@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title text-center><strong>LogIn</strong></ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <br/>
+  <br/>
+  <img src="assets/img/logo.png" />
+  <br/>
+  <br/>
+  <ion-list no-lines>
+    <form [formGroup]="logInForm" (ngSubmit)="onSubmit()">
+      <!-- <div *ngIf="!companyName"> -->
+      <div>
+        <ion-item>
+          <ion-label floating>
+            <ion-icon name="aperture"></ion-icon>&nbsp; Company Name</ion-label>
+          <ion-input type="text" #txtCompanyName formControlName="companyName" (ionBlur)="InputBlured(txtCompanyName.ngControl.name)"
+            (ionFocus)="InputFocused(txtCompanyName.ngControl.name)"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="!logInForm.get('companyName').required && companyNameRequired">
+          <p style="color:crimson"> Company Name is Required !! </p>
+        </ion-item>
+        <br/>
+      </div>
+
+      <!-- <div *ngIf="!User"> -->
+      <div>
+        <ion-item>
+          <ion-label floating>
+            <ion-icon name="person"></ion-icon>&nbsp; Username</ion-label>
+          <ion-input type="text" formControlName="userName" #txtUserName (ionBlur)="InputBlured(txtUserName.ngControl.name)" (ionFocus)="InputFocused(txtUserName.ngControl.name)"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="!logInForm.get('userName').required && userNameRequired">
+          <p style="color:crimson "> User Name is Required !! </p>
+        </ion-item>
+      </div>
+
+      <div>
+        <ion-item>
+          <ion-label floating>
+            <ion-icon name="create"></ion-icon>&nbsp; Password</ion-label>
+          <ion-input type="password" formControlName="password" #txtPassword (ionBlur)="InputBlured(txtPassword.ngControl.name)" (ionFocus)="InputFocused(txtPassword.ngControl.name)"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="!logInForm.get('password').required && passwordRequired">
+          <p style="color:crimson"> Password is Required !! </p>
+        </ion-item>
+      </div>
+
+      <br/>
+      <br/>
+      <ion-item>
+        <ion-label>Remember Me</ion-label>
+        <ion-checkbox color="primary"></ion-checkbox>
+      </ion-item>
+      <br/>
+      <br/>
+      <br/>
+      <div *ngIf="generalError">
+        <ion-item *ngIf="generalError">
+          <ion-label text-center style="color:crimson" text-wrap>{{generalError}}</ion-label>
+        </ion-item>
+        <br/>
+        <br/>
+      </div>
+      <button ion-button color="primary" block large round (click)="GoToFirstLogin()">
+        <ion-icon name="log-in"></ion-icon>&nbsp;&nbsp;&nbsp; LogIn</button>
+    </form>
+  </ion-list>
+  <button ion-button (click)="check()">Connection</button>
+</ion-content>

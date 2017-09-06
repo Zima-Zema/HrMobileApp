@@ -1,0 +1,45 @@
+<ion-menu [content]="content" type="overlay">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title> Welcome </ion-title>
+
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <ion-list-header> Pages</ion-list-header>
+      <button menuclose ion-item (click)="GoToHome()"> Home </button>
+      <button menuClose ion-item (click)="GoToTasks()">Tasks</button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<!--//////////////////////////////////////////////////////////////////  -->
+<ion-header>
+  <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
+  <ion-navbar>
+    <button ion-button menuToggle> 
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-buttons end>
+      <button id="notification-button" ion-button clear (click)="GoToNotifications()" large>
+        <ion-icon name="notifications">
+          <ion-badge id="notifications-badge" color="danger" *ngIf="notificationNumber != 0 && notificationNumber != undefined"> {{notificationNumber}}</ion-badge>
+        </ion-icon>              
+    </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<!--//////////////////////////////////////////////////////////////////  -->
+<ion-content padding>
+  <ion-card>
+    <img id="personal_img" src="assets/img/user.png" />
+    <br/>
+    <ion-card-header class="card">
+      <h1> Welcome </h1>
+      <!-- to <h2>HR Mobile App</h2> -->
+    </ion-card-header>
+    <ion-card-content class="card">
+      <p> Double Click ERP, HR mobile application.</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

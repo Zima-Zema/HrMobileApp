@@ -1,0 +1,53 @@
+
+.event-detail-container{
+    .item-inner{
+        //background-color:lemonchiffon ;
+    }
+}
+
+.calender-day{
+    border-radius: 6px;
+    padding: 5px 5px;
+    background-color: ghostwhite;
+    color :black;
+}
+
+.monthview-datetable{
+    td, th{
+       border:0 !important;
+       padding :3px ;
+       background-color: white!important;
+    };
+}
+
+td.monthview-current{
+    .calender-day{
+    background-color: #f53d3d!important;
+    color :white!important;
+}
+}
+
+.monthview-primary-with-event{
+     .calender-day{
+    background-color: #52BE80!important;
+    color :white!important;
+}
+}
+
+.monthview-selected{
+    .calender-day{
+    background-color: #488aff!important;
+    color :white!important;
+}
+}
+
+
+
+
+
+
+
+
+ 
+
+

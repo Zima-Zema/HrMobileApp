@@ -1,0 +1,28 @@
+ion-content
+{
+    text-align:center;
+}
+
+#notification-button {
+   position: relative;
+//    right: -260px;
+   overflow: visible!important;
+   width: 10px;
+   height: 10px;
+   padding: 20px;
+  margin:10px;
+  font-size: 25px;
+}
+
+#notifications-badge {
+   position: absolute;
+   border-radius: 50%;
+   top: 1px;
+   right: 6px;
+   text-align: center;
+   padding: 4px;
+}
+.personal_img{
+    width: 30px;
+    height: 250px;
+}

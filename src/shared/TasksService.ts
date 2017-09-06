@@ -1,0 +1,71 @@
+import { Injectable } from "@angular/core";
+import { Http, Headers, RequestOptionsArgs, Response, RequestMethod } from "@angular/http";
+import { Observable } from "rxjs";
+
+export interface ITasks {
+    Id: number
+    EmpListId: number;
+    TaskNo: number;
+    TaskCat: number;
+    Description: string;
+    Priority: number;
+    Status: number;
+    Required: any;
+    Unit: any;
+    EmpId?: number;
+    ManagerId?: number;
+    AssignedTime: any;
+    StartTime: any;
+    Duration: number;
+    CreatedUser: string;
+    ModifiedUser: string;
+    CreatedTime: any;
+    ModifiedTime: any;
+    ExpectDur: number;
+    EndTime: any;
+    SubPeriodId: number;
+    CompanyId: number;
+    //ChangeEmployee:boolean;
+    //EmpList:string,
+    //Employee:any,
+    //Manager:any,
+    //Period:any,
+    //PeriodId:number,
+   // SubPeriod: any,
+    //TaskCategory: string,
+    //isStart:boolean
+}
+
+
+export interface ITollen {
+    Files: Array<any>;
+    Source: string;
+    TaskId: number;
+    CompanyId: number;
+    Language: string;
+    FileDetails:string;
+}
+
+@Injectable()
+export class TasksServicesApi {
+    private baseURL: string = 'http://localhost:36207'
+    constructor(private _http: Http) {
+    }
+
+    //get all tasks
+    getTasks(emp_id: number): Observable<any[]> {
+        return this._http.get(`${this.baseURL}/newApi/MobileTasks/getAllTasks?emp_id=${emp_id}`).map((res: Response) => {
+            return res.json();
+        })
+    }
+    //save images and files
+    saveData(body: ITollen): Observable<any> {
+        let bodyString = JSON.stringify(body); // Stringify payload
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}/newApi/MobileTasks/PostFile`, bodyString, { headers: headers })
+            .map((res: Response) => {
+                console.log("res.json() ::: ",res.json());
+                return res.json();
+            });
+    }
+}

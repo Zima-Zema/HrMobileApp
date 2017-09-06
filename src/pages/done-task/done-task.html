@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>{{coming_Task.title}}</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="StepBack()" color="newGrey" class="doneBtn"><ion-icon name="close-circle"></ion-icon></button>
+      <button ion-button (click)="SaveData()" color="newGrey" class="doneBtn"><ion-icon name="checkmark-circle"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-textarea rows="6" class="txtarea" placeholder="Enter a discription" [value]="disc" [(ngModel)]="disc"></ion-textarea>
+    </ion-row>
+    <ion-row>
+      <ion-item *ngIf="File_Label">UPLOADED : {{File_Label}}</ion-item>
+    </ion-row>
+    <ion-row>
+      <img class="image" [src]="captureDataUrl" *ngIf="captureDataUrl" round/>
+    </ion-row>
+  </ion-grid>
+  <!-- /////////////////////////// for test  -->
+  <ion-item>{{filetext}}</ion-item>
+  <ion-item>{{errortext}}</ion-item>
+  <ion-item>correctPath : {{correctPath}}</ion-item>
+  <ion-item>file_name : {{currentName}}</ion-item>
+  <!-- ///////////////////////////////  -->
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="primary">
+    <ion-buttons>
+      <button ion-button icon-left (click)="presentActionSheet()">
+        <ion-icon name="camera"></ion-icon>Select Image
+      </button >
+      </ion-buttons>
+    <ion-buttons end>
+      <button ion-button icon-left (click)="openFile()">
+        <ion-icon name="cloud-upload"></ion-icon> Open File
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
