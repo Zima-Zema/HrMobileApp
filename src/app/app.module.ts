@@ -29,7 +29,7 @@ import { DoneTaskPageModule } from '../pages/done-task/done-task.module';
 import 'jquery'
 import 'signalr';
 import {SignalRModule, SignalRConfiguration,ConnectionTransport} from 'ng2-signalr';
-
+//from fatma
 export function creatConfig(): SignalRConfiguration {
   let baseUrl:string = '';
   const config = new SignalRConfiguration();
