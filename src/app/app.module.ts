@@ -59,7 +59,7 @@ export function creatConfig(): SignalRConfiguration {
     ForceChangePasswordPageModule,
     DoneTaskPageModule,
     HttpModule,
-    IonicStorageModule.forRoot({ driverOrder: ["localstorage", "websql"] })
+    
   ],
   bootstrap: [IonicApp],
   entryComponents: [
