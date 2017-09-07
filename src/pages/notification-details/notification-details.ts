@@ -18,7 +18,7 @@ export class NotificationDetailsPage {
     Id: 0
   }
   notify: INotification;
-  baseUrl: string = "http://localhost:36207/";
+  baseUrl: string = "http://www.enterprise-hr.com/";
   notifyDate: any
   notifyTime: any
   constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, public viewCtrl:ViewController) {

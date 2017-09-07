@@ -18,7 +18,7 @@ export class NotificationsPage {
     Language: "en-GB"
   }
   //http://localhost:36207/SpecialData/Photos/0/1054.jpeg?dummy=1503580792563
-  baseUrl: string = "http://localhost:36207/";
+  baseUrl: string = "http://www.enterprise-hr.com/";
   notifications: Array<INotification> = [];
   private start: number = 0;
   errorMsg:string=undefined;
