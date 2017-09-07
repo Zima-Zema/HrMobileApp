@@ -17,10 +17,6 @@ export class LoginServiceApi {
 
     logIn(companyName: string, userName: string, password: string) {
 
-        companyName = "DefaultCompany";
-        userName = "seham";
-        password = "Admin.12";
-
         return new Promise((resolve, reject) => {
             this._storage.keys().then((val) => {
                 return new Promise((resolve, reject) => {
@@ -32,7 +28,7 @@ export class LoginServiceApi {
                     return new Promise((resolve, reject) => {
                         if (this.storageKeys.indexOf("BaseURL") == -1) {
                             if (companyName.toUpperCase() == "DefaultCompany".toUpperCase()) {
-                                this.baseURL = ('http://localhost:36207/');
+                                this.baseURL = ('http://www.enterprise-hr.com/');
                                 this._storage.set("BaseURL", this.baseURL).then(() => {
                                     this._storage.set("CompanyName", companyName).then(() => {
                                         resolve();
@@ -66,8 +62,15 @@ export class LoginServiceApi {
                                         });
                                     },
                                     error => {
+                                        console.log(error);
                                         if (error.status == 404) {
                                             resolve("Error in Service .. Try agian later !!");
+                                        }
+                                        else if (error.status == 500) {
+                                            resolve("Error in Server .. Try agian later !!");
+                                        }
+                                        else if (error.type == 3) {
+                                            resolve("Error in Service URL .. Please Contact Customer Service !!");
                                         }
                                         else {
                                             resolve(JSON.parse(error._body).error_description);
@@ -106,7 +109,7 @@ export class LoginServiceApi {
     getBaseURL(companyName: string) {
         return new Promise((resolve, reject) => {
             if (companyName.toUpperCase() == "DefaultCompany".toUpperCase()) {
-                this.baseURL = ('http://localhost:36207/');
+                this.baseURL = ('http://www.enterprise-hr.com/');
                 this._storage.set("BaseURL", this.baseURL).then(() => {
                     resolve();
                 });
@@ -123,7 +126,6 @@ export class LoginServiceApi {
             .map((res: Response) => {
                 return res.json();
             });
-
     }
 
     Authenticate(userName: string, password: string) {
@@ -145,6 +147,9 @@ export class LoginServiceApi {
                     resolve();
                 },
                 error => {
+                    if (error.status == 500) {
+                        resolve("Error in Server .. Try agian later !!");
+                    }
                     resolve(error._body);
                 });
         });

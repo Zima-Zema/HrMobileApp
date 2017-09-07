@@ -20,9 +20,9 @@ export class LogInPage {
   public passwordRequired: boolean;
   public data: any;
   public generalError: string;
-  public companyName = null;
-  public rememberMe = null;
-  public password = null;
+  public companyNameExisted: boolean = false;
+  public userNameExisted: boolean = false;
+  public passwordExisted: boolean = false;
 
   constructor(
     private logInService: LoginServiceApi,
@@ -35,52 +35,43 @@ export class LogInPage {
     private network: Network) {
 
     this.createForm();
-
     this.getValues();
   }
 
-  ionViewWillEnter() {
-
-
-  }
-
-  ionViewDidLoad() {
-
-  }
-
   getValues() {
-
     this.storage.get("CompanyName").then((cdata) => {
-      this.companyName = cdata;
+      if (cdata) {
+        this.logInForm.controls['companyName'].setValue(cdata);
+        this.companyNameExisted = true;
+      }
       this.storage.get("User").then((udata) => {
-        this.User = udata;
+        if (udata) {
+          this.userNameExisted = true;
+          this.logInForm.controls['userName'].setValue(udata.UserName);
+        }
         this.storage.get("Password").then((pdata) => {
-          this.password = pdata;
-          //this.printNames(this.companyName, this.User, this.password);
-          this.logInForm.controls['companyName'].setValue('ali');
-
+          if (pdata) {
+            this.passwordExisted = true;
+            this.logInForm.controls['password'].setValue(pdata);
+            this.onSubmit();
+          }
         });
       });
     });
-
-  }
-
-  async printNames(c: any, u: any, p: any) {
-    console.log(c);
-    console.log(u);
-    console.log(p);
   }
 
   createForm() {
     this.logInForm = this.formBuilder.group({
       companyName: [null, Validators.compose([Validators.required])],
-      userName: [this.User == null ? '' : this.User.UserName, Validators.compose([Validators.required])],
-      password: [this.password == null ? '' : this.password, Validators.compose([Validators.required])],
+      userName: [null, Validators.compose([Validators.required])],
+      password: [null, Validators.compose([Validators.required])],
       rememberMe: false
     });
   }
 
   onSubmit() {
+    console.log(this.logInForm.value);
+    this.generalError = null;
     let loader = this.loadingCtrl.create({
       content: "Loading .."
     });
@@ -116,10 +107,9 @@ export class LogInPage {
       else {
         this.storage.set("User", data).then(() => {
           this.User = data;
-          if (this.rememberMe) {
+          if (rememberMe) {
             this.storage.set("Password", this.logInForm.value.password).then(() => {
               loader.dismiss();
-              console.log(this.User);
             });
           }
           else {
@@ -169,13 +159,5 @@ export class LogInPage {
         this.passwordRequired = false;
         break;
     }
-  }
-
-  prepareForm() {
-    let promise = new Promise((resolve, reject) => {
-
-      resolve();
-    });
-    return promise;
   }
 }
