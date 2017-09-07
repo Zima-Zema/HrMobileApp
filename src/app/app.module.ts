@@ -34,7 +34,7 @@ export function creatConfig(): SignalRConfiguration {
   let baseUrl: string = '';
   const config = new SignalRConfiguration();
   config.hubName = 'MyHub';
-  config.url = 'http://localhost:36207/';
+  config.url = 'http://www.enterprise-hr.com';
   config.logging = true;
   config.withCredentials = true;
   return config;

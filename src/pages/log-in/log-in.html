@@ -4,7 +4,6 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content padding>
   <br/>
   <br/>
@@ -13,8 +12,7 @@
   <br/>
   <ion-list no-lines>
     <form [formGroup]="logInForm" (ngSubmit)="onSubmit()">
-      <!-- <div *ngIf="!companyName"> -->
-      <div>
+      <div *ngIf="!companyNameExisted">
         <ion-item>
           <ion-label floating>
             <ion-icon name="aperture"></ion-icon>&nbsp; Company Name</ion-label>
@@ -27,8 +25,7 @@
         <br/>
       </div>
 
-      <!-- <div *ngIf="!User"> -->
-      <div>
+      <div *ngIf="!userNameExisted">
         <ion-item>
           <ion-label floating>
             <ion-icon name="person"></ion-icon>&nbsp; Username</ion-label>
@@ -66,9 +63,8 @@
         <br/>
         <br/>
       </div>
-      <button ion-button color="primary" block large round (click)="GoToFirstLogin()">
+      <button ion-button color="primary" block large round [disabled]="!logInForm.valid">
         <ion-icon name="log-in"></ion-icon>&nbsp;&nbsp;&nbsp; LogIn</button>
     </form>
   </ion-list>
-  <button ion-button (click)="check()">Connection</button>
 </ion-content>
