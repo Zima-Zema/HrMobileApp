@@ -10,21 +10,23 @@ import { CalendarComponent } from 'ionic2-calendar/calendar';
 @Component({
   selector: 'page-tasks',
   templateUrl: 'tasks.html',
-  //   styles:[`.event-detail-container{
-  //     .item-inner{
-  //         //background-color:lemonchiffon ;
-  //     }
-  // }`]
 })
-export class TasksPage implements AfterViewInit {
-  @ViewChild('template') template: ElementRef;
-  ngAfterViewInit(): void {
-
-  }
-
-
-  //color = "#f53d3d";
-
+export class TasksPage {
+  event: any = {};
+  str_time: any;
+  end_time: any;
+  title_data: string;
+  s_dd: any;
+  s_mm: any;
+  s_yyyy: any;
+  e_dd: any;
+  e_mm: any;
+  e_yyyy: any;
+  @ViewChild(CalendarComponent) myCalender: CalendarComponent;
+  eventSource = [];
+  events = [];
+  viewTitle: string;
+  selectedDay = new Date();
   TaskObj: ITasks = {
     Id: 0,
     EmpListId: 0,
@@ -58,15 +60,6 @@ export class TasksPage implements AfterViewInit {
     //SubPeriod:"",
     //TaskCategory:""
   }
-
-  @ViewChild(CalendarComponent) myCalender: CalendarComponent;
-
-
-  eventSource = [];
-  events = [];
-  viewTitle: string;
-  selectedDay = new Date();
-
   calendar = {
     mode: 'month',
     currentDate: new Date()
@@ -88,7 +81,6 @@ export class TasksPage implements AfterViewInit {
     loader.dismiss();
   }
   ///////////////////////////////////
-  //////////////////
   ionViewDidLoad() {
     console.log('ionViewDidLoad TasksPage');
   }
@@ -119,7 +111,6 @@ export class TasksPage implements AfterViewInit {
           this.eventSource = [];
           setTimeout(() => {
             this.eventSource = this.events;
-
           });
         }
       }
@@ -130,14 +121,7 @@ export class TasksPage implements AfterViewInit {
     this.viewTitle = title;
   }
 
-  changcolor(coll, color) {
-    coll.forEach(element => {
-      element.styles["background-color"] = color;
-    });
-  }
-
   onEventSelected(event) {
-    console.log("event >>>", this.event)
     let start = moment(event.startTime).format('LLLL');
     let end = moment(event.endTime).format('LLLL');
 
@@ -179,12 +163,16 @@ export class TasksPage implements AfterViewInit {
                 });
                 console.log("data back from dismiss :: ", data)
                 if (data.Files.length > 0) {
+                  var doc = document.querySelectorAll('.event-detail');
+                  console.log("doc :: ", doc);
+                  var arr_doc = Array.from(doc);
+                  console.log("arr_doc :: ", arr_doc);
+                  var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(""));
+                  console.log("filter_doc :: ", filter_doc);
+                  //filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor="lemonchiffon";
                   toast.present();
-                  // let h = this.template.getElementsByClassName('event-detail-container');
-                  // this.changcolor(h, this.color);
                 }
               }
-
             });
           }
         },
@@ -202,62 +190,60 @@ export class TasksPage implements AfterViewInit {
 
   ///////////////////////
   onTimeSelected(ev) {
-    //console.log("EVENT >>>> ", ev);
     this.selectedDay = ev.selectedTime;
   }
-  ///
-  event: any = {};
-  str_time: any;
-  end_time: any;
-  title_data: string;
-  s_dd: any;
-  s_mm: any;
-  s_yyyy: any;
-  e_dd: any;
-  e_mm: any;
-  e_yyyy: any;
   loadEvents() {
     let emp_id: number = 1054; //static from login id
     this.tasksService.getTasks(emp_id).subscribe((data) => {
-      //Working ==> mine 
-      data.forEach(ele => {
-        console.log("coming ele >>>", ele);
-        //stratTime
-        this.s_yyyy = moment(ele.StartTime).format('YYYY');
-        this.s_mm = moment(ele.StartTime).format('MM');
-        this.s_dd = moment(ele.StartTime).format('DD');
-        //EndTime
-        this.e_yyyy = moment(ele.EndTime).format('YYYY');
-        this.e_mm = moment(ele.EndTime).format('MM');
-        this.e_dd = moment(ele.EndTime).format('DD');
-        ////time should pass in this format otherwise there is a problem --> from documentation
-        this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
-        this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
-        this.title_data = ele.TaskCategory;
-        this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id };
-        this.events = this.eventSource;
-        this.events.push(this.event);
-      });
-      this.eventSource = [];
-      setTimeout(() => {
-        this.eventSource = this.events;
-      });
+      if (data) {
+        console.log("");
+        //Working ==> mine 
+        data.forEach(ele => {
+          console.log("coming ele >>>", ele);
+          //stratTime
+          this.s_yyyy = moment(ele.StartTime).format('YYYY');
+          this.s_mm = moment(ele.StartTime).format('MM');
+          this.s_dd = moment(ele.StartTime).format('DD');
+          //EndTime
+          this.e_yyyy = moment(ele.EndTime).format('YYYY');
+          this.e_mm = moment(ele.EndTime).format('MM');
+          this.e_dd = moment(ele.EndTime).format('DD');
+          ////time should pass in this format (UTC) otherwise there is a problem --> from documentation
+          this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
+          this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
+          this.title_data = ele.TaskCategory;
+          this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id };
+          this.events = this.eventSource;
+          this.events.push(this.event);
+        });
+        this.eventSource = [];
+        setTimeout(() => {
+          this.eventSource = this.events;
+        });
 
-      //Not Working ==> From the documentation (ionic2-calender)
-      //error ==> "cannot read property 'getTime' of undefined in monthview"
-      {
-        // this.str_time=new Date(Date.UTC(2017, 7)).toString();
-        // this.eventSource.push({
-        //   title: data[0].TaskCategory,
-        //   StartTime: new Date().toISOString(),
-        //   endtime: new Date().toISOString(),
-        //   allDay: false
-        // });
-        // this.myCalender.loadEvents();
+        //Not Working ==> From the documentation (ionic2-calender)
+        //error ==> "cannot read property 'getTime' of undefined in monthview"
+        {
+          // this.str_time=new Date(Date.UTC(2017, 7)).toString();
+          // this.eventSource.push({
+          //   title: data[0].TaskCategory,
+          //   StartTime: new Date().toISOString(),
+          //   endtime: new Date().toISOString(),
+          //   allDay: false
+          // });
+          // this.myCalender.loadEvents();
 
-        // {
+          // {
+        }
       }
-
+      else {
+        let toast = this.toastCtrl.create({
+          message: "There is no tasks...",
+          duration: 4000,
+          position: 'middle'
+        });
+        toast.present();
+      }
     });
   }
   ///////////////////////// function to remove object ( the event ) from eventsource array ////////////////

@@ -28,7 +28,7 @@ export class DoneTaskPage {
   public filetext: string = "";
   public errortext: string = "";
   public correctPath: string = "";
-  public currentName: string = "";
+  public file_name: string = "";
   //
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -112,16 +112,16 @@ export class DoneTaskPage {
       this.captureDataUrl = 'data:image/jpeg;base64,' + imageData;
       //
       this.filePath.resolveNativePath(imageData).then(filepath => {
-        let path_without_filename = imageData.substring(imageData.lastIndexOf('/') + 1, imageData.lastIndexOf('?')); //path without file name
-        let file_name = filepath.substr(filepath.lastIndexOf('/') + 1);  // just file name
+        let path_without_filename = imageData.substring(imageData.lastIndexOf('/') + 1, imageData.lastIndexOf('?')); 
+        this.file_name = filepath.substr(filepath.lastIndexOf('/') + 1);  // just file name
         this.correctPath = path_without_filename;
-        this.currentName = file_name;
+        //this.currentName = file_name;
         //
-        this.TollenObj.FileDetails = file_name;
+        this.TollenObj.FileDetails = this.file_name;
       })
       this.TollenObj.Files.push(imageData);
     }, (err) => {
-      console.log("error opening camera", err);
+      this.errortext = "error choose" 
     });
   }
   //
@@ -141,16 +141,15 @@ export class DoneTaskPage {
       //
       this.filePath.resolveNativePath(file_uri).then(filepath => {
         let path_without_filename = file_uri.substring(file_uri.lastIndexOf('/') + 1, file_uri.lastIndexOf('?')); //path without file name
-        let file_name = filepath.substr(filepath.lastIndexOf('/') + 1);  // just file name
+        this.file_name = filepath.substr(filepath.lastIndexOf('/') + 1);  // just file name
         this.correctPath = path_without_filename;
-        this.currentName = file_name;
         //
-        this.TollenObj.FileDetails = file_name;
+        this.TollenObj.FileDetails = this.file_name;
       });
       this.TollenObj.Files.push(file_uri);
     }
       , (err) => {
-        console.log("error opening Gallery", err);
+        this.errortext = err
       });
   }
   //
@@ -164,10 +163,9 @@ export class DoneTaskPage {
     //   .catch((e) => { this.filetext = e });
 
     let uri = this.file.dataDirectory + 'dbclick.txt';
-    let file_name = uri.substr(uri.lastIndexOf('/') + 1);
-    let uri_without_fulename = uri.substring(uri.lastIndexOf('/') + 1, uri.lastIndexOf('?'));
-    this.File_Label = file_name;
-    this.TollenObj.FileDetails = file_name;
+    this.file_name = uri.substr(uri.lastIndexOf('/') + 1);
+    this.correctPath = uri.substring(uri.lastIndexOf('/') + 1, uri.lastIndexOf('?'));
+    this.TollenObj.FileDetails = this.file_name;
     this.TollenObj.Files.push(uri);
   }
   //

@@ -36,7 +36,6 @@ export interface ITasks {
     //isStart:boolean
 }
 
-
 export interface ITollen {
     Files: Array<any>;
     Source: string;
@@ -48,7 +47,8 @@ export interface ITollen {
 
 @Injectable()
 export class TasksServicesApi {
-    private baseURL: string = 'http://localhost:36207'
+    //private baseURL: string = 'http://localhost:36207'
+    private baseURL: string = 'http://enterprise-hr.com'
     constructor(private _http: Http) {
     }
 

@@ -178,4 +178,9 @@ export class LogInPage {
     });
     return promise;
   }
+/////////////////////////
+  tasks(){
+    this.navCtrl.setRoot(WelcomePage);
+    this.navCtrl.popToRoot();
+  }
 }
