@@ -82,7 +82,6 @@ export class TasksPage {
   }
   ///////////////////////////////////
   ionViewDidLoad() {
-    console.log('ionViewDidLoad TasksPage');
   }
 
   addEvent() {
@@ -101,13 +100,11 @@ export class TasksPage {
         eventData.endTime = new Date(data.endTime);
 
         if (eventData.endTime < eventData.startTime) {
-          console.log("NOOOOOOOOOOOOO");
           toast.present();
         }
         else {
           this.events = this.eventSource;
           this.events.push(eventData);
-          console.log(" eventData >>> ", eventData)
           this.eventSource = [];
           setTimeout(() => {
             this.eventSource = this.events;
@@ -124,7 +121,6 @@ export class TasksPage {
   onEventSelected(event) {
     let start = moment(event.startTime).format('LLLL');
     let end = moment(event.endTime).format('LLLL');
-
     let alert = this.alertCtrl.create({
       title: 'Task: ' + event.title,
       subTitle: 'From: ' + start + '<br>To: ' + end,
@@ -156,20 +152,17 @@ export class TasksPage {
 
             Sec_modal.onDidDismiss(data => {
               if (data) {
+                console.log("data back from dismiss :: ", data)
                 let toast = this.toastCtrl.create({
                   message: "Documentations is Added.",
                   duration: 3000,
                   position: 'middle'
                 });
-                console.log("data back from dismiss :: ", data)
                 if (data.Files.length > 0) {
                   var doc = document.querySelectorAll('.event-detail');
-                  console.log("doc :: ", doc);
                   var arr_doc = Array.from(doc);
-                  console.log("arr_doc :: ", arr_doc);
-                  var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(""));
-                  console.log("filter_doc :: ", filter_doc);
-                  //filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor="lemonchiffon";
+                  var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title)); 
+                  filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor = "lemonchiffon";
                   toast.present();
                 }
               }
@@ -179,9 +172,6 @@ export class TasksPage {
         {
           text: 'Cancel',
           role: 'cancel',
-          handler: () => {
-            console.log("Current event :: ", event);
-          }
         }
       ]
     })
@@ -195,8 +185,7 @@ export class TasksPage {
   loadEvents() {
     let emp_id: number = 1054; //static from login id
     this.tasksService.getTasks(emp_id).subscribe((data) => {
-      if (data) {
-        console.log("");
+      if (data == null) {
         //Working ==> mine 
         data.forEach(ele => {
           console.log("coming ele >>>", ele);
@@ -239,7 +228,7 @@ export class TasksPage {
       else {
         let toast = this.toastCtrl.create({
           message: "There is no tasks...",
-          duration: 4000,
+          duration: 2000,
           position: 'middle'
         });
         toast.present();

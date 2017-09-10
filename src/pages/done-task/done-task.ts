@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ActionSheetController, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController, ViewController, ToastController } from 'ionic-angular';
 //plugins
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileOpener } from '@ionic-native/file-opener';
@@ -24,11 +24,11 @@ export class DoneTaskPage {
   public desc: string = "";
   public Id: any = 0;
   public File_Label: string = "";
+  public isdisabled: boolean = true;
   //////////////////////for test
-  public filetext: string = "";
   public errortext: string = "";
   public correctPath: string = "";
-  public file_name: string = "";
+  public filename: string = "";
   //
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -40,7 +40,8 @@ export class DoneTaskPage {
     private filePath: FilePath,
     private transfer: FileTransfer,
     private viewCtrl: ViewController,
-    private tasksService: TasksServicesApi) {
+    private tasksService: TasksServicesApi,
+    public toastCtrl: ToastController, ) {
     this.coming_Task = this.navParams.get('Task');
     console.log("this.coming_Task >>> ", this.coming_Task);
   }
@@ -54,9 +55,7 @@ export class DoneTaskPage {
     FileDetails: ""
   }
   //
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad DoneTaskPage');
-  }
+  ionViewDidLoad() { }
   //
   public presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
@@ -89,7 +88,8 @@ export class DoneTaskPage {
       buttons: [
         {
           text: 'Upload text ',
-          handler: () => { this.uploadtext(); }
+          handler: () => { this.uploadtext() },
+          cssClass: 'Uploadtext'
         },
         {
           text: 'Upload from your device',
@@ -109,19 +109,21 @@ export class DoneTaskPage {
     };
 
     this.cam.getPicture(cameraOptions).then((imageData) => {
+      if (imageData) {
+        this.isdisabled = false;
+      }
       this.captureDataUrl = 'data:image/jpeg;base64,' + imageData;
       //
       this.filePath.resolveNativePath(imageData).then(filepath => {
-        let path_without_filename = imageData.substring(imageData.lastIndexOf('/') + 1, imageData.lastIndexOf('?')); 
-        this.file_name = filepath.substr(filepath.lastIndexOf('/') + 1);  // just file name
-        this.correctPath = path_without_filename;
-        //this.currentName = file_name;
+        //let path_without_filename = imageData.substring(imageData.lastIndexOf('/') + 1, imageData.lastIndexOf('?'));
+        this.filename = filepath.substr(filepath.lastIndexOf('/') + 1);  // just file name
+        //this.correctPath = path_without_filename;
         //
-        this.TollenObj.FileDetails = this.file_name;
+        this.TollenObj.FileDetails = this.filename;
       })
       this.TollenObj.Files.push(imageData);
     }, (err) => {
-      this.errortext = "error choose" 
+      this.errortext = "error choose"
     });
   }
   //
@@ -138,13 +140,16 @@ export class DoneTaskPage {
 
     this.cam.getPicture(Options).then(file_uri => {
       this.captureDataUrl = 'data:image/jpeg;base64,' + file_uri;
+      if (file_uri) {
+        this.isdisabled = false;
+      }
       //
       this.filePath.resolveNativePath(file_uri).then(filepath => {
         let path_without_filename = file_uri.substring(file_uri.lastIndexOf('/') + 1, file_uri.lastIndexOf('?')); //path without file name
-        this.file_name = filepath.substr(filepath.lastIndexOf('/') + 1);  // just file name
+        //this.filename = filepath.substr(filepath.lastIndexOf('/') + 1);  // just file name
         this.correctPath = path_without_filename;
         //
-        this.TollenObj.FileDetails = this.file_name;
+        this.TollenObj.FileDetails = this.filename;
       });
       this.TollenObj.Files.push(file_uri);
     }
@@ -153,34 +158,47 @@ export class DoneTaskPage {
       });
   }
   //
+  //
   uploadtext() {
-    //write text on file
-    this.file.writeFile(this.file.dataDirectory, 'dbclick.txt', this.disc, { replace: true })
-      .then((data) => { this.filetext = data; })
-      .catch(e => { this.filetext = e; });
-    // this.fileOpener.open(this.file.dataDirectory + 'dbclick.txt', 'application/pdf')
-    //   .then((data) => { this.filetext = data })
-    //   .catch((e) => { this.filetext = e });
-
-    let uri = this.file.dataDirectory + 'dbclick.txt';
-    this.file_name = uri.substr(uri.lastIndexOf('/') + 1);
-    this.correctPath = uri.substring(uri.lastIndexOf('/') + 1, uri.lastIndexOf('?'));
-    this.TollenObj.FileDetails = this.file_name;
-    this.TollenObj.Files.push(uri);
+    if (this.disc == "") {
+      let toast = this.toastCtrl.create({
+        message: "Text file is empty..",
+        duration: 2000,
+        position: 'middle'
+      });
+      toast.present();
+    }
+    else {
+      //write text on file
+      this.file.writeFile(this.file.dataDirectory, 'dbclick.txt', this.disc, { replace: true })
+        .then((data) => { console.log(data) })
+        .catch(e => {
+          this.errortext = e;
+          console.log(e)
+        });
+      // this.fileOpener.open(this.file.dataDirectory + 'dbclick.txt', 'application/pdf')
+      //   .then((data) => { this.filetext = data })
+      //   .catch((e) => { this.filetext = e });
+      let uri = this.file.dataDirectory + 'dbclick.txt';
+      this.filename = uri.substring(uri.lastIndexOf('/') + 1);
+      console.log("this.correctPath", this.filename)
+      this.TollenObj.FileDetails = this.filename;
+      this.TollenObj.Files.push(uri);
+      this.isdisabled = false;
+    }
   }
   //
   uploadfile() {
     const fileTransfer: FileTransferObject = this.transfer.create();
-
     this.fileChooser.open()
       .then((uri) => {
-        //this.filePath.resolveNativePath(uri)
-        // .then(filePath => {
-        //   let file_name = filePath.substr(filePath.lastIndexOf('/') + 1);
-        //   //let uri_without_fulename = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('?'));
-        //   this.File_Label = file_name;
-        this.TollenObj.FileDetails = "test.jpeg";
-        this.TollenObj.Files.push(uri);
+        this.filePath.resolveNativePath(uri)
+          .then(filePath => {
+            this.filename = filePath.substr(filePath.lastIndexOf('/') + 1);
+            this.TollenObj.FileDetails = this.filename;
+            this.TollenObj.Files.push(uri);
+          })
+        this.isdisabled = false;
       })
       //.catch(err => this.errortext = "error path");
       /////////////////////////////////////////////////////
@@ -223,8 +241,17 @@ export class DoneTaskPage {
     this.TollenObj.TaskId = this.coming_Task.id;
     console.log("this.TollenObj  >>>", this.TollenObj);
     this.tasksService.saveData(this.TollenObj).subscribe((data) => {
-      this.filetext = data;
-      this.viewCtrl.dismiss(this.TollenObj);
+      if (data) {
+        this.viewCtrl.dismiss(this.TollenObj);
+      }
+      else {
+        let toast = this.toastCtrl.create({
+          message: "Fail to Add Documentations.",
+          duration: 3000,
+          position: 'middle'
+        });
+        toast.present();
+      }
     });
   }
   //

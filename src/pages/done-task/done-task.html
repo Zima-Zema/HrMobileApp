@@ -2,8 +2,8 @@
   <ion-navbar color="primary">
     <ion-title>{{coming_Task.title}}</ion-title>
     <ion-buttons end>
-      <button ion-button (click)="StepBack()" color="newGrey" class="doneBtn"><ion-icon name="close-circle"></ion-icon></button>
-      <button ion-button (click)="SaveData()" color="newGrey" class="doneBtn"><ion-icon name="checkmark-circle"></ion-icon></button>
+      <button ion-button (click)="StepBack()" color="newGrey" class="doneBtn" ><ion-icon name="close-circle"></ion-icon></button>
+      <button ion-button (click)="SaveData()" color="newGrey" class="doneBtn" [disabled]="isdisabled"><ion-icon name="checkmark-circle"></ion-icon></button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -21,9 +21,9 @@
     </ion-row>
   </ion-grid>
   <!-- /////////////////////////// for test  -->
-  <span>errortext : {{errortext}</span>
-  <span>file_name : {{file_name}}</span>
-  <span>correctPath : {{correctPath}}</span>
+  <span>errortext : {{errortext}}</span><br/>
+  <span>file_name : {{filename}}</span><br/>
+  <span>correctPath : {{correctPath}}</span><br/>
 
   <!-- ///////////////////////////////  -->
 </ion-content>
