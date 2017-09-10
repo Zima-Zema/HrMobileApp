@@ -160,7 +160,6 @@ export class LogInPage {
         break;
     }
   }
-<<<<<<< HEAD
 
   prepareForm() {
     let promise = new Promise((resolve, reject) => {
@@ -174,6 +173,4 @@ export class LogInPage {
     this.navCtrl.setRoot(WelcomePage);
     this.navCtrl.popToRoot();
   }
-=======
->>>>>>> 53566bdd171d03268fd249992a0ae482ac0c8e49
 }
