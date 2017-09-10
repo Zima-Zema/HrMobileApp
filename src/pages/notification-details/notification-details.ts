@@ -12,9 +12,9 @@ export class NotificationDetailsPage {
 
 
   updateObj: IUpdateNotification = {
-    CompanyId: 0,
+    CompanyId: 2,
     Culture: "en-GB",
-    UserName: "seham",
+    UserName: "Bravo",
     Id: 0
   }
   notify: INotification;

@@ -5,6 +5,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
+import { BackgroundMode } from '@ionic-native/background-mode';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 //
 import { MyApp } from './app.component';
 // plugins
@@ -34,7 +36,7 @@ export function creatConfig(): SignalRConfiguration {
   let baseUrl: string = '';
   const config = new SignalRConfiguration();
   config.hubName = 'MyHub';
-  config.url = 'http://www.enterprise-hr.com';
+  config.url = 'http://www.enterprise-hr.com/';
   config.logging = true;
   config.withCredentials = true;
   return config;
@@ -69,6 +71,8 @@ export function creatConfig(): SignalRConfiguration {
   providers: [
     ElasticModule,
     File,
+    BackgroundMode,
+    LocalNotifications,
     FileOpener,
     FileChooser,
     FileTransfer,
