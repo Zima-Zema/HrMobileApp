@@ -31,7 +31,7 @@ export interface ODataNotification{
 export class NotificationServiceApi {
 
     perPage: number = 10;
-    private baseURL: string = 'http://localhost:36207/'
+    private baseURL: string = 'http://www.enterprise-hr.com/'
     
     constructor(private _http: Http) {
     }

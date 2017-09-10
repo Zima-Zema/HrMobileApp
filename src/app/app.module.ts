@@ -28,15 +28,15 @@ import { ForceChangePasswordPageModule } from '../pages/force-change-password/fo
 import { DoneTaskPageModule } from '../pages/done-task/done-task.module';
 import 'jquery'
 import 'signalr';
-import {SignalRModule, SignalRConfiguration,ConnectionTransport} from 'ng2-signalr';
-//from fatma
+import { SignalRModule, SignalRConfiguration, ConnectionTransport } from 'ng2-signalr';
+//from Ali
 export function creatConfig(): SignalRConfiguration {
-  let baseUrl:string = '';
+  let baseUrl: string = '';
   const config = new SignalRConfiguration();
   config.hubName = 'MyHub';
-  config.url='http://localhost:36207/';
-  config.logging=true;
-  config.withCredentials=true;
+  config.url = 'http://www.enterprise-hr.com';
+  config.logging = true;
+  config.withCredentials = true;
   return config;
 }
 //
@@ -49,7 +49,7 @@ export function creatConfig(): SignalRConfiguration {
     BrowserModule,
     IonicModule.forRoot(MyApp),
     SignalRModule.forRoot(creatConfig),
-    IonicStorageModule.forRoot({driverOrder:["localstorage","websql"]}),
+    IonicStorageModule.forRoot({ driverOrder: ["localstorage", "websql"] }),
     LogInPageModule,
     NotificationsPageModule,
     WelcomePageModule,
@@ -59,7 +59,7 @@ export function creatConfig(): SignalRConfiguration {
     ForceChangePasswordPageModule,
     DoneTaskPageModule,
     HttpModule,
-    
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
