@@ -126,6 +126,8 @@ export class TasksPage {
       subTitle: 'From: ' + start + '<br>To: ' + end,
       buttons: [
         // {
+          ///////////////////////////////////////// Delete event from array //////////////////////////////////
+          //////////////////////////////////////// Not Used for now //////////////////////////////////////////
         //   text: 'Delete',
         //   handler: () => {
         //     let events = this.eventSource;
@@ -183,21 +185,21 @@ export class TasksPage {
     this.selectedDay = ev.selectedTime;
   }
   loadEvents() {
-    let emp_id: number = 1054; //static from login id
+    let emp_id: number = 14; //static => supposed to come from login id
     this.tasksService.getTasks(emp_id).subscribe((data) => {
-      if (data == null) {
-        //Working ==> mine 
+    //  if (data !== null) {
+        //Working ==> By Fatma 
         data.forEach(ele => {
           console.log("coming ele >>>", ele);
-          //stratTime
+          //stratTime  : sperate to get each of year , month and day
           this.s_yyyy = moment(ele.StartTime).format('YYYY');
           this.s_mm = moment(ele.StartTime).format('MM');
           this.s_dd = moment(ele.StartTime).format('DD');
-          //EndTime
+          //EndTime  : sperate to get each of year , month and day
           this.e_yyyy = moment(ele.EndTime).format('YYYY');
           this.e_mm = moment(ele.EndTime).format('MM');
           this.e_dd = moment(ele.EndTime).format('DD');
-          ////time should pass in this format (UTC) otherwise there is a problem --> from documentation
+          ////time should pass in this format (UTC) otherwise there is a problem --> from documentation (ionic2-calender)
           this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
           this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
           this.title_data = ele.TaskCategory;
@@ -224,15 +226,15 @@ export class TasksPage {
 
           // {
         }
-      }
-      else {
-        let toast = this.toastCtrl.create({
-          message: "There is no tasks...",
-          duration: 2000,
-          position: 'middle'
-        });
-        toast.present();
-      }
+     // }
+      // else {
+      //   let toast = this.toastCtrl.create({
+      //     message: "There is no tasks...",
+      //     duration: 2000,
+      //     position: 'middle'
+      //   });
+      //   toast.present();
+      // }
     });
   }
   ///////////////////////// function to remove object ( the event ) from eventsource array ////////////////

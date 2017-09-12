@@ -42,7 +42,7 @@ export interface ITollen {
     TaskId: number;
     CompanyId: number;
     Language: string;
-    FileDetails:string;
+    FileDetails: Array<any>;
 }
 
 @Injectable()
@@ -55,7 +55,9 @@ export class TasksServicesApi {
     //get all tasks
     getTasks(emp_id: number): Observable<any[]> {
         return this._http.get(`${this.baseURL}/newApi/MobileTasks/getAllTasks?emp_id=${emp_id}`).map((res: Response) => {
+             console.log("res : ",res.json())
             return res.json();
+           
         })
     }
     //save images and files
@@ -66,6 +68,6 @@ export class TasksServicesApi {
             .map((res: Response) => {
                 console.log("res.json() ::: ",res.json());
                 return res.json();
-            });
+            }).catch((err)=>{return err;});
     }
 }
