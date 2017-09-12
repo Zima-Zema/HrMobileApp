@@ -13,8 +13,8 @@ export class NotificationsPage {
 
   flag:boolean;
   notifyParams: INotifyParams = {
-    UserName: "seham",
-    CompanyId: 0,
+    UserName: "Bravo",
+    CompanyId: 2,
     Language: "en-GB"
   }
   //http://localhost:36207/SpecialData/Photos/0/1054.jpeg?dummy=1503580792563
