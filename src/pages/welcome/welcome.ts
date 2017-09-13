@@ -55,9 +55,9 @@ export class WelcomePage {
       });
     });
 
-    this.localNotifications.on('click',(data)=>{
-      this.navCtrl.push(NotificationDetailsPage,data);
-    });
+    // this.localNotifications.on('click',(data)=>{
+    //   this.navCtrl.push(NotificationDetailsPage,data);
+    // });
   }
 ////////////////////////////
 GoToHome(){

@@ -13,15 +13,14 @@
   <ion-list [virtualScroll]="notifications" approxItemHeight="50px">
     <ion-item *virtualItem="let notification" class="item-content"  (click)="notificationTapped($event,notification)" [ngClass]="{'item-content':!notification.Read}">
       <ion-avatar item-start>
-        
      
         <ion-img src="{{baseUrl}}SpecialData/Photos/0/{{notification.PicUrl}}?dummy=1503580792563">
         </ion-img>
         
       </ion-avatar>
       <h2>{{notification.From}}</h2>
-      <p>{{notification.Message}}</p>
-     <!--<ion-note item-end>3:36 PM</ion-note> -->
+      <h3 [innerHTML]="notification.Message"></h3>
+     
     </ion-item>
   </ion-list>
 

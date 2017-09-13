@@ -109,6 +109,7 @@ export class LogInPage {
           this.User = data;
           if (rememberMe) {
             this.storage.set("Password", this.logInForm.value.password).then(() => {
+              this.navCtrl.push(WelcomePage);
               loader.dismiss();
             });
           }
