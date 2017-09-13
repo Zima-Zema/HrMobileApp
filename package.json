@@ -27,7 +27,7 @@
         "@ionic-native/file": "^4.1.0",
         "@ionic-native/file-chooser": "^4.2.1",
         "@ionic-native/file-opener": "^4.1.0",
-        "@ionic-native/file-path": "^4.1.0",
+        "@ionic-native/file-path": "^4.2.1",
         "@ionic-native/file-transfer": "^4.1.0",
         "@ionic-native/local-notifications": "^4.2.1",
         "@ionic-native/network": "^4.2.1",
@@ -92,11 +92,11 @@
             "cordova-plugin-camera": {},
             "cordova-plugin-compat": {},
             "cordova-plugin-filechooser": {},
-            "cordova-plugin-filepath": {},
             "cordova-plugin-file-transfer": {},
             "cordova-plugin-network-information": {},
             "cordova-plugin-background-mode": {},
-            "de.appplant.cordova.plugin.local-notification": {}
+            "de.appplant.cordova.plugin.local-notification": {},
+            "cordova-plugin-filepath": {}
         },
         "platforms": [
             "android",

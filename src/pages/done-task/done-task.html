@@ -3,7 +3,7 @@
     <ion-title>{{coming_Task.title}}</ion-title>
     <ion-buttons end>
       <button ion-button (click)="StepBack()" color="newGrey" class="doneBtn"><ion-icon name="close-circle"></ion-icon></button>
-      <button ion-button (click)="SaveData()" color="newGrey" class="doneBtn"><ion-icon name="checkmark-circle"></ion-icon></button>
+      <button ion-button (click)="SaveData()" color="newGrey" class="doneBtn" [disabled]="isdisabled"><ion-icon name="checkmark-circle"></ion-icon></button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -17,13 +17,21 @@
       <ion-item *ngIf="File_Label">UPLOADED : {{File_Label}}</ion-item>
     </ion-row>
     <ion-row>
-      <img class="image" [src]="captureDataUrl" *ngIf="captureDataUrl" round/>
+      <!-- <ion-item>
+        <ion-avatar> -->
+      <div text-center>
+        <img class="image" [src]="captureDataUrl" *ngIf="captureDataUrl" style="border-radius:20%;" />
+      </div>
+      <!-- </ion-avatar>
+      </ion-item> -->
     </ion-row>
   </ion-grid>
   <!-- /////////////////////////// for test  -->
-  <span>errortext : {{errortext}</span>
-  <span>file_name : {{file_name}}</span>
-  <span>correctPath : {{correctPath}}</span>
+  <span>arr1 : {{arr1}}</span><br/>
+  <span>arr2 : {{arr2}}</span><br/>
+  <span>errortext : {{errortext}}</span><br/>
+  <span>filename : {{filename}}</span><br/>
+  <span>correctPath : {{correctPath}}</span><br/>
 
   <!-- ///////////////////////////////  -->
 </ion-content>

@@ -82,7 +82,6 @@ export class TasksPage {
   }
   ///////////////////////////////////
   ionViewDidLoad() {
-    console.log('ionViewDidLoad TasksPage');
   }
 
   addEvent() {
@@ -101,13 +100,11 @@ export class TasksPage {
         eventData.endTime = new Date(data.endTime);
 
         if (eventData.endTime < eventData.startTime) {
-          console.log("NOOOOOOOOOOOOO");
           toast.present();
         }
         else {
           this.events = this.eventSource;
           this.events.push(eventData);
-          console.log(" eventData >>> ", eventData)
           this.eventSource = [];
           setTimeout(() => {
             this.eventSource = this.events;
@@ -124,12 +121,13 @@ export class TasksPage {
   onEventSelected(event) {
     let start = moment(event.startTime).format('LLLL');
     let end = moment(event.endTime).format('LLLL');
-
     let alert = this.alertCtrl.create({
       title: 'Task: ' + event.title,
       subTitle: 'From: ' + start + '<br>To: ' + end,
       buttons: [
         // {
+          ///////////////////////////////////////// Delete event from array //////////////////////////////////
+          //////////////////////////////////////// Not Used for now //////////////////////////////////////////
         //   text: 'Delete',
         //   handler: () => {
         //     let events = this.eventSource;
@@ -156,20 +154,17 @@ export class TasksPage {
 
             Sec_modal.onDidDismiss(data => {
               if (data) {
+                console.log("data back from dismiss :: ", data)
                 let toast = this.toastCtrl.create({
                   message: "Documentations is Added.",
                   duration: 3000,
                   position: 'middle'
                 });
-                console.log("data back from dismiss :: ", data)
                 if (data.Files.length > 0) {
                   var doc = document.querySelectorAll('.event-detail');
-                  console.log("doc :: ", doc);
                   var arr_doc = Array.from(doc);
-                  console.log("arr_doc :: ", arr_doc);
-                  var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(""));
-                  console.log("filter_doc :: ", filter_doc);
-                  //filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor="lemonchiffon";
+                  var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title)); 
+                  filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor = "lemonchiffon";
                   toast.present();
                 }
               }
@@ -179,9 +174,6 @@ export class TasksPage {
         {
           text: 'Cancel',
           role: 'cancel',
-          handler: () => {
-            console.log("Current event :: ", event);
-          }
         }
       ]
     })
@@ -193,22 +185,21 @@ export class TasksPage {
     this.selectedDay = ev.selectedTime;
   }
   loadEvents() {
-    let emp_id: number = 1054; //static from login id
+    let emp_id: number = 14; //static => supposed to come from login id
     this.tasksService.getTasks(emp_id).subscribe((data) => {
-      if (data) {
-        console.log("");
-        //Working ==> mine 
+    //  if (data !== null) {
+        //Working ==> By Fatma 
         data.forEach(ele => {
           console.log("coming ele >>>", ele);
-          //stratTime
+          //stratTime  : sperate to get each of year , month and day
           this.s_yyyy = moment(ele.StartTime).format('YYYY');
           this.s_mm = moment(ele.StartTime).format('MM');
           this.s_dd = moment(ele.StartTime).format('DD');
-          //EndTime
+          //EndTime  : sperate to get each of year , month and day
           this.e_yyyy = moment(ele.EndTime).format('YYYY');
           this.e_mm = moment(ele.EndTime).format('MM');
           this.e_dd = moment(ele.EndTime).format('DD');
-          ////time should pass in this format (UTC) otherwise there is a problem --> from documentation
+          ////time should pass in this format (UTC) otherwise there is a problem --> from documentation (ionic2-calender)
           this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
           this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
           this.title_data = ele.TaskCategory;
@@ -235,15 +226,15 @@ export class TasksPage {
 
           // {
         }
-      }
-      else {
-        let toast = this.toastCtrl.create({
-          message: "There is no tasks...",
-          duration: 4000,
-          position: 'middle'
-        });
-        toast.present();
-      }
+     // }
+      // else {
+      //   let toast = this.toastCtrl.create({
+      //     message: "There is no tasks...",
+      //     duration: 2000,
+      //     position: 'middle'
+      //   });
+      //   toast.present();
+      // }
     });
   }
   ///////////////////////// function to remove object ( the event ) from eventsource array ////////////////
