@@ -26,7 +26,10 @@
       <ion-card-content>
         <ion-note item-end>{{notifyTime}}</ion-note>
         <ion-card-title>{{notify.From}}</ion-card-title>
-        <p>{{notify.Message}}</p>
+        
+        <!-- <h3>{{notify.Message}}</h3> -->
+
+        <h3 [innerHTML]="notify.Message"></h3>
         
       </ion-card-content>
   </ion-card>
