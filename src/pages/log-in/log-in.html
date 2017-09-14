@@ -36,6 +36,16 @@
         </ion-item>
       </div>
 
+      <div *ngIf="userNameExisted">
+        <br />
+        <ion-item>
+          <h1>
+            <strong id="lbl_UserName">
+             Welcome {{User.UserName}}
+            </strong>
+          </h1>
+        </ion-item>
+      </div>
       <div>
         <ion-item>
           <ion-label floating>

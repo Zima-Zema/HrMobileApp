@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ActionSheetController, ViewController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController, ViewController, ToastController, LoadingController } from 'ionic-angular';
 //plugins
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileOpener } from '@ionic-native/file-opener';
@@ -17,16 +17,15 @@ import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService';
   templateUrl: 'done-task.html',
 })
 export class DoneTaskPage {
-  //
+
   lastImage: string = null;
   private captureDataUrl: string = "";
   public disc: string = "";
   public coming_Task: any = "";
-  public desc: string = "";
-  public Id: any = 0;
-  public File_Label: string = "";
   public isdisabled: boolean = true;
   public ext: string = "";
+  public filename_arr: Array<any> = [];
+  public imags: Array<any> = [];
   //////////////////////for test
   public errortext: string = "";
   public correctPath: string = "";
@@ -43,7 +42,8 @@ export class DoneTaskPage {
     private transfer: FileTransfer,
     private viewCtrl: ViewController,
     private tasksService: TasksServicesApi,
-    public toastCtrl: ToastController, ) {
+    public toastCtrl: ToastController,
+    public loadingCtrl: LoadingController, ) {
     this.coming_Task = this.navParams.get('Task');
   }
   //
@@ -108,44 +108,46 @@ export class DoneTaskPage {
       destinationType: this.cam.DestinationType.FILE_URI,
       correctOrientation: true,
       quality: 100,
-      saveToPhotoAlbum: false,
+      saveToPhotoAlbum: false, 
     };
     this.cam.getPicture(Options).then((imagePath) => {
       if (imagePath) {
         //make SaveData button enable
         this.isdisabled = false;
+        // this.filename = imagePath;
+        // this.captureDataUrl = 'data:image/jpeg;base64,' + imagePath;
+        // this.TollenObj.FileDetails.push(imagePath);
+        // this.TollenObj.Files.push(this.captureDataUrl);
+        // //resolve the image path 
+        this.filePath.resolveNativePath(imagePath).then(filePath => {
+          this.ext = ".jpg"; //type of extension in image
+          //if gallery button click
+          if (SourceType === this.cam.PictureSourceType.PHOTOLIBRARY) {
+            let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1); //path without name
+            let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?')); //file name
+            this.copyFileToLocalDir(correctPath, currentName, this.createFileName(this.ext));
+          }
+          else {
+            //if camera button click
+            var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
+            var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
+            this.copyFileToLocalDir(correctPath, currentName, this.createFileName(this.ext));
+          }
+        }, (err: Error) => {
+          this.errortext = "path : " + err.message;
+        });
       }
-      //resolve the image path 
-      this.filePath.resolveNativePath(imagePath).then(filePath => {
-        this.ext = ".jpg"; //type of extension in image
-        //if gallery button click
-        if (SourceType === this.cam.PictureSourceType.PHOTOLIBRARY) {
-          let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1); //path without name
-          let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?')); //file name
-          this.copyFileToLocalDir(correctPath, currentName, this.createFileName(this.ext));
-        }
-        else {
-          var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
-          var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-          this.copyFileToLocalDir(correctPath, currentName, this.createFileName(this.ext));
-        }
-      }, (err: Error) => {
-        this.errortext = "path : " + err.message; 
-      });
     }, (err: Error) => {
       this.errortext = "get pic : " + err.message;
     })
   }
   //Copy the image to a local folder
   public copyFileToLocalDir(namePath, currentName, newFileName: string) {
-    this.filename = currentName;
-    this.correctPath = namePath;
     //copy the new file 
     this.file.copyFile(namePath, currentName, this.file.dataDirectory, newFileName).then(success => {
-      this.filename = newFileName;
-      this.correctPath = this.file.dataDirectory;
       //the image appear in page
-      this.captureDataUrl = this.correctPath + newFileName;
+      this.captureDataUrl = this.file.dataDirectory + newFileName;
+      this.imags.push(this.captureDataUrl);
       this.TollenObj.FileDetails.push(newFileName);
       this.TollenObj.Files.push(this.captureDataUrl);
     }, (err: Error) => {
@@ -160,8 +162,10 @@ export class DoneTaskPage {
     return newFileName;
   }
   //upload the text written in textarea
+  
   uploadtext() {
-    if (this.disc == "") {
+    let str_file=this.disc.trim();
+    if (str_file == '') {
       let toast = this.toastCtrl.create({
         message: "Text file is empty..",
         duration: 2000,
@@ -180,9 +184,10 @@ export class DoneTaskPage {
           this.correctPath = uri;
           this.TollenObj.FileDetails.push(textfile);
           this.TollenObj.Files.push(uri);
+          this.filename_arr.push(textfile);
         })
         .catch((e: Error) => {
-          this.errortext = e.message;
+          this.errortext = "writeFile error : " + e.message;
         });
       this.isdisabled = false;
     }
@@ -196,51 +201,33 @@ export class DoneTaskPage {
           this.correctPath = filePath;
           this.TollenObj.FileDetails.push(this.filename);
           this.TollenObj.Files.push(uri);
+          this.filename_arr.push(this.filename);
+        })
+        .catch((err: Error) => {
+          this.errortext = "filePath error : " + err.message;
         })
       this.isdisabled = false;
     })
-      .catch((e: Error) => { this.errortext = e.message; });
-    /////////////////////////////////////////////////////
-    // let options1: FileUploadOptions = {
-    //   fileKey: 'file',
-    //   fileName: 'name.pdf',
-    //   params: { resume: uri },
-    //   chunkedMode: false,
-    //   headers: { Authorization: localStorage.getItem('token') }
-    // }
-    ////////////////////////////////////////
-    // this.fileOpener.open(this.file.dataDirectory + 'dbclick.txt', 'application/pdf')
-    //   .then((data) => { this.filetext = data })
-    //   .catch((e) => { this.filetext = e });
-    /////////////////////////////////////////////////////
-    // fileTransfer.upload(uri, "", options1)
-    //   .then(
-    //   (data) => { 
-    //     this.errortext = JSON.stringify(data)
-    //   },
-    //   (err) => { 
-    //     this.errortext = "error choose"
-    //   }
-    //   )
+      .catch((e: Error) => { this.errortext = "fileChooser error : " + e.message; });
   }
-  public arr1: Array<any> = [];
-  public arr2: Array<any> = [];
+
   //
   SaveData() {
-    this.filename = this.errortext = this.correctPath = "";
+    //this.filename = this.errortext = this.correctPath = "";
     this.TollenObj.TaskId = this.coming_Task.id;
-    //test
-    this.TollenObj.Files.forEach(element => {
-      this.arr1 += element;
+    console.log(" this.TollenObj ::: ", this.TollenObj);
+    let loader = this.loadingCtrl.create({
+      content: "Loading Documentations..."
     });
-    this.TollenObj.FileDetails.forEach(element => {
-      this.arr2 += element;
-    });
-    //
+    //loader.present().then(() => {
     this.tasksService.saveData(this.TollenObj).subscribe((data) => {
       //if (data) {
-      this.filename = data;
-      this.viewCtrl.dismiss(this.TollenObj);
+      this.viewCtrl.dismiss(this.TollenObj).then(() => {
+        //loader.dismiss();
+      })
+      // this.viewCtrl.onDidDismiss(()=>{
+      //    loader.dismiss();       
+      // })
       // }
       // else {
       //   let toast = this.toastCtrl.create({
@@ -253,6 +240,7 @@ export class DoneTaskPage {
     }, (err) => {
       this.errortext = err.message;
     });
+    //});
   }
   //
   StepBack() {
@@ -285,4 +273,27 @@ export class DoneTaskPage {
   //     this.errortext = err.message;
   //   });
   // }
+
+  /////////////////////////////////////////////////////
+  // let options1: FileUploadOptions = {
+  //   fileKey: 'file',
+  //   fileName: 'name.pdf',
+  //   params: { resume: uri },
+  //   chunkedMode: false,
+  //   headers: { Authorization: localStorage.getItem('token') }
+  // }
+  ////////////////////////////////////////
+  // this.fileOpener.open(this.file.dataDirectory + 'dbclick.txt', 'application/pdf')
+  //   .then((data) => { this.filetext = data })
+  //   .catch((e) => { this.filetext = e });
+  /////////////////////////////////////////////////////
+  // fileTransfer.upload(uri, "", options1)
+  //   .then(
+  //   (data) => { 
+  //     this.errortext = JSON.stringify(data)
+  //   },
+  //   (err) => { 
+  //     this.errortext = "error choose"
+  //   }
+  //   )
 }

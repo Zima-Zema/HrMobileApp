@@ -13,26 +13,28 @@
     <ion-row>
       <ion-textarea rows="6" class="txtarea" placeholder="Enter a discription" [value]="disc" [(ngModel)]="disc"></ion-textarea>
     </ion-row>
-    <ion-row>
+    <!-- <ion-row>
       <ion-item *ngIf="File_Label">UPLOADED : {{File_Label}}</ion-item>
-    </ion-row>
+    </ion-row> -->
+    <br/>
+    <ion-scroll scrollX="true" scrollY="true" zoom="true">
+      <img *ngFor="let i of imags" [src]="i" style="border-radius:15%;" class="smallImg" />
+    </ion-scroll>
+    <br/>
     <ion-row>
-      <!-- <ion-item>
-        <ion-avatar> -->
       <div text-center>
-        <img class="image" [src]="captureDataUrl" *ngIf="captureDataUrl" style="border-radius:20%;" />
+        <img class="image" [src]="captureDataUrl" *ngIf="captureDataUrl" style="border-radius:15%;" />
       </div>
-      <!-- </ion-avatar>
-      </ion-item> -->
     </ion-row>
   </ion-grid>
   <!-- /////////////////////////// for test  -->
-  <span>arr1 : {{arr1}}</span><br/>
-  <span>arr2 : {{arr2}}</span><br/>
+  <ul>
+    <h3> you have uploaded : </h3>
+    <li *ngFor="let filename of filename_arr"> {{filename}}</li>
+  </ul>
   <span>errortext : {{errortext}}</span><br/>
-  <span>filename : {{filename}}</span><br/>
-  <span>correctPath : {{correctPath}}</span><br/>
-
+  <!-- <span>filename : {{filename}}</span><br/>
+  <span>correctPath : {{correctPath}}</span><br/> -->
   <!-- ///////////////////////////////  -->
 </ion-content>
 
