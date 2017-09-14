@@ -63,11 +63,15 @@ export class TasksServicesApi {
     //save images and files
     saveData(body: ITollen): Observable<any> {
         let bodyString = JSON.stringify(body); // Stringify payload
+        // console.log("the bloody bodyString>>",bodyString);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}/newApi/MobileTasks/PostFile`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json() ::: ",res.json());
                 return res.json();
-            }).catch((err)=>{return err;});
+            }).catch((err)=>{
+                console.log("the bloody From Service>>",err);
+                return err;
+            });
     }
 }

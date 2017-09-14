@@ -89,7 +89,7 @@ export class LogInPage {
                 let alert = this.alertCtrl.create({
                     title: "Error",
                     buttons: [{ text: "Ok", role: "cancel" }],
-                    message: "Error in Internet Connection .. Please Try again latter",
+                    message: "Error in Internet Connection .. Please Try again later",
                 });
                 alert.present();
             }
@@ -102,7 +102,7 @@ export class LogInPage {
                 let alert = this.alertCtrl.create({
                     title: "Error",
                     buttons: [{ text: "Ok", role: "cancel" }],
-                    message: "Error in Internet Connection .. Please Try again latter",
+                    message: "Error in Internet Connection .. Please Try again later",
                 });
                 alert.present();
             }

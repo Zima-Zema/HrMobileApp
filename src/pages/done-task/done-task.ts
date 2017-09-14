@@ -48,7 +48,7 @@ export class DoneTaskPage {
   }
   //
   TollenObj: ITollen = {
-    CompanyId: 0,
+    CompanyId:2,
     Files: [],
     Language: "en-GB",
     Source: "EmpTasksForm",
@@ -105,37 +105,38 @@ export class DoneTaskPage {
   openImage(SourceType) {
     let Options = {
       sourceType: SourceType,
-      destinationType: this.cam.DestinationType.FILE_URI,
+      destinationType: this.cam.DestinationType.DATA_URL,
       correctOrientation: true,
       quality: 100,
       saveToPhotoAlbum: false, 
     };
-    this.cam.getPicture(Options).then((imagePath) => {
-      if (imagePath) {
+    this.cam.getPicture(Options).then((imageData) => {
+      if (imageData) {
         //make SaveData button enable
         this.isdisabled = false;
-        // this.filename = imagePath;
-        // this.captureDataUrl = 'data:image/jpeg;base64,' + imagePath;
-        // this.TollenObj.FileDetails.push(imagePath);
-        // this.TollenObj.Files.push(this.captureDataUrl);
+        // this.filename = imageData;
+        this.captureDataUrl = 'data:image/jpeg;base64,' + imageData;
+        // this.TollenObj.FileDetails.push(imageData);
+        this.TollenObj.FileDetails.push("imageData");
+        this.TollenObj.Files.push(this.captureDataUrl);
         // //resolve the image path 
-        this.filePath.resolveNativePath(imagePath).then(filePath => {
-          this.ext = ".jpg"; //type of extension in image
-          //if gallery button click
-          if (SourceType === this.cam.PictureSourceType.PHOTOLIBRARY) {
-            let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1); //path without name
-            let currentName = imagePath.substring(imagePath.lastIndexOf('/') + 1, imagePath.lastIndexOf('?')); //file name
-            this.copyFileToLocalDir(correctPath, currentName, this.createFileName(this.ext));
-          }
-          else {
-            //if camera button click
-            var currentName = imagePath.substr(imagePath.lastIndexOf('/') + 1);
-            var correctPath = imagePath.substr(0, imagePath.lastIndexOf('/') + 1);
-            this.copyFileToLocalDir(correctPath, currentName, this.createFileName(this.ext));
-          }
-        }, (err: Error) => {
-          this.errortext = "path : " + err.message;
-        });
+        // this.filePath.resolveNativePath(imageData).then(filePath => {
+        //   this.ext = ".jpg"; //type of extension in image
+        //   //if gallery button click
+        //   if (SourceType === this.cam.PictureSourceType.PHOTOLIBRARY) {
+        //     let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1); //path without name
+        //     let currentName = imageData.substring(imageData.lastIndexOf('/') + 1, imageData.lastIndexOf('?')); //file name
+        //     this.copyFileToLocalDir(correctPath, currentName, this.createFileName(this.ext));
+        //   }
+        //   else {
+        //     //if camera button click
+        //     var currentName = imageData.substr(imageData.lastIndexOf('/') + 1);
+        //     var correctPath = imageData.substr(0, imageData.lastIndexOf('/') + 1);
+        //     this.copyFileToLocalDir(correctPath, currentName, this.createFileName(this.ext));
+        //   }
+        // }, (err: Error) => {
+        //   this.errortext = "path : " + err.message;
+        // });
       }
     }, (err: Error) => {
       this.errortext = "get pic : " + err.message;
@@ -162,12 +163,11 @@ export class DoneTaskPage {
     return newFileName;
   }
   //upload the text written in textarea
-  
   uploadtext() {
     let str_file=this.disc.trim();
     if (str_file == '') {
       let toast = this.toastCtrl.create({
-        message: "Text file is empty..",
+        message: "Text file is empty...",
         duration: 2000,
         position: 'middle'
       });
@@ -215,16 +215,15 @@ export class DoneTaskPage {
   SaveData() {
     //this.filename = this.errortext = this.correctPath = "";
     this.TollenObj.TaskId = this.coming_Task.id;
-    console.log(" this.TollenObj ::: ", this.TollenObj);
+   // console.log(" this.TollenObj ::: ", this.TollenObj);
     let loader = this.loadingCtrl.create({
       content: "Loading Documentations..."
     });
     //loader.present().then(() => {
     this.tasksService.saveData(this.TollenObj).subscribe((data) => {
       //if (data) {
-      this.viewCtrl.dismiss(this.TollenObj).then(() => {
+      this.viewCtrl.dismiss(this.TollenObj)
         //loader.dismiss();
-      })
       // this.viewCtrl.onDidDismiss(()=>{
       //    loader.dismiss();       
       // })
@@ -238,6 +237,7 @@ export class DoneTaskPage {
       //   toast.present();
       // }
     }, (err) => {
+      console.log("The bloody Error Page>>",err);
       this.errortext = err.message;
     });
     //});
