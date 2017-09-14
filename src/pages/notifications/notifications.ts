@@ -11,7 +11,7 @@ import { NotificationServiceApi, INotification, INotifyParams } from "../../shar
 })
 export class NotificationsPage {
 
-  flag:boolean;
+  flag: boolean;
   notifyParams: INotifyParams = {
     UserName: "Bravo",
     CompanyId: 2,
@@ -21,33 +21,35 @@ export class NotificationsPage {
   baseUrl: string = "http://www.enterprise-hr.com/";
   notifications: Array<INotification> = [];
   private start: number = 0;
-  errorMsg:string=undefined;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private loadingCtrl:LoadingController, private modalCtrl:ModalController) {
+  errorMsg: string = undefined;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private loadingCtrl: LoadingController, private modalCtrl: ModalController) {
 
 
 
   }
 
-  ionViewWillEnter(){
-    this.start=0;
+  ionViewWillEnter() {
+    this.start = 0;
     console.log('ionViewWillEnter NotificationsPage');
-        let loader = this.loadingCtrl.create({
-      content:"Loading..."
+    let loader = this.loadingCtrl.create({
+      content: "Loading..."
     });
-    loader.present().then(()=>{
-      this.loadNotification();
-      loader.dismiss();
+    loader.present().then(() => {
+      this.loadNotification().then(() => {
+        loader.dismiss();
+      })
+
     })
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NotificationsPage');
-    
+
   }
 
 
-  loadNotification() {
-    this.notifications=[];
+  loadNotification(): Promise<any> {
+    this.notifications = [];
     this.notifyApi.getNotifications(this.start, this.notifyParams).subscribe((data) => {
       //this.flag=false;
       // if (this.start < 10) {
@@ -55,9 +57,11 @@ export class NotificationsPage {
       // }
       console.log("Notification List>>>", data.value);
       for (let notification of data.value) {
-
         this.notifications.push(notification);
       }
+      return new Promise((res) => {
+        res(true);
+      });
 
     }, (error) => {
       console.log("error in notification", error);
@@ -70,13 +74,17 @@ export class NotificationsPage {
       //   }
       // })
     });
+
+          return new Promise((res) => {
+        res(false);
+      });
   }
 
   doInfinite(infiniteScroll: any) {
     console.log("doInfinite, start is currently>>>", this.start);
     this.start += 10;
     this.notifyApi.getNotifications(this.start, this.notifyParams).subscribe((data) => {
-      
+
       // if (this.start < 10) {
       //   this.storage.set("topNotify", data.value);
       // }
@@ -88,7 +96,7 @@ export class NotificationsPage {
       for (let notification of data.value) {
         this.notifications.push(notification);
       }
-      
+
       infiniteScroll.complete();
 
     }, (error) => {
@@ -105,11 +113,11 @@ export class NotificationsPage {
   }
   /////////////////////////////////////////
   notificationTapped(event, notification) {
-    let modal = this.modalCtrl.create(NotificationDetailsPage,notification);
+    let modal = this.modalCtrl.create(NotificationDetailsPage, notification);
     modal.present();
-    modal.onDidDismiss((data)=>{
-      console.log("ModalReturn",data);
-      this.notifications.find(n=>n.Id==data).Read=true;
+    modal.onDidDismiss((data) => {
+      console.log("ModalReturn", data);
+      this.notifications.find(n => n.Id == data).Read = true;
     })
 
     // this.navCtrl.push(NotificationDetailsPage, notification);

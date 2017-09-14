@@ -36,6 +36,16 @@
         </ion-item>
       </div>
 
+      <div *ngIf="userNameExisted">
+        <br />
+        <ion-item>
+          <h1>
+            <strong id="lbl_UserName">
+             Welcome {{User.UserName}}
+            </strong>
+          </h1>
+        </ion-item>
+      </div>
       <div>
         <ion-item>
           <ion-label floating>
@@ -51,7 +61,7 @@
       <br/>
       <ion-item>
         <ion-label>Remember Me</ion-label>
-        <ion-checkbox color="primary"></ion-checkbox>
+        <ion-checkbox formControlName="rememberMe" color="primary"></ion-checkbox>
       </ion-item>
       <br/>
       <br/>
@@ -67,6 +77,4 @@
         <ion-icon name="log-in"></ion-icon>&nbsp;&nbsp;&nbsp; LogIn</button>
     </form>
   </ion-list>
-  <button ion-button (click)="check()">Connection</button>
-  <button ion-button (click)="tasks()">Tasks</button>
 </ion-content>

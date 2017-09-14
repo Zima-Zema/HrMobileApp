@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Http, Headers, Response } from "@angular/http";
 import { Observable } from "rxjs/Observable";
+import { Storage } from '@ionic/storage';
 
 export interface INotifyParams {
     UserName: string;
@@ -31,9 +32,13 @@ export interface ODataNotification{
 export class NotificationServiceApi {
 
     perPage: number = 10;
-    private baseURL: string = 'http://www.enterprise-hr.com/'
+    private baseURL: string;
     
-    constructor(private _http: Http) {
+    constructor(private _http: Http,private _storage: Storage) {
+        this._storage.get("BaseURL").then((val) => {
+                                this.baseURL = val;
+                                
+                            });
     }
 
     getNotifications(start: number = 0,body:INotifyParams ):Observable<ODataNotification> {
