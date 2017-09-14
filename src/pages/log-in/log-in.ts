@@ -49,6 +49,7 @@ export class LogInPage {
             this.storage.get("User").then((udata) => {
                 if (udata) {
                     this.userNameExisted = true;
+                    this.User = udata;
                     this.logInForm.controls['userName'].setValue(udata.UserName);
                 }
                 this.storage.get("Password").then((pdata) => {
