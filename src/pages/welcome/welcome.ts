@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { NotificationsPage} from '../notifications/notifications';
-import { TasksPage} from '../tasks/tasks';
-import { NotificationServiceApi,INotifyParams,INotification} from '../../shared/NotificationService';
-import {SignalR} from 'ng2-signalr';
+import { NotificationsPage } from '../notifications/notifications';
+import { TasksPage } from '../tasks/tasks';
+import { NotificationServiceApi, INotifyParams, INotification } from '../../shared/NotificationService';
+import { SignalR } from 'ng2-signalr';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { NotificationDetailsPage } from '../notification-details/notification-details';
 
@@ -14,35 +14,39 @@ import { NotificationDetailsPage } from '../notification-details/notification-de
 })
 export class WelcomePage {
 
-  notifyParams:INotifyParams = {
-    UserName:"Bravo",
-    CompanyId:2,
-    Language:"en-GB"
+  notifyParams: INotifyParams = {
+    UserName: "Bravo",
+    CompanyId: 2,
+    Language: "en-GB"
   }
-  public static notificationNumber:number=0;
-  baseUrl:string="http://www.enterprise-hr.com/";
-  get notificationNumber(){
+  public static notificationNumber: number = 0;
+  baseUrl: string = "http://www.enterprise-hr.com/";
+  get notificationNumber() {
     return WelcomePage.notificationNumber;
   }
-  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi:NotificationServiceApi, private signalr:SignalR, public localNotifications:LocalNotifications) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private signalr: SignalR, public localNotifications: LocalNotifications) {
 
-    this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data)=>{
-      console.log("Notification Number>>>",data);
-      WelcomePage.notificationNumber=data;
-      console.log("WelcomePage.notificationNumber>>>",WelcomePage.notificationNumber);
-    },(err)=>{
-      console.log("WelcomePage.notificationNumber>>>",WelcomePage.notificationNumber);
-    })
+
 
 
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
+    if(WelcomePage.notificationNumber)
+    this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
+      console.log("Notification Number>>>", data);
+      WelcomePage.notificationNumber = data;
+      console.log("WelcomePage.notificationNumber>>>", WelcomePage.notificationNumber);
+    }, (err) => {
+      console.log("WelcomePage.notificationNumber Error>>>", err);
+    });
+
+
     console.log('ionViewDidLoad WelcomePage');
-    this.signalr.connect().then((connection)=>{
-      console.log("connection>>>",connection);
-      connection.listenFor('AppendMessage').subscribe((message:INotification)=>{
-        console.log("the message>>>",message);
+    this.signalr.connect().then((connection) => {
+      console.log("connection>>>", connection);
+      connection.listenFor('AppendMessage').subscribe((message) => {
+        console.log("the message>>>", message);
         WelcomePage.notificationNumber++;
         // this.localNotifications.schedule({
         //   id:message.Id,
@@ -58,15 +62,20 @@ export class WelcomePage {
     // this.localNotifications.on('click',(data)=>{
     //   this.navCtrl.push(NotificationDetailsPage,data);
     // });
+
   }
-////////////////////////////
-GoToHome(){
-  this.navCtrl.push(WelcomePage);
-}
-GoToNotifications(){
-  this.navCtrl.push(NotificationsPage);
-}
-GoToTasks(){
-  this.navCtrl.push(TasksPage);
-}
+
+  ionViewDidLoad() {
+
+  }
+  ////////////////////////////
+  GoToHome() {
+    this.navCtrl.push(WelcomePage);
+  }
+  GoToNotifications() {
+    this.navCtrl.push(NotificationsPage);
+  }
+  GoToTasks() {
+    this.navCtrl.push(TasksPage);
+  }
 }
