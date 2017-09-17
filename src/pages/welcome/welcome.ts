@@ -32,7 +32,7 @@ export class WelcomePage {
   }
 
   ionViewWillEnter() {
-    if(WelcomePage.notificationNumber)
+    // if(WelcomePage.notificationNumber)
     this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
       console.log("Notification Number>>>", data);
       WelcomePage.notificationNumber = data;
@@ -45,23 +45,23 @@ export class WelcomePage {
     console.log('ionViewDidLoad WelcomePage');
     this.signalr.connect().then((connection) => {
       console.log("connection>>>", connection);
-      connection.listenFor('AppendMessage').subscribe((message) => {
+      connection.listenFor('AppendMessage').subscribe((message:INotification) => {
         console.log("the message>>>", message);
         WelcomePage.notificationNumber++;
-        // this.localNotifications.schedule({
-        //   id:message.Id,
-        //   text:message.Message,
-        //   title:message.From,
-        //   icon:''+this.baseUrl+'SpecialData/Photos/0/'+message.PicUrl+'?dummy=1503580792563',
-        //   data:message
-        // });
+        this.localNotifications.schedule({
+          id:message.Id,
+          text:message.Message,
+          title:message.From,
+          icon:''+this.baseUrl+'SpecialData/Photos/0/'+message.PicUrl+'?dummy=1503580792563',
+          data:message
+        });
 
       });
     });
 
-    // this.localNotifications.on('click',(data)=>{
-    //   this.navCtrl.push(NotificationDetailsPage,data);
-    // });
+    this.localNotifications.on('click',(data)=>{
+      this.navCtrl.push(NotificationDetailsPage,data);
+    });
 
   }
 
@@ -70,7 +70,9 @@ export class WelcomePage {
   }
   ////////////////////////////
   GoToHome() {
-    this.navCtrl.push(WelcomePage);
+    //this.navCtrl.push(WelcomePage);
+    //this.navCtrl.setRoot(WelcomePage);
+    this.navCtrl.popToRoot();
   }
   GoToNotifications() {
     this.navCtrl.push(NotificationsPage);

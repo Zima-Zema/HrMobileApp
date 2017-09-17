@@ -66,6 +66,9 @@ export class LoginServiceApi {
                                         if (error.status == 404) {
                                             resolve("Error in Service .. Try agian later !!");
                                         }
+                                        else if (error.status == 403) {
+                                            resolve("Error in Service .. Try agian later !!");
+                                        }
                                         else if (error.status == 500) {
                                             resolve("Error in Server .. Try agian later !!");
                                         }
@@ -149,6 +152,9 @@ export class LoginServiceApi {
                 error => {
                     if (error.status == 500) {
                         resolve("Error in Server .. Try agian later !!");
+                    }
+                    else if (error.status == 403) {
+                        resolve("Incorrect Username or Password !!");
                     }
                     resolve(error._body);
                 });

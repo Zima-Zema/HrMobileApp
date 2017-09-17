@@ -127,7 +127,10 @@ export class LogInPage {
                     }
                 });
             }
-        });
+        }).catch((Zeoo)=>{
+            //console.log("Zeooo>>",Zeoo);
+            //loader.dismiss();
+        })
     }
 
     InputBlured(inputName) {

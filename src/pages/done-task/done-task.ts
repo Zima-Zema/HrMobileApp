@@ -48,7 +48,7 @@ export class DoneTaskPage {
   }
   //
   TollenObj: ITollen = {
-    CompanyId:2,
+    CompanyId: 2,
     Files: [],
     Language: "en-GB",
     Source: "EmpTasksForm",
@@ -71,7 +71,7 @@ export class DoneTaskPage {
         {
           text: 'Open your gallery',
           handler: () => {
-            this.openImage(this.cam.PictureSourceType.PHOTOLIBRARY);
+            this.openImage(this.cam.PictureSourceType.SAVEDPHOTOALBUM);
           }
         }
         //, {
@@ -106,24 +106,28 @@ export class DoneTaskPage {
     let Options = {
       sourceType: SourceType,
       destinationType: this.cam.DestinationType.DATA_URL,
-      correctOrientation: true,
       quality: 100,
-      saveToPhotoAlbum: false, 
+      targetWidth: 1000,
+      targetHeight: 1000,
+      encodingType: this.cam.EncodingType.PNG,
+      correctOrientation: true,
     };
     this.cam.getPicture(Options).then((imageData) => {
       if (imageData) {
         //make SaveData button enable
         this.isdisabled = false;
-        // this.filename = imageData;
+        ////////////////////////////////////////
+        this.ext = ".jpg";
+        let textfile = this.createFileName(this.ext);
         this.captureDataUrl = 'data:image/jpeg;base64,' + imageData;
-        // this.TollenObj.FileDetails.push(imageData);
-        this.TollenObj.FileDetails.push("imageData");
-        this.TollenObj.Files.push(this.captureDataUrl);
+        this.TollenObj.FileDetails.push(textfile);
+        this.TollenObj.Files.push(imageData);
+        ////////////////////////////////////////
         // //resolve the image path 
         // this.filePath.resolveNativePath(imageData).then(filePath => {
         //   this.ext = ".jpg"; //type of extension in image
         //   //if gallery button click
-        //   if (SourceType === this.cam.PictureSourceType.PHOTOLIBRARY) {
+        //   if (SourceType === this.cam.PictureSourceType.SAVEDPHOTOALBUM) {
         //     let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1); //path without name
         //     let currentName = imageData.substring(imageData.lastIndexOf('/') + 1, imageData.lastIndexOf('?')); //file name
         //     this.copyFileToLocalDir(correctPath, currentName, this.createFileName(this.ext));
@@ -164,7 +168,7 @@ export class DoneTaskPage {
   }
   //upload the text written in textarea
   uploadtext() {
-    let str_file=this.disc.trim();
+    let str_file = this.disc.trim();
     if (str_file == '') {
       let toast = this.toastCtrl.create({
         message: "Text file is empty...",
@@ -215,7 +219,7 @@ export class DoneTaskPage {
   SaveData() {
     //this.filename = this.errortext = this.correctPath = "";
     this.TollenObj.TaskId = this.coming_Task.id;
-   // console.log(" this.TollenObj ::: ", this.TollenObj);
+    // console.log(" this.TollenObj ::: ", this.TollenObj);
     let loader = this.loadingCtrl.create({
       content: "Loading Documentations..."
     });
@@ -223,7 +227,7 @@ export class DoneTaskPage {
     this.tasksService.saveData(this.TollenObj).subscribe((data) => {
       //if (data) {
       this.viewCtrl.dismiss(this.TollenObj)
-        //loader.dismiss();
+      //loader.dismiss();
       // this.viewCtrl.onDidDismiss(()=>{
       //    loader.dismiss();       
       // })
@@ -237,7 +241,7 @@ export class DoneTaskPage {
       //   toast.present();
       // }
     }, (err) => {
-      console.log("The bloody Error Page>>",err);
+      console.log("The bloody Error Page>>", err);
       this.errortext = err.message;
     });
     //});
