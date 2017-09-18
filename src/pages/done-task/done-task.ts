@@ -19,7 +19,6 @@ import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService';
 })
 export class DoneTaskPage {
 
-  lastImage: string = null;
   private captureDataUrl: string = "";
   public disc: string = "";
   public coming_Task: any = "";
@@ -141,6 +140,13 @@ export class DoneTaskPage {
       }
     }, (err: Error) => {
       this.errortext = "get pic : " + err.message;
+      let toast = this.toastCtrl.create({
+        message: "Sorry, Error to get Image",
+        duration: 3000,
+        position: 'middle',
+        cssClass: "tryerror.scss"
+      });
+      toast.present();
     }).catch(
       (e: Error) => { this.filename = e.message; }
       )
@@ -172,7 +178,8 @@ export class DoneTaskPage {
       let toast = this.toastCtrl.create({
         message: "Text file is empty...",
         duration: 2000,
-        position: 'middle'
+        position: 'middle',
+        cssClass: "tryempty.scss"
       });
       toast.present();
     }

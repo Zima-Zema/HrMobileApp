@@ -13,8 +13,6 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'tasks.html',
 })
 export class TasksPage {
-  // @Input('selectedD') selectedDate: any;
-  selectedDate: any;
   event: any = {};
   str_time: any;
   end_time: any;
@@ -25,7 +23,7 @@ export class TasksPage {
   e_dd: any;
   e_mm: any;
   e_yyyy: any;
-  @ViewChild(CalendarComponent) myCalender: CalendarComponent;
+  //@ViewChild(CalendarComponent) myCalender: CalendarComponent;
   eventSource = [];
   events = [];
   viewTitle: string;
@@ -53,15 +51,6 @@ export class TasksPage {
     EndTime: "",
     SubPeriodId: 0,
     CompanyId: 0,
-    //ChangeEmployee:false,
-    //EmpList:"",
-    //Employee:"",
-    //isStart:false,
-    //Manager:"",
-    //Period:"",
-    //PeriodId:0,
-    //SubPeriod:"",
-    //TaskCategory:""
   }
   calendar = {
     mode: 'month',
@@ -81,27 +70,15 @@ export class TasksPage {
   }
   ///////////////////////////////////
   ionViewDidLoad() {
-    // window.onload = function () {
-    //   var doc = document.getElementsByClassName('event-detail');
-    //   console.log("doc  ", doc.item(0));
-    // }
-    // window.addEventListener('load', ()=>{
-    //var arr_doc = Array.from(doc);
-    //console.log("arr_doc  ", arr_doc);
-    // var filter_doc = [...doc].filter(el => el.innerHTML.indexOf(event.title));
-    // })
   }
-
   ionViewWillLoad() {
     this.loader_task.present().then(() => {
       this.loadEvents();
     });
   }
-
   addEvent() {
     let modal = this.modalCtrl.create('AddTaskPage', { selectedDay: this.selectedDay });
     modal.present();
-
     modal.onDidDismiss(data => {
       if (data) {
         let toast = this.toastCtrl.create({
@@ -133,8 +110,6 @@ export class TasksPage {
   }
 
   onEventSelected(event) {
-    var doc = document.querySelectorAll('.event-detail');
-    console.log("doc ", doc);
     console.log("event  ", event);
     let start = moment(event.startTime).format('LLLL');
     let end = moment(event.endTime).format('LLLL');
@@ -168,16 +143,15 @@ export class TasksPage {
             if (event.Stat == 1) {
               const Sec_modal = this.modalCtrl.create('DoneTaskPage', { Task: event });
               Sec_modal.present();
-
               Sec_modal.onDidDismiss(data => {
                 if (data) {
                   console.log("data back from dismiss :: ", data)
-                  let toast = this.toastCtrl.create({
-                    message: "Documentations is Added.",
-                    duration: 3000,
-                    position: 'middle'
-                  });
                   if (data.Files.length > 0) {
+                    let toast = this.toastCtrl.create({
+                      message: "Documentations is Added.",
+                      duration: 3000,
+                      position: 'middle'
+                    });
                     var doc = document.querySelectorAll('.event-detail');
                     var arr_doc = Array.from(doc);
                     var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title));
@@ -213,63 +187,58 @@ export class TasksPage {
     })
     alert.present();
   }
-
-  ///////////////////////
   onTimeSelected(ev) {
     this.selectedDay = ev.selectedTime;
-  }
-  ///////////////////////////
-  ionViewDidEnter() {
-
   }
   loadEvents() {
     let emp_id: number;
     let user: any = this.storage.get("User").then((user) => {
-      console.log("User", user);
-      emp_id = user.EmpId;
-      this.tasksService.getTasks(emp_id).subscribe((data) => {
-        if (data) {
-          //Working ==> By Fatma 
-          data.forEach(ele => {
-            console.log("coming ele >>>", ele);
-            //stratTime  : sperate to get each of year , month and day
-            this.s_yyyy = moment(ele.StartTime).format('YYYY');
-            this.s_mm = moment(ele.StartTime).format('MM');
-            this.s_dd = moment(ele.StartTime).format('DD');
-            //EndTime  : sperate to get each of year , month and day
-            this.e_yyyy = moment(ele.EndTime).format('YYYY');
-            this.e_mm = moment(ele.EndTime).format('MM');
-            this.e_dd = moment(ele.EndTime).format('DD');
-            ////time should pass in this format (UTC) otherwise there is a problem --> from documentation (ionic2-calender)
-            this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
-            this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
-            this.title_data = ele.TaskCategory;
-            this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id, Stat: ele.Status };
-            this.events = this.eventSource;
-            if (this.event.Stat == 1) {
-              this.events.push(this.event);
-            }
-          });
-          this.eventSource = [];
-          this.loader_task.dismiss();
-          setTimeout(() => {
-            this.eventSource = this.events;
-          });
-        }
-        else {
-          let toast = this.toastCtrl.create({
-            message: "There is no tasks...",
-            duration: 2000,
-            position: 'middle'
-          });
-          toast.present();
-        }
-      });
+      if (user) {
+        console.log("User", user);
+        emp_id = user.EmpId;
+        this.tasksService.getTasks(emp_id).subscribe((data) => {
+          if (data) {
+            //Working ==> By Fatma 
+            data.forEach(ele => {
+              console.log("coming ele >>>", ele);
+              //stratTime  : sperate to get each of year , month and day
+              this.s_yyyy = moment(ele.StartTime).format('YYYY');
+              this.s_mm = moment(ele.StartTime).format('MM');
+              this.s_dd = moment(ele.StartTime).format('DD');
+              //EndTime  : sperate to get each of year , month and day
+              this.e_yyyy = moment(ele.EndTime).format('YYYY');
+              this.e_mm = moment(ele.EndTime).format('MM');
+              this.e_dd = moment(ele.EndTime).format('DD');
+              ////time should pass in this format (UTC) otherwise there is a problem --> from documentation (ionic2-calender)
+              this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
+              this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
+              this.title_data = ele.TaskCategory;
+              this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id, Stat: ele.Status, desc: ele.Description };
+              this.events = this.eventSource;
+              if (this.event.Stat == 1) {
+                this.events.push(this.event);
+              }
+            });
+            this.eventSource = [];
+            this.loader_task.dismiss();
+            setTimeout(() => {
+              this.eventSource = this.events;
+            });
+          }
+          else {
+            let toast = this.toastCtrl.create({
+              message: "There is no tasks...",
+              duration: 2000,
+              position: 'middle'
+            });
+            toast.present();
+          }
+        });
+      }
     });
   }
   ///////////////////////// function to remove object ( the event ) from eventsource array ////////////////
-  ///////////////////////// called in delete button in alert control //////////////////////////////
-  ///////////////////////// Not used for now ///////////////////
+  ///////////////////////// called in delete button in alert control // Not used for now //////////////////////////////
   removeByAttr = function (arr, attr, value) {
     var i = arr.length;
     while (i--) {
