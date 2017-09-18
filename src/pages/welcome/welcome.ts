@@ -6,8 +6,13 @@ import { NotificationServiceApi, INotifyParams, INotification } from '../../shar
 import { SignalR } from 'ng2-signalr';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { NotificationDetailsPage } from '../notification-details/notification-details';
+<<<<<<< HEAD
 import { LogInPage} from '../log-in/log-in';
 import { Storage } from '@ionic/storage';
+=======
+import { Storage } from '@ionic/storage';
+import { IUser } from "../../shared/IUser";
+>>>>>>> 8f62ed76c920f52aa6fcc2279f0180656c437232
 
 @IonicPage()
 @Component({
@@ -17,17 +22,29 @@ import { Storage } from '@ionic/storage';
 export class WelcomePage {
 
   notifyParams: INotifyParams = {
-    UserName: "Bravo",
-    CompanyId: 2,
-    Language: "en-GB"
+    UserName: "",
+    CompanyId: 0,
+    Language: ""
   }
   public static notificationNumber: number = 0;
+  user:IUser;
   baseUrl: string = "http://www.enterprise-hr.com/";
   get notificationNumber() {
     return WelcomePage.notificationNumber;
   }
   constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private signalr: SignalR, public localNotifications: LocalNotifications,private storage: Storage) {
+<<<<<<< HEAD
+=======
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+        this.notifyParams.UserName = this.user.UserName;
+        this.notifyParams.Language = this.user.Language;
+        this.notifyParams.CompanyId = this.user.CompanyId;
+      }
+>>>>>>> 8f62ed76c920f52aa6fcc2279f0180656c437232
 
+    });
 
 
 
