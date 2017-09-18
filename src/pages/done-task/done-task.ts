@@ -141,7 +141,7 @@ export class DoneTaskPage {
     }, (err: Error) => {
       this.errortext = "get pic : " + err.message;
       let toast = this.toastCtrl.create({
-        message: "Sorry, Error to get Image",
+        message: "Sorry, Error to get Image, Please try again.",
         duration: 3000,
         position: 'middle',
         cssClass: "tryerror.scss"
@@ -198,6 +198,13 @@ export class DoneTaskPage {
         })
         .catch((e: Error) => {
           this.errortext = "writeFile error : " + e.message;
+          let toast = this.toastCtrl.create({
+            message: "Sorry, Error to write file, Please try again.",
+            duration: 3000,
+            position: 'middle',
+            cssClass: "tryerror.scss"
+          });
+          toast.present();
         });
       this.isdisabled = false;
     }
@@ -215,10 +222,24 @@ export class DoneTaskPage {
         })
         .catch((err: Error) => {
           this.errortext = "filePath error : " + err.message;
+          let toast = this.toastCtrl.create({
+            message: "Sorry, Error to get file, Please try again.",
+            duration: 3000,
+            position: 'middle',
+            cssClass: "tryerror.scss"
+          });
+          toast.present();
         })
       this.isdisabled = false;
     })
-      .catch((e: Error) => { this.errortext = "fileChooser error : " + e.message; });
+      .catch((e: Error) => { this.errortext = "fileChooser error : " + e.message;
+     let toast = this.toastCtrl.create({
+            message: "Sorry, Error to open file, Please try again.",
+            duration: 3000,
+            position: 'middle',
+            cssClass: "tryerror.scss"
+          });
+          toast.present(); });
   }
 
   //
