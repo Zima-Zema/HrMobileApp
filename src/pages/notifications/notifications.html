@@ -15,7 +15,7 @@ notifications.length
     <ion-item *virtualItem="let notification" class="item-content"  (click)="notificationTapped($event,notification)" [ngClass]="{'item-content':!notification.Read}">
       <ion-avatar item-start>
      
-        <ion-img src="{{baseUrl}}SpecialData/Photos/0/{{notification.PicUrl}}?dummy=1503580792563">
+        <ion-img src="{{baseUrl}}SpecialData/Photos/{{user.CompanyId}}/{{notification.PicUrl}}?dummy=1503580792563">
         </ion-img>
         
       </ion-avatar>
