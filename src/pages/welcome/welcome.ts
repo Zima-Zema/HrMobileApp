@@ -50,6 +50,8 @@ export class WelcomePage {
           this.localNotifications.schedule({
             id: message.Id,
             text: message.Message,
+            at:new Date().getTime(),
+            led:'FF0000',
             title: message.From,
             icon: '' + this.baseUrl + 'SpecialData/Photos/'+this.user.CompanyId+'/' + message.PicUrl + '?dummy=1503580792563',
             data: message
