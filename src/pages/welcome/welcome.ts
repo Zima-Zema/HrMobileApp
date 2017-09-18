@@ -40,8 +40,6 @@ export class WelcomePage {
         this.user_name=udata.UserName;
         this.user_email=udata.Email;
       }
-<<<<<<< HEAD
-=======
       this.signalr.connect().then((connection) => {
         console.log("connection>>>", connection);
 
@@ -64,7 +62,6 @@ export class WelcomePage {
         this.navCtrl.push(NotificationDetailsPage, data);
       });
 
->>>>>>> 169828c8158932a3f855cf75ad007dd16f6097d1
     });
   }
 
@@ -72,10 +69,6 @@ export class WelcomePage {
     // if(WelcomePage.notificationNumber)
     this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
       console.log("Notification Number>>>", data);
-<<<<<<< HEAD
-      WelcomePage.notificationNumber = 0;
-=======
->>>>>>> 169828c8158932a3f855cf75ad007dd16f6097d1
       WelcomePage.notificationNumber = data;
       console.log("WelcomePage.notificationNumber>>>", WelcomePage.notificationNumber);
     }, (err) => {
@@ -83,31 +76,6 @@ export class WelcomePage {
     });
 
 
-<<<<<<< HEAD
-    console.log('ionViewDidLoad WelcomePage');
-    this.signalr.connect().then((connection) => {
-      console.log("connection>>>", connection);
-      connection.listenFor('AppendMessage').subscribe((message: INotification) => {
-        console.log("the message>>>", message);
-        WelcomePage.notificationNumber = WelcomePage.notificationNumber + 1;
-
-
-        this.localNotifications.schedule({
-          id: message.Id,
-          text: message.Message,
-          title: message.From,
-          icon: '' + this.baseUrl + 'SpecialData/Photos/0/' + message.PicUrl + '?dummy=1503580792563',
-          data: message
-        });
-
-      });
-    });
-
-    this.localNotifications.on('click', (data) => {
-      this.navCtrl.push(NotificationDetailsPage, data);
-    });
-=======
->>>>>>> 169828c8158932a3f855cf75ad007dd16f6097d1
 
   }
 
