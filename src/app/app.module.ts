@@ -28,7 +28,6 @@ import { TasksPageModule } from '../pages/tasks/tasks.module';
 import { AddTaskPageModule } from '../pages/add-task/add-task.module';
 import { ForceChangePasswordPageModule } from '../pages/force-change-password/force-change-password.module';
 import { DoneTaskPageModule } from '../pages/done-task/done-task.module';
-import 'jquery'
 import 'signalr';
 import { SignalRModule, SignalRConfiguration, ConnectionTransport } from 'ng2-signalr';
 //from Ali

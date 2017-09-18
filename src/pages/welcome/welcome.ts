@@ -6,6 +6,8 @@ import { NotificationServiceApi, INotifyParams, INotification } from '../../shar
 import { SignalR } from 'ng2-signalr';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { NotificationDetailsPage } from '../notification-details/notification-details';
+import { LogInPage} from '../log-in/log-in';
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -24,7 +26,7 @@ export class WelcomePage {
   get notificationNumber() {
     return WelcomePage.notificationNumber;
   }
-  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private signalr: SignalR, public localNotifications: LocalNotifications) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private signalr: SignalR, public localNotifications: LocalNotifications,private storage: Storage) {
 
 
 
@@ -35,6 +37,7 @@ export class WelcomePage {
     // if(WelcomePage.notificationNumber)
     this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
       console.log("Notification Number>>>", data);
+      WelcomePage.notificationNumber=0;
       WelcomePage.notificationNumber = data;
       console.log("WelcomePage.notificationNumber>>>", WelcomePage.notificationNumber);
     }, (err) => {
@@ -47,7 +50,9 @@ export class WelcomePage {
       console.log("connection>>>", connection);
       connection.listenFor('AppendMessage').subscribe((message:INotification) => {
         console.log("the message>>>", message);
-        WelcomePage.notificationNumber++;
+        WelcomePage.notificationNumber=WelcomePage.notificationNumber+1;
+        
+        
         this.localNotifications.schedule({
           id:message.Id,
           text:message.Message,
@@ -79,5 +84,10 @@ export class WelcomePage {
   }
   GoToTasks() {
     this.navCtrl.push(TasksPage);
+  }
+  Logout(){
+    this.storage.clear();
+    this.navCtrl.setRoot(LogInPage);
+    this.navCtrl.popToRoot();
   }
 }
