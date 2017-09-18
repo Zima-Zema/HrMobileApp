@@ -6,6 +6,8 @@ import { NotificationServiceApi, INotifyParams, INotification } from '../../shar
 import { SignalR } from 'ng2-signalr';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { NotificationDetailsPage } from '../notification-details/notification-details';
+import { Storage } from '@ionic/storage';
+import { IUser } from "../../shared/IUser";
 
 @IonicPage()
 @Component({
@@ -15,17 +17,26 @@ import { NotificationDetailsPage } from '../notification-details/notification-de
 export class WelcomePage {
 
   notifyParams: INotifyParams = {
-    UserName: "Bravo",
-    CompanyId: 2,
-    Language: "en-GB"
+    UserName: "",
+    CompanyId: 0,
+    Language: ""
   }
   public static notificationNumber: number = 0;
+  user:IUser;
   baseUrl: string = "http://www.enterprise-hr.com/";
   get notificationNumber() {
     return WelcomePage.notificationNumber;
   }
-  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private signalr: SignalR, public localNotifications: LocalNotifications) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private signalr: SignalR, public localNotifications: LocalNotifications,private storage: Storage) {
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+        this.notifyParams.UserName = this.user.UserName;
+        this.notifyParams.Language = this.user.Language;
+        this.notifyParams.CompanyId = this.user.CompanyId;
+      }
 
+    });
 
 
 

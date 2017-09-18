@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { WelcomePage } from '../welcome/welcome';
+import { Storage } from '@ionic/storage';
+import { IUser } from "../../shared/IUser";
 import { NotificationServiceApi, IUpdateNotification, INotification } from "../../shared/NotificationService";
 import * as moment from 'moment';
 @IonicPage()
@@ -12,27 +14,41 @@ export class NotificationDetailsPage {
 
 
   updateObj: IUpdateNotification = {
-    CompanyId: 2,
-    Culture: "en-GB",
-    UserName: "Bravo",
+    CompanyId: 0,
+    Culture: "",
+    UserName: "",
     Id: 0
   }
+  user: IUser;
   notify: INotification;
   baseUrl: string = "http://www.enterprise-hr.com/";
   notifyDate: any
   notifyTime: any
-  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, public viewCtrl:ViewController) {
-    this.notify = this.navParams.data
-    console.log("this.notify :: ", this.notify);
-    this.updateObj.Id = this.notify.Id;
-    this.notifyTime = (moment(this.notify.SentDate).format('LT'));
-    this.notifyDate = moment(this.notify.SentDate).format('LL');
-    if (this.notify.Read == false) {
-      this.notifyApi.updateNotification(this.updateObj).subscribe((data) => {
-        console.log("updateNotification");
-        WelcomePage.notificationNumber--;
-      })
-    }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, public viewCtrl: ViewController, private storage: Storage) {
+
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+        this.updateObj.UserName = this.user.UserName;
+        this.updateObj.Culture = this.user.Culture;
+        this.updateObj.CompanyId = this.user.CompanyId;
+      }
+
+      this.notify = this.navParams.data
+      console.log("this.notify :: ", this.notify);
+      this.updateObj.Id = this.notify.Id;
+      this.notifyTime = (moment(this.notify.SentDate).format('LT'));
+      this.notifyDate = moment(this.notify.SentDate).format('LL');
+      if (this.notify.Read == false) {
+        this.notifyApi.updateNotification(this.updateObj).subscribe((data) => {
+          console.log("updateNotification");
+          WelcomePage.notificationNumber--;
+        })
+      }
+
+    });
+
+
 
 
     //WelcomePage.notificationNumber--;
@@ -43,7 +59,7 @@ export class NotificationDetailsPage {
     console.log('ionViewDidLoad NotificationDetailsPage');
 
   }
-  dismiss(){
+  dismiss() {
     this.viewCtrl.dismiss(this.notify.Id);
   }
 

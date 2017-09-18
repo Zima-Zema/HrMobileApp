@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ModalController } from 'ionic-angular';
 import { NotificationDetailsPage } from '../notification-details/notification-details';
 import { NotificationServiceApi, INotification, INotifyParams } from "../../shared/NotificationService";
-//import { Storage } from "@ionic/Storage"
+import { Storage } from '@ionic/storage';
+import { IUser } from "../../shared/IUser";
+
 
 @IonicPage()
 @Component({
@@ -13,17 +15,26 @@ export class NotificationsPage {
 
   flag: boolean;
   notifyParams: INotifyParams = {
-    UserName: "Bravo",
-    CompanyId: 2,
-    Language: "en-GB"
+    UserName: "",
+    CompanyId: 0,
+    Language: ""
   }
+  user: IUser;
   //http://localhost:36207/SpecialData/Photos/0/1054.jpeg?dummy=1503580792563
   baseUrl: string = "http://www.enterprise-hr.com/";
   notifications: Array<INotification> = [];
   private start: number = 0;
   errorMsg: string = undefined;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private loadingCtrl: LoadingController, private modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private loadingCtrl: LoadingController, private modalCtrl: ModalController, private storage: Storage) {
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+        this.notifyParams.UserName = this.user.UserName;
+        this.notifyParams.Language = this.user.Language;
+        this.notifyParams.CompanyId = this.user.CompanyId;
+      }
 
+    });
 
 
   }
@@ -35,7 +46,9 @@ export class NotificationsPage {
       content: "Loading..."
     });
     loader.present().then(() => {
-      this.loadNotification().then(() => {
+      this.loadNotification().then((data) => {
+        console.log("Promise>>",data)
+        if(data)
         loader.dismiss();
       })
 
@@ -56,11 +69,13 @@ export class NotificationsPage {
       //   this.storage.set("topNotify", data.value);
       // }
       console.log("Notification List>>>", data.value);
-      for (let notification of data.value) {
-        this.notifications.push(notification);
-      }
+      this.notifications=data.value;
+      // for (let notification of data.value) {
+      //   this.notifications.push(notification);
+
+      // }
       return new Promise((res) => {
-        res(true);
+        res(data);
       });
 
     }, (error) => {
@@ -73,11 +88,15 @@ export class NotificationsPage {
       //     this.notifications.push(notification);
       //   }
       // })
+      return new Promise((res) => {
+        res(error);
+      });
     });
 
           return new Promise((res) => {
-        res(false);
+        res("error");
       });
+    
   }
 
   doInfinite(infiniteScroll: any) {

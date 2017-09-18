@@ -7,9 +7,10 @@
 
 </ion-header>
 
-
+notifications.length
 <ion-content padding>
   <ion-note *ngIf="errorMsg != undefined">{{errorMsg}}</ion-note>
+  <ion-note *ngIf="notifications.length <=0">You Have NO Notification Right Now</ion-note>
   <ion-list [virtualScroll]="notifications" approxItemHeight="50px">
     <ion-item *virtualItem="let notification" class="item-content"  (click)="notificationTapped($event,notification)" [ngClass]="{'item-content':!notification.Read}">
       <ion-avatar item-start>
