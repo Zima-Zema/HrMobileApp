@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ActionSheetController, ViewController, ToastController, LoadingController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 //plugins
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FileOpener } from '@ionic-native/file-opener';
@@ -43,12 +44,13 @@ export class DoneTaskPage {
     private viewCtrl: ViewController,
     private tasksService: TasksServicesApi,
     public toastCtrl: ToastController,
-    public loadingCtrl: LoadingController, ) {
+    public loadingCtrl: LoadingController,
+    private storage: Storage) {
     this.coming_Task = this.navParams.get('Task');
   }
   //
   TollenObj: ITollen = {
-    CompanyId: 2,
+    CompanyId: 0,
     Files: [],
     Language: "en-GB",
     Source: "EmpTasksForm",
@@ -74,10 +76,6 @@ export class DoneTaskPage {
             this.openImage(this.cam.PictureSourceType.SAVEDPHOTOALBUM);
           }
         }
-        //, {
-        //   text: 'Cancel',
-        //   role: 'cancel'
-        // }
       ]
     });
     actionSheet.present();
@@ -100,8 +98,7 @@ export class DoneTaskPage {
     });
     actionSheet.present();
   }
-  //open camera and gallery 
-  //pass source type according to choose(camera or gallery)
+
   openImage(SourceType) {
     let Options = {
       sourceType: SourceType,
@@ -116,12 +113,12 @@ export class DoneTaskPage {
       if (imageData) {
         //make SaveData button enable
         this.isdisabled = false;
-        ////////////////////////////////////////
         this.ext = ".jpg";
         let textfile = this.createFileName(this.ext);
         this.captureDataUrl = 'data:image/jpeg;base64,' + imageData;
         this.TollenObj.FileDetails.push(textfile);
         this.TollenObj.Files.push(imageData);
+        this.imags.push(this.captureDataUrl);
         ////////////////////////////////////////
         // //resolve the image path 
         // this.filePath.resolveNativePath(imageData).then(filePath => {
@@ -144,7 +141,9 @@ export class DoneTaskPage {
       }
     }, (err: Error) => {
       this.errortext = "get pic : " + err.message;
-    })
+    }).catch(
+      (e: Error) => { this.filename = e.message; }
+      )
   }
   //Copy the image to a local folder
   public copyFileToLocalDir(namePath, currentName, newFileName: string) {
@@ -217,9 +216,11 @@ export class DoneTaskPage {
 
   //
   SaveData() {
-    //this.filename = this.errortext = this.correctPath = "";
+    let user: any = this.storage.get("User").then((user) => {
+      this.TollenObj.CompanyId = user.CompanyId;
+      this.TollenObj.Language = user.Language;
+    })
     this.TollenObj.TaskId = this.coming_Task.id;
-    // console.log(" this.TollenObj ::: ", this.TollenObj);
     let loader = this.loadingCtrl.create({
       content: "Loading Documentations..."
     });

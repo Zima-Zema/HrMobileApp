@@ -1,10 +1,11 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ModalController, LoadingController, ToastController } from 'ionic-angular';
 import * as moment from 'moment';
 import { AddTaskPage } from '../add-task/add-task';
 import { DoneTaskPage } from '../done-task/done-task';
 import { TasksServicesApi, ITasks } from '../../shared/TasksService'
 import { CalendarComponent } from 'ionic2-calendar/calendar';
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -12,6 +13,8 @@ import { CalendarComponent } from 'ionic2-calendar/calendar';
   templateUrl: 'tasks.html',
 })
 export class TasksPage {
+  // @Input('selectedD') selectedDate: any;
+  selectedDate: any;
   event: any = {};
   str_time: any;
   end_time: any;
@@ -73,13 +76,26 @@ export class TasksPage {
     public modalCtrl: ModalController,
     private alertCtrl: AlertController,
     public toastCtrl: ToastController,
-    private tasksService: TasksServicesApi) {
-    this.loader_task.present().then(() => {
-      this.loadEvents();
-    });
+    private tasksService: TasksServicesApi,
+    private storage: Storage) {
   }
   ///////////////////////////////////
   ionViewDidLoad() {
+    // window.onload = function () {
+    //   var doc = document.getElementsByClassName('event-detail');
+    //   console.log("doc  ", doc.item(0));
+    // }
+    // window.addEventListener('load', ()=>{
+    //var arr_doc = Array.from(doc);
+    //console.log("arr_doc  ", arr_doc);
+    // var filter_doc = [...doc].filter(el => el.innerHTML.indexOf(event.title));
+    // })
+  }
+
+  ionViewWillLoad() {
+    this.loader_task.present().then(() => {
+      this.loadEvents();
+    });
   }
 
   addEvent() {
@@ -117,6 +133,9 @@ export class TasksPage {
   }
 
   onEventSelected(event) {
+    var doc = document.querySelectorAll('.event-detail');
+    console.log("doc ", doc);
+    console.log("event  ", event);
     let start = moment(event.startTime).format('LLLL');
     let end = moment(event.endTime).format('LLLL');
     let alert = this.alertCtrl.create({
@@ -124,8 +143,7 @@ export class TasksPage {
       subTitle: 'From: ' + start + '<br>To: ' + end,
       buttons: [
         // {
-        ///////////////////////////////////////// Delete event from array //////////////////////////////////
-        //////////////////////////////////////// Not Used for now //////////////////////////////////////////
+        ///////////////////////////////////////// Delete event from array // Not Used for now  //////////////////////////////////
         //   text: 'Delete',
         //   handler: () => {
         //     let events = this.eventSource;
@@ -147,26 +165,44 @@ export class TasksPage {
         {
           text: "Done",
           handler: () => {
-            const Sec_modal = this.modalCtrl.create('DoneTaskPage', { Task: event });
-            Sec_modal.present();
+            if (event.Stat == 1) {
+              const Sec_modal = this.modalCtrl.create('DoneTaskPage', { Task: event });
+              Sec_modal.present();
 
-            Sec_modal.onDidDismiss(data => {
-              if (data) {
-                console.log("data back from dismiss :: ", data)
-                let toast = this.toastCtrl.create({
-                  message: "Documentations is Added.",
-                  duration: 3000,
-                  position: 'middle'
-                });
-                if (data.Files.length > 0) {
-                  var doc = document.querySelectorAll('.event-detail');
-                  var arr_doc = Array.from(doc);
-                  var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title));
-                  filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor = "lemonchiffon";
-                  toast.present();
+              Sec_modal.onDidDismiss(data => {
+                if (data) {
+                  console.log("data back from dismiss :: ", data)
+                  let toast = this.toastCtrl.create({
+                    message: "Documentations is Added.",
+                    duration: 3000,
+                    position: 'middle'
+                  });
+                  if (data.Files.length > 0) {
+                    var doc = document.querySelectorAll('.event-detail');
+                    var arr_doc = Array.from(doc);
+                    var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title));
+                    filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor = "lemonchiffon";
+                    toast.present();
+                  }
+                  else {
+                    let toast = this.toastCtrl.create({
+                      message: "Sorry, No Documentations is Added.",
+                      duration: 3000,
+                      position: 'middle'
+                    });
+                    toast.present();
+                  }
                 }
-              }
-            });
+              });
+            }
+            else {
+              let toast = this.toastCtrl.create({
+                message: "this task is already done!",
+                duration: 3000,
+                position: 'middle'
+              });
+              toast.present();
+            }
           }
         },
         {
@@ -182,43 +218,53 @@ export class TasksPage {
   onTimeSelected(ev) {
     this.selectedDay = ev.selectedTime;
   }
+  ///////////////////////////
+  ionViewDidEnter() {
+
+  }
   loadEvents() {
-    let emp_id: number = 14; //static => supposed to come from login id
-    this.tasksService.getTasks(emp_id).subscribe((data) => {
-      //  if (data !== null) {
-      //Working ==> By Fatma 
-      data.forEach(ele => {
-        console.log("coming ele >>>", ele);
-        //stratTime  : sperate to get each of year , month and day
-        this.s_yyyy = moment(ele.StartTime).format('YYYY');
-        this.s_mm = moment(ele.StartTime).format('MM');
-        this.s_dd = moment(ele.StartTime).format('DD');
-        //EndTime  : sperate to get each of year , month and day
-        this.e_yyyy = moment(ele.EndTime).format('YYYY');
-        this.e_mm = moment(ele.EndTime).format('MM');
-        this.e_dd = moment(ele.EndTime).format('DD');
-        ////time should pass in this format (UTC) otherwise there is a problem --> from documentation (ionic2-calender)
-        this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
-        this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
-        this.title_data = ele.TaskCategory;
-        this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id };
-        this.events = this.eventSource;
-        this.events.push(this.event);
+    let emp_id: number;
+    let user: any = this.storage.get("User").then((user) => {
+      console.log("User", user);
+      emp_id = user.EmpId;
+      this.tasksService.getTasks(emp_id).subscribe((data) => {
+        if (data) {
+          //Working ==> By Fatma 
+          data.forEach(ele => {
+            console.log("coming ele >>>", ele);
+            //stratTime  : sperate to get each of year , month and day
+            this.s_yyyy = moment(ele.StartTime).format('YYYY');
+            this.s_mm = moment(ele.StartTime).format('MM');
+            this.s_dd = moment(ele.StartTime).format('DD');
+            //EndTime  : sperate to get each of year , month and day
+            this.e_yyyy = moment(ele.EndTime).format('YYYY');
+            this.e_mm = moment(ele.EndTime).format('MM');
+            this.e_dd = moment(ele.EndTime).format('DD');
+            ////time should pass in this format (UTC) otherwise there is a problem --> from documentation (ionic2-calender)
+            this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
+            this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
+            this.title_data = ele.TaskCategory;
+            this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id, Stat: ele.Status };
+            this.events = this.eventSource;
+            if (this.event.Stat == 1) {
+              this.events.push(this.event);
+            }
+          });
+          this.eventSource = [];
+          this.loader_task.dismiss();
+          setTimeout(() => {
+            this.eventSource = this.events;
+          });
+        }
+        else {
+          let toast = this.toastCtrl.create({
+            message: "There is no tasks...",
+            duration: 2000,
+            position: 'middle'
+          });
+          toast.present();
+        }
       });
-      this.eventSource = [];
-      this.loader_task.dismiss();
-      setTimeout(() => {
-        this.eventSource = this.events;
-      });
-      // }
-      // else {
-      //   let toast = this.toastCtrl.create({
-      //     message: "There is no tasks...",
-      //     duration: 2000,
-      //     position: 'middle'
-      //   });
-      //   toast.present();
-      // }
     });
   }
   ///////////////////////// function to remove object ( the event ) from eventsource array ////////////////

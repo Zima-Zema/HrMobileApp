@@ -6,6 +6,7 @@ import { NotificationServiceApi, INotifyParams, INotification } from '../../shar
 import { SignalR } from 'ng2-signalr';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { NotificationDetailsPage } from '../notification-details/notification-details';
+import { LogInPage} from '../log-in/log-in';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
 
@@ -46,7 +47,7 @@ export class WelcomePage {
             id: message.Id,
             text: message.Message,
             title: message.From,
-            icon: '' + this.baseUrl + 'SpecialData/Photos/0/' + message.PicUrl + '?dummy=1503580792563',
+            icon: '' + this.baseUrl + 'SpecialData/Photos/'+this.user.CompanyId+'/' + message.PicUrl + '?dummy=1503580792563',
             data: message
           });
 
@@ -67,7 +68,6 @@ export class WelcomePage {
     // if(WelcomePage.notificationNumber)
     this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
       console.log("Notification Number>>>", data);
-
       WelcomePage.notificationNumber = data;
       console.log("WelcomePage.notificationNumber>>>", WelcomePage.notificationNumber);
     }, (err) => {
@@ -92,5 +92,10 @@ export class WelcomePage {
   }
   GoToTasks() {
     this.navCtrl.push(TasksPage);
+  }
+  Logout(){
+    this.storage.clear();
+    this.navCtrl.setRoot(LogInPage);
+    this.navCtrl.popToRoot();
   }
 }

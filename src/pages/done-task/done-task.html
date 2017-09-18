@@ -29,12 +29,12 @@
   </ion-grid>
   <!-- /////////////////////////// for test  -->
   <ul>
-    <h3> you have uploaded : </h3>
+    <h3 *ngIf="filename"> Files you have uploaded : </h3>
     <li *ngFor="let filename of filename_arr"> {{filename}}</li>
   </ul>
   <span>errortext : {{errortext}}</span><br/>
-  <!-- <span>filename : {{filename}}</span><br/>
-  <span>correctPath : {{correctPath}}</span><br/> -->
+  <span>filename : {{filename}}</span><br/>
+  <span>correctPath : {{correctPath}}</span><br/>
   <!-- ///////////////////////////////  -->
 </ion-content>
 
