@@ -137,16 +137,7 @@ export class DoneTaskPage {
         // }, (err: Error) => {
         //   this.errortext = "path : " + err.message;
         // });
-      }
-    }, (err: Error) => {
-      this.errortext = "get pic : " + err.message;
-      let toast = this.toastCtrl.create({
-        message: "Sorry, Error to get Image, Please try again.",
-        duration: 3000,
-        position: 'middle',
-        cssClass: "tryerror.scss"
-      });
-      toast.present();
+      }   
     }).catch(
       (e: Error) => { this.filename = e.message; }
       )

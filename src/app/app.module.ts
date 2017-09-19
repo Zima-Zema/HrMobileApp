@@ -7,6 +7,7 @@ import { HttpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+import { AppMinimize } from '@ionic-native/app-minimize';
 //
 import { MyApp } from './app.component';
 // plugins
@@ -80,6 +81,7 @@ export function creatConfig(): SignalRConfiguration {
     FilePath,
     Camera,
     Network,
+    AppMinimize,
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler }

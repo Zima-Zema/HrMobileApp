@@ -46,11 +46,30 @@ export class NotificationsPage {
       content: "Loading..."
     });
     loader.present().then(() => {
-      this.loadNotification().then((data) => {
-        console.log("Promise>>",data)
-        if(data)
+      this.notifications = [];
+      this.notifyApi.getNotifications(this.start, this.notifyParams).subscribe((data) => {
+        this.notifications = data.value;
         loader.dismiss();
-      })
+        //this.flag=false;
+        // if (this.start < 10) {
+        //   this.storage.set("topNotify", data.value);
+        // }
+        // for (let notification of data.value) {
+        //   this.notifications.push(notification);
+        // }
+      }, (error) => {
+        console.log("error in notification", error);
+        this.errorMsg = "Connection TimeOut Please Check Your Internet Connection."
+        loader.dismiss();
+        // this.notifications=[];
+        // this.flag=true;
+        // this.storage.get("topNotify").then((data) => {
+        //   for (let notification of data) {
+        //     this.notifications.push(notification);
+        //   }
+        // })
+      });
+
 
     })
   }
@@ -61,42 +80,8 @@ export class NotificationsPage {
   }
 
 
-  loadNotification(): Promise<any> {
-    this.notifications = [];
-    this.notifyApi.getNotifications(this.start, this.notifyParams).subscribe((data) => {
-      //this.flag=false;
-      // if (this.start < 10) {
-      //   this.storage.set("topNotify", data.value);
-      // }
-      console.log("Notification List>>>", data.value);
-      this.notifications=data.value;
-      // for (let notification of data.value) {
-      //   this.notifications.push(notification);
+  loadNotification() {
 
-      // }
-      return new Promise((res) => {
-        res(data);
-      });
-
-    }, (error) => {
-      console.log("error in notification", error);
-      this.errorMsg = "Connection TimeOut Please Check Your Internet Connection."
-      // this.notifications=[];
-      // this.flag=true;
-      // this.storage.get("topNotify").then((data) => {
-      //   for (let notification of data) {
-      //     this.notifications.push(notification);
-      //   }
-      // })
-      return new Promise((res) => {
-        res(error);
-      });
-    });
-
-          return new Promise((res) => {
-        res("error");
-      });
-    
   }
 
   doInfinite(infiniteScroll: any) {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, ToastController, Platform } from 'ionic-angular';
 import { WelcomePage } from '../welcome/welcome';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
@@ -22,9 +22,17 @@ export class NotificationDetailsPage {
   user: IUser;
   notify: INotification;
   baseUrl: string = "http://www.enterprise-hr.com/";
-  notifyDate: any
-  notifyTime: any
-  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, public viewCtrl: ViewController, private storage: Storage) {
+  notifyDate: any;
+  notifyTime: any;
+  notifySubject: any;
+  notifyMsg: any;
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public notifyApi: NotificationServiceApi,
+    public viewCtrl: ViewController,
+    private storage: Storage,
+    private toastCtrl: ToastController,
+    private platform: Platform) {
 
     this.storage.get("User").then((udata) => {
       if (udata) {
@@ -33,12 +41,13 @@ export class NotificationDetailsPage {
         this.updateObj.Culture = this.user.Culture;
         this.updateObj.CompanyId = this.user.CompanyId;
       }
-
-      this.notify = this.navParams.data
+      this.notify = this.navParams.data;
       console.log("this.notify :: ", this.notify);
       this.updateObj.Id = this.notify.Id;
       this.notifyTime = (moment(this.notify.SentDate).format('LT'));
       this.notifyDate = moment(this.notify.SentDate).format('LL');
+      this.notifySubject = this.notify.From;
+      this.notifyMsg = this.notify.Message;
       if (this.notify.Read == false) {
         this.notifyApi.updateNotification(this.updateObj).subscribe((data) => {
           console.log("updateNotification");
@@ -47,16 +56,13 @@ export class NotificationDetailsPage {
       }
 
     });
-
-
-
-
-    //WelcomePage.notificationNumber--;
-
   }
 
+
+  ionViewWillEnter() {
+
+  }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NotificationDetailsPage');
 
   }
   dismiss() {
