@@ -18,6 +18,7 @@ import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { Network } from '@ionic-native/network';
+
 // pages
 import { HomePage } from '../pages/home/home';
 import { LogInPageModule } from '../pages/log-in/log-in.module';
