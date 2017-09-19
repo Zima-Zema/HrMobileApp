@@ -171,6 +171,32 @@ export class DoneTaskPage {
       newFileName = n + ext;
     return newFileName;
   }
+
+  // base64ToArrayBuffer(base64) {
+  //   var binary_string = window.atob(base64);
+  //   var len = binary_string.length;
+  //   var bytes = new Uint8Array(len);
+  //   for (var i = 0; i < len; i++) {
+  //     bytes[i] = binary_string.charCodeAt(i);
+  //   }
+  //   return bytes.buffer;
+  // }
+
+  public BASE64_MARKER = ';base64,';
+
+  convertDataURIToBinary(dataURI) {
+    var base64Index = dataURI.indexOf(this.BASE64_MARKER) + this.BASE64_MARKER.length;
+    var base64 = dataURI.substring(base64Index);
+    var raw = window.atob(base64);
+    var rawLength = raw.length;
+    var array = new Uint8Array(new ArrayBuffer(rawLength));
+
+    for (let i = 0; i < rawLength; i++) {
+      array[i] = raw.charCodeAt(i);
+    }
+    return array;
+  }
+
   //upload the text written in textarea
   uploadtext() {
     let str_file = this.disc.trim();
@@ -189,11 +215,16 @@ export class DoneTaskPage {
       //write text on file
       this.file.writeFile(this.file.dataDirectory, textfile, this.disc, { replace: true })
         .then((data) => {
-          let uri = this.file.dataDirectory + textfile;
+          let uri = this.file.dataDirectory;
           this.filename = textfile;
           this.correctPath = uri;
+          this.file.readAsDataURL(uri, textfile).then((b_data) => {
+            let ff = this.convertDataURIToBinary(b_data)
+            let arr = Array.from(ff);
+            this.filename_arr.push(arr);
+            this.TollenObj.Files.push(arr);
+          })
           this.TollenObj.FileDetails.push(textfile);
-          this.TollenObj.Files.push(uri);
           this.filename_arr.push(textfile);
         })
         .catch((e: Error) => {
@@ -211,35 +242,50 @@ export class DoneTaskPage {
   }
   //
   uploadfile() {
-    this.fileChooser.open().then((uri) => {
-      this.filePath.resolveNativePath(uri)
-        .then(filePath => {
-          this.filename = filePath.substr(filePath.lastIndexOf('/') + 1);
-          this.correctPath = filePath;
-          this.TollenObj.FileDetails.push(this.filename);
-          this.TollenObj.Files.push(uri);
-          this.filename_arr.push(this.filename);
+    this.fileChooser.open().then((uri) => {    
+      this.ext = ".txt";
+      this.filePath.resolveNativePath(uri).then(filePath => {
+        let textfile = filePath.substr(filePath.lastIndexOf('/') + 1);
+        let edit_path = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('?'));
+        this.filename = textfile;
+        this.correctPath = edit_path;
+        this.file.readAsDataURL(this.correctPath, this.filename).then((b_data) => {
+          this.filename = b_data;
+          let ff = this.convertDataURIToBinary(b_data)
+          let arr = Array.from(ff);
+          this.filename_arr.push(arr);
+          this.TollenObj.FileDetails.push(textfile);
+          this.TollenObj.Files.push(arr);
+        }).catch((e: Error) => {
+          this.errortext = "readAsDataURL error : " + e.message;
+          
         })
-        .catch((err: Error) => {
-          this.errortext = "filePath error : " + err.message;
-          let toast = this.toastCtrl.create({
-            message: "Sorry, Error to get file, Please try again.",
-            duration: 3000,
-            position: 'middle',
-            cssClass: "tryerror.scss"
-          });
-          toast.present();
-        })
-      this.isdisabled = false;
+      }).catch((e: Error) => { this.errortext = "resolveNativePath error : " + e.message })
+      this.filename_arr.push(this.filename);
     })
-      .catch((e: Error) => { this.errortext = "fileChooser error : " + e.message;
-     let toast = this.toastCtrl.create({
-            message: "Sorry, Error to open file, Please try again.",
-            duration: 3000,
-            position: 'middle',
-            cssClass: "tryerror.scss"
-          });
-          toast.present(); });
+      //     .catch((err: Error) => {
+      //     this.errortext = "filePath error : " + err.message;
+      //     let toast = this.toastCtrl.create({
+      //       message: "Sorry, Error to get file, Please try again.",
+      //       duration: 3000,
+      //       position: 'middle',
+      //       cssClass: "tryerror.scss"
+      //     });
+      //     toast.present();
+      //   })
+      //   this.isdisabled = false;
+      // })
+      .catch((e: Error) => {
+        this.errortext = "fileChooser error : " + e.message;
+        let toast = this.toastCtrl.create({
+          message: "Sorry, Error to open file, Please try again.",
+          duration: 3000,
+          position: 'middle',
+          cssClass: "tryerror.scss"
+        });
+        toast.present();
+      });
+    this.isdisabled = false;
   }
 
   //
@@ -308,13 +354,7 @@ export class DoneTaskPage {
   // }
 
   /////////////////////////////////////////////////////
-  // let options1: FileUploadOptions = {
-  //   fileKey: 'file',
-  //   fileName: 'name.pdf',
-  //   params: { resume: uri },
-  //   chunkedMode: false,
-  //   headers: { Authorization: localStorage.getItem('token') }
-  // }
+
   ////////////////////////////////////////
   // this.fileOpener.open(this.file.dataDirectory + 'dbclick.txt', 'application/pdf')
   //   .then((data) => { this.filetext = data })
@@ -329,4 +369,30 @@ export class DoneTaskPage {
   //     this.errortext = "error choose"
   //   }
   //   )
+
+
+  // let options1: FileUploadOptions = {
+  //           fileKey: 'file',
+  //           fileName: 'name.pdf',
+  //           params: { resume: uri },
+  //           chunkedMode: false,
+  //           headers: { Authorization: localStorage.getItem('token') }
+  //         }
+  //         const fileTransfer: FileTransferObject = this.transfer.create();
+  //         fileTransfer.upload(uri, "", options1)
+  //           .then(
+  //           (data) => {
+  //             this.errortext = JSON.stringify(data)
+  //           },
+  //           (err) => {
+  //             this.errortext = "error choose"
+  //           }
+  //           )
+
+
+
+
+
+
+
 }

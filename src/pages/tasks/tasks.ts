@@ -152,10 +152,10 @@ export class TasksPage {
                       duration: 3000,
                       position: 'middle'
                     });
-                    var doc = document.querySelectorAll('.event-detail');
-                    var arr_doc = Array.from(doc);
-                    var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title));
-                    filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor = "lemonchiffon";
+                    // var doc = document.querySelectorAll('.event-detail');
+                    // var arr_doc = Array.from(doc);
+                    // var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title));
+                    // filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor = "lemonchiffon";
                     toast.present();
                   }
                   else {
@@ -191,11 +191,15 @@ export class TasksPage {
     this.selectedDay = ev.selectedTime;
   }
   loadEvents() {
-    let emp_id: number;
-    let user: any = this.storage.get("User").then((user) => {
-      if (user) {
-        console.log("User", user);
-        emp_id = user.EmpId;
+    let emp_id: number=1;
+  //  let user: any = this.storage.get("User").then((user) => {
+     // if (user) {
+
+
+
+       // console.log("User", user);
+        //emp_id = user.EmpId;
+       // emp_id=1;
         this.tasksService.getTasks(emp_id).subscribe((data) => {
           if (data) {
             //Working ==> By Fatma 
@@ -234,8 +238,8 @@ export class TasksPage {
             toast.present();
           }
         });
-      }
-    });
+     // }
+   // });
   }
   ///////////////////////// function to remove object ( the event ) from eventsource array ////////////////
   ///////////////////////// called in delete button in alert control // Not used for now //////////////////////////////
