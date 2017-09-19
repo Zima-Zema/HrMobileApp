@@ -191,15 +191,10 @@ export class TasksPage {
     this.selectedDay = ev.selectedTime;
   }
   loadEvents() {
-    let emp_id: number=1;
-  //  let user: any = this.storage.get("User").then((user) => {
-     // if (user) {
-
-
-
-       // console.log("User", user);
-        //emp_id = user.EmpId;
-       // emp_id=1;
+    let emp_id: number;
+    let user: any = this.storage.get("User").then((user) => {
+      if (user) {
+        emp_id = user.EmpId;
         this.tasksService.getTasks(emp_id).subscribe((data) => {
           if (data) {
             //Working ==> By Fatma 
@@ -238,8 +233,8 @@ export class TasksPage {
             toast.present();
           }
         });
-     // }
-   // });
+      }
+    });
   }
   ///////////////////////// function to remove object ( the event ) from eventsource array ////////////////
   ///////////////////////// called in delete button in alert control // Not used for now //////////////////////////////
