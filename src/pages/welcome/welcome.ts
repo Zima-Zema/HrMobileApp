@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, } from 'ionic-angular';
 import { NotificationsPage } from '../notifications/notifications';
 import { TasksPage } from '../tasks/tasks';
 import { NotificationServiceApi, INotifyParams, INotification } from '../../shared/NotificationService';
 import { SignalR } from 'ng2-signalr';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { NotificationDetailsPage } from '../notification-details/notification-details';
 import { LogInPage } from '../log-in/log-in';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
@@ -35,10 +34,7 @@ export class WelcomePage {
      public notifyApi: NotificationServiceApi, 
      private signalr: SignalR, 
      public localNotifications: LocalNotifications, 
-     private storage: Storage, 
-     private toastCtrl: ToastController,
-     private modalCtrl: ModalController,
-    private backgroundMode: BackgroundMode) {
+     private storage: Storage) {
     this.storage.get("User").then((udata) => {
       if (udata) {
         console.log("udata ", udata)
@@ -73,9 +69,8 @@ export class WelcomePage {
       });
 
       this.localNotifications.on('click', (data) => {
-        // this.navCtrl.push(NotificationDetailsPage, data); 
-        let modal = this.modalCtrl.create(NotificationDetailsPage, data);
-        modal.present();
+        this.navCtrl.push(NotificationsPage); 
+        
       });
 
     });

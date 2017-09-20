@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, AlertController } from 'ionic-angular';
 import { WelcomePage } from '../welcome/welcome';
 import { ForceChangePasswordPage } from '../force-change-password/force-change-password';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
@@ -31,7 +31,6 @@ export class LogInPage {
         private navCtrl: NavController,
         private loadingCtrl: LoadingController,
         private alertCtrl: AlertController,
-        private navParams: NavParams,
         private formBuilder: FormBuilder,
         private storage: Storage,
         private network: Network) {
