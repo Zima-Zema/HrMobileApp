@@ -47,34 +47,43 @@ export class NotificationServiceApi {
          let bodyString = `UserName=${body.UserName}&Language=${body.Language}&CompanyId=${body.CompanyId}`;
          console.log("bodyString>>>>",bodyString);
         let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-        return this._http.post(`${this.baseURL}odata/WebMobLogs?$top=${this.perPage}&$skip=${start}&$orderby=SentDate desc`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}odata/WebMobLogs?$top=${this.perPage}&$skip=${start}&$orderby=SentDate desc`, bodyString, { headers: headers }).retry(1)
             .map((res: Response) => {
                 console.log("Res>>>", res.json());
                 return res.json();
 
+            }).catch((err) => {
+                console.log("the bloody From Service>>", err);
+                return err;
             });
     }
 
     getNotificationCount(body:INotifyParams){
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}newApi/Notifications/Count`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}newApi/Notifications/Count`, bodyString, { headers: headers }).retry(1)
             .map((res: Response) => {
                 console.log("Res>>>", res.json());
                 return res.json();
 
+            }).catch((err) => {
+                console.log("the bloody From Service>>", err);
+                return err;
             });
     }
 
     updateNotification(body:IUpdateNotification){
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}newApi/Notifications/Update`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}newApi/Notifications/Update`, bodyString, { headers: headers }).retry(1)
             .map((res: Response) => {
                 console.log("Res>>>", res.json());
                 return res.json();
 
-            }); 
+            }).catch((err) => {
+                console.log("the bloody From Service>>", err);
+                return err;
+            });
     }
 
 }

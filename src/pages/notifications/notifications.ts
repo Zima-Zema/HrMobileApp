@@ -43,7 +43,7 @@ export class NotificationsPage {
     this.start = 0;
     console.log('ionViewWillEnter NotificationsPage');
     let loader = this.loadingCtrl.create({
-      content: "Loading..."
+      content: "Loading...",
     });
     loader.present().then(() => {
       this.notifications = [];

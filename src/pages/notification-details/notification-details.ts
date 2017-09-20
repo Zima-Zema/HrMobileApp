@@ -50,7 +50,9 @@ export class NotificationDetailsPage {
         this.notifyApi.updateNotification(this.updateObj).subscribe((data) => {
           console.log("updateNotification");
           WelcomePage.notificationNumber--;
-        })
+        },(error)=>{
+          
+        });
       }
 
     });
