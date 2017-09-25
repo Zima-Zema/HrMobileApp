@@ -11,5 +11,22 @@
 </ion-header>
 
 <ion-content padding>
-
+  <ion-list no-lines>
+    <!-- <button *ngFor="let item of LeavesData">
+      <ion-item>Leave Type : {{ item.Type }} </ion-item>
+      <ion-item>Start Date : {{item.StartDate}}  </ion-item>
+      <ion-item>Return Date : {{item.ReturnDate}}  </ion-item>
+      <ion-item>No of Days : {{item.NofDays}} </ion-item>
+      <ion-item>{{item.ApprovalStatus}} </ion-item>
+    </button> -->
+    <ion-item *ngFor="let item of LeavesData">
+      <ion-thumbnail item-start>
+        <img src="img/thumbnail-totoro.png">
+      </ion-thumbnail>
+      <h2>{{ item.Type }}</h2>
+      <p>{{item.StartDate}}</p>
+      <p>{{item.ReturnDate}} </p>
+      <button ion-button clear item-end>{{item.ApprovalStatus}}</button>
+    </ion-item>
+  </ion-list>
 </ion-content>
