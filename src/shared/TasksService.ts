@@ -48,14 +48,14 @@ export interface ITollen {
 
 @Injectable()
 export class TasksServicesApi {
-    //private baseURL: string = 'http://192.168.1.17:36207'
-    private baseURL: string;
+    private baseURL: string = 'http://192.168.1.17:36207'
+    //private baseURL: string;
     constructor(private _http: Http, private _storage: Storage) {
-        this._storage.get("BaseURL").then((val) => {
-            this.baseURL = val;
-            console.log("BaseUrl From Task services>>>", this.baseURL);
+        // this._storage.get("BaseURL").then((val) => {
+        //     this.baseURL = val;
+        //     console.log("BaseUrl From Task services>>>", this.baseURL);
 
-        });
+        // });
     }
 
     //get all tasks

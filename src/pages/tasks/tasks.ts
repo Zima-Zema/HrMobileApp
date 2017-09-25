@@ -144,35 +144,38 @@ export class TasksPage {
                 if (data) {
                   console.log("data back from dismiss :: ", data)
                   if (data.Files.length > 0) {
-                    let toast = this.toastCtrl.create({
+                    let suc_toast = this.toastCtrl.create({
                       message: "Documentations is Added.",
                       duration: 3000,
-                      position: 'middle'
+                      position: 'bottom',
+                      cssClass:"suc_toast.scss"
                     });
                     // var doc = document.querySelectorAll('.event-detail');
                     // var arr_doc = Array.from(doc);
                     // var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title));
                     // filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor = "lemonchiffon";
-                    toast.present();
+                    suc_toast.present();
+                    this.loadEvents();
                   }
                   else {
-                    let toast = this.toastCtrl.create({
+                    let err_toast = this.toastCtrl.create({
                       message: "Sorry, No Documentations is Added.",
                       duration: 3000,
                       position: 'middle'
                     });
-                    toast.present();
+                    err_toast.present();
                   }
                 }
+
               });
             }
             else {
-              let toast = this.toastCtrl.create({
+              let err_toast = this.toastCtrl.create({
                 message: "this task is already done!",
                 duration: 3000,
                 position: 'middle'
               });
-              toast.present();
+              err_toast.present();
             }
           }
         },
@@ -188,10 +191,17 @@ export class TasksPage {
     this.selectedDay = ev.selectedTime;
   }
   loadEvents() {
+    this.eventSource = [];
     let emp_id: number;
+<<<<<<< HEAD
     //  let user: any = this.storage.get("User").then((user) => {
     //if (user) {
     //emp_id = user.EmpId;
+=======
+    // let user: any = this.storage.get("User").then((user) => {
+    // if (user) {
+    //  emp_id = user.EmpId;
+>>>>>>> 80b320b69f0baf680e754135d014f3b86ce70c47
     emp_id = 1;
     this.tasksService.getTasks(emp_id).subscribe((data) => {
       if (data) {
@@ -221,6 +231,17 @@ export class TasksPage {
         setTimeout(() => {
           this.eventSource = this.events;
         });
+<<<<<<< HEAD
+=======
+      }
+      else {
+        let err_toast = this.toastCtrl.create({
+          message: "There is no tasks...",
+          duration: 2000,
+          position: 'middle'
+        });
+        err_toast.present();
+>>>>>>> 80b320b69f0baf680e754135d014f3b86ce70c47
       }
       else {
         let toast = this.toastCtrl.create({
@@ -240,6 +261,7 @@ export class TasksPage {
         toast.present();
       });
     });
+<<<<<<< HEAD
     //   }
     // }, (err) => {
     //   let toast = this.toastCtrl.create({
@@ -251,6 +273,10 @@ export class TasksPage {
     //     toast.present();
     //   });
     // });
+=======
+    // }
+    //});
+>>>>>>> 80b320b69f0baf680e754135d014f3b86ce70c47
   }
   ///////////////////////// function to remove object ( the event ) from eventsource array ////////////////
   ///////////////////////// called in delete button in alert control // Not used for now //////////////////////////////
