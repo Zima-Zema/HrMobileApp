@@ -9,7 +9,7 @@ import { LogInPage } from '../log-in/log-in';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
 import { BackgroundMode } from "@ionic-native/background-mode";
-
+import { LeaveListPage} from '../leave-list/leave-list';
 @IonicPage()
 @Component({
   selector: 'page-welcome',
@@ -105,6 +105,9 @@ export class WelcomePage {
   }
   GoToTasks() {
     this.navCtrl.push(TasksPage);
+  }
+  GoToLeaveList(){
+    this.navCtrl.push(LeaveListPage);
   }
   Logout() {
     this.storage.clear();

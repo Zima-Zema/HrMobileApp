@@ -63,7 +63,8 @@ export class TasksServicesApi {
         return this._http.get(`${this.baseURL}/newApi/MobileTasks/getAllTasks?emp_id=${emp_id}`).map((res: Response) => {
             console.log("res get tasks : ", res.json())
             return res.json();
-
+        }).catch((err)=>{
+            return err;
         })
     }
     //save images and files

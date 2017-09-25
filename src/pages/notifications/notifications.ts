@@ -40,6 +40,7 @@ export class NotificationsPage {
   }
 
   ionViewWillEnter() {
+    this.errorMsg = undefined;
     this.start = 0;
     console.log('ionViewWillEnter NotificationsPage');
     let loader = this.loadingCtrl.create({
@@ -117,14 +118,15 @@ export class NotificationsPage {
   }
   /////////////////////////////////////////
   notificationTapped(event, notification) {
-    let modal = this.modalCtrl.create(NotificationDetailsPage, notification);
-    modal.present();
-    modal.onDidDismiss((data) => {
-      console.log("ModalReturn", data);
-      this.notifications.find(n => n.Id == data).Read = true;
-    })
+    // let modal = this.modalCtrl.create(NotificationDetailsPage, notification);
+    // modal.present();
+    // modal.onDidDismiss((data) => {
+    //   console.log("ModalReturn", data);
+    //   this.notifications.find(n => n.Id == data).Read = true;
+    // })
 
-    // this.navCtrl.push(NotificationDetailsPage, notification);
+    this.navCtrl.push(NotificationDetailsPage, notification);
+    
 
   }
 

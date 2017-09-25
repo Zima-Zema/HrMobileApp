@@ -4,9 +4,9 @@
       {{ viewTitle }}
     </ion-title>
     <ion-buttons end>
-      <!-- <button ion-button icon-only (click)="addEvent()">
+       <!-- <button ion-button icon-only (click)="addEvent()">
         <ion-icon name="add"></ion-icon>
-      </button> -->
+      </button>  -->
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -20,7 +20,7 @@
   </template>
 
 
-  <calendar [monthviewDisplayEventTemplate]="template"  [eventSource]="eventSource" [calendarMode]="calendar.mode"
+  <calendar [monthviewDisplayEventTemplate]="template" [markDisabled]="markDisable" [eventSource]="eventSource" [calendarMode]="calendar.mode"
     [currentDate]="calendar.currentDate" [showEventDetail]=true (onEventSelected)="onEventSelected($event)" (onTitleChanged)="onViewTitleChanged($event)"
     (onTimeSelected)="onTimeSelected($event)" step="30" class="calendar" noEventsLabel='No Tasks'>
   </calendar>
