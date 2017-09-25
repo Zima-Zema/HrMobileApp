@@ -3,6 +3,11 @@
 
   <ion-navbar>
     <ion-title>Notifications</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="ionViewWillEnter()">
+        <ion-icon name="refresh" md="md-refresh" class="closeBtn"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -10,7 +15,7 @@
 notifications.length
 <ion-content padding>
   <ion-note *ngIf="errorMsg != undefined">{{errorMsg}}</ion-note>
-  <ion-note *ngIf="notifications.length <=0">You Have NO Notification Right Now</ion-note>
+  <ion-note *ngIf="notifications.length == 0 && errorMsg == undefined">You Have NO Notification Right Now</ion-note>
   <ion-list [virtualScroll]="notifications" approxItemHeight="50px">
     <ion-item *virtualItem="let notification" class="item-content"  (click)="notificationTapped($event,notification)" [ngClass]="{'item-content':!notification.Read}">
       <ion-avatar item-start>

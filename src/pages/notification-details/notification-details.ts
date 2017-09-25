@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, ToastController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, Platform } from 'ionic-angular';
 import { WelcomePage } from '../welcome/welcome';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
@@ -30,9 +30,7 @@ export class NotificationDetailsPage {
     public navParams: NavParams,
     public notifyApi: NotificationServiceApi,
     public viewCtrl: ViewController,
-    private storage: Storage,
-    private toastCtrl: ToastController,
-    private platform: Platform) {
+    private storage: Storage) {
 
     this.storage.get("User").then((udata) => {
       if (udata) {
@@ -52,7 +50,9 @@ export class NotificationDetailsPage {
         this.notifyApi.updateNotification(this.updateObj).subscribe((data) => {
           console.log("updateNotification");
           WelcomePage.notificationNumber--;
-        })
+        },(error)=>{
+          
+        });
       }
 
     });

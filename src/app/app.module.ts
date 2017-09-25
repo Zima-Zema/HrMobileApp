@@ -31,10 +31,16 @@ import { AddTaskPageModule } from '../pages/add-task/add-task.module';
 import { ForceChangePasswordPageModule } from '../pages/force-change-password/force-change-password.module';
 import { DoneTaskPageModule } from '../pages/done-task/done-task.module';
 import 'signalr';
-import { SignalRModule, SignalRConfiguration, ConnectionTransport } from 'ng2-signalr';
+import { SignalRModule, SignalRConfiguration } from 'ng2-signalr';
+import { Storage } from '@ionic/storage';
 //from Ali
 export function creatConfig(): SignalRConfiguration {
-  let baseUrl: string = '';
+  // let _store: Storage;
+  // let baseUrl: string = '';
+  // _store.get("BaseURL").then((val) => {
+  //   this.baseURL = val;
+  //   console.log("BaseUrl From Notity services>>>", this.baseURL);
+  // });
   const config = new SignalRConfiguration();
   config.hubName = 'MyHub';
   config.url = 'http://www.enterprise-hr.com/';

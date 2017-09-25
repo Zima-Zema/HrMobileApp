@@ -76,6 +76,7 @@ export class TasksPage {
       this.loadEvents();
     });
   }
+  /////////////////////////// Not Used for now //////////////////////
   addEvent() {
     let modal = this.modalCtrl.create('AddTaskPage', { selectedDay: this.selectedDay });
     modal.present();
@@ -104,7 +105,7 @@ export class TasksPage {
       }
     });
   }
-
+  ///////////////////////////////////////
   onViewTitleChanged(title) {
     this.viewTitle = title;
   }

@@ -3,18 +3,16 @@ import { Platform, NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { LogInPage } from '../pages/log-in/log-in';
-import { WelcomePage } from '../pages/welcome/welcome';
-import { HomePage } from '../pages/home/home';
 import { BackgroundMode } from '@ionic-native/background-mode';
-import { AppMinimize } from '@ionic-native/app-minimize';
 import { LocalNotifications } from '@ionic-native/local-notifications';
+
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage: any = LogInPage;
   @ViewChild('myNav') nav: NavController;
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private backgroundMode: BackgroundMode, public localNotifications: LocalNotifications, private appMinimize: AppMinimize) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private backgroundMode: BackgroundMode, public localNotifications: LocalNotifications) {
     platform.ready().then(() => {
 
 
