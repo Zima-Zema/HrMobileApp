@@ -147,35 +147,38 @@ export class TasksPage {
                 if (data) {
                   console.log("data back from dismiss :: ", data)
                   if (data.Files.length > 0) {
-                    let toast = this.toastCtrl.create({
+                    let suc_toast = this.toastCtrl.create({
                       message: "Documentations is Added.",
                       duration: 3000,
-                      position: 'middle'
+                      position: 'bottom',
+                      cssClass:"suc_toast.scss"
                     });
                     // var doc = document.querySelectorAll('.event-detail');
                     // var arr_doc = Array.from(doc);
                     // var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title));
                     // filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor = "lemonchiffon";
-                    toast.present();
+                    suc_toast.present();
+                    this.loadEvents();
                   }
                   else {
-                    let toast = this.toastCtrl.create({
+                    let err_toast = this.toastCtrl.create({
                       message: "Sorry, No Documentations is Added.",
                       duration: 3000,
                       position: 'middle'
                     });
-                    toast.present();
+                    err_toast.present();
                   }
                 }
+
               });
             }
             else {
-              let toast = this.toastCtrl.create({
+              let err_toast = this.toastCtrl.create({
                 message: "this task is already done!",
                 duration: 3000,
                 position: 'middle'
               });
-              toast.present();
+              err_toast.present();
             }
           }
         },
@@ -191,50 +194,52 @@ export class TasksPage {
     this.selectedDay = ev.selectedTime;
   }
   loadEvents() {
+    this.eventSource = [];
     let emp_id: number;
-    let user: any = this.storage.get("User").then((user) => {
-      if (user) {
-        emp_id = user.EmpId;
-        this.tasksService.getTasks(emp_id).subscribe((data) => {
-          if (data) {
-            //Working ==> By Fatma 
-            data.forEach(ele => {
-              console.log("coming ele >>>", ele);
-              //stratTime  : sperate to get each of year , month and day
-              this.s_yyyy = moment(ele.StartTime).format('YYYY');
-              this.s_mm = moment(ele.StartTime).format('MM');
-              this.s_dd = moment(ele.StartTime).format('DD');
-              //EndTime  : sperate to get each of year , month and day
-              this.e_yyyy = moment(ele.EndTime).format('YYYY');
-              this.e_mm = moment(ele.EndTime).format('MM');
-              this.e_dd = moment(ele.EndTime).format('DD');
-              ////time should pass in this format (UTC) otherwise there is a problem --> from documentation (ionic2-calender)
-              this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
-              this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
-              this.title_data = ele.TaskCategory;
-              this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id, Stat: ele.Status, desc: ele.Description };
-              this.events = this.eventSource;
-              if (this.event.Stat == 1) {
-                this.events.push(this.event);
-              }
-            });
-            this.eventSource = [];
-            this.loader_task.dismiss();
-            setTimeout(() => {
-              this.eventSource = this.events;
-            });
-          }
-          else {
-            let toast = this.toastCtrl.create({
-              message: "There is no tasks...",
-              duration: 2000,
-              position: 'middle'
-            });
-            toast.present();
+    // let user: any = this.storage.get("User").then((user) => {
+    // if (user) {
+    //  emp_id = user.EmpId;
+    emp_id = 1;
+    this.tasksService.getTasks(emp_id).subscribe((data) => {
+      if (data) {
+        //Working ==> By Fatma 
+        data.forEach(ele => {
+          console.log("coming ele >>>", ele);
+          //stratTime  : sperate to get each of year , month and day
+          this.s_yyyy = moment(ele.StartTime).format('YYYY');
+          this.s_mm = moment(ele.StartTime).format('MM');
+          this.s_dd = moment(ele.StartTime).format('DD');
+          //EndTime  : sperate to get each of year , month and day
+          this.e_yyyy = moment(ele.EndTime).format('YYYY');
+          this.e_mm = moment(ele.EndTime).format('MM');
+          this.e_dd = moment(ele.EndTime).format('DD');
+          ////time should pass in this format (UTC) otherwise there is a problem --> from documentation (ionic2-calender)
+          this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
+          this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
+          this.title_data = ele.TaskCategory;
+          this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id, Stat: ele.Status, desc: ele.Description };
+          this.events = this.eventSource;
+          if (this.event.Stat == 1) {
+            this.events.push(this.event);
           }
         });
+        this.eventSource = [];
+        this.loader_task.dismiss();
+        setTimeout(() => {
+          this.eventSource = this.events;
+        });
+      }
+      else {
+        let err_toast = this.toastCtrl.create({
+          message: "There is no tasks...",
+          duration: 2000,
+          position: 'middle'
+        });
+        err_toast.present();
       }
     });
+    // }
+    //});
   }
   ///////////////////////// function to remove object ( the event ) from eventsource array ////////////////
   ///////////////////////// called in delete button in alert control // Not used for now //////////////////////////////
