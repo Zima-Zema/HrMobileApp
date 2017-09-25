@@ -10,6 +10,7 @@ import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
 import { BackgroundMode } from "@ionic-native/background-mode";
 import { LeaveListPage} from '../leave-list/leave-list';
+import { ForceChangePasswordPage } from '../force-change-password/force-change-password';
 @IonicPage()
 @Component({
   selector: 'page-welcome',
@@ -113,5 +114,8 @@ export class WelcomePage {
     this.storage.clear();
     this.navCtrl.setRoot(LogInPage);
     this.navCtrl.popToRoot();
+  }
+  GoToConfirme(){
+    this.navCtrl.push(ForceChangePasswordPage,{user:"userName",pass:"password"});
   }
 }
