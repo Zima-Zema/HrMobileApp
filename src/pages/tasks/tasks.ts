@@ -193,15 +193,9 @@ export class TasksPage {
   loadEvents() {
     this.eventSource = [];
     let emp_id: number;
-<<<<<<< HEAD
     //  let user: any = this.storage.get("User").then((user) => {
     //if (user) {
     //emp_id = user.EmpId;
-=======
-    // let user: any = this.storage.get("User").then((user) => {
-    // if (user) {
-    //  emp_id = user.EmpId;
->>>>>>> 80b320b69f0baf680e754135d014f3b86ce70c47
     emp_id = 1;
     this.tasksService.getTasks(emp_id).subscribe((data) => {
       if (data) {
@@ -231,8 +225,6 @@ export class TasksPage {
         setTimeout(() => {
           this.eventSource = this.events;
         });
-<<<<<<< HEAD
-=======
       }
       else {
         let err_toast = this.toastCtrl.create({
@@ -241,15 +233,6 @@ export class TasksPage {
           position: 'middle'
         });
         err_toast.present();
->>>>>>> 80b320b69f0baf680e754135d014f3b86ce70c47
-      }
-      else {
-        let toast = this.toastCtrl.create({
-          message: "There is no tasks...",
-          duration: 2000,
-          position: 'middle'
-        });
-        toast.present();
       }
     }, (e) => {
       let toast = this.toastCtrl.create({
@@ -261,7 +244,6 @@ export class TasksPage {
         toast.present();
       });
     });
-<<<<<<< HEAD
     //   }
     // }, (err) => {
     //   let toast = this.toastCtrl.create({
@@ -273,10 +255,6 @@ export class TasksPage {
     //     toast.present();
     //   });
     // });
-=======
-    // }
-    //});
->>>>>>> 80b320b69f0baf680e754135d014f3b86ce70c47
   }
   ///////////////////////// function to remove object ( the event ) from eventsource array ////////////////
   ///////////////////////// called in delete button in alert control // Not used for now //////////////////////////////
