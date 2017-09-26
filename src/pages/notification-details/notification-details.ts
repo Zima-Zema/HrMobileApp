@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { WelcomePage } from '../welcome/welcome';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";

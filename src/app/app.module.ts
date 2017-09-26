@@ -4,7 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
-import { IonicStorageModule } from '@ionic/storage';
+import { IonicStorageModule,Storage } from '@ionic/storage';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AppMinimize } from '@ionic-native/app-minimize';
@@ -21,7 +21,6 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { Network } from '@ionic-native/network';
 import 'signalr';
 import { SignalRModule, SignalRConfiguration } from 'ng2-signalr';
-import { Storage } from '@ionic/storage';
 // pages
 import { HomePage } from '../pages/home/home';
 import { LogInPageModule } from '../pages/log-in/log-in.module';

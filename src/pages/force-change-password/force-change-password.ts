@@ -23,8 +23,7 @@ export class ForceChangePasswordPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private logInService: LoginServiceApi,
     private loadingCtrl: LoadingController,
-    private formBuilder: FormBuilder,
-    private storage: Storage, ) {
+    private formBuilder: FormBuilder ) {
     this.currentUser = this.navParams.data;
 
     this.createForm();
