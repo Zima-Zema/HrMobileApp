@@ -51,7 +51,7 @@ export class NotificationDetailsPage {
           console.log("updateNotification");
           WelcomePage.notificationNumber--;
         },(error)=>{
-          
+          WelcomePage.notificationNumber--;
         });
       }
 
