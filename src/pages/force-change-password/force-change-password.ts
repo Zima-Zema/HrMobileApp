@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { WelcomePage } from '../welcome/welcome';
+import { LogInPage } from '../log-in/log-in';
 import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms";
-import { LoginServiceApi } from "../../shared/loginService";
-import { Storage } from '@ionic/storage';
+import { LoginServiceApi, ILogin } from "../../shared/loginService";
 import { IUser } from "../../shared/IUser";
 @IonicPage()
 @Component({
@@ -19,18 +19,13 @@ export class ForceChangePasswordPage {
   public user: IUser;
   public logInForm: FormGroup;
   public generalError: string;
+  currentUser: ILogin;
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private logInService: LoginServiceApi,
     private loadingCtrl: LoadingController,
     private formBuilder: FormBuilder,
     private storage: Storage, ) {
-      this.storage.get("User").then((udata) => {
-      if (udata) {
-        this.user = udata;
-        
-      }
-
-    });
+    this.currentUser = this.navParams.data;
 
     this.createForm();
   }
@@ -91,21 +86,28 @@ export class ForceChangePasswordPage {
     });
     loader.present();
 
-    let newPassword:string = this.logInForm.value.newPassword;
-    let confirmPassword:string = this.logInForm.value.confirm;
+    let newPassword: string = this.logInForm.value.newPassword;
+    let confirmPassword: string = this.logInForm.value.confirm;
     console.log(newPassword);
     console.log(confirmPassword);
-    if (newPassword===confirmPassword) {
-      console.log("Burn Them All");
+    if (newPassword === confirmPassword) {
+      this.currentUser.ResetPassword = newPassword;
+      this.currentUser.confirm = confirmPassword;
+      console.log("The bloody user>>", this.currentUser);
+      this.logInService.resetPassword(this.currentUser).subscribe((data) => {
+        console.log("resetPassword ReturnData>>", data);
+        this.navCtrl.popToRoot();
+
+      }, (error) => { });
       loader.dismiss();
     }
-    else{
-      
+    else {
+
       console.log("Wow")
       this.logInForm.reset();
-      this.confirmPasswordMatched=true;
+      this.confirmPasswordMatched = true;
       loader.dismiss();
-      this.generalError="Confirm Password is NOT Matched !!";
+      this.generalError = "Confirm Password is NOT Matched !!";
     }
 
   }

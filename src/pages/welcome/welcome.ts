@@ -115,7 +115,4 @@ export class WelcomePage {
     this.navCtrl.setRoot(LogInPage);
     this.navCtrl.popToRoot();
   }
-  GoToConfirme(){
-    this.navCtrl.push(ForceChangePasswordPage,{user:"userName",pass:"password"});
-  }
 }

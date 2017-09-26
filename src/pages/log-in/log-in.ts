@@ -111,7 +111,7 @@ export class LogInPage {
                     this.User = data;
                     if (this.User.ResetPassword) {
                         loader.dismiss();
-                        this.navCtrl.push(ForceChangePasswordPage,{user:userName,pass:password});
+                        this.navCtrl.push(ForceChangePasswordPage,{UserName:userName,Password:password});
                     }
                     else {
                         if (rememberMe) {
