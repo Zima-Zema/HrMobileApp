@@ -121,7 +121,7 @@ export class LogInPage {
                     this.User = data;
                     if (this.User.ResetPassword) {
                         loader.dismiss();
-                        this.navCtrl.push(ForceChangePasswordPage);
+                        this.navCtrl.push(ForceChangePasswordPage,{UserName:userName,Password:password});
                     }
                     else {
                         if (rememberMe) {
@@ -179,4 +179,9 @@ export class LogInPage {
                 break;
         }
     }
+    tasks(){
+        this.navCtrl.setRoot(WelcomePage);
+        this.navCtrl.popToRoot();
+    }
+
 }

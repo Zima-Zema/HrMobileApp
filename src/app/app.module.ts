@@ -4,7 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
-import { IonicStorageModule } from '@ionic/storage';
+import { IonicStorageModule,Storage } from '@ionic/storage';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AppMinimize } from '@ionic-native/app-minimize';
@@ -19,7 +19,8 @@ import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { Network } from '@ionic-native/network';
-
+import 'signalr';
+import { SignalRModule, SignalRConfiguration } from 'ng2-signalr';
 // pages
 import { HomePage } from '../pages/home/home';
 import { LogInPageModule } from '../pages/log-in/log-in.module';
@@ -30,10 +31,8 @@ import { TasksPageModule } from '../pages/tasks/tasks.module';
 import { AddTaskPageModule } from '../pages/add-task/add-task.module';
 import { ForceChangePasswordPageModule } from '../pages/force-change-password/force-change-password.module';
 import { DoneTaskPageModule } from '../pages/done-task/done-task.module';
-import 'signalr';
-import { SignalRModule, SignalRConfiguration } from 'ng2-signalr';
-import { Storage } from '@ionic/storage';
-
+import { LeaveListPageModule} from '../pages/leave-list/leave-list.module';
+import { RequestLeavePageModule} from '../pages/request-leave/request-leave.module';
 //from Ali
 export function creatConfig(): SignalRConfiguration {
   // let _store: Storage;
@@ -69,7 +68,8 @@ export function creatConfig(): SignalRConfiguration {
     ForceChangePasswordPageModule,
     DoneTaskPageModule,
     HttpModule,
-
+    LeaveListPageModule,
+    RequestLeavePageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -8,8 +8,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { LogInPage } from '../log-in/log-in';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
-import { BackgroundMode } from "@ionic-native/background-mode";
-
+import { LeaveListPage } from '../leave-list/leave-list';
 @IonicPage()
 @Component({
   selector: 'page-welcome',
@@ -30,11 +29,11 @@ export class WelcomePage {
     return WelcomePage.notificationNumber;
   }
   constructor(public navCtrl: NavController,
-     public navParams: NavParams, 
-     public notifyApi: NotificationServiceApi, 
-     private signalr: SignalR, 
-     public localNotifications: LocalNotifications, 
-     private storage: Storage) {
+    public navParams: NavParams,
+    public notifyApi: NotificationServiceApi,
+    private signalr: SignalR,
+    public localNotifications: LocalNotifications,
+    private storage: Storage) {
     this.storage.get("User").then((udata) => {
       if (udata) {
         console.log("udata ", udata)
@@ -69,8 +68,8 @@ export class WelcomePage {
       });
 
       this.localNotifications.on('click', (data) => {
-        this.navCtrl.push(NotificationsPage); 
-        
+        this.navCtrl.push(NotificationsPage);
+
       });
 
     });
@@ -78,18 +77,15 @@ export class WelcomePage {
 
   ionViewWillEnter() {
 
-    // if(WelcomePage.notificationNumber)
-    this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
-      console.log("Notification Number>>>", data);
-      WelcomePage.notificationNumber = data;
-      console.log("WelcomePage.notificationNumber>>>", WelcomePage.notificationNumber);
-    }, (err) => {
-      console.log("WelcomePage.notificationNumber Error>>>", err);
-    });
-    // this.backgroundMode.overrideBackButton();
-
-
-
+    if (WelcomePage.notificationNumber < 0 || WelcomePage.notificationNumber == undefined) {
+      this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
+        console.log("Notification Number>>>", data);
+        WelcomePage.notificationNumber = data;
+        console.log("WelcomePage.notificationNumber>>>", WelcomePage.notificationNumber);
+      }, (err) => {
+        console.log("WelcomePage.notificationNumber Error>>>", err);
+      });
+    }
   }
 
   ionViewDidLoad() {
@@ -105,6 +101,9 @@ export class WelcomePage {
   }
   GoToTasks() {
     this.navCtrl.push(TasksPage);
+  }
+  GoToLeaveList() {
+    this.navCtrl.push(LeaveListPage);
   }
   Logout() {
     this.storage.clear();

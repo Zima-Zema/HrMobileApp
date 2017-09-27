@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController, ModalController, 
 import * as moment from 'moment';
 import { AddTaskPage } from '../add-task/add-task';
 import { DoneTaskPage } from '../done-task/done-task';
-import { TasksServicesApi, ITasks } from '../../shared/TasksService'
+import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService'
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { Storage } from '@ionic/storage';
 
@@ -23,7 +23,6 @@ export class TasksPage {
   e_dd: any;
   e_mm: any;
   e_yyyy: any;
-  //@ViewChild(CalendarComponent) myCalender: CalendarComponent;
   eventSource = [];
   events = [];
   viewTitle: string;
@@ -52,12 +51,23 @@ export class TasksPage {
     SubPeriodId: 0,
     CompanyId: 0,
   }
+  TollenObj: ITollen = {
+    CompanyId: 0,
+    Files: [],
+    Language: "en-GB",
+    Source: "EmpTasksForm",
+    TaskId: 0,
+    FileDetails: []
+  }
   calendar = {
     mode: 'month',
     currentDate: new Date()
   };
   loader_task = this.loadingCtrl.create({
     content: "Loading Tasks..."
+  });
+  Done_Loader = this.loadingCtrl.create({
+    content: "Done Tasks..."
   });
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -67,9 +77,6 @@ export class TasksPage {
     public toastCtrl: ToastController,
     private tasksService: TasksServicesApi,
     private storage: Storage) {
-  }
-  ///////////////////////////////////
-  ionViewDidLoad() {
   }
   ionViewWillLoad() {
     this.loader_task.present().then(() => {
@@ -139,7 +146,22 @@ export class TasksPage {
         //   }
         // },
         {
-          text: "Done",
+          text: "Done Task",
+          handler: () => {
+            this.TollenObj.TaskId = event.id;
+            console.log("iiiiid", this.TollenObj.TaskId)
+            this.Done_Loader.present().then(() => {
+              this.tasksService.saveData(this.TollenObj).subscribe((data) => {
+                console.log(data);
+                this.loadEvents();
+                this.Done_Loader.dismiss();
+              })
+            })
+
+          }
+        }
+        , {
+          text: "Attachments",
           handler: () => {
             if (event.Stat == 1) {
               const Sec_modal = this.modalCtrl.create('DoneTaskPage', { Task: event });
@@ -148,42 +170,45 @@ export class TasksPage {
                 if (data) {
                   console.log("data back from dismiss :: ", data)
                   if (data.Files.length > 0) {
-                    let toast = this.toastCtrl.create({
+                    let suc_toast = this.toastCtrl.create({
                       message: "Documentations is Added.",
                       duration: 3000,
-                      position: 'middle'
+                      position: 'bottom',
+                      cssClass: "suc_toast.scss"
                     });
                     // var doc = document.querySelectorAll('.event-detail');
                     // var arr_doc = Array.from(doc);
                     // var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title));
                     // filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor = "lemonchiffon";
-                    toast.present();
+                    suc_toast.present();
+                    this.loadEvents();
                   }
                   else {
-                    let toast = this.toastCtrl.create({
+                    let err_toast = this.toastCtrl.create({
                       message: "Sorry, No Documentations is Added.",
                       duration: 3000,
                       position: 'middle'
                     });
-                    toast.present();
+                    err_toast.present();
                   }
                 }
+
               });
             }
             else {
-              let toast = this.toastCtrl.create({
+              let err_toast = this.toastCtrl.create({
                 message: "this task is already done!",
                 duration: 3000,
                 position: 'middle'
               });
-              toast.present();
+              err_toast.present();
             }
           }
         },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-        }
+        // {
+        //   text: 'Cancel',
+        //   role: 'cancel',
+        // }
       ]
     })
     alert.present();
@@ -192,50 +217,70 @@ export class TasksPage {
     this.selectedDay = ev.selectedTime;
   }
   loadEvents() {
+    this.eventSource = [];
     let emp_id: number;
-    let user: any = this.storage.get("User").then((user) => {
-      if (user) {
-        emp_id = user.EmpId;
-        this.tasksService.getTasks(emp_id).subscribe((data) => {
-          if (data) {
-            //Working ==> By Fatma 
-            data.forEach(ele => {
-              console.log("coming ele >>>", ele);
-              //stratTime  : sperate to get each of year , month and day
-              this.s_yyyy = moment(ele.StartTime).format('YYYY');
-              this.s_mm = moment(ele.StartTime).format('MM');
-              this.s_dd = moment(ele.StartTime).format('DD');
-              //EndTime  : sperate to get each of year , month and day
-              this.e_yyyy = moment(ele.EndTime).format('YYYY');
-              this.e_mm = moment(ele.EndTime).format('MM');
-              this.e_dd = moment(ele.EndTime).format('DD');
-              ////time should pass in this format (UTC) otherwise there is a problem --> from documentation (ionic2-calender)
-              this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
-              this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
-              this.title_data = ele.TaskCategory;
-              this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id, Stat: ele.Status, desc: ele.Description };
-              this.events = this.eventSource;
-              if (this.event.Stat == 1) {
-                this.events.push(this.event);
-              }
-            });
-            this.eventSource = [];
-            this.loader_task.dismiss();
-            setTimeout(() => {
-              this.eventSource = this.events;
-            });
-          }
-          else {
-            let toast = this.toastCtrl.create({
-              message: "There is no tasks...",
-              duration: 2000,
-              position: 'middle'
-            });
-            toast.present();
+    //  let user: any = this.storage.get("User").then((user) => {
+    //if (user) {
+    //emp_id = user.EmpId;
+    emp_id = 1054;
+    this.tasksService.getTasks(emp_id).subscribe((data) => {
+      if (data) {
+        //Working ==> By Fatma 
+        data.forEach(ele => {
+          console.log("coming ele >>>", ele);
+          //stratTime  : sperate to get each of year , month and day
+          this.s_yyyy = moment(ele.StartTime).format('YYYY');
+          this.s_mm = moment(ele.StartTime).format('MM');
+          this.s_dd = moment(ele.StartTime).format('DD');
+          //EndTime  : sperate to get each of year , month and day
+          this.e_yyyy = moment(ele.EndTime).format('YYYY');
+          this.e_mm = moment(ele.EndTime).format('MM');
+          this.e_dd = moment(ele.EndTime).format('DD');
+          ////time should pass in this format (UTC) otherwise there is a problem --> from documentation (ionic2-calender)
+          this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
+          this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
+          this.title_data = ele.TaskCategory;
+          this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id, Stat: ele.Status, desc: ele.Description };
+          this.events = this.eventSource;
+          if (this.event.Stat == 1) {
+            this.events.push(this.event);
           }
         });
+        this.eventSource = [];
+        this.loader_task.dismiss();
+        setTimeout(() => {
+          this.eventSource = this.events;
+        });
       }
+      else {
+        let err_toast = this.toastCtrl.create({
+          message: "There is no tasks...",
+          duration: 2000,
+          position: 'middle'
+        });
+        err_toast.present();
+      }
+    }, (e) => {
+      let toast = this.toastCtrl.create({
+        message: "Error in getting tasks, Please Try again later.",
+        duration: 3000,
+        position: 'middle'
+      });
+      this.loader_task.dismiss().then(() => {
+        toast.present();
+      });
     });
+    //   }
+    // }, (err) => {
+    //   let toast = this.toastCtrl.create({
+    //     message: "There is an error, Please Try again later.",
+    //     duration: 3000,
+    //     position: 'middle'
+    //   });
+    //   this.loader_task.dismiss().then(() => {
+    //     toast.present();
+    //   });
+    // });
   }
   ///////////////////////// function to remove object ( the event ) from eventsource array ////////////////
   ///////////////////////// called in delete button in alert control // Not used for now //////////////////////////////
@@ -247,5 +292,28 @@ export class TasksPage {
       }
     }
     return arr;
+  }
+  ///////////////////////////////
+  markDisable = (date) => {
+    console.log(date);
+  };
+  /////////////////////////
+  public getDaysInMonth(month, year) {
+    var date = new Date(year, month, 1);
+    var days: Array<Date> = [];
+    var spac_days: Array<Date> = [];
+    while (date.getMonth() === month) {
+      days.push(new Date(date));
+
+      date.setDate(date.getDate() + 1);
+    }
+    days.forEach(element => {
+      if (element.getDay() == 6 || element.getDay() == 5) {
+        spac_days.push(element);
+      }
+    });
+    //console.log("days  ", days);
+    // console.log("spac_days  ", spac_days);
+    return spac_days;
   }
 }
