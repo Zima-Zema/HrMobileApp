@@ -50,7 +50,13 @@
         <ion-item>
           <ion-label floating>
             <ion-icon name="create"></ion-icon>&nbsp; Password</ion-label>
-          <ion-input type="password" formControlName="password" #txtPassword (ionBlur)="InputBlured(txtPassword.ngControl.name)" (ionFocus)="InputFocused(txtPassword.ngControl.name)"></ion-input>
+          
+          <ion-input type="{{type}}" formControlName="password" #txtPassword (ionBlur)="InputBlured(txtPassword.ngControl.name)" (ionFocus)="InputFocused(txtPassword.ngControl.name)">
+          </ion-input>
+          <button  *ngIf="!showPass" ion-button icon-only clear color="dark" type="button" item-right (click)="showPassword()"> <ion-icon name="eye-off"></ion-icon></button >
+          <button  *ngIf="showPass"  ion-button icon-only clear color="dark" type="button" item-right (click)="showPassword()"> <ion-icon name="eye"></ion-icon></button >
+           
+
         </ion-item>
         <ion-item *ngIf="!logInForm.get('password').required && passwordRequired">
           <p style="color:crimson"> Password is Required !! </p>

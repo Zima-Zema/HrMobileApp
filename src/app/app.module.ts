@@ -33,6 +33,7 @@ import { DoneTaskPageModule } from '../pages/done-task/done-task.module';
 import 'signalr';
 import { SignalRModule, SignalRConfiguration } from 'ng2-signalr';
 import { Storage } from '@ionic/storage';
+
 //from Ali
 export function creatConfig(): SignalRConfiguration {
   // let _store: Storage;

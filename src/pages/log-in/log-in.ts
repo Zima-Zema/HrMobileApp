@@ -25,6 +25,8 @@ export class LogInPage {
     public companyNameExisted: boolean = false;
     public userNameExisted: boolean = false;
     public passwordExisted: boolean = false;
+    public type = 'password';
+    public showPass = false;
 
     constructor(
         private logInService: LoginServiceApi,
@@ -38,7 +40,15 @@ export class LogInPage {
         this.createForm();
         this.getValues();
     }
+    showPassword() {
+        this.showPass = !this.showPass;
 
+        if (this.showPass) {
+            this.type = 'text';
+        } else {
+            this.type = 'password';
+        }
+    }
     getValues() {
         this.storage.get("CompanyName").then((cdata) => {
             if (cdata) {
@@ -77,7 +87,7 @@ export class LogInPage {
             content: "Loading .."
         });
         loader.present();
-       
+
         let companyName = this.logInForm.value.companyName.trim();
         let userName = this.logInForm.value.userName.trim();
         let password = this.logInForm.value.password;
@@ -127,7 +137,7 @@ export class LogInPage {
                     }
                 });
             }
-        }).catch((Zeoo)=>{
+        }).catch((Zeoo) => {
             //console.log("Zeooo>>",Zeoo);
             //loader.dismiss();
         })
