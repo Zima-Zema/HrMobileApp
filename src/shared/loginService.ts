@@ -3,6 +3,13 @@ import { Http, Headers, RequestOptionsArgs, Response, RequestMethod } from "@ang
 import { Observable } from "rxjs";
 import { Storage } from '@ionic/storage';
 
+export interface ILogin {
+    UserName: string;
+    Password: string;
+    ResetPassword: string;
+    confirm:string
+}
+
 @Injectable()
 export class LoginServiceApi {
 
@@ -160,4 +167,19 @@ export class LoginServiceApi {
                 });
         });
     }
+
+    resetPassword(body:ILogin){
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}newApi/Security/Reset`, bodyString, { headers: headers }).retry(1)
+            .map((res: Response) => {
+                console.log("Res>>>", res.json());
+                return res.json();
+
+            }).catch((err) => {
+                console.log("the bloody From Service>>", err);
+                return err;
+            });
+    }
+    
 }
