@@ -1,3 +1,21 @@
-page-request-leave {
 
+
+.ios, .md {
+ 
+    page-request-leave {
+ 
+        .scroll-content {
+            background-color: map-get($colors, light);
+        }
+ 
+        ion-card-header {
+            font-weight: bold;
+        }
+ 
+    }
+ 
+}
+
+.cardheader{
+    background-color: #4d94ff;
 }

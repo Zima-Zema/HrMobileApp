@@ -3,10 +3,6 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RequestLeavePage } from '../request-leave/request-leave';
 import { LeaveServicesApi, IRequestType } from '../../shared/LeavesService';
 
-enum approvalStatusEnum {
-  New = 1, Submit, AprovalEmployeeReview, ManagerReview, Accepted, Approved, CancelBeforeAccepted, CancelAfterAccepted, Rejected
-}
-
 @IonicPage()
 @Component({
   selector: 'page-leave-list',
@@ -28,13 +24,12 @@ export class LeaveListPage {
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi) {
   }
-
   ionViewDidLoad() {
     console.log('ionViewDidLoad LeaveListPage');
   }
   ionViewWillEnter() {
     this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
-      console.log("getLeavesdata ",data);
+      console.log("getLeavesdata ", data);
       this.LeavesData = data;
     }, (e) => {
       console.log("error ", e);

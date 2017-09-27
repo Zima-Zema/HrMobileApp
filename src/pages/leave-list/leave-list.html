@@ -10,23 +10,25 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-list no-lines>
-    <!-- <button *ngFor="let item of LeavesData">
-      <ion-item>Leave Type : {{ item.Type }} </ion-item>
-      <ion-item>Start Date : {{item.StartDate}}  </ion-item>
-      <ion-item>Return Date : {{item.ReturnDate}}  </ion-item>
-      <ion-item>No of Days : {{item.NofDays}} </ion-item>
-      <ion-item>{{item.ApprovalStatus}} </ion-item>
-    </button> -->
+
     <ion-item *ngFor="let item of LeavesData">
+      <!-- <ion-card> -->
       <ion-thumbnail item-start>
-        <img src="img/thumbnail-totoro.png">
+        <img src="img/thumbnail-totoro.png" style="border-radius:15%;" class="smallImg">
       </ion-thumbnail>
-      <h2>{{ item.Type }}</h2>
-      <p>{{item.StartDate}}</p>
-      <p>{{item.ReturnDate}} </p>
-      <button ion-button clear item-end>{{item.ApprovalStatus}}</button>
+      <h3>{{item.Type}}</h3>
+      <h5>{{item.StartDate}} </h5>
+      <h5>{{item.ReturnDate}}</h5>
+      <p *ngIf="item.NofDays==1">{{item.NofDays}} day </p>
+      <p *ngIf="item.NofDays > 1">{{item.NofDays}} days </p>
+      <!-- <h3>{{item.ApprovalStatus|approvalPipe}}</h3> -->
+      <ion-note>
+        <button ion-button clear item-end>{{item.ApprovalStatus|approvalPipe}}</button>
+      </ion-note>
+      <!-- </ion-card> -->
     </ion-item>
+
   </ion-list>
 </ion-content>

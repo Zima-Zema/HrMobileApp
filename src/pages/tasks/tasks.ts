@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController, ModalController, 
 import * as moment from 'moment';
 import { AddTaskPage } from '../add-task/add-task';
 import { DoneTaskPage } from '../done-task/done-task';
-import { TasksServicesApi, ITasks } from '../../shared/TasksService'
+import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService'
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { Storage } from '@ionic/storage';
 
@@ -51,12 +51,23 @@ export class TasksPage {
     SubPeriodId: 0,
     CompanyId: 0,
   }
+  TollenObj: ITollen = {
+    CompanyId: 0,
+    Files: [],
+    Language: "en-GB",
+    Source: "EmpTasksForm",
+    TaskId: 0,
+    FileDetails: []
+  }
   calendar = {
     mode: 'month',
     currentDate: new Date()
   };
   loader_task = this.loadingCtrl.create({
     content: "Loading Tasks..."
+  });
+  Done_Loader = this.loadingCtrl.create({
+    content: "Done Tasks..."
   });
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -135,7 +146,22 @@ export class TasksPage {
         //   }
         // },
         {
-          text: "Done",
+          text: "Done Task",
+          handler: () => {
+            this.TollenObj.TaskId = event.id;
+            console.log("iiiiid", this.TollenObj.TaskId)
+            this.Done_Loader.present().then(() => {
+              this.tasksService.saveData(this.TollenObj).subscribe((data) => {
+                console.log(data);
+                this.loadEvents();
+                this.Done_Loader.dismiss();
+              })
+            })
+
+          }
+        }
+        , {
+          text: "Attachments",
           handler: () => {
             if (event.Stat == 1) {
               const Sec_modal = this.modalCtrl.create('DoneTaskPage', { Task: event });
@@ -148,7 +174,7 @@ export class TasksPage {
                       message: "Documentations is Added.",
                       duration: 3000,
                       position: 'bottom',
-                      cssClass:"suc_toast.scss"
+                      cssClass: "suc_toast.scss"
                     });
                     // var doc = document.querySelectorAll('.event-detail');
                     // var arr_doc = Array.from(doc);
@@ -179,10 +205,10 @@ export class TasksPage {
             }
           }
         },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-        }
+        // {
+        //   text: 'Cancel',
+        //   role: 'cancel',
+        // }
       ]
     })
     alert.present();
@@ -196,7 +222,7 @@ export class TasksPage {
     //  let user: any = this.storage.get("User").then((user) => {
     //if (user) {
     //emp_id = user.EmpId;
-    emp_id = 1;
+    emp_id = 1054;
     this.tasksService.getTasks(emp_id).subscribe((data) => {
       if (data) {
         //Working ==> By Fatma 
