@@ -20,6 +20,7 @@ import { FilePath } from '@ionic-native/file-path';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { Network } from '@ionic-native/network';
 import 'signalr';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { SignalRModule, SignalRConfiguration } from 'ng2-signalr';
 // pages
 import { HomePage } from '../pages/home/home';
