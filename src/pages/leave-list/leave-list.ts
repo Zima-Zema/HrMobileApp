@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { RequestLeavePage } from '../request-leave/request-leave';
 import { LeaveServicesApi, IRequestType } from '../../shared/LeavesService';
 import * as moment from 'moment';
@@ -15,37 +15,52 @@ export class LeaveListPage {
   RequestTypeObj: IRequestType = {
     CompId: 0,
     Culture: "ar-EG",
-    EmpId: 
+    EmpId:
     //1
     1072
-    //17 
+    //17
   }
   public LeavesData: Array<any> = [];
   public LeavesCount: number = 0;
+  public img_color:any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    public LeaveServices: LeaveServicesApi) {
+    public LeaveServices: LeaveServicesApi,
+    public loadingCtrl: LoadingController,
+    public toastCtrl: ToastController) {
   }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad LeaveListPage');
   }
   ionViewWillEnter() {
-    this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
-      console.log("getLeavesdata ", data);
-      this.LeavesCount=data.length;
-      data.forEach(element => {
+    var LeavesLoader = this.loadingCtrl.create({
+      content: "Loading Leaves..."
+    });
+    LeavesLoader.present().then(() => {
+      this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
+        console.log("getLeavesdata ", data);
+        this.LeavesCount = data.length;
+        data.forEach(element => {
+          element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
+          element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');
+        });
+        this.LeavesData = data;
+        LeavesLoader.dismiss();
+      }, (e) => {
+        console.log("error ", e);
+        let toast = this.toastCtrl.create({
+          message: "Error in getting Leaves, Please Try again later.",
+          duration: 3000,
+          position: 'middle'
+        });
+        LeavesLoader.dismiss().then(() => {
+          toast.present();
+        });
+      })
+    });
 
-        console.log(element.StartDate)
-        element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
-        console.log(element.StartDate)
-        element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');
-        console.log(element.ReturnDate)
-      });
-      this.LeavesData = data;
-    }, (e) => {
-      console.log("error ", e);
-    })
   }
 
   addLeave() {

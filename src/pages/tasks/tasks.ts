@@ -63,12 +63,7 @@ export class TasksPage {
     mode: 'month',
     currentDate: new Date()
   };
-  loader_task = this.loadingCtrl.create({
-    content: "Loading Tasks..."
-  });
-  Done_Loader = this.loadingCtrl.create({
-    content: "Done Tasks..."
-  });
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public loadingCtrl: LoadingController,
@@ -78,6 +73,12 @@ export class TasksPage {
     private tasksService: TasksServicesApi,
     private storage: Storage) {
   }
+  loader_task = this.loadingCtrl.create({
+    content: "Loading Tasks..."
+  });
+  Done_Loader = this.loadingCtrl.create({
+    content: "Done Tasks..."
+  });
   ionViewWillLoad() {
     this.loader_task.present().then(() => {
       this.loadEvents();

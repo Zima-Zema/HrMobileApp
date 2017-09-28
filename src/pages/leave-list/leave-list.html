@@ -11,23 +11,19 @@
 </ion-header>
 
 <ion-content>
-  <!-- <ion-list no-lines> -->
-
-        <ion-item *ngFor="let item of LeavesData">
-          <ion-note>
-           <ion-thumbnail item-start>
-        <img src="" style="border-radius:15%;" class="smallImg">
-      </ion-thumbnail>  
-          </ion-note>
-
-          <h3>{{item.Type}}</h3>
-          <h5>{{item.StartDate}} - {{item.ReturnDate}} </h5>
-          <p *ngIf="item.NofDays==1">{{item.NofDays}} day </p>
-          <p *ngIf="item.NofDays > 1">{{item.NofDays}} days </p>
-          <!-- <h3>{{item.ApprovalStatus|approvalPipe}}</h3> -->
-          <ion-note>
-            <button ion-button clear item-end>{{item.ApprovalStatus|approvalPipe}}</button>
-          </ion-note>
-          <!-- </ion-card> -->
-        </ion-item>
+  <ion-list *ngFor="let item of LeavesData">
+    <ion-item id="pItem">
+      <ion-avatar item-start>
+        <img *ngIf="item.ApprovalStatus== 1 || item.ApprovalStatus==2|| item.ApprovalStatus==6 || item.ApprovalStatus==9" src="{{item.ApprovalStatus|imagePipe}}"
+          style="border-radius:15%;" class="smallImg">
+        <img *ngIf="item.ApprovalStatus == 3 || item.ApprovalStatus == 4 || item.ApprovalStatus == 5 || item.ApprovalStatus == 7 || item.ApprovalStatus == 8"
+          src="../../../assets/img/blue.png" style="border-radius:15%;" class="smallImg">
+      </ion-avatar>
+      <h2>{{item.Type}}</h2>
+      <h5>{{item.StartDate}} - {{item.ReturnDate}} </h5>
+      <ion-note item-end *ngIf="item.NofDays==1">{{item.NofDays}} day </ion-note>
+      <ion-note item-end *ngIf="item.NofDays > 1">{{item.NofDays}} days </ion-note>
+      <p [ngClass]="{grey:item.ApprovalStatus==1,yellow:item.ApprovalStatus==2,green:item.ApprovalStatus==6,red:item.ApprovalStatus==9,blue:true}">{{item.ApprovalStatus|approvalPipe}}</p>
+    </ion-item>
+  </ion-list>
 </ion-content>

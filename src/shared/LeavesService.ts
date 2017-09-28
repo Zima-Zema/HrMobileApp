@@ -26,9 +26,9 @@ export interface IRequestData {
 export class LeaveServicesApi {
 
     private baseURL: string =
-    //'http://192.168.1.17:36207';
+    'http://192.168.1.17:36207';
     //
-    "http://www.enterprise-hr.com";
+   // "http://www.enterprise-hr.com";
 
 
     constructor(private _http: Http, private _storage: Storage) {

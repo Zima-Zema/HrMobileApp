@@ -10,7 +10,11 @@ import * as moment from 'moment';
 export class AddTaskPage {
   dateFilter: string;
   event = { startTime: new Date().toISOString(), endTime: new Date().toISOString(), allDay: false };
-  minDate = new Date().toISOString();
+  public date1=new Date(Date.now());
+  public h2=this.date1.getHours()+2; 
+  minDate = this.date1;
+  //.toISOString();
+
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -20,6 +24,10 @@ export class AddTaskPage {
     let tryDate = this.navParams
     this.event.startTime = preselectedDate;
     this.event.endTime = preselectedDate;
+
+    console.log("daaaate",new Date(Date.now()));
+    console.log("minDate ",this.minDate);
+    
   }
 
   ionViewDidLoad() {
