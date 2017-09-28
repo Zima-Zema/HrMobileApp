@@ -149,10 +149,8 @@ export class TasksPage {
           text: "Done Task",
           handler: () => {
             this.TollenObj.TaskId = event.id;
-            console.log("iiiiid", this.TollenObj.TaskId)
             this.Done_Loader.present().then(() => {
               this.tasksService.saveData(this.TollenObj).subscribe((data) => {
-                console.log(data);
                 this.loadEvents();
                 this.Done_Loader.dismiss();
               })
@@ -168,7 +166,6 @@ export class TasksPage {
               Sec_modal.present();
               Sec_modal.onDidDismiss(data => {
                 if (data) {
-                  console.log("data back from dismiss :: ", data)
                   if (data.Files.length > 0) {
                     let suc_toast = this.toastCtrl.create({
                       message: "Documentations is Added.",
@@ -227,7 +224,6 @@ export class TasksPage {
       if (data) {
         //Working ==> By Fatma 
         data.forEach(ele => {
-          console.log("coming ele >>>", ele);
           //stratTime  : sperate to get each of year , month and day
           this.s_yyyy = moment(ele.StartTime).format('YYYY');
           this.s_mm = moment(ele.StartTime).format('MM');
@@ -294,26 +290,26 @@ export class TasksPage {
     return arr;
   }
   ///////////////////////////////
-  markDisable = (date) => {
-    console.log(date);
-  };
-  /////////////////////////
-  public getDaysInMonth(month, year) {
-    var date = new Date(year, month, 1);
-    var days: Array<Date> = [];
-    var spac_days: Array<Date> = [];
-    while (date.getMonth() === month) {
-      days.push(new Date(date));
+  // markDisable = (date) => {
+  //   console.log(date);
+  // };
+  // /////////////////////////
+  // public getDaysInMonth(month, year) {
+  //   var date = new Date(year, month, 1);
+  //   var days: Array<Date> = [];
+  //   var spac_days: Array<Date> = [];
+  //   while (date.getMonth() === month) {
+  //     days.push(new Date(date));
 
-      date.setDate(date.getDate() + 1);
-    }
-    days.forEach(element => {
-      if (element.getDay() == 6 || element.getDay() == 5) {
-        spac_days.push(element);
-      }
-    });
-    //console.log("days  ", days);
-    // console.log("spac_days  ", spac_days);
-    return spac_days;
-  }
+  //     date.setDate(date.getDate() + 1);
+  //   }
+  //   days.forEach(element => {
+  //     if (element.getDay() == 6 || element.getDay() == 5) {
+  //       spac_days.push(element);
+  //     }
+  //   });
+  //   //console.log("days  ", days);
+  //   // console.log("spac_days  ", spac_days);
+  //   return spac_days;
+  // }
 }
