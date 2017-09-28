@@ -18,7 +18,8 @@
             Leaves Chart
           </ion-card-header>
           <ion-card-content>
-            <canvas #doughnutCanvas></canvas>
+            <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType" [options]="doughnutOptions"
+              (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
           </ion-card-content>
         </ion-card>
       </ion-slide>
@@ -34,73 +35,148 @@
     </ion-slides>
   </ion-card>
 
-  <ion-card>
-    <ion-card-header class="cardheader">
-      Request Leave
-    </ion-card-header>
-    <ion-list>
-      <ion-item>
-        <ion-label>Leave Type</ion-label>
-        <ion-select [(ngModel)]="leaving" (ionChange)="leaveChange(leaving)" interface="popover">
-          <ion-option *ngFor="let item of LeavesData" value="{{item.Id}}">{{item.Name}}</ion-option>
-        </ion-select>
-      </ion-item>
-    </ion-list>
+  <!-- 
+  <ion-list>
+    <ion-item>
+      <ion-label>Leave Type</ion-label>
+      <ion-select [(ngModel)]="leaving" (ionChange)="leaveChange(leaving)" interface="popover">
+        <ion-option *ngFor="let item of LeavesData.LeaveTypeList" value="{{item.Id}}">{{item.Name}}</ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+ -->
 
-    <ion-card *ngIf="leaving">
-      <ion-grid>
+  <form [formGroup]="RequestLeaveForm" (ngSubmit)="saveLeaves()">
 
-        <!-- <form [formGroup]="RequestLeaveForm" (ngSubmit)="saveLeaves()">  -->
-        <ion-item>
-          <ion-label *ngIf="AllowedDays">Allowed Days</ion-label>
-          {{AllowedDays}}
-        </ion-item>
+    <ion-item>
+      <ion-label floating>Leave Type</ion-label>
+      <ion-select [(ngModel)]="leaveType" formControlName="leaveType" interface="popover">
+        <!-- <ion-option *ngFor="let item of LeavesData.LeaveTypeList" value="{{item.Id}}">{{item.Name}}</ion-option> -->
+      </ion-select>
+    </ion-item>
 
-        <ion-item>
-          <ion-label>Start Date</ion-label>
-          <ion-datetime displayFormat="MM/DD HH:mm" pickerFormat="D MMM:HH:mm"></ion-datetime>
-        </ion-item>
+    <ion-item>
+      <ion-label floating>Start Date</ion-label>
+      <ion-datetime [(ngModel)]="startDate" formControlName="startDate" displayFormat="MM/DD HH:mm" pickerFormat="MMM DD YYYY:HH:mm"
+        [min]="minDate" max="2020"></ion-datetime>
+    </ion-item>
 
-        <ion-item>
-          <ion-label>No. Of Days</ion-label>
-          <ion-input type="number"></ion-input>
-        </ion-item>
+    <ion-item>
+      <ion-label floating>No. Of Days</ion-label>
+      <ion-input type="number" [(ngModel)]="noOfDays" formControlName="noOfDays"></ion-input>
+    </ion-item>
 
-        <ion-item>
-          <ion-label>End Date</ion-label>
-          <ion-label></ion-label>
-        </ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label floating>Allowed Days</ion-label>
+            <ion-input type="number" readonly [(ngModel)]="allowedDays" formControlName="allowedDays"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label floating>Reserved Days</ion-label>
+            <ion-input type="number" readonly [(ngModel)]="reservedDays" formControlName="reservedDays"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-        <ion-item>
-          <ion-label>Balance After <br/>Leave</ion-label>
-          <br/>
-          <ion-label></ion-label>
-        </ion-item>
+    <ion-item>
+      <ion-label floating>End Date</ion-label>
+      <ion-input type="text" readonly [(ngModel)]="endDate" formControlName="endDate"></ion-input>
+    </ion-item>
 
-        <ion-item>
-          <ion-label>Return Date</ion-label>
-          <ion-label></ion-label>
-        </ion-item>
+    <ion-item>
+      <ion-label floating>Return Date</ion-label>
+      <ion-input type="text" readonly [(ngModel)]="returnDate" formControlName="returnDate"></ion-input>
+    </ion-item>
 
-        <!-- <ion-list> -->
-        <ion-item>
-            <ion-label>Replacement Employee</ion-label>
-          <ion-select [(ngModel)]="Replacement" interface="popover">
-            <ion-option *ngFor="let item of Replace" value="{{item.id}}">{{item.name}}</ion-option>
-          </ion-select>
-        </ion-item>
-        <!-- </ion-list> -->
 
-        <ion-item>
-          <ion-label>Comments</ion-label>
-          <br>
-          <ion-textarea rows="3" class="txtarea" placeholder="discription"></ion-textarea>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label floating>Balance Before</ion-label>
+            <ion-input type="number" readonly [(ngModel)]="balBefore" formControlName="balBefore"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label floating>Balance After</ion-label>
+            <ion-input type="number" readonly [(ngModel)]="balAfter" formControlName="balAfter"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-        </ion-item>
-        <button ion-button> Save</button>
-      </ion-grid>
+    <ion-item>
+      <ion-label floating>Replacement Employee</ion-label>
+      <ion-select [(ngModel)]="replacement" formControlName="replacement" interface="popover">
+        <ion-option *ngFor="let item of Replace" value="{{item.id}}">{{item.name}}</ion-option>
+      </ion-select>
+    </ion-item>
 
-    </ion-card>
-  </ion-card>
-  <!-- </form>  -->
+    <ion-item>
+      <ion-label>Comments</ion-label>
+      <br>
+      <ion-textarea rows="3" class="txtarea" [(ngModel)]="comments" formControlName="comments" placeholder="discription"></ion-textarea>
+    </ion-item>
+
+    <!-- 
+     <ion-item>
+      <ion-label *ngIf="AllowedDays">Allowed Days</ion-label>
+      {{AllowedDays}}
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Start Date</ion-label>
+      <ion-datetime displayFormat="MM/DD HH:mm" pickerFormat="D MMM:HH:mm"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>No. Of Days</ion-label>
+      <ion-input type="number"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>End Date</ion-label>
+      <ion-label></ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Balance After <br/>Leave</ion-label>
+      <br/>
+      <ion-label></ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Return Date</ion-label>
+      <ion-label></ion-label>
+    </ion-item>
+
+     <ion-list> 
+    <ion-item>
+      <ion-label>Replacement Employee</ion-label>
+      <ion-select [(ngModel)]="Replacement" interface="popover">
+        <ion-option *ngFor="let item of Replace" value="{{item.id}}">{{item.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+   </ion-list> 
+
+    <ion-item>
+      <ion-label>Comments</ion-label>
+      <br>
+      <ion-textarea rows="3" class="txtarea" placeholder="discription"></ion-textarea>
+
+    </ion-item>
+    <button ion-button> Save</button>
+  -->
+
+
+  </form>
 </ion-content>
+<ion-footer>
+  <button ion-button block color="primary" type="submit" [disabled]="!RequestLeaveForm.valid">Submit</button>
+</ion-footer>
