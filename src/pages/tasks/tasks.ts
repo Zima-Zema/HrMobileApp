@@ -65,13 +65,9 @@ export class TasksPage {
     mode: 'month',
     currentDate: new Date()
   };
-<<<<<<< HEAD
   loader_task = this.loadingCtrl.create({
     content: "Loading Tasks..."
   });
-=======
-
->>>>>>> 4bfcda384a2a74d62a31a4c9faf8621043205866
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public loadingCtrl: LoadingController,
@@ -81,9 +77,7 @@ export class TasksPage {
     private tasksService: TasksServicesApi,
     private storage: Storage) {
   }
-  loader_task = this.loadingCtrl.create({
-    content: "Loading Tasks..."
-  });
+
   Done_Loader = this.loadingCtrl.create({
     content: "Done Tasks..."
   });
@@ -193,12 +187,9 @@ export class TasksPage {
               Sec_modal.present();
               Sec_modal.onDidDismiss((data) => {
                 if (data) {
-<<<<<<< HEAD
                   event.title = event.title + " | Done Task";
                   event.Stat = 2;
                   console.log("data back from dismiss :: ", data)
-=======
->>>>>>> 4bfcda384a2a74d62a31a4c9faf8621043205866
                   if (data.Files.length > 0) {
                     let suc_toast = this.toastCtrl.create({
                       message: "Documentations is Added.",
@@ -302,7 +293,6 @@ export class TasksPage {
     return arr;
   }
   ///////////////////////////////
-<<<<<<< HEAD
   markDisable = (date) => {
     //console.log(date);
   };
@@ -323,28 +313,4 @@ export class TasksPage {
     });
     return spac_days;
   }
-=======
-  // markDisable = (date) => {
-  //   console.log(date);
-  // };
-  // /////////////////////////
-  // public getDaysInMonth(month, year) {
-  //   var date = new Date(year, month, 1);
-  //   var days: Array<Date> = [];
-  //   var spac_days: Array<Date> = [];
-  //   while (date.getMonth() === month) {
-  //     days.push(new Date(date));
-
-  //     date.setDate(date.getDate() + 1);
-  //   }
-  //   days.forEach(element => {
-  //     if (element.getDay() == 6 || element.getDay() == 5) {
-  //       spac_days.push(element);
-  //     }
-  //   });
-  //   //console.log("days  ", days);
-  //   // console.log("spac_days  ", spac_days);
-  //   return spac_days;
-  // }
->>>>>>> 4bfcda384a2a74d62a31a4c9faf8621043205866
 }
