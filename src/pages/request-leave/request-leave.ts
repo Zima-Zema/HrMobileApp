@@ -26,7 +26,8 @@ export class RequestLeavePage {
   public balAfter: number = 0;
   public replacement: any;
   public comments: any;
-  
+  public reason: any;
+
   minDate = this.bloodyIsoString(new Date());
 
   bloodyIsoString(bloodyDate: Date) {
@@ -71,17 +72,29 @@ export class RequestLeavePage {
   }
   public RequestLeaveForm: FormGroup;
   public LeavesData: Array<any> = [];
+  public ChartData: Array<any> = [];
+
+  public pieChartLabels: string[] = ["الأجازة السنوية", "الأجازة العارضة"];
+  public pieChartData: number[];
+  public pieChartType: string = 'pie';
+  public lineChartColors: Array<any> = [
+    { // dark grey
+      backgroundColor: 'rgb(0,0,255)',
+      borderColor: 'rgb(0,0,255)'
+
+    },
+    { // grey
+      backgroundColor: 'rgb(255,0,0)',
+      borderColor: 'rgb(255,0,0)'
+
+    },
 
 
-  public Replace: Array<any> = [];
-  public doughnutChartLabels: string[] = ['Download Sales', 'In-Store Sales', 'Mail-Order Sales'];
-  public doughnutChartData: number[] = [350, 450, 100];
-  public doughnutChartType: string = 'doughnut';
-
+  ];
   public doughnutOptions: any = {
-    animation: {
-      duration: 3000
-    }
+    // animation: {
+    //   duration: 3000
+    // }
   };
 
 
@@ -105,13 +118,40 @@ export class RequestLeavePage {
       balBefore: [''],
       balAfter: [''],
       replacement: [''],
-      comments: ['']
+      comments: [''],
+      reason: ['']
 
 
     });
     // this.leaving = 1067;  //annual leave 
+    console.log("This is the Bloody contructor");
+
+    console.log("leaving ", this.leaveType);
+    this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((data) => {
+      console.log("leavetyps>>>", data);
+      this.LeavesData = data;
+      this.ChartData = data.ChartData;
+      this.pieChartData=[this.ChartData[0].Balance,this.ChartData[1].Balance];
+      //this.loadCharts(data.ChartData);
+    }, (e) => {
+      console.log("error ", e);
+    })
   }
 
+  loadCharts(chartData: Array<any>) {
+    let lableTemp: Array<string> = [];
+    let dataTemp: Array<number> = [];
+    console.log("chartData", chartData);
+    chartData.forEach((item) => {
+      console.log("item", item)
+      lableTemp.push(item.Name);
+      dataTemp.push(item.Balance);
+
+    })
+    //this.pieChartLabels=lableTemp;
+    //this.pieChartData = dataTemp;
+    console.log(this.pieChartLabels, this.pieChartData);
+  }
   // events
   public chartClicked(e: any): void {
     console.log(e);
@@ -122,14 +162,7 @@ export class RequestLeavePage {
   }
 
   ionViewDidLoad() {
-    // console.log('ionViewDidLoad RequestLeavePage');
-    // console.log("leaving ", this.leaveType);
-    // this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((data) => {
-    //   console.log("leavetyps>>>", data);
-    //   this.LeavesData = data;
-    // }, (e) => {
-    //   console.log("error ", e);
-    // })
+
   }
 
   ionViewWillEnter() {
