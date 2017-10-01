@@ -35,75 +35,6 @@
     </ion-slides>
   </ion-card>
 
-<<<<<<< HEAD
-
-   
-    <ion-list>
-      <ion-item>
-        <ion-label>Leave Type</ion-label>
-        <ion-select [(ngModel)]="leaving" (ionChange)="leaveChange(leaving)" interface="popover">
-          <ion-option *ngFor="let item of LeavesData" value="{{item.Id}}">{{item.Name}}</ion-option>
-        </ion-select>
-      </ion-item>
-    </ion-list>
-
-      <ion-grid>
-
-        <!-- <form [formGroup]="RequestLeaveForm" (ngSubmit)="saveLeaves()">  -->
-        <ion-item>
-          <ion-label *ngIf="AllowedDays">Allowed Days</ion-label>
-          {{AllowedDays}}
-        </ion-item>
-
-        <ion-item>
-          <ion-label>Start Date</ion-label>
-          <ion-datetime displayFormat="MM/DD HH:mm" pickerFormat="D MMM:HH:mm"></ion-datetime>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>No. Of Days</ion-label>
-          <ion-input type="number"></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>End Date</ion-label>
-          <ion-label></ion-label>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>Balance After <br/>Leave</ion-label>
-          <br/>
-          <ion-label></ion-label>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>Return Date</ion-label>
-          <ion-label></ion-label>
-        </ion-item>
-
-        <!-- <ion-list> -->
-        <ion-item>
-            <ion-label>Replacement Employee</ion-label>
-          <ion-select [(ngModel)]="Replacement" interface="popover">
-            <ion-option *ngFor="let item of Replace" value="{{item.id}}">{{item.name}}</ion-option>
-          </ion-select>
-        </ion-item>
-        <!-- </ion-list> -->
-
-        <ion-item>
-          <ion-label>Comments</ion-label>
-          <br>
-          <ion-textarea rows="3" class="txtarea" placeholder="discription"></ion-textarea>
-
-        </ion-item>
-        <button ion-button> Save</button>
-      </ion-grid>
-
-
-  
-  <!-- </form>  -->
-</ion-content>
-=======
   <!-- 
   <ion-list>
     <ion-item>
@@ -249,4 +180,3 @@
 <ion-footer>
   <button ion-button block color="primary" type="submit" [disabled]="!RequestLeaveForm.valid">Submit</button>
 </ion-footer>
->>>>>>> 4bfcda384a2a74d62a31a4c9faf8621043205866

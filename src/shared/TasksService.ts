@@ -60,13 +60,8 @@ export class TasksServicesApi {
 
     //get all tasks
     getTasks(emp_id: number): Observable<any[]> {
-<<<<<<< HEAD
         return this._http.get(`${this.baseURL}/newApi/MobileTasks/getAllTasks?emp_id=${emp_id}`).map((res: Response) => {
            // console.log("res get tasks : ", res.json())
-=======
-        return this._http.get(`${this.baseURL}/newApi//MobileTasks//getAllTasks?emp_id=${emp_id}`).map((res: Response) => {
-            console.log("res get tasks : ", res.json())
->>>>>>> 4bfcda384a2a74d62a31a4c9faf8621043205866
             return res.json();
         }).catch((err) => {
             return err;

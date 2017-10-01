@@ -1,17 +1,4 @@
 {
-<<<<<<< HEAD
-    "name": "dummy",
-    "version": "0.0.1",
-    "author": "Ionic Framework",
-    "homepage": "http://ionicframework.com/",
-    "private": true,
-    "scripts": {
-        "clean": "ionic-app-scripts clean",
-        "build": "ionic-app-scripts build",
-        "lint": "ionic-app-scripts lint",
-        "ionic:build": "ionic-app-scripts build",
-        "ionic:serve": "ionic-app-scripts serve"
-=======
   "name": "dummy",
   "version": "0.0.1",
   "author": "Ionic Framework",
@@ -124,7 +111,6 @@
         "XWALK_MULTIPLEAPK": "true"
       },
       "cordova-plugin-appminimize": {}
->>>>>>> 4bfcda384a2a74d62a31a4c9faf8621043205866
     },
     "dependencies": {
         "@angular/animations": "4.1.3",

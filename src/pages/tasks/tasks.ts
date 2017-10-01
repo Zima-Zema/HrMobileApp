@@ -164,7 +164,6 @@ export class TasksPage {
         {
           text: "Done Task",
           handler: () => {
-<<<<<<< HEAD
             var Done_Loader = this.loadingCtrl.create({
               content: "Done Tasks..."
             });
@@ -176,13 +175,6 @@ export class TasksPage {
                   event.Stat = 2;
                   Done_Loader.dismiss();
                 })
-=======
-            this.TollenObj.TaskId = event.id;
-            this.Done_Loader.present().then(() => {
-              this.tasksService.saveData(this.TollenObj).subscribe((data) => {
-                this.loadEvents();
-                this.Done_Loader.dismiss();
->>>>>>> 4bfcda384a2a74d62a31a4c9faf8621043205866
               })
               //.catch((err: Error) => {
               //   Done_Loader.dismiss(); 
