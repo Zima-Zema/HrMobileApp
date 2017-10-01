@@ -240,10 +240,10 @@ export class DoneTaskPage {
   }
   //
   SaveData() {
-    let user: any = this.storage.get("User").then((user) => {
-      this.TollenObj.CompanyId = user.CompanyId;
-      this.TollenObj.Language = user.Language;
-    });
+    // let user: any = this.storage.get("User").then((user) => {
+    //   this.TollenObj.CompanyId = user.CompanyId;
+    //   this.TollenObj.Language = user.Language;
+    // });
     this.TollenObj.TaskId = this.coming_Task.id;
     let loader = this.loadingCtrl.create({
       content: "Loading Documentations..."
@@ -251,21 +251,27 @@ export class DoneTaskPage {
     loader.present().then(() => {
       this.tasksService.saveData(this.TollenObj).subscribe((data) => {
         if (data) {
-          this.viewCtrl.dismiss(this.TollenObj);
           loader.dismiss();
+          this.viewCtrl.dismiss(this.TollenObj).then(() => {        
+            console.log("i'm dismissed......")
+          })
         }
         else {
-          this.viewCtrl.dismiss();
           loader.dismiss();
+          this.viewCtrl.dismiss();
         }
       }, (err) => {
-         let err_toast = this.toastCtrl.create({
-            message: "Fail to Add Documentations.",
-            duration: 3000,
-            position: 'middle',
-            cssClass:"toast.scss"
-          });        
+        let err_toast = this.toastCtrl.create({
+          message: "Fail to Add Documentations.",
+          duration: 3000,
+          position: 'middle',
+          cssClass: "toast.scss"
+        });
+        loader.dismiss().then(() => {
           err_toast.present();
+          this.viewCtrl.dismiss()
+        });
+
       });
     })
 

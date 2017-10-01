@@ -24,4 +24,6 @@
     [currentDate]="calendar.currentDate" [showEventDetail]=true (onEventSelected)="onEventSelected($event)" (onTitleChanged)="onViewTitleChanged($event)"
     (onTimeSelected)="onTimeSelected($event)" step="30" class="calendar" noEventsLabel='No Tasks'>
   </calendar>
+
+<span>{{errTxt}}</span>
 </ion-content>
