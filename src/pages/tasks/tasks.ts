@@ -7,6 +7,7 @@ import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService'
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { Storage } from '@ionic/storage';
 
+
 @IonicPage()
 @Component({
   selector: 'page-tasks',

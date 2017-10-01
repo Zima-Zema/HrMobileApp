@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 import { RequestLeavePage } from '../request-leave/request-leave';
 import { LeaveServicesApi, IRequestType } from '../../shared/LeavesService';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 
 @IonicPage()
 @Component({
@@ -22,7 +23,7 @@ export class LeaveListPage {
   }
   public LeavesData: Array<any> = [];
   public LeavesCount: number = 0;
-  public img_color:any;
+  public img_color: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -46,7 +47,11 @@ export class LeaveListPage {
           element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
           element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');
         });
-        this.LeavesData = data;
+        
+        this.LeavesData = _.chain(data).groupBy('Type').toPairs()
+          .map(item => _.zipObject(['divisionType', 'divisionTypes'], item)).value();
+
+       // this.LeavesData = data;
         LeavesLoader.dismiss();
       }, (e) => {
         console.log("error ", e);
