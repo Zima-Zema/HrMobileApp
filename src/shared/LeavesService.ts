@@ -24,11 +24,13 @@ export interface IRequestData {
 
 @Injectable()
 export class LeaveServicesApi {
-    approvalStatus={
-        1:"new",
-        2:""
-}
-    private baseURL: string = 'http://192.168.1.17:36207'
+
+    private baseURL: string =
+    'http://192.168.1.17:36207';
+    //
+   // "http://www.enterprise-hr.com";
+
+
     constructor(private _http: Http, private _storage: Storage) {
     }
 

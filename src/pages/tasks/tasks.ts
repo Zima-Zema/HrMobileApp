@@ -7,6 +7,7 @@ import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService'
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { Storage } from '@ionic/storage';
 
+
 @IonicPage()
 @Component({
   selector: 'page-tasks',
@@ -64,9 +65,13 @@ export class TasksPage {
     mode: 'month',
     currentDate: new Date()
   };
+<<<<<<< HEAD
   loader_task = this.loadingCtrl.create({
     content: "Loading Tasks..."
   });
+=======
+
+>>>>>>> 4bfcda384a2a74d62a31a4c9faf8621043205866
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public loadingCtrl: LoadingController,
@@ -76,6 +81,12 @@ export class TasksPage {
     private tasksService: TasksServicesApi,
     private storage: Storage) {
   }
+  loader_task = this.loadingCtrl.create({
+    content: "Loading Tasks..."
+  });
+  Done_Loader = this.loadingCtrl.create({
+    content: "Done Tasks..."
+  });
   ionViewWillLoad() {
     this.loader_task.present().then(() => {
       this.loadEvents();
@@ -153,6 +164,7 @@ export class TasksPage {
         {
           text: "Done Task",
           handler: () => {
+<<<<<<< HEAD
             var Done_Loader = this.loadingCtrl.create({
               content: "Done Tasks..."
             });
@@ -164,6 +176,13 @@ export class TasksPage {
                   event.Stat = 2;
                   Done_Loader.dismiss();
                 })
+=======
+            this.TollenObj.TaskId = event.id;
+            this.Done_Loader.present().then(() => {
+              this.tasksService.saveData(this.TollenObj).subscribe((data) => {
+                this.loadEvents();
+                this.Done_Loader.dismiss();
+>>>>>>> 4bfcda384a2a74d62a31a4c9faf8621043205866
               })
               //.catch((err: Error) => {
               //   Done_Loader.dismiss(); 
@@ -182,9 +201,12 @@ export class TasksPage {
               Sec_modal.present();
               Sec_modal.onDidDismiss((data) => {
                 if (data) {
+<<<<<<< HEAD
                   event.title = event.title + " | Done Task";
                   event.Stat = 2;
                   console.log("data back from dismiss :: ", data)
+=======
+>>>>>>> 4bfcda384a2a74d62a31a4c9faf8621043205866
                   if (data.Files.length > 0) {
                     let suc_toast = this.toastCtrl.create({
                       message: "Documentations is Added.",
@@ -232,7 +254,6 @@ export class TasksPage {
       if (data) {
         //Working ==> By Fatma 
         data.forEach(ele => {
-          console.log("coming ele >>>", ele);
           //stratTime  : sperate to get each of year , month and day
           this.s_yyyy = moment(ele.StartTime).format('YYYY');
           this.s_mm = moment(ele.StartTime).format('MM');
@@ -289,6 +310,7 @@ export class TasksPage {
     return arr;
   }
   ///////////////////////////////
+<<<<<<< HEAD
   markDisable = (date) => {
     //console.log(date);
   };
@@ -309,4 +331,28 @@ export class TasksPage {
     });
     return spac_days;
   }
+=======
+  // markDisable = (date) => {
+  //   console.log(date);
+  // };
+  // /////////////////////////
+  // public getDaysInMonth(month, year) {
+  //   var date = new Date(year, month, 1);
+  //   var days: Array<Date> = [];
+  //   var spac_days: Array<Date> = [];
+  //   while (date.getMonth() === month) {
+  //     days.push(new Date(date));
+
+  //     date.setDate(date.getDate() + 1);
+  //   }
+  //   days.forEach(element => {
+  //     if (element.getDay() == 6 || element.getDay() == 5) {
+  //       spac_days.push(element);
+  //     }
+  //   });
+  //   //console.log("days  ", days);
+  //   // console.log("spac_days  ", spac_days);
+  //   return spac_days;
+  // }
+>>>>>>> 4bfcda384a2a74d62a31a4c9faf8621043205866
 }
