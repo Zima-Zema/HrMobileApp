@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { LeaveServicesApi, IRequestType, IRequestData } from '../../shared/LeavesService';
 import { LeaveListPage } from '../leave-list/leave-list';
-
+import { Chart } from 'chart.js';
 
 @IonicPage()
 @Component({
@@ -11,8 +11,8 @@ import { LeaveListPage } from '../leave-list/leave-list';
   templateUrl: 'request-leave.html',
 })
 export class RequestLeavePage {
-  // @ViewChild('doughnutCanvas') doughnutCanvas;
-  // doughnutChart: any;
+  @ViewChild('doughnutCanvas') doughnutCanvas;
+  doughnutChart: any;
 
   //Form ngModel
   public leaveType: any;
@@ -26,7 +26,8 @@ export class RequestLeavePage {
   public balAfter: number = 0;
   public replacement: any;
   public comments: any;
-  
+  public reason: any;
+
   minDate = this.bloodyIsoString(new Date());
 
   bloodyIsoString(bloodyDate: Date) {
@@ -49,13 +50,6 @@ export class RequestLeavePage {
 
 
 
-
-
-
-
-
-
-
   RequestTypeObj: IRequestType = {
     CompId: 0,
     Culture: "en-GB",
@@ -71,18 +65,9 @@ export class RequestLeavePage {
   }
   public RequestLeaveForm: FormGroup;
   public LeavesData: Array<any> = [];
+  public ChartData: Array<any> = [];
 
 
-  public Replace: Array<any> = [];
-  public doughnutChartLabels: string[] = ['Download Sales', 'In-Store Sales', 'Mail-Order Sales'];
-  public doughnutChartData: number[] = [350, 450, 100];
-  public doughnutChartType: string = 'doughnut';
-
-  public doughnutOptions: any = {
-    animation: {
-      duration: 3000
-    }
-  };
 
 
 
@@ -105,13 +90,58 @@ export class RequestLeavePage {
       balBefore: [''],
       balAfter: [''],
       replacement: [''],
-      comments: ['']
+      comments: [''],
+      reason: ['']
 
 
     });
     // this.leaving = 1067;  //annual leave 
+    console.log("This is the Bloody contructor");
+
+    console.log("leaving ", this.leaveType);
+    this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((Konafa) => {
+      console.log("leavetyps>>>", Konafa);
+      this.LeavesData = Konafa;
+      this.ChartData = Konafa.ChartData;
+      this.loadCharts(this.ChartData);
+    }, (e) => {
+      console.log("error ", e);
+    })
   }
 
+  loadCharts(chartData: Array<any>) {
+    let lableTemp: Array<string> = [];
+    let dataTemp: Array<number> = [];
+    console.log("chartData", chartData);
+    chartData.forEach((item) => {
+      console.log("item", item)
+      lableTemp.push(item.Name);
+      dataTemp.push(item.Balance);
+
+    })
+    this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
+
+      type: 'doughnut',
+      data: {
+        labels: lableTemp,
+        datasets: [{
+          label: '# of Votes',
+          data: dataTemp,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            
+          ],
+          hoverBackgroundColor: [
+            "#FF6384",
+            "#36A2EB",
+            
+          ]
+        }]
+      }
+
+    });
+  }
   // events
   public chartClicked(e: any): void {
     console.log(e);
@@ -122,14 +152,7 @@ export class RequestLeavePage {
   }
 
   ionViewDidLoad() {
-    // console.log('ionViewDidLoad RequestLeavePage');
-    // console.log("leaving ", this.leaveType);
-    // this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((data) => {
-    //   console.log("leavetyps>>>", data);
-    //   this.LeavesData = data;
-    // }, (e) => {
-    //   console.log("error ", e);
-    // })
+
   }
 
   ionViewWillEnter() {

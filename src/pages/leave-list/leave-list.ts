@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 })
 
 export class LeaveListPage {
-
+  public toggled: boolean = false;
   RequestTypeObj: IRequestType = {
     CompId: 0,
     Culture: "ar-EG",
@@ -24,6 +24,9 @@ export class LeaveListPage {
   public LeavesData: Array<any> = [];
   public LeavesCount: number = 0;
   public img_color: any;
+  public LeavesFilter: Array<any> = [];
+  public queryText: string;
+  Leaves_Arr = [];
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -32,29 +35,28 @@ export class LeaveListPage {
     public toastCtrl: ToastController) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad LeaveListPage');
+  public toggle(): void {
+    this.toggled = this.toggled ? false : true;
   }
-  ionViewWillEnter() {
+
+  ionViewDidLoad() {
+    this.Leaves_Arr = [];
     var LeavesLoader = this.loadingCtrl.create({
       content: "Loading Leaves..."
     });
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
-        console.log("getLeavesdata ", data);
         this.LeavesCount = data.length;
         data.forEach(element => {
           element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
           element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');
         });
-        
+
         this.LeavesData = _.chain(data).groupBy('Type').toPairs()
           .map(item => _.zipObject(['divisionType', 'divisionTypes'], item)).value();
-
-       // this.LeavesData = data;
+        this.Leaves_Arr = this.LeavesData;
         LeavesLoader.dismiss();
       }, (e) => {
-        console.log("error ", e);
         let toast = this.toastCtrl.create({
           message: "Error in getting Leaves, Please Try again later.",
           duration: 3000,
@@ -65,7 +67,22 @@ export class LeaveListPage {
         });
       })
     });
+  }
+  ionViewWillEnter() {
+    this.toggled = false;
+  }
 
+  filterItems() { 
+    this.Leaves_Arr = [];
+    let val = this.queryText.toLowerCase();
+    _.forEach(this.LeavesData, td => {
+      let leavs = _.filter(td.divisionTypes, t => (<any>t).StartDate.toLowerCase().includes(val));
+      if (leavs.length) {
+        this.LeavesFilter.push({ divisionType: td.divisionType, divisionTypes: leavs });
+      }
+    });
+    this.Leaves_Arr = this.LeavesFilter;
+    this.LeavesFilter = [];
   }
 
   addLeave() {

@@ -18,6 +18,7 @@ export class TasksPage {
   str_time: any;
   end_time: any;
   title_data: string;
+  errTxt: string;
   s_dd: any;
   s_mm: any;
   s_yyyy: any;
@@ -64,7 +65,9 @@ export class TasksPage {
     mode: 'month',
     currentDate: new Date()
   };
-
+  loader_task = this.loadingCtrl.create({
+    content: "Loading Tasks..."
+  });
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public loadingCtrl: LoadingController,
@@ -74,9 +77,7 @@ export class TasksPage {
     private tasksService: TasksServicesApi,
     private storage: Storage) {
   }
-  loader_task = this.loadingCtrl.create({
-    content: "Loading Tasks..."
-  });
+
   Done_Loader = this.loadingCtrl.create({
     content: "Done Tasks..."
   });
@@ -123,6 +124,13 @@ export class TasksPage {
     console.log("event  ", event);
     let start = moment(event.startTime).format('LLLL');
     let end = moment(event.endTime).format('LLLL');
+    const Sec_modal = this.modalCtrl.create('DoneTaskPage', { Task: event });
+    let finish_toast = this.toastCtrl.create({
+      message: "This Task Is Already Done!!!",
+      duration: 3000,
+      position: 'bottom',
+      cssClass: "suc_toast.scss"
+    });
     let alert = this.alertCtrl.create({
       title: 'Task: ' + event.title,
       subTitle: 'From: ' + start + '<br>To: ' + end,
@@ -150,24 +158,38 @@ export class TasksPage {
         {
           text: "Done Task",
           handler: () => {
-            this.TollenObj.TaskId = event.id;
-            this.Done_Loader.present().then(() => {
-              this.tasksService.saveData(this.TollenObj).subscribe((data) => {
-                this.loadEvents();
-                this.Done_Loader.dismiss();
+            var Done_Loader = this.loadingCtrl.create({
+              content: "Done Tasks..."
+            });
+            if (event.Stat == 1) {
+              this.TollenObj.TaskId = event.id;
+              Done_Loader.present().then(() => {
+                this.tasksService.saveData(this.TollenObj).subscribe((data) => {
+                  event.title = event.title + " | Done Task";
+                  event.Stat = 2;
+                  Done_Loader.dismiss();
+                })
               })
-            })
-
+              //.catch((err: Error) => {
+              //   Done_Loader.dismiss(); 
+              //   this.errTxt = err.message;
+              // })
+            }
+            else {
+              finish_toast.present();
+            }
           }
         }
         , {
           text: "Attachments",
           handler: () => {
             if (event.Stat == 1) {
-              const Sec_modal = this.modalCtrl.create('DoneTaskPage', { Task: event });
               Sec_modal.present();
-              Sec_modal.onDidDismiss(data => {
+              Sec_modal.onDidDismiss((data) => {
                 if (data) {
+                  event.title = event.title + " | Done Task";
+                  event.Stat = 2;
+                  console.log("data back from dismiss :: ", data)
                   if (data.Files.length > 0) {
                     let suc_toast = this.toastCtrl.create({
                       message: "Documentations is Added.",
@@ -175,12 +197,11 @@ export class TasksPage {
                       position: 'bottom',
                       cssClass: "suc_toast.scss"
                     });
+                    suc_toast.present();
                     // var doc = document.querySelectorAll('.event-detail');
                     // var arr_doc = Array.from(doc);
                     // var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title));
                     // filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor = "lemonchiffon";
-                    suc_toast.present();
-                    this.loadEvents();
                   }
                   else {
                     let err_toast = this.toastCtrl.create({
@@ -191,23 +212,13 @@ export class TasksPage {
                     err_toast.present();
                   }
                 }
-
               });
             }
             else {
-              let err_toast = this.toastCtrl.create({
-                message: "this task is already done!",
-                duration: 3000,
-                position: 'middle'
-              });
-              err_toast.present();
+              finish_toast.present();
             }
           }
-        },
-        // {
-        //   text: 'Cancel',
-        //   role: 'cancel',
-        // }
+        }
       ]
     })
     alert.present();
@@ -237,12 +248,13 @@ export class TasksPage {
           ////time should pass in this format (UTC) otherwise there is a problem --> from documentation (ionic2-calender)
           this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
           this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
-          this.title_data = ele.TaskCategory;
+          if (ele.Status == 1) { this.title_data = ele.TaskCategory; }
+          else { this.title_data = ele.TaskCategory + " | Done Task";; }
+
           this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id, Stat: ele.Status, desc: ele.Description };
           this.events = this.eventSource;
-          if (this.event.Stat == 1) {
-            this.events.push(this.event);
-          }
+          this.events.push(this.event);
+
         });
         this.eventSource = [];
         this.loader_task.dismiss();
@@ -256,7 +268,7 @@ export class TasksPage {
           duration: 2000,
           position: 'middle'
         });
-        err_toast.present();
+        this.loader_task.dismiss().then(() => { err_toast.present() });
       }
     }, (e) => {
       let toast = this.toastCtrl.create({
@@ -268,17 +280,6 @@ export class TasksPage {
         toast.present();
       });
     });
-    //   }
-    // }, (err) => {
-    //   let toast = this.toastCtrl.create({
-    //     message: "There is an error, Please Try again later.",
-    //     duration: 3000,
-    //     position: 'middle'
-    //   });
-    //   this.loader_task.dismiss().then(() => {
-    //     toast.present();
-    //   });
-    // });
   }
   ///////////////////////// function to remove object ( the event ) from eventsource array ////////////////
   ///////////////////////// called in delete button in alert control // Not used for now //////////////////////////////
@@ -292,26 +293,24 @@ export class TasksPage {
     return arr;
   }
   ///////////////////////////////
-  // markDisable = (date) => {
-  //   console.log(date);
-  // };
-  // /////////////////////////
-  // public getDaysInMonth(month, year) {
-  //   var date = new Date(year, month, 1);
-  //   var days: Array<Date> = [];
-  //   var spac_days: Array<Date> = [];
-  //   while (date.getMonth() === month) {
-  //     days.push(new Date(date));
+  markDisable = (date) => {
+    //console.log(date);
+  };
+  /////////////////////////
+  public getDaysInMonth(month, year) {
+    var date = new Date(year, month, 1);
+    var days: Array<Date> = [];
+    var spac_days: Array<Date> = [];
+    while (date.getMonth() === month) {
+      days.push(new Date(date));
 
-  //     date.setDate(date.getDate() + 1);
-  //   }
-  //   days.forEach(element => {
-  //     if (element.getDay() == 6 || element.getDay() == 5) {
-  //       spac_days.push(element);
-  //     }
-  //   });
-  //   //console.log("days  ", days);
-  //   // console.log("spac_days  ", spac_days);
-  //   return spac_days;
-  // }
+      date.setDate(date.getDate() + 1);
+    }
+    days.forEach(element => {
+      if (element.getDay() == 6 || element.getDay() == 5) {
+        spac_days.push(element);
+      }
+    });
+    return spac_days;
+  }
 }

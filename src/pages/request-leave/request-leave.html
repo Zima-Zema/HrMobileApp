@@ -18,8 +18,7 @@
             Leaves Chart
           </ion-card-header>
           <ion-card-content>
-            <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType" [options]="doughnutOptions"
-              (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+            <canvas #doughnutCanvas></canvas>
           </ion-card-content>
         </ion-card>
       </ion-slide>
@@ -51,7 +50,7 @@
     <ion-item>
       <ion-label floating>Leave Type</ion-label>
       <ion-select [(ngModel)]="leaveType" formControlName="leaveType" interface="popover">
-        <!-- <ion-option *ngFor="let item of LeavesData.LeaveTypeList" value="{{item.Id}}">{{item.Name}}</ion-option> -->
+        <ion-option *ngFor="let item of LeavesData.LeaveTypeList" value="{{item.Id}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
 
@@ -65,7 +64,12 @@
       <ion-label floating>No. Of Days</ion-label>
       <ion-input type="number" [(ngModel)]="noOfDays" formControlName="noOfDays"></ion-input>
     </ion-item>
-
+    <ion-item>
+      <ion-label floating>Leave Reason</ion-label>
+      <ion-select [(ngModel)]="reason" formControlName="reason" interface="popover">
+        <ion-option *ngFor="let item of LeavesData.LeaveReasonList" value="{{item.Id}}">{{item.Name}}</ion-option>
+      </ion-select>
+    </ion-item>
     <ion-grid>
       <ion-row>
         <ion-col>
@@ -114,7 +118,7 @@
     <ion-item>
       <ion-label floating>Replacement Employee</ion-label>
       <ion-select [(ngModel)]="replacement" formControlName="replacement" interface="popover">
-        <ion-option *ngFor="let item of Replace" value="{{item.id}}">{{item.name}}</ion-option>
+        <ion-option *ngFor="let item of LeavesData.Replacements" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
 

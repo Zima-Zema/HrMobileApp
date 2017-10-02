@@ -30,3 +30,48 @@ ion-content
 h3{
     font-weight: bold;
 }
+
+//.ios, .md {
+  page-welcome {
+    ion-slide img {
+      height: 60vh !important;
+      width: auto !important;
+    }
+  }
+
+  .card-background-page {
+
+  ion-card {
+    position: relative;
+    text-align: center;
+  }
+
+  .card-title {
+    position: absolute;
+    top: 36%;
+    font-size: 2.0em;
+    width: 100%;
+    font-weight: bold;
+    color:black;
+    font-family: "Comic Sans MS", cursive, sans-serif
+    // #fff;
+  }
+
+  .card-subtitle {
+    //font-size: 1.0em;
+    font-size: 20px;
+    position: absolute;
+    top: 52%;
+    width: 100%;
+    color: black;
+    font-family: "Comic Sans MS", cursive, sans-serif
+    //#fff;
+  }
+  }
+
+  #bigCard{
+ height: 70vh !important;
+      width: auto !important;
+  }
+ 
+

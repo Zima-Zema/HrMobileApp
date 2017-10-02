@@ -7,7 +7,10 @@
   </ion-header>
   <ion-content>
     <ion-list>
-      <ion-list-header> <h2> {{user_name}} </h2> <p>{{user_email}} </p> </ion-list-header>
+      <ion-list-header>
+        <h2> {{user_name}} </h2>
+        <p>{{user_email}} </p>
+      </ion-list-header>
       <!-- <button menuclose ion-item (click)="GoToHome()"> Home </button> -->
       <button menuClose ion-item (click)="GoToTasks()">Tasks</button>
       <button menuClose ion-item (click)="GoToLeaveList()">Leave List</button>
@@ -32,16 +35,45 @@
   </ion-navbar>
 </ion-header>
 <!--//////////////////////////////////////////////////////////////////  -->
-<ion-content padding>
-  <ion-card>
+<ion-content >
+  <!-- <ion-card>
     <img id="personal_img" src="assets/img/user.png" />
     <br/>
     <ion-card-header class="card">
       <h1> Welcome </h1>
-      <!-- to <h2>HR Mobile App</h2> -->
     </ion-card-header>
     <ion-card-content class="card">
       <p> Double Click ERP, HR mobile application.</p>
     </ion-card-content>
-  </ion-card>
+  </ion-card>  -->
+<ion-card id="bigCard">
+  <ion-slides pager="true" class="card-background-page">
+
+    <ion-slide>
+      <ion-card>
+        <img src="../../../assets/img/working1.jpg" />
+        <div class="card-title">Welcome</div>
+        <div class="card-subtitle"></div>
+      </ion-card>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-card>
+        <img src="../../../assets/img/working3.jpg" />
+        <div class="card-title">Double Click ERP</div>
+        <div class="card-subtitle"></div>
+      </ion-card>
+    </ion-slide>
+
+    <ion-slide>
+       <ion-card>
+        <img src="../../../assets/img/working4.jpg" />
+        <div class="card-title">HR mobile application</div>
+        <div class="card-subtitle">100 User</div>
+      </ion-card>
+    </ion-slide>
+
+  </ion-slides>
+</ion-card>
+
 </ion-content>
