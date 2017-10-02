@@ -65,7 +65,7 @@ export class RequestLeavePage {
     Culture: "ar-EG",
     EmpId: 1072,
     RequestId: 0,
-    StartDate: "2017-09-24 00:00:00.000"
+    StartDate: ""
   }
   public RequestLeaveForm: FormGroup;
   public LeavesData: Array<any> = [];
@@ -196,19 +196,20 @@ export class RequestLeavePage {
 
   }
   /////////////////////
-  // leaveChange(item: any) {
-  //   console.log("itemSelected ", item);
-  //   this.RequestDataObj.TypeId = item;
-  //   this.RequestDataObj.StartDate = "2017-09-24 00:00:00.000";
-  //   this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
-  //     console.log("data GetRequestLeaveData ", data);
-  //     this.allowedDays = data.requestVal.AllowedDays;
-  //     this.Replace = data.Replacements;
-  //     console.log("rrrrrrr ", this.Replace)
-  //   }, (err) => {
-  //     console.log("error ", err)
-  //   })
-  // }
+  leaveChange(item: any) {
+    console.log("itemSelected ", item);
+    this.RequestDataObj.TypeId = item;
+    this.RequestDataObj.StartDate = new Date().toDateString();
+    
+    
+    this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
+      console.log("data GetRequestLeaveData ", data);
+      this.allowedDays = data.requestVal.AllowedDays;
+      
+    }, (err) => {
+      console.log("error ", err)
+    })
+  }
 
   saveLeaves() {
     this.navCtrl.push(LeaveListPage);
