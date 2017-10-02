@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { LeaveServicesApi, IRequestType, IRequestData } from '../../shared/LeavesService';
@@ -10,7 +10,10 @@ import { Chart } from 'chart.js';
   selector: 'page-request-leave',
   templateUrl: 'request-leave.html',
 })
-export class RequestLeavePage {
+export class RequestLeavePage implements OnChanges {
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("changes",changes);
+  }
   @ViewChild('doughnutCanvas') doughnutCanvas;
   doughnutChart: any;
 
@@ -61,7 +64,7 @@ export class RequestLeavePage {
     Culture: "ar-EG",
     EmpId: 1072,
     RequestId: 0,
-    StartDate: "2017-09-24 00:00:00.000"
+    StartDate: ""
   }
   public RequestLeaveForm: FormGroup;
   public LeavesData: Array<any> = [];
@@ -159,19 +162,20 @@ export class RequestLeavePage {
 
   }
   /////////////////////
-  // leaveChange(item: any) {
-  //   console.log("itemSelected ", item);
-  //   this.RequestDataObj.TypeId = item;
-  //   this.RequestDataObj.StartDate = "2017-09-24 00:00:00.000";
-  //   this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
-  //     console.log("data GetRequestLeaveData ", data);
-  //     this.allowedDays = data.requestVal.AllowedDays;
-  //     this.Replace = data.Replacements;
-  //     console.log("rrrrrrr ", this.Replace)
-  //   }, (err) => {
-  //     console.log("error ", err)
-  //   })
-  // }
+  leaveChange(item: any) {
+    console.log("itemSelected ", item);
+    this.RequestDataObj.TypeId = item;
+    this.RequestDataObj.StartDate = new Date().toDateString();
+    
+    
+    this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
+      console.log("data GetRequestLeaveData ", data);
+      this.allowedDays = data.requestVal.AllowedDays;
+      
+    }, (err) => {
+      console.log("error ", err)
+    })
+  }
 
   saveLeaves() {
     this.navCtrl.push(LeaveListPage);

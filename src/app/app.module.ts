@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -14,13 +16,11 @@ import { MyApp } from './app.component';
 import { File } from '@ionic-native/file';
 import { FileOpener } from '@ionic-native/file-opener';
 import { Camera } from '@ionic-native/camera';
-import { ElasticModule } from 'angular2-elastic';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { Network } from '@ionic-native/network';
 import 'signalr';
-import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { SignalRModule, SignalRConfiguration } from 'ng2-signalr';
 // pages
 import { HomePage } from '../pages/home/home';
@@ -57,6 +57,7 @@ export function creatConfig(): SignalRConfiguration {
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     IonicModule.forRoot(MyApp),
     SignalRModule.forRoot(creatConfig),
     IonicStorageModule.forRoot({ driverOrder: ["localstorage", "websql"] }),
@@ -78,7 +79,6 @@ export function creatConfig(): SignalRConfiguration {
     HomePage
   ],
   providers: [
-    ElasticModule,
     File,
     BackgroundMode,
     LocalNotifications,
