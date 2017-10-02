@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { LeaveServicesApi, IRequestType, IRequestData } from '../../shared/LeavesService';
 import { LeaveListPage } from '../leave-list/leave-list';
 import { Chart } from 'chart.js';
-
+import * as moment from 'moment';
 @IonicPage()
 @Component({
   selector: 'page-request-leave',
@@ -33,7 +33,6 @@ export class RequestLeavePage {
   public comments: any;
   public reason: any;
   public fraction: any;
-
   minDate = this.bloodyIsoString(new Date());
 
 
@@ -73,8 +72,8 @@ export class RequestLeavePage {
   public RequestLeaveForm: FormGroup;
   public LeavesData: Array<any> = [];
   public ChartData: Array<any> = [];
-
-
+  public requestData: any;
+  allowFraction: boolean = false;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
@@ -217,13 +216,69 @@ export class RequestLeavePage {
 
     this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
       console.log("data GetRequestLeaveData ", data);
+      this.requestData = data;
       this.allowedDays = data.requestVal.AllowedDays;
+      this.allowFraction = data.LeaveType.AllowFraction
+      if (!this.allowFraction) {
+        this.fraction = undefined;
+      }
+      this.reservedDays = data.requestVal.ReservedDays
+      this.balBefore = data.requestVal.BalBefore;
+      this.balAfter  = undefined;
+      console.log("allowFraction", this.allowFraction);
 
     }, (err) => {
       console.log("error ", err)
     })
   }
+  dateChange(item) {
+    console.log("dateChange");
+    console.log(this.startDate);
+    console.log(this.noOfDays);
+    console.log(this.fraction);
+    if (this.startDate && this.noOfDays) {
+      let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
+      console.log(res);
+      moment.locale();
+      this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
+      this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
+      this.startDate = res.startDate;
+      this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
+    }
+  }
+  numberChange(item) {
+    console.log("numberChange");
+    console.log(this.startDate);
+    console.log(this.noOfDays);
+    console.log(this.fraction);
+    if (this.startDate && this.noOfDays) {
+      let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
+      console.log(res);
+      moment.locale();
+      this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
+      this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
+      this.startDate = res.startDate;
+      this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
 
+    }
+
+  }
+  fractionChange(item) {
+    console.log("numberChange");
+    console.log(this.startDate);
+    console.log(this.noOfDays);
+    console.log(this.fraction);
+    if (this.startDate && this.noOfDays) {
+      let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
+      console.log(res);
+      moment.locale();
+      this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
+      this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
+      this.startDate = res.startDate;
+      this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
+
+    }
+  }
   saveLeaves() {
     this.navCtrl.push(LeaveListPage);
   }
