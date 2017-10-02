@@ -60,7 +60,7 @@
     <ion-item>
       <ion-label floating>Start Date</ion-label>
       <ion-datetime [(ngModel)]="startDate" formControlName="startDate" displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM DD YYYY:HH:mm"
-         [min]="minDate"  yearValues="2017,2018,2019,2020,2021" ></ion-datetime>
+         [min]="minDate"  [yearValues]="yearsValue" ></ion-datetime>
     </ion-item>
 
     <ion-item>

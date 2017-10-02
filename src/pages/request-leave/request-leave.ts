@@ -13,10 +13,12 @@ import { Chart } from 'chart.js';
 export class RequestLeavePage {
   @ViewChild('barCanvas') barCanvas;
   @ViewChild('doughnutCanvas') doughnutCanvas;
- // @ViewChild(Slides) slides: Slides;
+  // @ViewChild(Slides) slides: Slides;
   barChart: any;
   doughnutChart: any;
 
+  public YearsArr: Array<number> = [];
+  public yearsValue: Array<number> = [];
   //Form ngModel
   public leaveType: any;
   public startDate: any;
@@ -30,9 +32,10 @@ export class RequestLeavePage {
   public replacement: any;
   public comments: any;
   public reason: any;
+  public fraction: any;
 
   minDate = this.bloodyIsoString(new Date());
- 
+
 
   bloodyIsoString(bloodyDate: Date) {
 
@@ -70,7 +73,7 @@ export class RequestLeavePage {
   public RequestLeaveForm: FormGroup;
   public LeavesData: Array<any> = [];
   public ChartData: Array<any> = [];
- 
+
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -89,8 +92,8 @@ export class RequestLeavePage {
       balAfter: [''],
       replacement: [''],
       comments: [''],
-      reason: ['']
-
+      reason: [''],
+      fraction: ['']
 
     });
     // this.leaving = 1067;  //annual leave 
@@ -106,9 +109,19 @@ export class RequestLeavePage {
       console.log("error ", e);
     })
 
-    console.log("minData : ",this.minDate);
+    console.log("minData : ", this.minDate);
+    this.yearsValue = this.GetYears();
   }
 
+  GetYears() {
+    let year = new Date().getFullYear();
+    console.log("year : ", year)
+    console.log("year : ", year + 100)
+    for (let i = year; i <= year + 100; i++) {
+      this.YearsArr.push(i);
+    }
+    return this.YearsArr;
+  }
 
   //doughnut chart
   loadCharts(chartData: Array<any>) {
@@ -200,12 +213,12 @@ export class RequestLeavePage {
     console.log("itemSelected ", item);
     this.RequestDataObj.TypeId = item;
     this.RequestDataObj.StartDate = new Date().toDateString();
-    
-    
+
+
     this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
       console.log("data GetRequestLeaveData ", data);
       this.allowedDays = data.requestVal.AllowedDays;
-      
+
     }, (err) => {
       console.log("error ", err)
     })
