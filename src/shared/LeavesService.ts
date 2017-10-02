@@ -187,8 +187,8 @@ export class LeaveServicesApi {
 
         let hasFraction = (leaveType && leaveType.AllowFraction && (!Number.isInteger(NofDays)));
         if (hasFraction) {
-            startHours = moment(startDate).format('h')
-            console.log("fatma +2 ", moment(startDate))
+            startHours = new Date(startDate).getHours();
+            console.log("fatma +2 ", new Date(startDate));
             console.log('calcDates startHours', startHours);
             console.log('calcDates startDate', startDate);
 
@@ -213,9 +213,9 @@ export class LeaveServicesApi {
                 NofHours *= calender.WorkHours;
 
         }
-        if (startDate && !isNaN(NofDays)) {
-            endDate = this.addDays(startDate, Number(NofDays.toString()), calender, leaveType);
-            returnDate = this.addDays(startDate, Number(NofDays.toString()) + 1, calender, leaveType);
+        if (startDate && NofDays) {
+            endDate = this.addDays(startDate, NofDays, calender, leaveType);
+            returnDate = this.addDays(startDate, NofDays + 1, calender, leaveType);
             if (hasFraction) {
                 var NofMin = (Number.parseInt(NofHours) != 0 ? NofHours % Number.parseInt(NofHours) : NofHours);
                 returnDate = (new Date(returnDate)).setHours(startHours + NofHours);
