@@ -15,7 +15,7 @@
       <ion-slide>
         <ion-card>
           <ion-card-header>
-            Leaves Chart
+            Balance Chart
           </ion-card-header>
           <ion-card-content>
             <canvas #doughnutCanvas></canvas>
@@ -26,11 +26,14 @@
       <ion-slide>
         <ion-card>
           <ion-card-header>
-            another Chart
+            Leaves Chart
           </ion-card-header>
+          <ion-card-content>
+            <canvas #barCanvas></canvas>
+          </ion-card-content>
         </ion-card>
-
       </ion-slide>
+
     </ion-slides>
   </ion-card>
 
@@ -56,13 +59,13 @@
 
     <ion-item>
       <ion-label floating>Start Date</ion-label>
-      <ion-datetime [(ngModel)]="startDate" (ionChange)="dateChange(startDate)" formControlName="startDate" displayFormat="MM/DD HH:mm"
-        pickerFormat="MMM DD YYYY:HH:mm" [min]="minDate" max="2020"></ion-datetime>
+      <ion-datetime [(ngModel)]="startDate" formControlName="startDate" displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM DD YYYY:HH:mm"
+         [min]="minDate"  yearValues="2017,2018,2019,2020,2021" ></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label floating>No. Of Days</ion-label>
-      <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays"></ion-input>
+      <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays" [min]="1"></ion-input>
     </ion-item>
 
 

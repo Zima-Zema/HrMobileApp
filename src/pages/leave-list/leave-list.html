@@ -1,25 +1,25 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Leave Requests ({{LeavesCount}}) </ion-title>
+    <ion-title *ngIf="!toggled">Leave Requests ({{LeavesCount}}) </ion-title>
     <ion-buttons end>
-      <button ion-button icon-only  (click)="toggle()">
+      <button ion-button icon-only (click)="toggle()">
         <ion-icon  name="search"></ion-icon>
       </button>
       <button ion-button icon-only (click)="addLeave()">
         <ion-icon name="add"></ion-icon>
       </button>
     </ion-buttons>
-    
+      <ion-searchbar *ngIf="toggled" showCancelButton placeholder="Filter By Day, Month or Year" [(ngModel)]="queryText" (ionInput)="filterItems()"></ion-searchbar>
   </ion-navbar>
 
-   <!-- <ion-toolbar no-border-top>  -->
-    <ion-searchbar *ngIf="toggled" showCancelButton placeholder="Filter By Day, Month or Year" [(ngModel)]="queryText" (ionInput)="filterItems()" ></ion-searchbar>
-   <!-- </ion-toolbar>  -->
+  <!-- <ion-toolbar no-border-top>  -->
+
+  <!-- </ion-toolbar>  -->
 </ion-header>
 
 <ion-content>
-  <ion-list  *ngFor="let item of Leaves_Arr">
+  <ion-list *ngFor="let item of Leaves_Arr">
     <ion-item-group id="pItem">
       <ion-item-divider color="primary" id="divison">{{item.divisionType}}</ion-item-divider>
       <ion-item *ngFor="let item of item.divisionTypes">
