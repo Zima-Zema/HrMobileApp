@@ -64,22 +64,25 @@
       <ion-label floating>No. Of Days</ion-label>
       <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays"></ion-input>
     </ion-item>
+
+
+    <ion-item *ngIf="allowFraction">
+      <ion-label floating>Fraction</ion-label>
+      <ion-select [(ngModel)]="fraction" (ionChange)="fractionChange(fraction)" formControlName="fraction" interface="popover">
+        <ion-option value="0.25">Quarter Day</ion-option>
+        <ion-option value="0.5">Half Day</ion-option>
+        <ion-option value="0.75">Half Quarter Day</ion-option>
+      </ion-select>
+    </ion-item>
+
+
     <ion-item>
-
-      <ion-item>
-        <ion-label floating>Fraction</ion-label>
-        <ion-select [(ngModel)]="fraction" (ionChange)="fractionChange(leaveType)" formControlName="fraction" interface="popover">
-          <ion-option  value="0.25">                                                                          </ion-option>
-          <ion-option  value=""></ion-option>
-        
-        </ion-select>
-      </ion-item>
-
       <ion-label floating>Leave Reason</ion-label>
       <ion-select [(ngModel)]="reason" formControlName="reason" interface="popover">
         <ion-option *ngFor="let item of LeavesData.LeaveReasonList" value="{{item.Id}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
+
     <ion-grid>
       <ion-row>
         <ion-col>

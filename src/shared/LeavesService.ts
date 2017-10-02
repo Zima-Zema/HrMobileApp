@@ -3,7 +3,7 @@ import { Http, Headers, RequestOptionsArgs, Response, RequestMethod } from "@ang
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
 import { Storage } from '@ionic/storage';
-
+import * as moment from 'moment';
 
 export interface IRequestType {
     CompId: number,
@@ -183,27 +183,35 @@ export class LeaveServicesApi {
         let returnDate;
 
         let NofDays = Number.parseFloat(noOfDayes) + (fraction ? Number.parseFloat(fraction) : 0);
+        console.log('calcDates NofDays', NofDays);
+
         let hasFraction = (leaveType && leaveType.AllowFraction && (!Number.isInteger(NofDays)));
         if (hasFraction) {
-            startHours = new Date(startDate).getHours();
+            startHours = moment(startDate).format('h')
+            console.log("fatma +2 ", moment(startDate))
+            console.log('calcDates startHours', startHours);
+            console.log('calcDates startDate', startDate);
+
             startMin = new Date(startDate).getMinutes();
             if (startHours == 0) {
                 if (calender.WorkStartTime) {
-                    if (calender.WorkStartTime.indexOf('/Date') != -1) {
-                        startHours = new Date(parseInt(calender.WorkStartTime.substr(6))).getHours();
-                        startMin = new Date(parseInt(calender.WorkStartTime.substr(6))).getMinutes();
+                    //if (calender.WorkStartTime.indexOf('/Date') != -1) {
+                    startHours = new Date(calender.WorkStartTime).getHours();
+                    startMin = new Date(calender.WorkStartTime).getMinutes();
 
-                        startDate = (new Date(startDate)).setHours(startHours);
-                        startDate = new Date((new Date(startDate)).setMinutes(startMin));
+                    startDate = (new Date(startDate)).setHours(startHours);
+                    startDate = new Date((new Date(startDate)).setMinutes(startMin));
 
-                    }
+                    console.log('calcDates startDate', startDate);
+                    //}
                 }
             }
             //
 
-            NofHours = (Number.parseInt(NofDays.toString()) != 0 ? NofDays % Number.parseInt(NofDays.toString()) : NofDays); //check for div by 0
-            if (calender.WorkHours != undefined) NofHours *= calender.WorkHours;
-            NofDays = Number.parseInt(NofDays.toString());
+            NofHours = ((NofDays) != 0 ? NofDays % NofDays : NofDays);
+            if (calender.WorkHours != undefined)
+                NofHours *= calender.WorkHours;
+
         }
         if (startDate && !isNaN(NofDays)) {
             endDate = this.addDays(startDate, Number(NofDays.toString()), calender, leaveType);
@@ -216,9 +224,9 @@ export class LeaveServicesApi {
             }
         }
         return {
-            startDate:startDate,
-            endDate:endDate,
-            returnDate:returnDate
+            startDate: startDate,
+            endDate: endDate,
+            returnDate: returnDate
         }
 
     }
