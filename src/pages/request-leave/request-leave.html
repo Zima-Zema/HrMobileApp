@@ -60,7 +60,7 @@
     <ion-item>
       <ion-label floating>Start Date</ion-label>
       <ion-datetime [(ngModel)]="startDate" formControlName="startDate" displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM DD YYYY:HH:mm"
-         [min]="minDate"  [yearValues]="yearsValue" ></ion-datetime>
+        [min]="minDate" [yearValues]="yearsValue"></ion-datetime>
     </ion-item>
 
     <ion-item>
@@ -72,6 +72,7 @@
     <ion-item *ngIf="allowFraction">
       <ion-label floating>Fraction</ion-label>
       <ion-select [(ngModel)]="fraction" (ionChange)="fractionChange(fraction)" formControlName="fraction" interface="popover">
+        <ion-option value="0">No Fraction</ion-option>
         <ion-option value="0.25">Quarter Day</ion-option>
         <ion-option value="0.5">Half Day</ion-option>
         <ion-option value="0.75">Half Quarter Day</ion-option>
