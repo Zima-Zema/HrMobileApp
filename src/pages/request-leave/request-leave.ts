@@ -13,10 +13,12 @@ import * as moment from 'moment';
 export class RequestLeavePage {
   @ViewChild('barCanvas') barCanvas;
   @ViewChild('doughnutCanvas') doughnutCanvas;
- // @ViewChild(Slides) slides: Slides;
+  // @ViewChild(Slides) slides: Slides;
   barChart: any;
   doughnutChart: any;
 
+  public YearsArr: Array<number> = [];
+  public yearsValue: Array<number> = [];
   //Form ngModel
   public leaveType: any;
   public startDate: any;
@@ -32,7 +34,7 @@ export class RequestLeavePage {
   public reason: any;
   public fraction: any;
   minDate = this.bloodyIsoString(new Date());
- 
+
 
   bloodyIsoString(bloodyDate: Date) {
 
@@ -92,7 +94,6 @@ export class RequestLeavePage {
       reason: [''],
       fraction: ['']
 
-
     });
     // this.leaving = 1067;  //annual leave 
     console.log("This is the Bloody contructor");
@@ -107,9 +108,19 @@ export class RequestLeavePage {
       console.log("error ", e);
     })
 
-    console.log("minData : ",this.minDate);
+    console.log("minData : ", this.minDate);
+    this.yearsValue = this.GetYears();
   }
 
+  GetYears() {
+    let year = new Date().getFullYear();
+    console.log("year : ", year)
+    console.log("year : ", year + 100)
+    for (let i = year; i <= year + 100; i++) {
+      this.YearsArr.push(i);
+    }
+    return this.YearsArr;
+  }
 
   //doughnut chart
   loadCharts(chartData: Array<any>) {
