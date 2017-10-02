@@ -33,15 +33,10 @@ h3{
 
 //.ios, .md {
   page-welcome {
-    ion-slide {
-      //background-color: #32db64;
-    }
- 
     ion-slide img {
       height: 60vh !important;
       width: auto !important;
     }
- 
   }
 
   .card-background-page {
@@ -72,6 +67,11 @@ h3{
     font-family: "Comic Sans MS", cursive, sans-serif
     //#fff;
   }
+  }
+
+  #bigCard{
+ height: 70vh !important;
+      width: auto !important;
   }
  
 

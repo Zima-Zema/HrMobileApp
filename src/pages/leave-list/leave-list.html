@@ -8,12 +8,13 @@
       </button>
       <button ion-button icon-only (click)="addLeave()">
         <ion-icon name="add"></ion-icon>
-      </button> 
+      </button>
     </ion-buttons>
-  </ion-navbar>
-  
-   <!-- <ion-toolbar no-border-top>  -->
     <ion-searchbar *ngIf="toggled" showCancelButton placeholder="Filter By Day, Month or Year" [(ngModel)]="queryText" (ionInput)="filterItems()" ></ion-searchbar>
+  </ion-navbar>
+
+   <!-- <ion-toolbar no-border-top>  -->
+    
    <!-- </ion-toolbar>  -->
 </ion-header>
 

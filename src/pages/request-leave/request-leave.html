@@ -18,8 +18,7 @@
             Leaves Chart
           </ion-card-header>
           <ion-card-content>
-            <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" [options]="doughnutOptions"
-               (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+            <canvas #doughnutCanvas></canvas>
           </ion-card-content>
         </ion-card>
       </ion-slide>
