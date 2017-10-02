@@ -165,7 +165,7 @@ export class TasksPage {
               this.TollenObj.TaskId = event.id;
               Done_Loader.present().then(() => {
                 this.tasksService.saveData(this.TollenObj).subscribe((data) => {
-                  event.title = event.title + " | Done Task";
+                  event.title= event.title +" is Done";
                   event.Stat = 2;
                   Done_Loader.dismiss();
                 })
@@ -187,7 +187,7 @@ export class TasksPage {
               Sec_modal.present();
               Sec_modal.onDidDismiss((data) => {
                 if (data) {
-                  event.title = event.title + " | Done Task";
+                  event.title = event.title + "  is Done";
                   event.Stat = 2;
                   console.log("data back from dismiss :: ", data)
                   if (data.Files.length > 0) {
@@ -249,7 +249,7 @@ export class TasksPage {
           this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
           this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
           if (ele.Status == 1) { this.title_data = ele.TaskCategory; }
-          else { this.title_data = ele.TaskCategory + " | Done Task";; }
+          else { this.title_data = ele.TaskCategory + "  is Done"; }
 
           this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id, Stat: ele.Status, desc: ele.Description };
           this.events = this.eventSource;

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { LeaveServicesApi, IRequestType, IRequestData } from '../../shared/LeavesService';
 import { LeaveListPage } from '../leave-list/leave-list';
@@ -11,7 +11,10 @@ import { Chart } from 'chart.js';
   templateUrl: 'request-leave.html',
 })
 export class RequestLeavePage {
+  @ViewChild('barCanvas') barCanvas;
   @ViewChild('doughnutCanvas') doughnutCanvas;
+ // @ViewChild(Slides) slides: Slides;
+  barChart: any;
   doughnutChart: any;
 
   //Form ngModel
@@ -29,6 +32,7 @@ export class RequestLeavePage {
   public reason: any;
 
   minDate = this.bloodyIsoString(new Date());
+ 
 
   bloodyIsoString(bloodyDate: Date) {
 
@@ -66,13 +70,7 @@ export class RequestLeavePage {
   public RequestLeaveForm: FormGroup;
   public LeavesData: Array<any> = [];
   public ChartData: Array<any> = [];
-
-
-
-
-
-
-
+ 
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -107,18 +105,24 @@ export class RequestLeavePage {
     }, (e) => {
       console.log("error ", e);
     })
+
+    console.log("minData : ",this.minDate);
   }
 
+
+  //doughnut chart
   loadCharts(chartData: Array<any>) {
     let lableTemp: Array<string> = [];
     let dataTemp: Array<number> = [];
+    let DaysTemp: Array<number> = [];
     console.log("chartData", chartData);
     chartData.forEach((item) => {
       console.log("item", item)
       lableTemp.push(item.Name);
       dataTemp.push(item.Balance);
-
+      DaysTemp.push(item.Days)
     })
+
     this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
 
       type: 'doughnut',
@@ -130,14 +134,47 @@ export class RequestLeavePage {
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
-            
           ],
           hoverBackgroundColor: [
             "#FF6384",
             "#36A2EB",
-            
+
           ]
         }]
+      }
+
+    });
+    // //Bar Chart
+    this.barChart = new Chart(this.barCanvas.nativeElement, {
+      type: 'bar',
+      data: {
+        labels: lableTemp,
+        datasets: [
+          {
+            label: "Balance",
+            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+            hoverBackgroundColor: "#7B68EE",
+            borderColor: 'rgba(153, 102, 255, 1)',
+            borderWidth: 1,
+            data: dataTemp
+          }, {
+            label: "Days",
+            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+            hoverBackgroundColor: "#FFCE56",
+            borderColor: 'rgba(255, 206, 86, 1)',
+            borderWidth: 1,
+            data: DaysTemp
+          }
+        ]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
       }
 
     });
