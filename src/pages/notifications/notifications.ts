@@ -40,6 +40,11 @@ export class NotificationsPage {
   }
 
   ionViewWillEnter() {
+
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad NotificationsPage');
     this.errorMsg = undefined;
     this.start = 0;
     console.log('ionViewWillEnter NotificationsPage');
@@ -73,15 +78,6 @@ export class NotificationsPage {
 
 
     })
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad NotificationsPage');
-
-  }
-
-
-  loadNotification() {
 
   }
 
@@ -124,7 +120,7 @@ export class NotificationsPage {
     //   console.log("ModalReturn", data);
     //   this.notifications.find(n => n.Id == data).Read = true;
     // })
-
+    this.notifications.find(n => n.Id == notification.Id).Read = true;
     this.navCtrl.push(NotificationDetailsPage, notification);
     
 
