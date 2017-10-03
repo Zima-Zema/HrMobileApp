@@ -11,12 +11,14 @@ import * as moment from 'moment';
   templateUrl: 'request-leave.html',
 })
 export class RequestLeavePage {
+  public item: any;
   @ViewChild('barCanvas') barCanvas;
   @ViewChild('doughnutCanvas') doughnutCanvas;
-  // @ViewChild(Slides) slides: Slides;
   barChart: any;
   doughnutChart: any;
 
+  public EditFlag: boolean = false;
+  public BtnTxt: string = "Submit";
   public YearsArr: Array<number> = [];
   public yearsValue: Array<number> = [];
   //Form ngModel
@@ -33,28 +35,8 @@ export class RequestLeavePage {
   public comments: any;
   public reason: any;
   public fraction: any;
-  minDate = this.bloodyIsoString(new Date());
-
-
-  bloodyIsoString(bloodyDate: Date) {
-
-    let tzo = -bloodyDate.getTimezoneOffset(),
-      dif = tzo >= 0 ? '+' : '-',
-      pad = function (num) {
-        let norm = Math.floor(Math.abs(num));
-        return (norm < 10 ? '0' : '') + norm;
-      };
-    return bloodyDate.getFullYear() +
-      '-' + pad(bloodyDate.getMonth() + 1) +
-      '-' + pad(bloodyDate.getDate()) +
-      'T' + pad(bloodyDate.getHours()) +
-      ':' + pad(bloodyDate.getMinutes()) +
-      ':' + pad(bloodyDate.getSeconds()) +
-      dif + pad(tzo / 60) +
-      ':' + pad(tzo % 60);
-  }
-
-
+  public minDate: any;
+  // minDate = this.bloodyIsoString(new Date());
 
   RequestTypeObj: IRequestType = {
     CompId: 0,
@@ -74,10 +56,15 @@ export class RequestLeavePage {
   public ChartData: Array<any> = [];
   public requestData: any;
   allowFraction: boolean = false;
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
     private formBuilder: FormBuilder) {
+    //Edit Mode
+    this.item = this.navParams.data;
+    console.log("Edit coming Item : ", this.item)
+    //
     console.log("From Cons>>>", new Date().toISOString());
     this.RequestLeaveForm = this.formBuilder.group({
       leaveType: ['', Validators.required],
@@ -96,7 +83,6 @@ export class RequestLeavePage {
 
     });
     // this.leaving = 1067;  //annual leave 
-    console.log("This is the Bloody contructor");
 
     console.log("leaving ", this.leaveType);
     this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((Konafa) => {
@@ -112,6 +98,53 @@ export class RequestLeavePage {
     this.yearsValue = this.GetYears();
   }
 
+  ionViewWillEnter() {
+    //Edit Mode
+    if (Object.keys(this.item).length > 0) {
+      this.EditFlag = true;
+      this.BtnTxt = "Update";
+      this.leaveChange(this.item.TypeId);
+      this.leaveType = this.item.TypeId;
+      let SDate = new Date(this.item.StartDate);
+      this.minDate = this.bloodyIsoString(SDate);
+      this.startDate = this.item.StartDate;
+      this.noOfDays = this.item.NofDays;
+      // this.allowedDays = 0;
+      // this.reservedDays = 0;
+      this.returnDate = this.item.ReturnDate;
+      this.endDate = this.item.EndDate;
+      // this.balBefore = 0;
+      // this.balAfter = 0;
+      this.replacement = this.item.ReplaceEmpId;
+      // this.comments = 0;
+      // this.reason = 0;
+      // this.fraction = 0;
+    }
+    else {
+      this.EditFlag = false;
+      this.BtnTxt = "Submit";
+      this.minDate = this.bloodyIsoString(new Date());
+    }
+    console.log("this.EditFlag : ", this.EditFlag);
+  }
+
+  bloodyIsoString(bloodyDate: Date) {
+    let tzo = -bloodyDate.getTimezoneOffset(),
+      dif = tzo >= 0 ? '+' : '-',
+      pad = function (num) {
+        let norm = Math.floor(Math.abs(num));
+        return (norm < 10 ? '0' : '') + norm;
+      };
+    return bloodyDate.getFullYear() +
+      '-' + pad(bloodyDate.getMonth() + 1) +
+      '-' + pad(bloodyDate.getDate()) +
+      'T' + pad(bloodyDate.getHours()) +
+      ':' + pad(bloodyDate.getMinutes()) +
+      ':' + pad(bloodyDate.getSeconds()) +
+      dif + pad(tzo / 60) +
+      ':' + pad(tzo % 60);
+  }
+
   GetYears() {
     let year = new Date().getFullYear();
     console.log("year : ", year)
@@ -122,7 +155,7 @@ export class RequestLeavePage {
     return this.YearsArr;
   }
 
-  //doughnut chart
+
   loadCharts(chartData: Array<any>) {
     let lableTemp: Array<string> = [];
     let dataTemp: Array<number> = [];
@@ -134,9 +167,8 @@ export class RequestLeavePage {
       dataTemp.push(item.Balance);
       DaysTemp.push(item.Days)
     })
-
+    //doughnut chart
     this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
-
       type: 'doughnut',
       data: {
         labels: lableTemp,
@@ -202,8 +234,6 @@ export class RequestLeavePage {
 
   ionViewDidLoad() {
   }
-  ionViewWillEnter() {
-  }
   /////////////////////
   leaveChange(item: any) {
     console.log("itemSelected ", item);
@@ -219,7 +249,16 @@ export class RequestLeavePage {
       }
       this.reservedDays = data.requestVal.ReservedDays
       this.balBefore = data.requestVal.BalBefore;
+      if (this.EditFlag == true) {
+        console.log("this.noOfDaysssssssss : ", this.noOfDays)       
+        this.fraction=this.noOfDays % 1;
+        this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? this.fraction : 0));
+        console.log("this.balAfterrrrrr : ",this.balAfter);
+        this.noOfDays=Math.trunc(this.noOfDays);
+      }
+      else{
       this.balAfter = undefined;
+      }
       console.log("allowFraction", this.allowFraction);
     }, (err) => {
       console.log("error ", err)
@@ -246,7 +285,7 @@ export class RequestLeavePage {
       let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
       console.log(res);
       moment.locale();
-      
+
       this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
       this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
       this.startDate = this.allowFraction ? this.bloodyIsoString(res.startDate) : res.startDate;
@@ -254,6 +293,7 @@ export class RequestLeavePage {
 
     }
   }
+
   saveLeaves() {
     this.navCtrl.push(LeaveListPage);
   }

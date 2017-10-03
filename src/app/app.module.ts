@@ -34,6 +34,7 @@ import { ForceChangePasswordPageModule } from '../pages/force-change-password/fo
 import { DoneTaskPageModule } from '../pages/done-task/done-task.module';
 import { LeaveListPageModule} from '../pages/leave-list/leave-list.module';
 import { RequestLeavePageModule} from '../pages/request-leave/request-leave.module';
+import { LeaveEditPageModule} from '../pages/leave-edit/leave-edit.module';
 //from Ali
 export function creatConfig(): SignalRConfiguration {
   // let _store: Storage;
@@ -71,7 +72,8 @@ export function creatConfig(): SignalRConfiguration {
     DoneTaskPageModule,
     HttpModule,
     LeaveListPageModule,
-    RequestLeavePageModule
+    RequestLeavePageModule,
+    LeaveEditPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

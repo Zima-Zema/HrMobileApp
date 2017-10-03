@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { RequestLeavePage } from '../request-leave/request-leave';
+import { LeaveEditPage } from '../leave-edit/leave-edit';
 import { LeaveServicesApi, IRequestType } from '../../shared/LeavesService';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -26,7 +27,7 @@ export class LeaveListPage {
   public img_color: any;
   public LeavesFilter: Array<any> = [];
   public queryText: string;
-  Leaves_Arr = [];
+  public Leaves_Arr: Array<any> = [];
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -50,6 +51,7 @@ export class LeaveListPage {
         data.forEach(element => {
           element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
           element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');
+          element.EndDate=moment(element.EndDate).format('ddd, MMM DD, YYYY');
         });
 
         this.LeavesData = _.chain(data).groupBy('Type').toPairs()
@@ -72,7 +74,7 @@ export class LeaveListPage {
     this.toggled = false;
   }
 
-  filterItems() { 
+  filterItems() {
     this.Leaves_Arr = [];
     let val = this.queryText.toLowerCase();
     _.forEach(this.LeavesData, td => {
@@ -87,6 +89,10 @@ export class LeaveListPage {
 
   addLeave() {
     this.navCtrl.push(RequestLeavePage);
+  }
+  EditLeaves(item) {
+    //this.navCtrl.push(LeaveEditPage,item);
+    this.navCtrl.push(RequestLeavePage,item);
   }
 
 }

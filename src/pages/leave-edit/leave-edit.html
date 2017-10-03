@@ -1,0 +1,29 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{item.Type}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <form [formGroup]="EditLeaveForm" (ngSubmit)="UpdateLeaves()">
+
+
+    <ion-item>
+      <ion-label floating>Start Date</ion-label>
+      <ion-datetime [(ngModel)]="startDate" formControlName="startDate" displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM DD YYYY:HH:mm"
+        [min]="minDate" [yearValues]="yearsValue"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>No. Of Days</ion-label>
+      <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays" [min]="1"></ion-input>
+    </ion-item>
+
+    <button ion-button color="primary" type="submit" [disabled]="!EditLeaveForm.valid">Submit</button>
+  </form>
+
+</ion-content>
