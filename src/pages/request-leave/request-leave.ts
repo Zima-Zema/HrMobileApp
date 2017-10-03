@@ -201,19 +201,14 @@ export class RequestLeavePage {
   }
 
   ionViewDidLoad() {
-
   }
-
   ionViewWillEnter() {
-
   }
   /////////////////////
   leaveChange(item: any) {
     console.log("itemSelected ", item);
     this.RequestDataObj.TypeId = item;
     this.RequestDataObj.StartDate = new Date().toDateString();
-
-
     this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
       console.log("data GetRequestLeaveData ", data);
       this.requestData = data;
@@ -224,47 +219,26 @@ export class RequestLeavePage {
       }
       this.reservedDays = data.requestVal.ReservedDays
       this.balBefore = data.requestVal.BalBefore;
-      this.balAfter  = undefined;
+      this.balAfter = undefined;
       console.log("allowFraction", this.allowFraction);
-
     }, (err) => {
       console.log("error ", err)
     })
   }
   dateChange(item) {
     console.log("dateChange");
-    console.log(this.startDate);
-    console.log(this.noOfDays);
-    console.log(this.fraction);
-    if (this.startDate && this.noOfDays) {
-      let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
-      console.log(res);
-      moment.locale();
-      this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
-      this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
-      this.startDate = res.startDate;
-      this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
-    }
+    this.bindForm();
   }
   numberChange(item) {
     console.log("numberChange");
-    console.log(this.startDate);
-    console.log(this.noOfDays);
-    console.log(this.fraction);
-    if (this.startDate && this.noOfDays) {
-      let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
-      console.log(res);
-      moment.locale();
-      this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
-      this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
-      this.startDate = res.startDate;
-      this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
-
-    }
-
+    this.bindForm();
   }
   fractionChange(item) {
     console.log("numberChange");
+    this.bindForm();
+  }
+
+  bindForm() {
     console.log(this.startDate);
     console.log(this.noOfDays);
     console.log(this.fraction);
