@@ -242,7 +242,7 @@ export class RequestLeavePage {
       moment.locale();
       this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
       this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
-      this.startDate = res.startDate;
+      this.startDate = this.allowFraction ? this.bloodyIsoString(res.startDate) : res.startDate;      
       this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
     }
   }
@@ -257,7 +257,7 @@ export class RequestLeavePage {
       moment.locale();
       this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
       this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
-      this.startDate = res.startDate;
+      this.startDate = this.allowFraction ? this.bloodyIsoString(res.startDate) : res.startDate;
       this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
 
     }
@@ -272,9 +272,10 @@ export class RequestLeavePage {
       let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
       console.log(res);
       moment.locale();
+      
       this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
       this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
-      this.startDate = res.startDate;
+      this.startDate = this.allowFraction ? this.bloodyIsoString(res.startDate) : res.startDate;
       this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
 
     }
