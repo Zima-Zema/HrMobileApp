@@ -193,14 +193,17 @@ export class LeaveServicesApi {
             console.log('calcDates startDate', startDate);
 
             startMin = new Date(startDate).getMinutes();
-            if (startHours == 0) {
+            if (startHours <= (new Date(calender.WorkStartTime).getHours())) {
                 if (calender.WorkStartTime) {
+
                     //if (calender.WorkStartTime.indexOf('/Date') != -1) {
                     startHours = new Date(calender.WorkStartTime).getHours();
                     startMin = new Date(calender.WorkStartTime).getMinutes();
+                    console.log('calender.WorkStartTime', calender.WorkStartTime);
 
-                    startDate = (new Date(startDate)).setHours(startHours);
-                    startDate = new Date((new Date(startDate)).setMinutes(startMin));
+                    console.log('calender.WorkStartTime.getHours', startHours);
+                    startDate = (new Date(startDate)).setHours(startHours, startMin);
+                    //startDate = new Date((new Date(startDate)).setMinutes(startMin));
 
                     console.log('calcDates startDate', startDate);
                     //}
@@ -218,6 +221,7 @@ export class LeaveServicesApi {
             returnDate = this.addDays(startDate, NofDays + 1, calender, leaveType);
             if (hasFraction) {
                 var NofMin = (Number.parseInt(NofHours) != 0 ? NofHours % Number.parseInt(NofHours) : NofHours);
+                returnDate = this.addDays(startDate, NofDays, calender, leaveType);
                 returnDate = (new Date(returnDate)).setHours(startHours + NofHours);
                 returnDate = new Date((new Date(returnDate)).setMinutes(startMin + (NofMin * 60)));
 
