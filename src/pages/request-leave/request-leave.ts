@@ -1,39 +1,38 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidatorFn } from "@angular/forms";
 import { LeaveServicesApi, IRequestType, IRequestData } from '../../shared/LeavesService';
 import { LeaveListPage } from '../leave-list/leave-list';
 import { Chart } from 'chart.js';
 import * as moment from 'moment';
+
 @IonicPage()
 @Component({
   selector: 'page-request-leave',
   templateUrl: 'request-leave.html',
 })
 export class RequestLeavePage {
+
   @ViewChild('barCanvas') barCanvas;
   @ViewChild('doughnutCanvas') doughnutCanvas;
   // @ViewChild(Slides) slides: Slides;
-  barChart: any;
-  doughnutChart: any;
 
-  public YearsArr: Array<number> = [];
-  public yearsValue: Array<number> = [];
   //Form ngModel
   public leaveType: any;
   public startDate: any;
   public noOfDays: any;
-  public allowedDays: number = 0;
-  public reservedDays: number = 0;
+  public allowedDays: number = undefined;
+  public reservedDays: number = undefined;
   public returnDate: any;
   public endDate: any;
-  public balBefore: number = 0;
-  public balAfter: number = 0;
+  public balBefore: number = undefined;
+  public balAfter: number = undefined;
   public replacement: any;
   public comments: any;
   public reason: any;
   public fraction: any;
-  minDate = this.bloodyIsoString(new Date());
+
+  minDate = this.bloodyIsoString(new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0)));
 
 
   bloodyIsoString(bloodyDate: Date) {
@@ -74,6 +73,13 @@ export class RequestLeavePage {
   public ChartData: Array<any> = [];
   public requestData: any;
   allowFraction: boolean = false;
+  barChart: any;
+  doughnutChart: any;
+  static maxDays: number = null;
+  static allowed: number = null;
+  public YearsArr: Array<number> = [];
+  public yearsValue: Array<number> = [];
+  pickFormat: string;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
@@ -82,7 +88,7 @@ export class RequestLeavePage {
     this.RequestLeaveForm = this.formBuilder.group({
       leaveType: ['', Validators.required],
       startDate: ['', Validators.required],
-      noOfDays: ['', Validators.required],
+      noOfDays: ['', Validators.compose([Validators.required, RequestLeavePage.isValid])],
       allowedDays: [''],
       reservedDays: [''],
       endDate: [''],
@@ -200,12 +206,9 @@ export class RequestLeavePage {
     console.log(e);
   }
 
-  ionViewDidLoad() {
-  }
-  ionViewWillEnter() {
-  }
   /////////////////////
   leaveChange(item: any) {
+    this.resetForm();
     console.log("itemSelected ", item);
     this.RequestDataObj.TypeId = item;
     this.RequestDataObj.StartDate = new Date().toDateString();
@@ -213,13 +216,27 @@ export class RequestLeavePage {
       console.log("data GetRequestLeaveData ", data);
       this.requestData = data;
       this.allowedDays = data.requestVal.AllowedDays;
-      this.allowFraction = data.LeaveType.AllowFraction
+      this.allowFraction = data.LeaveType.AllowFraction;
+      RequestLeavePage.maxDays = data.requestVal.MaxDays;
+      RequestLeavePage.allowed = data.requestVal.AllowedDays;
       if (!this.allowFraction) {
         this.fraction = undefined;
+        this.pickFormat = 'MMM DD YYYY';
+      }
+      else {
+        this.pickFormat = 'MMM DD YYYY:HH:mm';
+      }
+      if (data.LeaveType.AbsenceType == 8) {
+        this.minDate = this.bloodyIsoString(new Date());
+        this.startDate = new Date();
+      }
+      else {
+        this.minDate = this.bloodyIsoString(new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0)));
       }
       this.reservedDays = data.requestVal.ReservedDays
       this.balBefore = data.requestVal.BalBefore;
       this.balAfter = undefined;
+      ////////
       console.log("allowFraction", this.allowFraction);
     }, (err) => {
       console.log("error ", err)
@@ -246,13 +263,63 @@ export class RequestLeavePage {
       let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
       console.log(res);
       moment.locale();
-      
+
       this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
       this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
-      this.startDate = this.allowFraction ? this.bloodyIsoString(res.startDate) : res.startDate;
+      //this.startDate = this.allowFraction ? this.bloodyIsoString(res.startDate) : res.startDate;
       this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
 
     }
+  }
+  resetForm() {
+    this.startDate = null;
+    this.noOfDays = null;
+    this.allowedDays = undefined;
+    this.reservedDays = undefined;
+    this.returnDate;
+    this.endDate = null;
+    this.balBefore = undefined;
+    this.balAfter = undefined;
+    this.replacement = null;;
+    this.comments = null;;
+    this.reason = null;;
+    this.fraction = null;;
+  }
+  static isValid(control: FormControl) {
+    console.log("validationAllowed", RequestLeavePage.allowed);
+    if (RequestLeavePage.allowed == null) {
+      return {
+        "noLeave": "Select Leave Type First"
+      }
+    }
+    if (control.value > RequestLeavePage.maxDays && RequestLeavePage.maxDays != null) {
+      return {
+        "maximum": "bigger than Maximum"
+      }
+    }
+
+    if (control.value > RequestLeavePage.allowed) {
+      return {
+        "allowed": "bigger than allowed"
+      };
+    }
+
+
+    if (isNaN(control.value)) {
+      return {
+        "general": "not a number"
+      };
+    }
+
+    if (control.value % 1 !== 0) {
+      return {
+        "general": "not a whole number"
+      };
+    }
+
+
+
+    return null;
   }
   saveLeaves() {
     this.navCtrl.push(LeaveListPage);
