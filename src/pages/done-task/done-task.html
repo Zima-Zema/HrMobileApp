@@ -11,11 +11,8 @@
 <ion-content padding>
   <ion-grid>
     <ion-row>
-      <ion-textarea rows="6" class="txtarea" placeholder="Enter a discription" [value]="disc" [(ngModel)]="disc" (focus)="valuechange($event)"></ion-textarea>
+      <ion-textarea rows="6" class="txtarea" placeholder="Enter a discription" [value]="disc" [(ngModel)]="disc" (ionBlur)="valuechange($event)"></ion-textarea>
     </ion-row>
-    <!-- <ion-row>
-      <ion-item *ngIf="File_Label">UPLOADED : {{File_Label}}</ion-item>
-    </ion-row> -->
     <br/>
     <ion-scroll scrollX="true" scrollY="true" zoom="true">
       <img *ngFor="let i of imags" [src]="i" style="border-radius:15%;" class="smallImg" />
@@ -27,15 +24,6 @@
       </div>
     </ion-row>
   </ion-grid>
-  <!-- /////////////////////////// for test  -->
-  <ul>
-    <h3 *ngIf="filename"> Files you have uploaded : </h3>
-    <li *ngFor="let filename of filename_arr"> {{filename}}</li>
-  </ul>
-  <!-- <span>errortext : {{errortext}}</span><br/>
-  <span>filename : {{filename}}</span><br/>
-  <span>correctPath : {{correctPath}}</span><br/> -->
-  <!-- ///////////////////////////////  -->
 </ion-content>
 
 <ion-footer>

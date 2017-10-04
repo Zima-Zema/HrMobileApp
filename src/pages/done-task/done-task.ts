@@ -24,7 +24,6 @@ export class DoneTaskPage {
   public coming_Task: any = "";
   public isdisabled: boolean = true;
   public ext: string = "";
-  public filename_arr: Array<any> = [];
   public imags: Array<any> = [];
   //////////////////////for test
   public errortext: string = "";
@@ -57,10 +56,10 @@ export class DoneTaskPage {
     FileDetails: []
   }
   //
-  public focused=false;
+  public focused = false;
   valuechange(it) {
-    console.log("textarea valuechange : ",it)
-    this.focused=true;
+    console.log("textarea valuechange : ", it)
+    this.uploadtext();
   }
 
   //action sheet for images
@@ -89,11 +88,11 @@ export class DoneTaskPage {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Choose File',
       buttons: [
-        {
-          text: 'Upload text ',
-          handler: () => { this.uploadtext() },
-          cssClass: 'Uploadtext'
-        },
+        // {
+        //   text: 'Upload text ',
+        //   handler: () => { this.uploadtext() },
+        //   cssClass: 'Uploadtext'
+        // },
         {
           text: 'Upload from your device',
           handler: () => { this.uploadfile(); }
@@ -183,7 +182,6 @@ export class DoneTaskPage {
           let arr = Array.from(ff);
           this.TollenObj.Files.push(arr);
           this.TollenObj.FileDetails.push(textfile);
-          this.filename_arr.push(textfile);
         });
       }).catch((e: Error) => {
         this.errortext = "writeFile error : " + e.message;
@@ -212,7 +210,12 @@ export class DoneTaskPage {
           let arr = Array.from(un_arr);
           this.TollenObj.FileDetails.push(textfile);
           this.TollenObj.Files.push(arr);
-          this.filename_arr.push(this.filename);
+          let success_toast = this.toastCtrl.create({
+            message: "File Is Saved, Press correct to upload...",
+            duration: 3000,
+            position: 'bottom'
+          });
+          success_toast.present();
         }).catch((e: Error) => {
           this.errortext = "readAsDataURL error : " + e.message;
           let err_toast = this.toastCtrl.create({
@@ -257,7 +260,7 @@ export class DoneTaskPage {
       this.tasksService.saveData(this.TollenObj).subscribe((data) => {
         if (data) {
           loader.dismiss();
-          this.viewCtrl.dismiss(this.TollenObj).then(() => {        
+          this.viewCtrl.dismiss(this.TollenObj).then(() => {
             console.log("i'm dismissed......")
           })
         }
@@ -285,107 +288,4 @@ export class DoneTaskPage {
   StepBack() {
     this.viewCtrl.dismiss();
   }
-
-
-  // openCamera() {
-  //   const cameraOptions: CameraOptions = {
-  //     quality: 100,
-  //     destinationType: this.cam.DestinationType.DATA_URL,
-  //     encodingType: this.cam.EncodingType.JPEG,
-  //     mediaType: this.cam.MediaType.PICTURE,
-  //   };
-
-  //   this.cam.getPicture(cameraOptions).then((imageData) => {
-  //     if (imageData) {
-  //       this.isdisabled = false;
-  //     }
-  //     this.captureDataUrl = 'data:image/jpeg;base64,' + imageData;
-  //     //this.correctPath=imageData
-  //     //this.filename=this.captureDataUrl;
-  //     this.filePath.resolveNativePath(imageData).then(filepath => {
-  //       //   let path_without_filename = imageData.substring(imageData.lastIndexOf('/') + 1, imageData.lastIndexOf('?'));
-  //       this.filename = filepath.substring(filepath.lastIndexOf('/') + 1);  // just file name
-  //       //   this.TollenObj.FileDetails = this.filename;
-  //     }, (err: Error) => {
-  //       this.errortext = err.message;
-  //     })
-  //     // this.TollenObj.Files.push(imageData);
-  //   }, (err: Error) => {
-  //     this.errortext = err.message;
-  //   });
-  // }
-
-  /////////////////////////////////////////////////////
-
-  ////////////////////////////////////////
-  // this.fileOpener.open(this.file.dataDirectory + 'dbclick.txt', 'application/pdf')
-  //   .then((data) => { this.filetext = data })
-  //   .catch((e) => { this.filetext = e });
-  /////////////////////////////////////////////////////
-  // fileTransfer.upload(uri, "", options1)
-  //   .then(
-  //   (data) => { 
-  //     this.errortext = JSON.stringify(data)
-  //   },
-  //   (err) => { 
-  //     this.errortext = "error choose"
-  //   }
-  //   )
-
-
-  // let options1: FileUploadOptions = {
-  //           fileKey: 'file',
-  //           fileName: 'name.pdf',
-  //           params: { resume: uri },
-  //           chunkedMode: false,
-  //           headers: { Authorization: localStorage.getItem('token') }
-  //         }
-  //         const fileTransfer: FileTransferObject = this.transfer.create();
-  //         fileTransfer.upload(uri, "", options1)
-  //           .then(
-  //           (data) => {
-  //             this.errortext = JSON.stringify(data)
-  //           },
-  //           (err) => {
-  //             this.errortext = "error choose"
-  //           }
-  //           )
-
-
-  ////////////////////////////////////////
-  // //resolve the image path 
-  // this.filePath.resolveNativePath(imageData).then(filePath => {
-  //   this.ext = ".jpg"; //type of extension in image
-  //   //if gallery button click
-  //   if (SourceType === this.cam.PictureSourceType.SAVEDPHOTOALBUM) {
-  //     let correctPath = filePath.substr(0, filePath.lastIndexOf('/') + 1); //path without name
-  //     let currentName = imageData.substring(imageData.lastIndexOf('/') + 1, imageData.lastIndexOf('?')); //file name
-  //     this.copyFileToLocalDir(correctPath, currentName, this.createFileName(this.ext));
-  //   }
-  //   else {
-  //     //if camera button click
-  //     var currentName = imageData.substr(imageData.lastIndexOf('/') + 1);
-  //     var correctPath = imageData.substr(0, imageData.lastIndexOf('/') + 1);
-  //     this.copyFileToLocalDir(correctPath, currentName, this.createFileName(this.ext));
-  //   }
-  // }, (err: Error) => {
-  //   this.errortext = "path : " + err.message;
-  // });
-  ///////////////////////////////////////////
-  // //Copy the image to a local folder
-  // public copyFileToLocalDir(namePath, currentName, newFileName: string) {
-  //   //copy the new file 
-  //   this.file.copyFile(namePath, currentName, this.file.dataDirectory, newFileName).then(success => {
-  //     //the image appear in page
-  //     this.captureDataUrl = this.file.dataDirectory + newFileName;
-  //     this.imags.push(this.captureDataUrl);
-  //     this.TollenObj.FileDetails.push(newFileName);
-  //     this.TollenObj.Files.push(this.captureDataUrl);
-  //   }, (err: Error) => {
-  //     this.errortext = "copy : " + err.message;
-  //   });
-  // }
-
-
-
 }

@@ -221,7 +221,7 @@ export class RequestLeavePage {
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: false
+              beginAtZero: true
             }
           }]
         }

@@ -120,7 +120,7 @@ export class LeaveListPage {
         let toast = this.toastCtrl.create({
           message: "Leave Is Deletede Successfully...",
           duration: 3000,
-          position: 'middle'
+          position: 'bottom'
         });
         toast.present();
       }, (err: Error) => {
@@ -128,7 +128,7 @@ export class LeaveListPage {
         let toast = this.toastCtrl.create({
           message: "Error in Deleting Leaves, Please Try again later.",
           duration: 3000,
-          position: 'middle'
+          position: 'bottom'
         });
         toast.present();
       })
