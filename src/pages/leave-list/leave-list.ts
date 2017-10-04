@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController, AlertController } from 'ionic-angular';
 import { RequestLeavePage } from '../request-leave/request-leave';
 import { LeaveEditPage } from '../leave-edit/leave-edit';
 import { LeaveServicesApi, IRequestType, IDeleteRequest } from '../../shared/LeavesService';
@@ -38,7 +38,8 @@ export class LeaveListPage {
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
     public loadingCtrl: LoadingController,
-    public toastCtrl: ToastController) {
+    public toastCtrl: ToastController,
+    public alertCtrl: AlertController) {
   }
 
   public toggle(): void {
@@ -98,18 +99,37 @@ export class LeaveListPage {
     this.navCtrl.push(RequestLeavePage);
   }
   EditLeaves(item) {
-    item.readOnly=false;
+    item.readOnly = false;
     this.navCtrl.push(RequestLeavePage, item);
   }
-  ShowLeaves(item){
-    item.readOnly=true;
+  ShowLeaves(item) {
+    item.readOnly = true;
     this.navCtrl.push(RequestLeavePage, item);
+  }
+  DeleteLeave(itemLeave) {
+    const alert = this.alertCtrl.create({
+      title: 'Confirm Remove',
+      message: 'Are you sure you want to remove this leave request?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.ConfirmDelete(itemLeave)
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
-  DeleteLeave(item) {
+  ConfirmDelete(item) {
     console.log("Trash item : ", item);
-    this.DeleteObj.Id=item.Id;
-    console.log("this.DeleteObj ",this.DeleteObj)
+    this.DeleteObj.Id = item.Id;
+    console.log("this.DeleteObj ", this.DeleteObj)
     this.LeaveServices.removeLeaveRequest(this.DeleteObj)
       .subscribe((data) => {
         console.log("deleted", data);
@@ -137,5 +157,4 @@ export class LeaveListPage {
         toast.present();
       })
   }
-
 }

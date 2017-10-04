@@ -7,7 +7,6 @@ import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService'
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { Storage } from '@ionic/storage';
 
-
 @IonicPage()
 @Component({
   selector: 'page-tasks',
@@ -18,7 +17,6 @@ export class TasksPage {
   str_time: any;
   end_time: any;
   title_data: string;
-  errTxt: string;
   s_dd: any;
   s_mm: any;
   s_yyyy: any;
@@ -29,30 +27,6 @@ export class TasksPage {
   events = [];
   viewTitle: string;
   selectedDay = new Date();
-  TaskObj: ITasks = {
-    Id: 0,
-    EmpListId: 0,
-    TaskNo: 0,
-    TaskCat: 0,
-    Description: "",
-    Priority: 0,
-    Status: 0,
-    Required: "",
-    Unit: "",
-    EmpId: 0,
-    ManagerId: 0,
-    AssignedTime: "",
-    StartTime: "",
-    Duration: 0,
-    CreatedUser: "",
-    ModifiedUser: "",
-    CreatedTime: "",
-    ModifiedTime: "",
-    ExpectDur: 0,
-    EndTime: "",
-    SubPeriodId: 0,
-    CompanyId: 0,
-  }
   TollenObj: ITollen = {
     CompanyId: 0,
     Files: [],
@@ -78,43 +52,12 @@ export class TasksPage {
     private storage: Storage) {
   }
 
-  Done_Loader = this.loadingCtrl.create({
-    content: "Done Tasks..."
-  });
   ionViewWillLoad() {
     this.loader_task.present().then(() => {
       this.loadEvents();
     });
   }
-  /////////////////////////// Not Used for now //////////////////////
-  addEvent() {
-    let modal = this.modalCtrl.create('AddTaskPage', { selectedDay: this.selectedDay });
-    modal.present();
-    modal.onDidDismiss(data => {
-      if (data) {
-        let toast = this.toastCtrl.create({
-          message: "Sorry, End date is before start date.",
-          duration: 3000,
-          position: 'middle'
-        });
-        let eventData = data;
-        eventData.startTime = new Date(data.startTime);
-        eventData.endTime = new Date(data.endTime);
 
-        if (eventData.endTime < eventData.startTime) {
-          toast.present();
-        }
-        else {
-          this.events = this.eventSource;
-          this.events.push(eventData);
-          this.eventSource = [];
-          setTimeout(() => {
-            this.eventSource = this.events;
-          });
-        }
-      }
-    });
-  }
   ///////////////////////////////////////
   onViewTitleChanged(title) {
     this.viewTitle = title;
@@ -165,15 +108,19 @@ export class TasksPage {
               this.TollenObj.TaskId = event.id;
               Done_Loader.present().then(() => {
                 this.tasksService.saveData(this.TollenObj).subscribe((data) => {
-                  event.title= event.title +" is Done";
+                  event.title = event.title + " is Done";
                   event.Stat = 2;
                   Done_Loader.dismiss();
                 })
+              }).catch((err: Error) => {
+                Done_Loader.dismiss();
+                let err_toast = this.toastCtrl.create({
+                  message: "Error to finish task, Please try again later...",
+                  duration: 3000,
+                  position: 'middle'
+                });
+                err_toast.present();
               })
-              //.catch((err: Error) => {
-              //   Done_Loader.dismiss(); 
-              //   this.errTxt = err.message;
-              // })
             }
             else {
               finish_toast.present();
@@ -184,33 +131,30 @@ export class TasksPage {
           text: "Attachments",
           handler: () => {
             if (event.Stat == 1) {
+              let err_toast = this.toastCtrl.create({
+                message: "Sorry, No Documentations is Added.",
+                duration: 3000,
+                position: 'middle'
+              });
               Sec_modal.present();
               Sec_modal.onDidDismiss((data) => {
                 if (data) {
                   event.title = event.title + "  is Done";
                   event.Stat = 2;
-                  console.log("data back from dismiss :: ", data)
                   if (data.Files.length > 0) {
                     let suc_toast = this.toastCtrl.create({
                       message: "Documentations is Added.",
                       duration: 3000,
                       position: 'bottom',
-                      cssClass: "suc_toast.scss"
                     });
                     suc_toast.present();
-                    // var doc = document.querySelectorAll('.event-detail');
-                    // var arr_doc = Array.from(doc);
-                    // var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title));
-                    // filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor = "lemonchiffon";
                   }
                   else {
-                    let err_toast = this.toastCtrl.create({
-                      message: "Sorry, No Documentations is Added.",
-                      duration: 3000,
-                      position: 'middle'
-                    });
                     err_toast.present();
                   }
+                }
+                else{
+                  err_toast.present();
                 }
               });
             }
@@ -292,25 +236,37 @@ export class TasksPage {
     }
     return arr;
   }
-  ///////////////////////////////
-  markDisable = (date) => {
-    //console.log(date);
-  };
-  /////////////////////////
-  public getDaysInMonth(month, year) {
-    var date = new Date(year, month, 1);
-    var days: Array<Date> = [];
-    var spac_days: Array<Date> = [];
-    while (date.getMonth() === month) {
-      days.push(new Date(date));
+  /////////////////////////// Not Used for now //////////////////////
+  addEvent() {
+    let modal = this.modalCtrl.create('AddTaskPage', { selectedDay: this.selectedDay });
+    modal.present();
+    modal.onDidDismiss(data => {
+      if (data) {
+        let toast = this.toastCtrl.create({
+          message: "Sorry, End date is before start date.",
+          duration: 3000,
+          position: 'middle'
+        });
+        let eventData = data;
+        eventData.startTime = new Date(data.startTime);
+        eventData.endTime = new Date(data.endTime);
 
-      date.setDate(date.getDate() + 1);
-    }
-    days.forEach(element => {
-      if (element.getDay() == 6 || element.getDay() == 5) {
-        spac_days.push(element);
+        if (eventData.endTime < eventData.startTime) {
+          toast.present();
+        }
+        else {
+          this.events = this.eventSource;
+          this.events.push(eventData);
+          this.eventSource = [];
+          setTimeout(() => {
+            this.eventSource = this.events;
+          });
+        }
       }
     });
-    return spac_days;
   }
+  // var doc = document.querySelectorAll('.event-detail');
+  // var arr_doc = Array.from(doc);
+  // var filter_doc = [...arr_doc].filter(el => el.innerHTML.indexOf(event.title));
+  // filter_doc[0].parentElement.parentElement.parentElement.parentElement.style.backgroundColor = "lemonchiffon";
 }
