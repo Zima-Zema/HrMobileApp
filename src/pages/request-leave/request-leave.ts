@@ -110,26 +110,6 @@ export class RequestLeavePage {
   ionViewWillEnter() {
 
     if (Object.keys(this.item).length > 0) {
-<<<<<<< HEAD
-      this.EditFlag = true;
-      this.BtnTxt = "Update";
-      this.leaveChange(this.item.TypeId);
-      this.leaveType = this.item.TypeId;
-      let SDate = new Date(this.item.StartDate);
-      this.startDate = this.bloodyIsoString(SDate);
-      this.minDate = this.bloodyIsoString(SDate);
-      this.noOfDays = this.item.NofDays;
-      // this.allowedDays = 0;
-      // this.reservedDays = 0;
-      this.returnDate = this.item.ReturnDate;
-      this.endDate = this.item.EndDate;
-      // this.balBefore = 0;
-      // this.balAfter = 0;
-      this.replacement = this.item.ReplaceEmpId;
-      // this.comments = 0;
-      // this.reason = 0;
-      // this.fraction = 0;
-=======
       //Edit Mode
       if (this.item.readOnly == false) {
         console.log("Edit Mode");
@@ -161,7 +141,6 @@ export class RequestLeavePage {
         this.endDate = this.item.EndDate;
         this.replacement = this.item.ReplaceEmpId;
       }
->>>>>>> aa98fe2c4e72450054b3bf15be6527adb5bd4891
     }
     //Request Mode
     else {
