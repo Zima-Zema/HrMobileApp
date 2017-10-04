@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidatorFn } from "@angular/forms";
 import { LeaveServicesApi, IRequestType, IRequestData } from '../../shared/LeavesService';
 import { LeaveListPage } from '../leave-list/leave-list';
@@ -13,10 +13,11 @@ import * as moment from 'moment';
 })
 export class RequestLeavePage {
   public item: any;
-  @ViewChild('barCanvas') barCanvas;
+
   @ViewChild('doughnutCanvas') doughnutCanvas;
-  barChart: any;
+  @ViewChild('barCanvas') barCanvas;
   doughnutChart: any;
+  barChart: any;
 
   public EditFlag: boolean = false;
   public BtnTxt: string = "Submit";
@@ -172,7 +173,7 @@ export class RequestLeavePage {
       dataTemp.push(item.Balance);
       DaysTemp.push(item.Days)
     })
-    //doughnut chart
+    // //doughnut chart
     this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
       type: 'doughnut',
       data: {
@@ -220,7 +221,7 @@ export class RequestLeavePage {
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
+              beginAtZero: false
             }
           }]
         }

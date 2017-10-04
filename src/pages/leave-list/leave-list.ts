@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { RequestLeavePage } from '../request-leave/request-leave';
 import { LeaveEditPage } from '../leave-edit/leave-edit';
-import { LeaveServicesApi, IRequestType } from '../../shared/LeavesService';
+import { LeaveServicesApi, IRequestType, IDeleteRequest } from '../../shared/LeavesService';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -28,6 +28,10 @@ export class LeaveListPage {
   public LeavesFilter: Array<any> = [];
   public queryText: string;
   public Leaves_Arr: Array<any> = [];
+  DeleteObj: IDeleteRequest = {
+    Id: 0,
+    Language: "ar-EG"
+  }
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -51,7 +55,7 @@ export class LeaveListPage {
         data.forEach(element => {
           element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
           element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');
-          element.EndDate=moment(element.EndDate).format('ddd, MMM DD, YYYY');
+          element.EndDate = moment(element.EndDate).format('ddd, MMM DD, YYYY');
         });
 
         this.LeavesData = _.chain(data).groupBy('Type').toPairs()
@@ -92,7 +96,47 @@ export class LeaveListPage {
   }
   EditLeaves(item) {
     //this.navCtrl.push(LeaveEditPage,item);
-    this.navCtrl.push(RequestLeavePage,item);
+    this.navCtrl.push(RequestLeavePage, item);
+  }
+  DeleteLeave(item) {
+    //  var arr= this.removeByAttr(this.Leaves_Arr,"Id",item.Id);
+    //  console.log("arr ",arr);
+    console.log("this.Leaves_Arr ", this.Leaves_Arr);
+    let foo
+
+    console.log("foo", foo);
+    this.Leaves_Arr = _.chain(foo).merge('Type').toPairs()
+      .map(item => _.zipObject(['divisionType', 'divisionTypes'], item)).value();
+
+    //this.Leaves_Arr = this.LeavesData;
+
+    // console.log("Trash item : ", item);
+    // this.DeleteObj.Id = item.Id;
+    // var DeleteLoader = this.loadingCtrl.create({
+    //   content: "Deleteing Leaves..."
+    // });
+    // DeleteLoader.present().then(() => {
+    //   this.LeaveServices.removeLeaveRequest(this.DeleteObj)
+    //     .subscribe((data) => {
+    //       console.log("deleted", data);
+    //       DeleteLoader.dismiss();
+    //     }, (err: Error) => {
+    //       console.log("error : ", err.message);
+    //       DeleteLoader.dismiss();
+    //     })
+    // }).catch((e) => {
+    //   console.log("error : ", e)
+    // })
+  }
+
+  removeByAttr = function (arr, attr, value) {
+    var i = arr.length;
+    while (i--) {
+      if (arr[i] && arr[i].hasOwnProperty(attr) && (arguments.length > 2 && arr[i][attr] === value)) {
+        arr.splice(i, 1);
+      }
+    }
+    return arr;
   }
 
 }
