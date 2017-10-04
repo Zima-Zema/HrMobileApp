@@ -12,6 +12,7 @@ import * as moment from 'moment';
   templateUrl: 'request-leave.html',
 })
 export class RequestLeavePage {
+  
   public item: any;
 
   @ViewChild('doughnutCanvas') doughnutCanvas;
@@ -61,8 +62,9 @@ export class RequestLeavePage {
   allowFraction: boolean = false;
   static maxDays: number = null;
   static allowed: number = null;
-  static mustReason: boolean = null;
+  public static mustReason: boolean = true;
   pickFormat: string;
+  displayFormat: string;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
@@ -84,7 +86,7 @@ export class RequestLeavePage {
       balAfter: [''],
       replacement: [''],
       comments: [''],
-      reason: ['',RequestLeavePage.isValidReqReason],
+      reason: [''],
       fraction: ['']
 
     });
@@ -112,8 +114,9 @@ export class RequestLeavePage {
       this.leaveChange(this.item.TypeId);
       this.leaveType = this.item.TypeId;
       let SDate = new Date(this.item.StartDate);
+      this.startDate = this.bloodyIsoString(SDate);
       this.minDate = this.bloodyIsoString(SDate);
-      this.startDate = this.item.StartDate;
+
       this.noOfDays = this.item.NofDays;
       // this.allowedDays = 0;
       // this.reservedDays = 0;
@@ -255,18 +258,16 @@ export class RequestLeavePage {
       RequestLeavePage.maxDays = data.requestVal.MaxDays;
       RequestLeavePage.allowed = data.requestVal.AllowedDays;
       RequestLeavePage.mustReason = data.LeaveType.MustAddCause;
-      if (RequestLeavePage.mustReason) {
-        this.RequestLeaveForm.controls['reason'].updateValueAndValidity();
-        
-        
-      }
-      console.log("RequestLeavePage.mustReason",RequestLeavePage.mustReason)
+
+      console.log("RequestLeavePage.mustReason", RequestLeavePage.mustReason)
       if (!this.allowFraction) {
         this.fraction = undefined;
         this.pickFormat = 'MMM DD YYYY';
+        this.displayFormat="MM/DD/YYYY"
       }
       else {
         this.pickFormat = 'MMM DD YYYY:HH:mm';
+        this.displayFormat ="MM/DD/YYYY HH:mm";
       }
       if (data.LeaveType.AbsenceType == 8) {
         this.minDate = this.bloodyIsoString(new Date());
@@ -372,7 +373,7 @@ export class RequestLeavePage {
     return null;
   }
   static isValidReqReason(control: FormControl) {
-    
+
     // if (RequestLeavePage.mustReason == null) {
     //   return {
     //     "noLeave": "Select Leave Type First"

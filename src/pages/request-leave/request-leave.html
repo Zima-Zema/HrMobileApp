@@ -65,7 +65,7 @@
 
     <ion-item>
       <ion-label floating>Start Date</ion-label>
-      <ion-datetime [(ngModel)]="startDate" formControlName="startDate" displayFormat="MM/DD/YYYY HH:mm" [pickerFormat]="pickFormat"
+      <ion-datetime [(ngModel)]="startDate" formControlName="startDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat"
         [min]="minDate" [yearValues]="yearsValue"></ion-datetime>
     </ion-item>
 
@@ -96,11 +96,11 @@
 
     <ion-item>
       <ion-label floating>Leave Reason</ion-label>
-      <ion-select [(ngModel)]="reason" formControlName="reason" interface="popover"  >
+      <ion-select [(ngModel)]="reason" formControlName="reason" interface="popover" [required]="mustReason"  >
         <ion-option *ngFor="let item of LeavesData.LeaveReasonList" value="{{item.Id}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
-    <span>
+    <span *ngIf="mustReason" style="color:crimson " >
       Required
     </span>
     <!-- <span *ngIf="!RequestLeaveForm.controls.reason.valid && (RequestLeaveForm.controls.reason.dirty)">
