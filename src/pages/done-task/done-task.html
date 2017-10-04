@@ -11,7 +11,7 @@
 <ion-content padding>
   <ion-grid>
     <ion-row>
-      <ion-textarea rows="6" class="txtarea" placeholder="Enter a discription" [value]="disc" [(ngModel)]="disc"></ion-textarea>
+      <ion-textarea rows="6" class="txtarea" placeholder="Enter a discription" [value]="disc" [(ngModel)]="disc" (focus)="valuechange($event)"></ion-textarea>
     </ion-row>
     <!-- <ion-row>
       <ion-item *ngIf="File_Label">UPLOADED : {{File_Label}}</ion-item>

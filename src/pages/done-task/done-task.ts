@@ -57,7 +57,12 @@ export class DoneTaskPage {
     FileDetails: []
   }
   //
-  ionViewDidLoad() { }
+  public focused=false;
+  valuechange(it) {
+    console.log("textarea valuechange : ",it)
+    this.focused=true;
+  }
+
   //action sheet for images
   public presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({

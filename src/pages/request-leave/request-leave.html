@@ -59,9 +59,9 @@
     </ion-item>
 
     <ion-item>
-      <ion-label >Start Date</ion-label>
-      <ion-datetime [(ngModel)]="startDate" formControlName="startDate" displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM DD YYYY:HH:mm"
-        [min]="minDate" [yearValues]="yearsValue" placeholder="{{startDate}}"></ion-datetime>
+      <ion-label floating>Start Date</ion-label>
+      <ion-datetime [(ngModel)]="startDate" formControlName="startDate" displayFormat="MM/DD/YYYY HH:mm" [pickerFormat]="pickFormat"
+        [min]="minDate" [yearValues]="yearsValue"></ion-datetime>
     </ion-item>
 
     <ion-item>
@@ -69,6 +69,14 @@
       <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays" [min]="1"></ion-input>
     </ion-item>
 
+
+    <span *ngIf="!RequestLeaveForm.controls.noOfDays.valid  && (RequestLeaveForm.controls.noOfDays.dirty)">
+      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('maximum')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('maximum')}} - {{requestData.LeaveType.MaxDays}}</p>
+      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('allowed')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('allowed')}} - {{allowedDays}}</p>      
+      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('noLeave')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('noLeave')}}</p>      
+      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('general')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('general')}}</p>      
+      
+    </span>
 
     <ion-item *ngIf="allowFraction">
       <ion-label floating>Fraction</ion-label>
@@ -145,57 +153,6 @@
       <br>
       <ion-textarea rows="3" class="txtarea" [(ngModel)]="comments" formControlName="comments" placeholder="discription"></ion-textarea>
     </ion-item>
-
-    <!-- 
-     <ion-item>
-      <ion-label *ngIf="AllowedDays">Allowed Days</ion-label>
-      {{AllowedDays}}
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Start Date</ion-label>
-      <ion-datetime displayFormat="MM/DD HH:mm" pickerFormat="D MMM:HH:mm"></ion-datetime>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>No. Of Days</ion-label>
-      <ion-input type="number"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>End Date</ion-label>
-      <ion-label></ion-label>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Balance After <br/>Leave</ion-label>
-      <br/>
-      <ion-label></ion-label>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Return Date</ion-label>
-      <ion-label></ion-label>
-    </ion-item>
-
-     <ion-list> 
-    <ion-item>
-      <ion-label>Replacement Employee</ion-label>
-      <ion-select [(ngModel)]="Replacement" interface="popover">
-        <ion-option *ngFor="let item of Replace" value="{{item.id}}">{{item.name}}</ion-option>
-      </ion-select>
-    </ion-item>
-   </ion-list> 
-
-    <ion-item>
-      <ion-label>Comments</ion-label>
-      <br>
-      <ion-textarea rows="3" class="txtarea" placeholder="discription"></ion-textarea>
-
-    </ion-item>
-    <button ion-button> Save</button>
-  -->
-
 
   </form>
 </ion-content>
