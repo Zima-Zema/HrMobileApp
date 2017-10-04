@@ -116,7 +116,6 @@ export class RequestLeavePage {
       let SDate = new Date(this.item.StartDate);
       this.startDate = this.bloodyIsoString(SDate);
       this.minDate = this.bloodyIsoString(SDate);
-
       this.noOfDays = this.item.NofDays;
       // this.allowedDays = 0;
       // this.reservedDays = 0;
