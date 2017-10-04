@@ -12,7 +12,7 @@ import * as moment from 'moment';
   templateUrl: 'request-leave.html',
 })
 export class RequestLeavePage {
-  
+
   public item: any;
 
   @ViewChild('doughnutCanvas') doughnutCanvas;
@@ -20,7 +20,8 @@ export class RequestLeavePage {
   doughnutChart: any;
   barChart: any;
 
-  public EditFlag: boolean = false;
+  //public EditFlag: boolean = false;
+  public EditFlag: number = 0;
   public BtnTxt: string = "Submit";
   public YearsArr: Array<number> = [];
   public yearsValue: Array<number> = [];
@@ -107,8 +108,9 @@ export class RequestLeavePage {
   }
 
   ionViewWillEnter() {
-    //Edit Mode
+
     if (Object.keys(this.item).length > 0) {
+<<<<<<< HEAD
       this.EditFlag = true;
       this.BtnTxt = "Update";
       this.leaveChange(this.item.TypeId);
@@ -127,9 +129,43 @@ export class RequestLeavePage {
       // this.comments = 0;
       // this.reason = 0;
       // this.fraction = 0;
+=======
+      //Edit Mode
+      if (this.item.readOnly == false) {
+        console.log("Edit Mode");
+        this.EditFlag = 1;
+        this.BtnTxt = "Update";
+        this.leaveChange(this.item.TypeId);
+        this.leaveType = this.item.TypeId;
+        let SDate = new Date(this.item.StartDate);
+        this.startDate = this.bloodyIsoString(SDate);
+        this.minDate = this.bloodyIsoString(SDate);
+        this.noOfDays = this.item.NofDays;
+        this.returnDate = this.item.ReturnDate;
+        this.endDate = this.item.EndDate;
+        this.replacement = this.item.ReplaceEmpId;
+        // this.comments = "";
+        // this.reason = 0;
+      }
+      //Show Mode
+      else {
+        console.log("Show Mode >> readOnly Flag : ", this.item.readOnly);
+        this.EditFlag = 2;
+        this.leaveChange(this.item.TypeId);
+        this.leaveType = this.item.TypeId;
+        let SDate = new Date(this.item.StartDate);
+        this.startDate = this.bloodyIsoString(SDate);
+        this.minDate = this.bloodyIsoString(SDate);
+        this.noOfDays = this.item.NofDays;
+        this.returnDate = this.item.ReturnDate;
+        this.endDate = this.item.EndDate;
+        this.replacement = this.item.ReplaceEmpId;
+      }
+>>>>>>> aa98fe2c4e72450054b3bf15be6527adb5bd4891
     }
+    //Request Mode
     else {
-      this.EditFlag = false;
+      this.EditFlag = 0;
       this.BtnTxt = "Submit";
       this.minDate = this.bloodyIsoString(new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0)));
     }
@@ -223,7 +259,7 @@ export class RequestLeavePage {
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: false
+              beginAtZero: true
             }
           }]
         }
@@ -262,11 +298,11 @@ export class RequestLeavePage {
       if (!this.allowFraction) {
         this.fraction = undefined;
         this.pickFormat = 'MMM DD YYYY';
-        this.displayFormat="MM/DD/YYYY"
+        this.displayFormat = "MM/DD/YYYY"
       }
       else {
         this.pickFormat = 'MMM DD YYYY:HH:mm';
-        this.displayFormat ="MM/DD/YYYY HH:mm";
+        this.displayFormat = "MM/DD/YYYY HH:mm";
       }
       if (data.LeaveType.AbsenceType == 8) {
         this.minDate = this.bloodyIsoString(new Date());
@@ -277,11 +313,9 @@ export class RequestLeavePage {
       }
       this.reservedDays = data.requestVal.ReservedDays
       this.balBefore = data.requestVal.BalBefore;
-      if (this.EditFlag == true) {
-        console.log("this.noOfDaysssssssss : ", this.noOfDays)
+      if (this.EditFlag == 1 || this.EditFlag == 2) {
         this.fraction = this.noOfDays % 1;
         this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? this.fraction : 0));
-        console.log("this.balAfterrrrrr : ", this.balAfter);
         this.noOfDays = Math.trunc(this.noOfDays);
       }
       else {
