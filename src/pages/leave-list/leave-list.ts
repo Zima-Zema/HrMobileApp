@@ -28,6 +28,7 @@ export class LeaveListPage {
   public LeavesFilter: Array<any> = [];
   public queryText: string;
   public Leaves_Arr: Array<any> = [];
+  public motherArr;
   DeleteObj: IDeleteRequest = {
     Id: 0,
     Language: "ar-EG"
@@ -46,12 +47,14 @@ export class LeaveListPage {
 
   ionViewDidLoad() {
     this.Leaves_Arr = [];
+    this.motherArr = [];
     var LeavesLoader = this.loadingCtrl.create({
       content: "Loading Leaves..."
     });
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
         this.LeavesCount = data.length;
+        this.motherArr = data;
         data.forEach(element => {
           element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
           element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');
@@ -99,16 +102,16 @@ export class LeaveListPage {
     this.navCtrl.push(RequestLeavePage, item);
   }
   DeleteLeave(item) {
-    //  var arr= this.removeByAttr(this.Leaves_Arr,"Id",item.Id);
-    //  console.log("arr ",arr);
-    console.log("this.Leaves_Arr ", this.Leaves_Arr);
-    let foo
 
-    console.log("foo", foo);
-    this.Leaves_Arr = _.chain(foo).merge('Type').toPairs()
-      .map(item => _.zipObject(['divisionType', 'divisionTypes'], item)).value();
 
-    //this.Leaves_Arr = this.LeavesData;
+    this.motherArr = this.motherArr.filter((element) => {
+      return element.Id !== item.Id;
+    })
+    this.LeavesCount--;
+    this.Leaves_Arr = _.chain(this.motherArr).groupBy('Type').toPairs()
+    .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
+ 
+
 
     // console.log("Trash item : ", item);
     // this.DeleteObj.Id = item.Id;
