@@ -3,6 +3,11 @@
   <ion-navbar>
     <ion-title *ngIf="!EditFlag">Request Leave</ion-title>
     <ion-title *ngIf="EditFlag">Edit Leave</ion-title>
+    <!-- <ion-buttons end>
+      <button ion-button icon-only (click)="addEvent()">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </ion-buttons> -->
   </ion-navbar>
 
 </ion-header>
@@ -51,9 +56,9 @@
 
   <form [formGroup]="RequestLeaveForm" (ngSubmit)="saveLeaves()">
 
-    <ion-item >
+    <ion-item>
       <ion-label floating>Leave Type</ion-label>
-      <ion-select [(ngModel)]="leaveType" (ionChange)="leaveChange(leaveType)" formControlName="leaveType" interface="popover" >
+      <ion-select [(ngModel)]="leaveType" (ionChange)="leaveChange(leaveType)" formControlName="leaveType" interface="popover">
         <ion-option *ngFor="let item of LeavesData.LeaveTypeList" value="{{item.Id}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
