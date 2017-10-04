@@ -137,8 +137,6 @@ export class LeaveServicesApi {
             });
     }
 
-    //this method return endDate
-    //so returnDate = addDays(startDate, (Number(NofDays) + 1)); 
     addDays(startDate, noOfDayes, calender, leaveType): Date {
         let count = 0;
         let result = new Date(startDate);
@@ -173,8 +171,6 @@ export class LeaveServicesApi {
         return result;
     }
 
-    //getNofDays
-    //Number.parseFloat(nofDays) + (fraction ? Number.parseFloat(fraction) : 0);
     calcDates(startDate, noOfDayes, calender, leaveType, fraction) {
         let startHours;
         let startMin;

@@ -60,6 +60,7 @@ export class RequestLeavePage {
   allowFraction: boolean = false;
   static maxDays: number = null;
   static allowed: number = null;
+  static mustReason: boolean = null;
   pickFormat: string;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -82,7 +83,7 @@ export class RequestLeavePage {
       balAfter: [''],
       replacement: [''],
       comments: [''],
-      reason: [''],
+      reason: ['',RequestLeavePage.isValidReqReason],
       fraction: ['']
 
     });
@@ -237,6 +238,7 @@ export class RequestLeavePage {
   }
 
   ionViewDidLoad() {
+
   }
   /////////////////////
   leaveChange(item: any) {
@@ -251,6 +253,13 @@ export class RequestLeavePage {
       this.allowFraction = data.LeaveType.AllowFraction;
       RequestLeavePage.maxDays = data.requestVal.MaxDays;
       RequestLeavePage.allowed = data.requestVal.AllowedDays;
+      RequestLeavePage.mustReason = data.LeaveType.MustAddCause;
+      if (RequestLeavePage.mustReason) {
+        this.RequestLeaveForm.controls['reason'].updateValueAndValidity();
+        
+        
+      }
+      console.log("RequestLeavePage.mustReason",RequestLeavePage.mustReason)
       if (!this.allowFraction) {
         this.fraction = undefined;
         this.pickFormat = 'MMM DD YYYY';
@@ -277,8 +286,7 @@ export class RequestLeavePage {
       else {
         this.balAfter = undefined;
       }
-      ////////
-      console.log("allowFraction", this.allowFraction);
+
     }, (err) => {
       console.log("error ", err)
     })
@@ -360,6 +368,23 @@ export class RequestLeavePage {
 
 
 
+    return null;
+  }
+  static isValidReqReason(control: FormControl) {
+    
+    // if (RequestLeavePage.mustReason == null) {
+    //   return {
+    //     "noLeave": "Select Leave Type First"
+    //   }
+    // }
+    if (RequestLeavePage.mustReason == true) {
+      return {
+        'theMust': "This Leave Type Must Have Reason"
+      }
+    }
+    // if (RequestLeavePage.mustReason == false) {
+    //   return null;
+    // }
     return null;
   }
   saveLeaves() {
