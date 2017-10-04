@@ -101,45 +101,37 @@ export class LeaveListPage {
     //this.navCtrl.push(LeaveEditPage,item);
     this.navCtrl.push(RequestLeavePage, item);
   }
+
   DeleteLeave(item) {
-
-
-    this.motherArr = this.motherArr.filter((element) => {
-      return element.Id !== item.Id;
-    })
-    this.LeavesCount--;
-    this.Leaves_Arr = _.chain(this.motherArr).groupBy('Type').toPairs()
-    .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
- 
-
-
-    // console.log("Trash item : ", item);
-    // this.DeleteObj.Id = item.Id;
-    // var DeleteLoader = this.loadingCtrl.create({
-    //   content: "Deleteing Leaves..."
-    // });
-    // DeleteLoader.present().then(() => {
-    //   this.LeaveServices.removeLeaveRequest(this.DeleteObj)
-    //     .subscribe((data) => {
-    //       console.log("deleted", data);
-    //       DeleteLoader.dismiss();
-    //     }, (err: Error) => {
-    //       console.log("error : ", err.message);
-    //       DeleteLoader.dismiss();
-    //     })
-    // }).catch((e) => {
-    //   console.log("error : ", e)
-    // })
-  }
-
-  removeByAttr = function (arr, attr, value) {
-    var i = arr.length;
-    while (i--) {
-      if (arr[i] && arr[i].hasOwnProperty(attr) && (arguments.length > 2 && arr[i][attr] === value)) {
-        arr.splice(i, 1);
-      }
-    }
-    return arr;
+    console.log("Trash item : ", item);
+    this.DeleteObj.Id=item.Id;
+    console.log("this.DeleteObj ",this.DeleteObj)
+    this.LeaveServices.removeLeaveRequest(this.DeleteObj)
+      .subscribe((data) => {
+        console.log("deleted", data);
+        //
+        this.motherArr = this.motherArr.filter((element) => {
+          return element.Id !== item.Id;
+        })
+        this.Leaves_Arr = _.chain(this.motherArr).groupBy('Type').toPairs()
+          .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
+        this.LeavesCount--;
+        //
+        let toast = this.toastCtrl.create({
+          message: "Leave Is Deletede Successfully...",
+          duration: 3000,
+          position: 'middle'
+        });
+        toast.present();
+      }, (err: Error) => {
+        console.log("error : ", err.message);
+        let toast = this.toastCtrl.create({
+          message: "Error in Deleting Leaves, Please Try again later.",
+          duration: 3000,
+          position: 'middle'
+        });
+        toast.present();
+      })
   }
 
 }
