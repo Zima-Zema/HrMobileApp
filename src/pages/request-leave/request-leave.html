@@ -1,8 +1,9 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title *ngIf="!EditFlag">Request Leave</ion-title>
-    <ion-title *ngIf="EditFlag">Edit Leave</ion-title>
+    <ion-title *ngIf="EditFlag==0">Request Leave</ion-title>
+    <ion-title *ngIf="EditFlag==1">Edit Leave</ion-title>
+    <ion-title *ngIf="EditFlag==2">Leave Details</ion-title>
     <!-- <ion-buttons end>
       <button ion-button icon-only (click)="addEvent()">
         <ion-icon name="trash"></ion-icon>
@@ -11,7 +12,6 @@
   </ion-navbar>
 
 </ion-header>
-
 
 <ion-content>
 
@@ -58,20 +58,20 @@
 
     <ion-item>
       <ion-label floating>Leave Type</ion-label>
-      <ion-select [(ngModel)]="leaveType" (ionChange)="leaveChange(leaveType)" formControlName="leaveType" interface="popover">
+      <ion-select [(ngModel)]="leaveType" (ionChange)="leaveChange(leaveType)" formControlName="leaveType" interface="popover" [disabled]="EditFlag==2"> 
         <ion-option *ngFor="let item of LeavesData.LeaveTypeList" value="{{item.Id}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Start Date</ion-label>
-      <ion-datetime [(ngModel)]="startDate" formControlName="startDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat"
+      <ion-datetime [(ngModel)]="startDate" formControlName="startDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat" [disabled]="EditFlag==2"
         [min]="minDate" [yearValues]="yearsValue"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label floating>No. Of Days</ion-label>
-      <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays" [min]="1"></ion-input>
+      <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays" [min]="1" [disabled]="EditFlag==2"></ion-input>
     </ion-item>
 
 
@@ -85,7 +85,7 @@
 
     <ion-item *ngIf="allowFraction">
       <ion-label floating>Fraction</ion-label>
-      <ion-select [(ngModel)]="fraction" (ionChange)="fractionChange(fraction)" formControlName="fraction" interface="popover">
+      <ion-select [(ngModel)]="fraction" (ionChange)="fractionChange(fraction)" formControlName="fraction" interface="popover" [disabled]="EditFlag==2">
         <ion-option value="0">No Fraction</ion-option>
         <ion-option value="0.25">Quarter Day</ion-option>
         <ion-option value="0.5">Half Day</ion-option>
@@ -96,11 +96,11 @@
 
     <ion-item>
       <ion-label floating>Leave Reason</ion-label>
-      <ion-select [(ngModel)]="reason" formControlName="reason" interface="popover" [required]="mustReason"  >
+      <ion-select [(ngModel)]="reason" formControlName="reason" interface="popover" [required]="mustReason" [disabled]="EditFlag==2">
         <ion-option *ngFor="let item of LeavesData.LeaveReasonList" value="{{item.Id}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
-    <span *ngIf="mustReason" style="color:crimson " >
+    <span *ngIf="mustReason" style="color:crimson ">
       Required
     </span>
     <!-- <span *ngIf="!RequestLeaveForm.controls.reason.valid && (RequestLeaveForm.controls.reason.dirty)">
@@ -113,13 +113,13 @@
         <ion-col>
           <ion-item>
             <ion-label floating>Allowed Days</ion-label>
-            <ion-input type="number" readonly [(ngModel)]="allowedDays" formControlName="allowedDays"></ion-input>
+            <ion-input type="number" readonly [(ngModel)]="allowedDays" formControlName="allowedDays" [disabled]="EditFlag==2"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item>
             <ion-label floating>Reserved Days</ion-label>
-            <ion-input type="number" readonly [(ngModel)]="reservedDays" formControlName="reservedDays"></ion-input>
+            <ion-input type="number" readonly [(ngModel)]="reservedDays" formControlName="reservedDays" [disabled]="EditFlag==2"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -127,12 +127,12 @@
 
     <ion-item>
       <ion-label floating>End Date</ion-label>
-      <ion-input type="text" readonly [(ngModel)]="endDate" formControlName="endDate"></ion-input>
+      <ion-input type="text" readonly [(ngModel)]="endDate" formControlName="endDate" [disabled]="EditFlag==2"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Return Date</ion-label>
-      <ion-input type="text" readonly [(ngModel)]="returnDate" formControlName="returnDate"></ion-input>
+      <ion-input type="text" readonly [(ngModel)]="returnDate" formControlName="returnDate" [disabled]="EditFlag==2"></ion-input>
     </ion-item>
 
 
@@ -141,13 +141,13 @@
         <ion-col>
           <ion-item>
             <ion-label floating>Balance Before</ion-label>
-            <ion-input type="number" readonly [(ngModel)]="balBefore" formControlName="balBefore"></ion-input>
+            <ion-input type="number" readonly [(ngModel)]="balBefore" formControlName="balBefore" [disabled]="EditFlag==2"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item>
             <ion-label floating>Balance After</ion-label>
-            <ion-input type="number" readonly [(ngModel)]="balAfter" formControlName="balAfter"></ion-input>
+            <ion-input type="number" readonly [(ngModel)]="balAfter" formControlName="balAfter" [disabled]="EditFlag==2"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -155,7 +155,7 @@
 
     <ion-item>
       <ion-label floating>Replacement Employee</ion-label>
-      <ion-select [(ngModel)]="replacement" formControlName="replacement" interface="popover">
+      <ion-select [(ngModel)]="replacement" formControlName="replacement" interface="popover" [disabled]="EditFlag==2">
         <ion-option *ngFor="let item of LeavesData.Replacements" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
@@ -163,11 +163,11 @@
     <ion-item>
       <ion-label>Comments</ion-label>
       <br>
-      <ion-textarea rows="3" class="txtarea" [(ngModel)]="comments" formControlName="comments" placeholder="discription"></ion-textarea>
+      <ion-textarea rows="3" class="txtarea" [(ngModel)]="comments" formControlName="comments" placeholder="discription" [disabled]="EditFlag==2"></ion-textarea>
     </ion-item>
 
   </form>
 </ion-content>
-<ion-footer>
+<ion-footer *ngIf="EditFlag==0 || EditFlag==1">
   <button ion-button block color="primary" type="submit" [disabled]="!RequestLeaveForm.valid">{{BtnTxt}}</button>
 </ion-footer>

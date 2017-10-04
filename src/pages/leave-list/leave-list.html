@@ -20,7 +20,7 @@
     <ion-item-group id="pItem">
       <ion-item-divider color="primary" id="divison">{{item.divisionType}}</ion-item-divider>
       <ion-item-sliding *ngFor="let item of item.divisionTypes">
-        <button ion-item (click)="EditLeaves(item)">
+        <button ion-item (click)="ShowLeaves(item)">
         <ion-avatar item-start>
           <img *ngIf="item.ApprovalStatus== 1 || item.ApprovalStatus==2|| item.ApprovalStatus==6 || item.ApprovalStatus==9" src="{{item.ApprovalStatus|imagePipe}}"
             style="border-radius:15%;" class="smallImg">
@@ -34,11 +34,14 @@
         <p [ngClass]="{grey:item.ApprovalStatus==1,yellow:item.ApprovalStatus==2,green:item.ApprovalStatus==6,red:item.ApprovalStatus==9,blue:true}">{{item.ApprovalStatus|approvalPipe}}</p>
       <!-- </ion-item> -->
       </button>
-        <ion-item-options *ngIf="item.ApprovalStatus==1">
-          <button ion-button color="danger" class="TrashLeave" (click)="DeleteLeave(item)">
-          <ion-icon name="trash"></ion-icon>
-          Delete
+        <ion-item-options >
+          <button *ngIf="item.ApprovalStatus==1 || item.ApprovalStatus==3" ion-button color="secondary" class="TrashLeave" (click)="EditLeaves(item)">
+          <ion-icon name="brush"></ion-icon>
         </button>
+          <button *ngIf="item.ApprovalStatus==1 " ion-button color="danger" class="TrashLeave" (click)="DeleteLeave(item)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+
         </ion-item-options>
       </ion-item-sliding>
     </ion-item-group>

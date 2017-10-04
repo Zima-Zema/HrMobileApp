@@ -98,7 +98,11 @@ export class LeaveListPage {
     this.navCtrl.push(RequestLeavePage);
   }
   EditLeaves(item) {
-    //this.navCtrl.push(LeaveEditPage,item);
+    item.readOnly=false;
+    this.navCtrl.push(RequestLeavePage, item);
+  }
+  ShowLeaves(item){
+    item.readOnly=true;
     this.navCtrl.push(RequestLeavePage, item);
   }
 
