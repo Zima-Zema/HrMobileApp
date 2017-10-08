@@ -140,6 +140,7 @@ export class LeaveServicesApi {
     addDays(startDate, noOfDayes, calender, leaveType): Date {
         let count = 0;
         let result = new Date(startDate);
+        
         noOfDayes--;
         if (calender && leaveType) {
             while (count < noOfDayes) {
@@ -177,11 +178,14 @@ export class LeaveServicesApi {
         let NofHours;
         let endDate;
         let returnDate;
+        console.log('calcDates fraction', fraction);
 
         let NofDays = Number.parseFloat(noOfDayes) + (fraction ? Number.parseFloat(fraction) : 0);
         console.log('calcDates NofDays', NofDays);
 
         let hasFraction = (leaveType && leaveType.AllowFraction && (!Number.isInteger(NofDays)));
+        console.log(`calcDates hasFraction ${hasFraction}`);
+
         if (hasFraction) {
             startHours = new Date(startDate).getHours();
             console.log("fatma +2 ", new Date(startDate));
@@ -212,8 +216,11 @@ export class LeaveServicesApi {
                 NofHours *= calender.WorkHours;
 
         }
+        
         if (startDate && NofDays) {
-            endDate = this.addDays(startDate, NofDays, calender, leaveType);
+            console.log(`before add Days startDate: ${Date.parse(startDate)} noofDayes: ${NofDays}`);
+            endDate = this.addDays(Date.parse(startDate), NofDays, calender, leaveType);
+
             returnDate = this.addDays(startDate, NofDays + 1, calender, leaveType);
             if (hasFraction) {
                 var NofMin = (Number.parseInt(NofHours) != 0 ? NofHours % Number.parseInt(NofHours) : NofHours);
