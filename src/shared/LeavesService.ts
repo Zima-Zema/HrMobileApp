@@ -140,7 +140,7 @@ export class LeaveServicesApi {
     addDays(startDate, noOfDayes, calender, leaveType): Date {
         let count = 0;
         let result = new Date(startDate);
-        
+        console.log(`the bloody result from addDays ${result}`)
         noOfDayes--;
         if (calender && leaveType) {
             while (count < noOfDayes) {
@@ -173,6 +173,7 @@ export class LeaveServicesApi {
     }
 
     calcDates(startDate, noOfDayes, calender, leaveType, fraction) {
+
         let startHours;
         let startMin;
         let NofHours;
@@ -190,7 +191,7 @@ export class LeaveServicesApi {
             startHours = new Date(startDate).getHours();
             console.log("fatma +2 ", new Date(startDate));
             console.log('calcDates startHours', startHours);
-            console.log('calcDates startDate', startDate);
+            console.log('calcDates calender', calender);
 
             startMin = new Date(startDate).getMinutes();
             if (startHours <= (new Date(calender.WorkStartTime).getHours())) {
@@ -211,22 +212,28 @@ export class LeaveServicesApi {
             }
             //
 
-            NofHours = ((NofDays) != 0 ? NofDays % NofDays : NofDays);
+            NofHours = ((NofDays) != 0 ? NofDays % Number.parseInt(NofDays.toString()) : NofDays);
+            console.log("calcDates>NofHours", NofHours);
             if (calender.WorkHours != undefined)
                 NofHours *= calender.WorkHours;
+            console.log("calcDates>NofHours", NofHours);
 
         }
-        
-        if (startDate && NofDays) {
-            console.log(`before add Days startDate: ${Date.parse(startDate)} noofDayes: ${NofDays}`);
-            endDate = this.addDays(Date.parse(startDate), NofDays, calender, leaveType);
 
+        if (startDate && NofDays) {
+            console.log(`before add Days startDate: ${startDate} noofDayes: ${NofDays}`);
+            endDate = this.addDays(startDate, NofDays, calender, leaveType);
             returnDate = this.addDays(startDate, NofDays + 1, calender, leaveType);
+
             if (hasFraction) {
                 var NofMin = (Number.parseInt(NofHours) != 0 ? NofHours % Number.parseInt(NofHours) : NofHours);
+                
                 returnDate = this.addDays(startDate, NofDays, calender, leaveType);
                 returnDate = (new Date(returnDate)).setHours(startHours + NofHours);
                 returnDate = new Date((new Date(returnDate)).setMinutes(startMin + (NofMin * 60)));
+
+                endDate = (new Date(endDate)).setHours(startHours + NofHours);
+                endDate = new Date((new Date(endDate)).setMinutes(startMin + (NofMin * 60)));
 
             }
         }

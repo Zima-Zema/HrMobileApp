@@ -63,6 +63,7 @@ export class RequestLeavePage {
   allowFraction: boolean = false;
   static maxDays: number = null;
   static allowed: number = null;
+  static frac: number = 0;
   public static mustReason: boolean = true;
   pickFormat: string;
   displayFormat: string;
@@ -284,7 +285,9 @@ export class RequestLeavePage {
         this.displayFormat = "MM/DD/YYYY HH:mm";
       }
       if (data.LeaveType.AbsenceType == 8) {
-        this.minDate = this.bloodyIsoString(new Date());
+        this.minDate = this.bloodyIsoString(new Date()).slice(0, -6);
+
+        console.log(`Fatma: ${this.minDate}`);
         this.startDate = new Date();
       }
       else {
@@ -294,6 +297,7 @@ export class RequestLeavePage {
       this.balBefore = data.requestVal.BalBefore;
       if (this.EditFlag == 1 || this.EditFlag == 2) {
         this.fraction = this.noOfDays % 1;
+
         this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? this.fraction : 0));
         this.noOfDays = Math.trunc(this.noOfDays);
       }
@@ -314,6 +318,13 @@ export class RequestLeavePage {
     this.bindForm();
   }
   fractionChange(item) {
+    if (item) {
+      RequestLeavePage.frac = item
+      this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity(this.RequestLeaveForm.controls['noOfDays'].value);
+    }
+    else {
+      RequestLeavePage.frac = 0
+    }
     console.log("numberChange");
     this.bindForm();
   }
@@ -323,19 +334,22 @@ export class RequestLeavePage {
     console.log(this.noOfDays);
     console.log(this.fraction);
     if (this.startDate && this.noOfDays) {
-      let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
-      console.log(res);
+      let res = this.LeaveServices.calcDates(this.startDate.slice(0, -1), this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
+      console.log("res : ", res);
       moment.locale();
 
       this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
       this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
-      this.startDate = this.allowFraction ? this.bloodyIsoString( new Date(res.startDate)) : res.startDate;
+      //this.startDate = this.allowFraction ? this.bloodyIsoString( new Date(res.startDate)) : res.startDate;
       console.log(`The final startDate ${this.startDate}`);
       this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
 
     }
   }
   resetForm() {
+    RequestLeavePage.allowed = null;
+    RequestLeavePage.maxDays = null;
+    RequestLeavePage.frac = 0;
     this.startDate = null;
     this.noOfDays = null;
     this.allowedDays = undefined;
@@ -356,7 +370,9 @@ export class RequestLeavePage {
         "noLeave": "Select Leave Type First"
       }
     }
-    if (control.value > RequestLeavePage.maxDays && RequestLeavePage.maxDays != null) {
+    let x = (Number.parseInt(control.value) + Number.parseFloat(RequestLeavePage.frac.toString()));
+
+    if (x > RequestLeavePage.maxDays && RequestLeavePage.maxDays != null) {
       return {
         "maximum": "bigger than Maximum"
       }
