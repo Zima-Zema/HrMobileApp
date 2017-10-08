@@ -127,7 +127,6 @@ export class LeaveListPage {
   }
 
   ConfirmDelete(item) {
-    console.log("Trash item : ", item);
     this.DeleteObj.Id = item.Id;
     console.log("this.DeleteObj ", this.DeleteObj)
     this.LeaveServices.removeLeaveRequest(this.DeleteObj)

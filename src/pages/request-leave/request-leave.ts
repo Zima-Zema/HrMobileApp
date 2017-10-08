@@ -329,7 +329,8 @@ export class RequestLeavePage {
 
       this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
       this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
-      //this.startDate = this.allowFraction ? this.bloodyIsoString(res.startDate) : res.startDate;
+      this.startDate = this.allowFraction ? this.bloodyIsoString( new Date(res.startDate)) : res.startDate;
+      console.log(`The final startDate ${this.startDate}`);
       this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
 
     }
