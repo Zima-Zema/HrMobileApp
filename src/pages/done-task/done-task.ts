@@ -3,11 +3,9 @@ import { IonicPage, NavController, NavParams, ActionSheetController, ViewControl
 import { Storage } from '@ionic/storage';
 //plugins
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { FileOpener } from '@ionic-native/file-opener';
 import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 //pages
 import { WelcomePage } from '../welcome/welcome';
 import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService';
@@ -30,11 +28,9 @@ export class DoneTaskPage {
     public navParams: NavParams,
     public actionSheetCtrl: ActionSheetController,
     public cam: Camera,
-    private fileOpener: FileOpener,
     private file: File,
     private fileChooser: FileChooser,
     private filePath: FilePath,
-    private transfer: FileTransfer,
     private viewCtrl: ViewController,
     private tasksService: TasksServicesApi,
     public toastCtrl: ToastController,
