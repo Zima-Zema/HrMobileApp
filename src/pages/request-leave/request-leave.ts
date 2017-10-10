@@ -56,10 +56,13 @@ export class RequestLeavePage {
     RequestId: 0,
     StartDate: ""
   }
+
   public RequestLeaveForm: FormGroup;
   public LeavesData: Array<any> = [];
   public ChartData: Array<any> = [];
   public requestData: any;
+  public workhour: number;
+  public TotalWorkhour: number;
   allowFraction: boolean = false;
   static maxDays: number = null;
   static allowed: number = null;
@@ -67,15 +70,14 @@ export class RequestLeavePage {
   public static mustReason: boolean = true;
   pickFormat: string;
   displayFormat: string;
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
     private formBuilder: FormBuilder) {
     //Edit Mode
     this.item = this.navParams.data;
-    console.log("Edit coming Item : ", this.item)
-    //
-    console.log("From Cons>>>", new Date().toISOString());
+    //form validation
     this.RequestLeaveForm = this.formBuilder.group({
       leaveType: ['', Validators.required],
       startDate: ['', Validators.required],
@@ -88,49 +90,46 @@ export class RequestLeavePage {
       balAfter: [''],
       replacement: [''],
       comments: [''],
-      reason: [''],
+      reason: ['', Validators.compose([RequestLeavePage.isValidReqReason])],
       fraction: ['']
 
     });
     // this.leaving = 1067;  //annual leave 
-
-    console.log("leaving ", this.leaveType);
     this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((Konafa) => {
       console.log("leavetyps>>>", Konafa);
       this.LeavesData = Konafa;
       this.ChartData = Konafa.ChartData;
       this.loadCharts(this.ChartData);
     }, (e) => {
-      console.log("error ", e);
+      // console.log("error ", e);
     })
-
-    console.log("minData : ", this.minDate);
+    //console.log("minData : ", this.minDate);
     this.yearsValue = this.GetYears();
   }
 
+  // // EditFlag = 0 ---> Request  , EditFlag = 1 ---> Edit , EditFlad = 2 --->show
   ionViewWillEnter() {
-
     if (Object.keys(this.item).length > 0) {
       //Edit Mode
       if (this.item.readOnly == false) {
-        console.log("Edit Mode");
+        console.log("Edit Mode ", this.item);
         this.EditFlag = 1;
         this.BtnTxt = "Update";
         this.leaveChange(this.item.TypeId);
         this.leaveType = this.item.TypeId;
         let SDate = new Date(this.item.StartDate);
-        this.startDate = this.bloodyIsoString(SDate);
+        this.startDate = new Date(this.item.StartDate).toISOString().slice(0, -1);
         this.minDate = this.bloodyIsoString(SDate);
         this.noOfDays = this.item.NofDays;
         this.returnDate = this.item.ReturnDate;
         this.endDate = this.item.EndDate;
         this.replacement = this.item.ReplaceEmpId;
-        // this.comments = "";
-        // this.reason = 0;
+        this.comments = this.item.ReasonDesc;
+        this.reason = this.item.ReqReason;
       }
       //Show Mode
       else {
-        console.log("Show Mode >> readOnly Flag : ", this.item.readOnly);
+        console.log("Show Mode");
         this.EditFlag = 2;
         this.leaveChange(this.item.TypeId);
         this.leaveType = this.item.TypeId;
@@ -141,6 +140,8 @@ export class RequestLeavePage {
         this.returnDate = this.item.ReturnDate;
         this.endDate = this.item.EndDate;
         this.replacement = this.item.ReplaceEmpId;
+        this.reason = this.item.ReqReason;
+        this.comments = this.item.ReasonDesc;
       }
     }
     //Request Mode
@@ -149,7 +150,6 @@ export class RequestLeavePage {
       this.BtnTxt = "Submit";
       this.minDate = this.bloodyIsoString(new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0)));
     }
-    console.log("this.EditFlag : ", this.EditFlag);
   }
 
   bloodyIsoString(bloodyDate: Date) {
@@ -171,22 +171,17 @@ export class RequestLeavePage {
 
   GetYears() {
     let year = new Date().getFullYear();
-    console.log("year : ", year)
-    console.log("year : ", year + 100)
     for (let i = year; i <= year + 100; i++) {
       this.YearsArr.push(i);
     }
     return this.YearsArr;
   }
 
-
   loadCharts(chartData: Array<any>) {
     let lableTemp: Array<string> = [];
     let dataTemp: Array<number> = [];
     let DaysTemp: Array<number> = [];
-    console.log("chartData", chartData);
     chartData.forEach((item) => {
-      console.log("item", item)
       lableTemp.push(item.Name);
       dataTemp.push(item.Balance);
       DaysTemp.push(item.Days)
@@ -249,46 +244,52 @@ export class RequestLeavePage {
   }
   // events
   public chartClicked(e: any): void {
-    console.log(e);
+    //console.log(e);
   }
 
   public chartHovered(e: any): void {
-    console.log(e);
+    // console.log(e);
   }
 
-  ionViewDidLoad() {
-
-  }
+  ionViewDidLoad() { }
   /////////////////////
   leaveChange(item: any) {
     this.resetForm();
-    console.log("itemSelected ", item);
+    //console.log("itemSelected ", item);
     this.RequestDataObj.TypeId = item;
     this.RequestDataObj.StartDate = new Date().toDateString();
     this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
       console.log("data GetRequestLeaveData ", data);
+      this.workhour = data.Calender.WorkHours;
       this.requestData = data;
       this.allowedDays = data.requestVal.AllowedDays;
       this.allowFraction = data.LeaveType.AllowFraction;
       RequestLeavePage.maxDays = data.requestVal.MaxDays;
       RequestLeavePage.allowed = data.requestVal.AllowedDays;
       RequestLeavePage.mustReason = data.LeaveType.MustAddCause;
+      //console.log("RequestLeavePage.mustReason", RequestLeavePage.mustReason)
 
-      console.log("RequestLeavePage.mustReason", RequestLeavePage.mustReason)
+      if (RequestLeavePage.mustReason == true) {
+        if (this.EditFlag == 0) { //Request Mode -- > set ddl to 0 
+          this.RequestLeaveForm.controls['reason'].setValue(0);
+        }
+        this.RequestLeaveForm.controls['reason'].markAsDirty({ onlySelf: true });
+      }
+      //
       if (!this.allowFraction) {
         this.fraction = undefined;
         this.pickFormat = 'MMM DD YYYY';
-        this.displayFormat = "MM/DD/YYYY"
+        this.displayFormat = "MMM DD, YYYY"
       }
-      else {
-        this.pickFormat = 'MMM DD YYYY:HH:mm';
-        this.displayFormat = "MM/DD/YYYY HH:mm";
+      else { //العارضه
+        this.pickFormat = 'MMM DD YYYY';
+        this.displayFormat = "MMM DD, YYYY hh:mm";
       }
+      //
       if (data.LeaveType.AbsenceType == 8) {
         this.minDate = this.bloodyIsoString(new Date()).slice(0, -6);
-
-        console.log(`Fatma: ${this.minDate}`);
-        this.startDate = new Date();
+        //console.log(`Fatma: ${this.minDate}`);
+        //this.startDate = new Date();
       }
       else {
         this.minDate = this.bloodyIsoString(new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0)));
@@ -297,7 +298,6 @@ export class RequestLeavePage {
       this.balBefore = data.requestVal.BalBefore;
       if (this.EditFlag == 1 || this.EditFlag == 2) {
         this.fraction = this.noOfDays % 1;
-
         this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? this.fraction : 0));
         this.noOfDays = Math.trunc(this.noOfDays);
       }
@@ -306,44 +306,52 @@ export class RequestLeavePage {
       }
 
     }, (err) => {
-      console.log("error ", err)
+      //console.log("error ", err)
     })
   }
   dateChange(item) {
-    console.log("dateChange");
     this.bindForm();
   }
   numberChange(item) {
-    console.log("numberChange");
     this.bindForm();
   }
-  fractionChange(item) {
+  fractionChange(item: number) {
     if (item) {
-      RequestLeavePage.frac = item
-      this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity(this.RequestLeaveForm.controls['noOfDays'].value);
+      RequestLeavePage.frac = item;
+      if (this.noOfDays) {
+        this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity(this.RequestLeaveForm.controls['noOfDays'].value);
+      }
     }
     else {
       RequestLeavePage.frac = 0
     }
-    console.log("numberChange");
     this.bindForm();
   }
-
+  reasonChange(reason) {
+  }
+  public trystart: any;
   bindForm() {
-    console.log(this.startDate);
-    console.log(this.noOfDays);
-    console.log(this.fraction);
-    if (this.startDate && this.noOfDays) {
-      let res = this.LeaveServices.calcDates(this.startDate.slice(0, -1), this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
+    
+    let MilliDate = new Date(this.startDate).setHours(8);
+    this.startDate = new Date(MilliDate);
+    this.trystart =moment(this.startDate).format('lll');
+    console.log("bindForm startDate", this.startDate);
+    console.log(`bindForm EndDate : ${this.endDate}`);
+    console.log("bindForm Calender : ", this.requestData.Calender)
+    console.log(`bindForm noOfDays: ${this.noOfDays} , fraction : ${this.fraction}`)
+    console.log(`bindForm LeaveType : ${this.requestData.LeaveType}`)
+    // if (this.startDate && this.noOfDays) {
+    if (this.startDate) {
+      let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
       console.log("res : ", res);
+      this.trystart=res.startDate;
       moment.locale();
-
-      this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
-      this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
-      //this.startDate = this.allowFraction ? this.bloodyIsoString( new Date(res.startDate)) : res.startDate;
-      console.log(`The final startDate ${this.startDate}`);
-      this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
-
+      if (this.EditFlag == 0 || this.EditFlag == 1) {
+        this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
+        this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
+        this.startDate = this.allowFraction ? this.bloodyIsoString(new Date(res.startDate)) : res.startDate;
+        this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
+      }
     }
   }
   resetForm() {
@@ -363,6 +371,7 @@ export class RequestLeavePage {
     this.reason = null;;
     this.fraction = null;;
   }
+
   static isValid(control: FormControl) {
     console.log("validationAllowed", RequestLeavePage.allowed);
     if (RequestLeavePage.allowed == null) {
@@ -397,7 +406,11 @@ export class RequestLeavePage {
       };
     }
 
-
+    if (Number.parseInt(control.value) <= 0) {
+      return {
+        "general": "zero or negative not allowed."
+      }
+    }
 
     return null;
   }
@@ -408,7 +421,8 @@ export class RequestLeavePage {
     //     "noLeave": "Select Leave Type First"
     //   }
     // }
-    if (RequestLeavePage.mustReason == true) {
+    //console.log("control.value>>", typeof control.value, control.value);
+    if (RequestLeavePage.mustReason == true && Number.parseInt(control.value) === 0) {
       return {
         'theMust': "This Leave Type Must Have Reason"
       }
@@ -419,7 +433,8 @@ export class RequestLeavePage {
     return null;
   }
   saveLeaves() {
-    this.navCtrl.push(LeaveListPage);
+    this.navCtrl.pop();
+    //.push(LeaveListPage);
   }
 
 

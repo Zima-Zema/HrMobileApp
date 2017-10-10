@@ -20,7 +20,7 @@
 
       <ion-slide>
         <ion-card>
-          <ion-card-header >
+          <ion-card-header>
             Balance Chart
           </ion-card-header>
           <ion-card-content>
@@ -53,29 +53,31 @@
     </ion-item>
   </ion-list>
  -->
-
-  <form [formGroup]="RequestLeaveForm" (ngSubmit)="saveLeaves()">
+ <span>{{trystart}}</span> 
+  <form [formGroup]="RequestLeaveForm" (ngSubmit)="saveLeaves()" id="RequestLeaveID">
 
     <ion-item>
       <ion-label floating>Leave Type</ion-label>
-      <ion-select [(ngModel)]="leaveType" (ionChange)="leaveChange(leaveType)" formControlName="leaveType" interface="popover" [disabled]="EditFlag==2"> 
+      <ion-select [(ngModel)]="leaveType" (ionChange)="leaveChange(leaveType)" formControlName="leaveType" interface="popover"
+        [disabled]="EditFlag==2">
         <ion-option *ngFor="let item of LeavesData.LeaveTypeList" value="{{item.Id}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Start Date</ion-label>
-      <ion-datetime [(ngModel)]="startDate" formControlName="startDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat" [disabled]="EditFlag==2"
-        [min]="minDate" [yearValues]="yearsValue"></ion-datetime>
+      <ion-datetime [(ngModel)]="startDate" formControlName="startDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat"
+        [disabled]="EditFlag==2" [min]="minDate" [yearValues]="yearsValue"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label floating>No. Of Days</ion-label>
-      <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays" [min]="1" [disabled]="EditFlag==2"></ion-input>
+      <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays" [min]="1"
+        [disabled]="EditFlag==2"></ion-input>
     </ion-item>
 
 
-    <span *ngIf="!RequestLeaveForm.controls.noOfDays.valid  && (RequestLeaveForm.controls.noOfDays.dirty)">
+    <span *ngIf="!RequestLeaveForm.controls.noOfDays.valid  && (RequestLeaveForm.controls.noOfDays.dirty) && EditFlag!=2 ">
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('maximum')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('maximum')}} - {{requestData.LeaveType.MaxDays}}</p>
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('allowed')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('allowed')}} - {{allowedDays}}</p>      
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('noLeave')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('noLeave')}}</p>      
@@ -85,29 +87,31 @@
 
     <ion-item *ngIf="allowFraction">
       <ion-label floating>Fraction</ion-label>
-      <ion-select [(ngModel)]="fraction" (ionChange)="fractionChange(fraction)" formControlName="fraction" interface="popover" [disabled]="EditFlag==2">
-        <ion-option value="0">No Fraction</ion-option>
-        <ion-option value="0.25">Quarter Day</ion-option>
-        <ion-option value="0.5">Half Day</ion-option>
-        <ion-option value="0.75">Half Quarter Day</ion-option>
+      <ion-select [(ngModel)]="fraction" (ionChange)="fractionChange(fraction)" formControlName="fraction" interface="popover"
+        [disabled]="EditFlag==2">
+         <ion-option value="0">No Fraction</ion-option> 
+        <ion-option value="+0.25">Quarter At Start Day</ion-option>
+        <ion-option value="+0.5">Half At Start Day</ion-option>
+        <ion-option value="-0.25">Quarter At End Day</ion-option>
+        <ion-option value="-0.5">Half At End Day</ion-option>
       </ion-select>
     </ion-item>
 
 
     <ion-item>
       <ion-label floating>Leave Reason</ion-label>
-      <ion-select [(ngModel)]="reason" formControlName="reason" interface="popover" [required]="mustReason" [disabled]="EditFlag==2">
-        <ion-option *ngFor="let item of LeavesData.LeaveReasonList" value="{{item.Id}}">{{item.Name}}</ion-option>
+      <ion-select [(ngModel)]="reason" (ionChange)="reasonChange(reason)" formControlName="reason" interface="popover" [disabled]="EditFlag==2">
+        <ion-option value="0">No Reason</ion-option>
+        <ion-option *ngFor="let item of LeavesData.LeaveReasonList" value="{{item.CodeId}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
-    <span *ngIf="mustReason" style="color:crimson ">
-      Required
-    </span>
-    <!-- <span *ngIf="!RequestLeaveForm.controls.reason.valid && (RequestLeaveForm.controls.reason.dirty)">
+
+
+    <span *ngIf="!RequestLeaveForm.controls.reason.valid && (RequestLeaveForm.controls.reason.dirty) && EditFlag!=2">
       <p *ngIf="RequestLeaveForm.get('reason').hasError('theMust')" style="color:crimson ">{{RequestLeaveForm.get('reason').getError('theMust')}}</p>
        <p *ngIf="RequestLeaveForm.get('reason').hasError('noLeave')" style="color:crimson ">{{RequestLeaveForm.get('reason').getError('noLeave')}}</p>      
       
-    </span> -->
+    </span>
     <ion-grid>
       <ion-row>
         <ion-col>
@@ -169,5 +173,5 @@
   </form>
 </ion-content>
 <ion-footer *ngIf="EditFlag==0 || EditFlag==1">
-  <button ion-button block color="primary" type="submit" [disabled]="!RequestLeaveForm.valid">{{BtnTxt}}</button>
+  <button ion-button block form="RequestLeaveID" color="primary" type="submit" [disabled]="!RequestLeaveForm.valid">{{BtnTxt}}</button>
 </ion-footer>

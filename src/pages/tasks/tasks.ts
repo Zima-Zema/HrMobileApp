@@ -53,11 +53,15 @@ export class TasksPage {
   }
 
   ionViewWillLoad() {
+    // this.loader_task.present().then(() => {
+    //   this.loadEvents();
+    // });
+  }
+  ionViewWillEnter() {
     this.loader_task.present().then(() => {
       this.loadEvents();
     });
   }
-
   ///////////////////////////////////////
   onViewTitleChanged(title) {
     this.viewTitle = title;
@@ -111,6 +115,7 @@ export class TasksPage {
                   event.title = event.title + " is Done";
                   event.Stat = 2;
                   Done_Loader.dismiss();
+                  this.loadEvents();
                 })
               }).catch((err: Error) => {
                 Done_Loader.dismiss();
@@ -148,12 +153,13 @@ export class TasksPage {
                       position: 'bottom',
                     });
                     suc_toast.present();
+                    this.loadEvents();
                   }
                   else {
                     err_toast.present();
                   }
                 }
-                else{
+                else {
                   err_toast.present();
                 }
               });
@@ -194,11 +200,10 @@ export class TasksPage {
           this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
           if (ele.Status == 1) { this.title_data = ele.TaskCategory; }
           else { this.title_data = ele.TaskCategory + "  is Done"; }
-
+          console.log("this.str_time : ", this.str_time)
           this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id, Stat: ele.Status, desc: ele.Description };
           this.events = this.eventSource;
           this.events.push(this.event);
-
         });
         this.eventSource = [];
         this.loader_task.dismiss();
