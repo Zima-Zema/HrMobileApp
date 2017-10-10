@@ -54,7 +54,7 @@
   </ion-list>
  -->
 
-  <form [formGroup]="RequestLeaveForm" (ngSubmit)="saveLeaves()">
+  <form [formGroup]="RequestLeaveForm" (ngSubmit)="saveLeaves()" id="LeavesFormID">
 
     <ion-item>
       <ion-label floating>Leave Type</ion-label>
@@ -169,5 +169,5 @@
   </form>
 </ion-content>
 <ion-footer *ngIf="EditFlag==0 || EditFlag==1">
-  <button ion-button block color="primary" type="submit" [disabled]="!RequestLeaveForm.valid">{{BtnTxt}}</button>
+  <button ion-button block form="LeavesFormID" color="primary" type="submit" [disabled]="!RequestLeaveForm.valid">{{BtnTxt}}</button>
 </ion-footer>

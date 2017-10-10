@@ -402,7 +402,7 @@ export class RequestLeavePage {
     return null;
   }
   saveLeaves() {
-    this.navCtrl.push(LeaveListPage);
+    this.navCtrl.pop();
   }
 
 
