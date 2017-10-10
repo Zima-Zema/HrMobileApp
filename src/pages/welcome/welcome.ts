@@ -9,6 +9,8 @@ import { LogInPage } from '../log-in/log-in';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
 import { LeaveListPage } from '../leave-list/leave-list';
+import { TranslateService } from '@ngx-translate/core';
+import { SettingsPage } from '../settings/settings';
 @IonicPage()
 @Component({
   selector: 'page-welcome',
@@ -24,6 +26,8 @@ export class WelcomePage {
   }
   public static notificationNumber: number = 0;
   user: IUser;
+  menuDir;
+  lang;
   baseUrl: string = "http://www.enterprise-hr.com/";
   get notificationNumber() {
     return WelcomePage.notificationNumber;
@@ -33,7 +37,17 @@ export class WelcomePage {
     public notifyApi: NotificationServiceApi,
     private signalr: SignalR,
     public localNotifications: LocalNotifications,
-    private storage: Storage) {
+    private storage: Storage,
+    translate: TranslateService
+  ) {
+    this.lang = translate.getDefaultLang();
+    if (this.lang === 'ar') {
+      this.menuDir = "right";
+    }
+    else {
+      this.menuDir = "left";
+    }
+    console.log("Language: ", translate.getDefaultLang());
     this.storage.get("User").then((udata) => {
       if (udata) {
         console.log("udata ", udata)
@@ -104,6 +118,9 @@ export class WelcomePage {
   }
   GoToLeaveList() {
     this.navCtrl.push(LeaveListPage);
+  }
+  Settings() {
+    this.navCtrl.push(SettingsPage);
   }
   Logout() {
     this.storage.clear();

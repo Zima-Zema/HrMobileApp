@@ -8,7 +8,7 @@ import { MonthViewComponent } from 'ionic2-calendar/monthview';
 import { WeekViewComponent } from 'ionic2-calendar/weekview';
 import { DayViewComponent } from 'ionic2-calendar/dayview';
 import { TasksServicesApi } from '../../shared/TasksService'
-
+import { TranslateModule } from '@ngx-translate/core'
 @NgModule({
   declarations: [
     TasksPage,
@@ -16,6 +16,7 @@ import { TasksServicesApi } from '../../shared/TasksService'
   imports: [
     IonicPageModule.forChild(TasksPage),
     NgCalendarModule,
+    TranslateModule
 
   ],
   providers: [TasksServicesApi,

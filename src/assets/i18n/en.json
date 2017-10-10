@@ -1,0 +1,25 @@
+{
+    "Welcome": "Welcome",
+    "Tasks": "Tasks",
+    "Logout": "Logout",
+    "Leave List": "Leave List",
+    "Settings":"Settings",
+    "Language":"Language",
+    "English":"English",
+    "Arabic":"Arabic",
+    "settingButton":"Save Changes",
+    "ALERT_TITLE":"Confirm",
+    "ALERT_message":"App Need To Be Restart !!",
+    "ALERT_OK":"OK",
+    "cancel":"Cancel",
+
+    "compName":"Company Name",
+    "compRequir":"Company Name Is Required !!",
+    "Username":"Username",
+    "userRequir":"User Name is Required !!",
+    "Password":"Password",
+    "passRequir":"Password is Required !!",
+    "remmberMe":"Remember Me",
+    "LogIn":"LogIn"
+
+}
