@@ -20,9 +20,9 @@
   </template>
 
 
-  <calendar [monthviewDisplayEventTemplate]="template" [markDisabled]="markDisable" [eventSource]="eventSource" [calendarMode]="calendar.mode"
+  <calendar  locale="de-DE" dir="ltr" [monthviewDisplayEventTemplate]="template" [markDisabled]="markDisable" [eventSource]="eventSource" [calendarMode]="calendar.mode"
     [currentDate]="calendar.currentDate" [showEventDetail]=true (onEventSelected)="onEventSelected($event)" (onTitleChanged)="onViewTitleChanged($event)"
-    (onTimeSelected)="onTimeSelected($event)" step="30" class="calendar" noEventsLabel='No Tasks'>
+    (onTimeSelected)="onTimeSelected($event)" step="30" class="calendar" noEventsLabel='No Tasks' >
   </calendar>
 
 </ion-content>

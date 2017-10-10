@@ -1,11 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { HttpModule } from '@angular/http';
-import { IonicStorageModule,Storage } from '@ionic/storage';
+import { HttpModule, Http } from '@angular/http';
+import { IonicStorageModule, Storage } from '@ionic/storage';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AppMinimize } from '@ionic-native/app-minimize';
@@ -29,10 +29,17 @@ import { TasksPageModule } from '../pages/tasks/tasks.module';
 import { AddTaskPageModule } from '../pages/add-task/add-task.module';
 import { ForceChangePasswordPageModule } from '../pages/force-change-password/force-change-password.module';
 import { DoneTaskPageModule } from '../pages/done-task/done-task.module';
-import { LeaveListPageModule} from '../pages/leave-list/leave-list.module';
-import { RequestLeavePageModule} from '../pages/request-leave/request-leave.module';
-import { LeaveEditPageModule} from '../pages/leave-edit/leave-edit.module';
+import { LeaveListPageModule } from '../pages/leave-list/leave-list.module';
+import { RequestLeavePageModule } from '../pages/request-leave/request-leave.module';
+import { LeaveEditPageModule } from '../pages/leave-edit/leave-edit.module';
 //from Ali
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { SettingsPageModule } from '../pages/settings/settings.module';
+
+export function setTranslateLoader(http: Http) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 export function creatConfig(): SignalRConfiguration {
   // let _store: Storage;
   // let baseUrl: string = '';
@@ -59,6 +66,13 @@ export function creatConfig(): SignalRConfiguration {
     IonicModule.forRoot(MyApp),
     SignalRModule.forRoot(creatConfig),
     IonicStorageModule.forRoot({ driverOrder: ["localstorage", "websql"] }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (setTranslateLoader),
+        deps: [Http]
+      }
+    }),
     LogInPageModule,
     NotificationsPageModule,
     WelcomePageModule,
@@ -70,7 +84,8 @@ export function creatConfig(): SignalRConfiguration {
     HttpModule,
     LeaveListPageModule,
     RequestLeavePageModule,
-    LeaveEditPageModule
+    LeaveEditPageModule,
+    SettingsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

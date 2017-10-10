@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title text-center><strong>LogIn</strong></ion-title>
+    <ion-title text-center><strong>{{"LogIn" | translate}}</strong></ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -15,12 +15,12 @@
       <div *ngIf="!companyNameExisted">
         <ion-item>
           <ion-label floating>
-            <ion-icon name="aperture"></ion-icon>&nbsp; Company Name</ion-label>
+            <ion-icon name="aperture"></ion-icon>&nbsp; {{"compName" | translate}}</ion-label>
           <ion-input type="text" #txtCompanyName formControlName="companyName" (ionBlur)="InputBlured(txtCompanyName.ngControl.name)"
             (ionFocus)="InputFocused(txtCompanyName.ngControl.name)"></ion-input>
         </ion-item>
         <ion-item *ngIf="!logInForm.get('companyName').required && companyNameRequired">
-          <p style="color:crimson"> Company Name is Required !! </p>
+          <p style="color:crimson"> {{"compRequir" | translate}} </p>
         </ion-item>
         <br/>
       </div>
@@ -28,11 +28,11 @@
       <div *ngIf="!userNameExisted">
         <ion-item>
           <ion-label floating>
-            <ion-icon name="person"></ion-icon>&nbsp; Username</ion-label>
+            <ion-icon name="person"></ion-icon>&nbsp; {{"Username" | translate}}</ion-label>
           <ion-input type="text" formControlName="userName" #txtUserName (ionBlur)="InputBlured(txtUserName.ngControl.name)" (ionFocus)="InputFocused(txtUserName.ngControl.name)"></ion-input>
         </ion-item>
         <ion-item *ngIf="!logInForm.get('userName').required && userNameRequired">
-          <p style="color:crimson "> User Name is Required !! </p>
+          <p style="color:crimson "> {{"userRequir" | translate}}</p>
         </ion-item>
       </div>
 
@@ -49,7 +49,7 @@
       <div>
         <ion-item>
           <ion-label floating>
-            <ion-icon name="create"></ion-icon>&nbsp; Password</ion-label>
+            <ion-icon name="create"></ion-icon>&nbsp; {{"Password" | translate}}</ion-label>
           
           <ion-input type="{{type}}" formControlName="password" #txtPassword (ionBlur)="InputBlured(txtPassword.ngControl.name)" (ionFocus)="InputFocused(txtPassword.ngControl.name)">
           </ion-input>
@@ -59,14 +59,14 @@
 
         </ion-item>
         <ion-item *ngIf="!logInForm.get('password').required && passwordRequired">
-          <p style="color:crimson"> Password is Required !! </p>
+          <p style="color:crimson"> {{"passRequir" | translate}} </p>
         </ion-item>
       </div>
 
       <br/>
       <br/>
       <ion-item>
-        <ion-label>Remember Me</ion-label>
+        <ion-label>{{"remmberMe" | translate}}</ion-label>
         <ion-checkbox formControlName="rememberMe" color="primary"></ion-checkbox>
       </ion-item>
       <br/>
@@ -80,8 +80,8 @@
         <br/>
       </div>
       <button ion-button color="primary" block large round [disabled]="!logInForm.valid">
-        <ion-icon name="log-in"></ion-icon>&nbsp;&nbsp;&nbsp; LogIn</button>
+        <ion-icon name="log-in"></ion-icon>&nbsp;&nbsp;&nbsp; {{"LogIn" | translate}}</button>
     </form>
   </ion-list>
-  <button ion-button (click)="tasks()">Tasks</button>
+  <button ion-button (click)="tasks()">{{"Tasks" | translate}}</button>
 </ion-content>

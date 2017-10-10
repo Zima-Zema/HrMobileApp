@@ -73,5 +73,16 @@ h3{
  height: 70vh !important;
       width: auto !important;
   }
- 
+ .rightMenuButton{
+  position: absolute; right: 0;
+ }
+ .leftMenuButton{
+  position: absolute; left: 0;
+ }
+ .left{
+  float: left;
+ }
+ .right{
+  float: right;
+}
 

@@ -6,6 +6,7 @@ import { DoneTaskPage } from '../done-task/done-task';
 import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService'
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { Storage } from '@ionic/storage';
+import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
 @Component({
@@ -35,6 +36,9 @@ export class TasksPage {
     TaskId: 0,
     FileDetails: []
   }
+  lang;
+  calendarLocal = "en-GB"
+  calendarDir;
   calendar = {
     mode: 'month',
     currentDate: new Date()
@@ -49,7 +53,17 @@ export class TasksPage {
     private alertCtrl: AlertController,
     public toastCtrl: ToastController,
     private tasksService: TasksServicesApi,
-    private storage: Storage) {
+    private storage: Storage,
+    private translationService: TranslateService) {
+      this.lang = translationService.getDefaultLang();
+      if (this.lang === 'ar') {
+        this.calendarLocal="ar-EG";
+        this.calendarDir="rtl"
+      }
+      else {
+        this.calendarLocal="en-GB";
+        this.calendarDir="ltr"
+      }
   }
 
   ionViewWillLoad() {

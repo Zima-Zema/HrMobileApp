@@ -1,7 +1,7 @@
-<ion-menu [content]="content" type="overlay">
+<ion-menu [content]="content" [side]="menuDir" type="overlay">
   <ion-header>
     <ion-toolbar>
-      <ion-title> Welcome </ion-title>
+      <ion-title> {{"Welcome" | translate }} </ion-title>
 
     </ion-toolbar>
   </ion-header>
@@ -12,9 +12,10 @@
         <p>{{user_email}} </p>
       </ion-list-header>
       <!-- <button menuclose ion-item (click)="GoToHome()"> Home </button> -->
-      <button menuClose ion-item (click)="GoToTasks()">Tasks</button>
-      <button menuClose ion-item (click)="GoToLeaveList()">Leave List</button>
-      <button menuClose ion-item (click)="Logout()">Logout</button>
+      <button menuClose ion-item (click)="GoToTasks()">{{"Tasks" | translate }}</button>
+      <button menuClose ion-item (click)="GoToLeaveList()">{{"Leave List" | translate}}</button>
+      <button menuClose ion-item (click)="Settings()" >{{"Settings" | translate}}</button>
+      <button menuClose ion-item (click)="Logout()" >{{"Logout" | translate}}</button>
     </ion-list>
   </ion-content>
 </ion-menu>
@@ -22,10 +23,10 @@
 <ion-header>
   <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
   <ion-navbar>
-    <button ion-button menuToggle> 
+    <button ion-button menuToggle [ngClass]="{rightMenuButton:lang=='ar',leftMenuButton:lang=='en'}"> 
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-buttons end>
+    <ion-buttons [ngClass]="{right:lang=='en',left:lang=='ar'}" >
       <button id="notification-button" ion-button clear (click)="GoToNotifications()" large>
         <ion-icon name="notifications">
           <ion-badge id="notifications-badge" color="danger" *ngIf="notificationNumber != 0 && notificationNumber != undefined"> {{notificationNumber}}</ion-badge>
