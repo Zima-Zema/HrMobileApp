@@ -525,9 +525,9 @@ export class RequestLeavePage {
     this.requestObj.Culture = "ar-EG";
     this.requestObj.NofDays = Number.parseInt(this.noOfDays);
     this.requestObj.FractionDays = Number.parseFloat(this.fraction);
-    this.requestObj.StartDate = new Date(this.startDate).toLocaleString();
-    this.requestObj.EndDate = new Date(this.endDate).toLocaleString();
-    this.requestObj.ReturnDate = new Date(this.returnDate).toLocaleString();
+    this.requestObj.StartDate = new Date(new Date(this.startDate).toString()).toISOString().slice(0,-1);
+    this.requestObj.EndDate = new Date(new Date(this.endDate).toString()).toISOString().slice(0,-1);
+    this.requestObj.ReturnDate = new Date(new Date(this.returnDate).toString()).toISOString().slice(0,-1);
     this.requestObj.ReqReason = Number.parseInt(this.reason);
     this.requestObj.ReasonDesc = this.comments;
     this.requestObj.ApprovalStatus = ApprovalStatusEnum.New;
@@ -536,11 +536,11 @@ export class RequestLeavePage {
     this.requestObj.BalBefore = this.balBefore;
 
     console.log(this.requestObj);
-    // this.LeaveServices.addLeaveRequest(this.requestObj).subscribe((data) => {
-    //   console.log(`The Return After Insert ${data}`);
-    // }, (err) => {
-    //   console.log(`The Return Error ${err}`);
-    // })
+    this.LeaveServices.addLeaveRequest(this.requestObj).subscribe((data) => {
+      console.log(`The Return After Insert ${data}`);
+    }, (err) => {
+      console.log(`The Return Error ${err}`);
+    })
     //this.navCtrl.pop();
     //.push(LeaveListPage);
   }
