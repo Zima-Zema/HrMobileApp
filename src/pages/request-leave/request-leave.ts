@@ -329,12 +329,11 @@ export class RequestLeavePage {
   }
   reasonChange(reason) {
   }
-  public trystart: any;
+
   bindForm() {
-    
+
     let MilliDate = new Date(this.startDate).setHours(8);
     this.startDate = new Date(MilliDate);
-    this.trystart =moment(this.startDate).format('lll');
     console.log("bindForm startDate", this.startDate);
     console.log(`bindForm EndDate : ${this.endDate}`);
     console.log("bindForm Calender : ", this.requestData.Calender)
@@ -344,12 +343,12 @@ export class RequestLeavePage {
     if (this.startDate) {
       let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
       console.log("res : ", res);
-      this.trystart=res.startDate;
-      moment.locale();
+
       if (this.EditFlag == 0 || this.EditFlag == 1) {
-        this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
-        this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
-        this.startDate = this.allowFraction ? this.bloodyIsoString(new Date(res.startDate)) : res.startDate;
+        this.endDate = this.allowFraction ? new Date(res.endDate).toISOString() : new Date(res.endDate).toISOString();
+        console.log(`End Date ${this.endDate}`);
+        this.returnDate = this.allowFraction ? new Date(res.returnDate).toISOString() : new Date(res.returnDate).toISOString();
+        this.startDate = this.allowFraction ? new Date(res.startDate).toISOString() : new Date(res.startDate).toISOString();
         this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
       }
     }
