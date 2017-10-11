@@ -393,30 +393,6 @@ loadCharts(chartData: Array<any>) {
   }
   reasonChange(reason) {
   }
-<<<<<<< HEAD
-  public trystart: any;
-bindForm() {
-
-  let MilliDate = new Date(this.startDate).setHours(8);
-  this.startDate = new Date(MilliDate);
-  this.trystart = moment(this.startDate).format('lll');
-  console.log("bindForm startDate", this.startDate);
-  console.log(`bindForm EndDate : ${this.endDate}`);
-  console.log("bindForm Calender : ", this.requestData.Calender)
-  console.log(`bindForm noOfDays: ${this.noOfDays} , fraction : ${this.fraction}`)
-  console.log(`bindForm LeaveType : ${this.requestData.LeaveType}`)
-  // if (this.startDate && this.noOfDays) {
-  if (this.startDate) {
-    let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
-    console.log("res : ", res);
-    this.trystart = res.startDate;
-    moment.locale();
-    if (this.EditFlag == 0 || this.EditFlag == 1) {
-      this.endDate = this.allowFraction ? moment(res.endDate).format('lll') : moment(res.endDate).format('l');
-      this.returnDate = this.allowFraction ? moment(res.returnDate).format('lll') : moment(res.returnDate).format('l');
-      this.startDate = this.allowFraction ? this.bloodyIsoString(new Date(res.startDate)) : res.startDate;
-      this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
-=======
 
   bindForm() {
 
@@ -438,9 +414,7 @@ bindForm() {
         this.returnDate = this.allowFraction ? new Date(res.returnDate).toISOString() : new Date(res.returnDate).toISOString();
         this.startDate = this.allowFraction ? new Date(res.startDate).toISOString() : new Date(res.startDate).toISOString();
         this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
-      }
->>>>>>> 4b341989af0343562409c6eaa68aadb2110e6e25
-    }
+      }   
   }
 }
 resetForm() {
