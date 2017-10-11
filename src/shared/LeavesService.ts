@@ -38,9 +38,11 @@ export interface ILeaveRequest {
     ReplaceEmpId: number,
     NofDays: number,
     FractionDays: number,
-    StartDate: Date,
+    StartDate: string,
     Culture: string,
-    EndDate: Date,
+    EndDate: string,
+    ReturnDate:string,
+    ReasonDesc:string
     ApprovalStatus: ApprovalStatusEnum
 }
 
