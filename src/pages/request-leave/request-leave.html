@@ -52,8 +52,12 @@
       </ion-select>
     </ion-item>
   </ion-list>
+<<<<<<< HEAD
  -->
   <span>{{trystart}}</span>
+=======
+-->
+>>>>>>> 4b341989af0343562409c6eaa68aadb2110e6e25
   <form [formGroup]="RequestLeaveForm" (ngSubmit)="saveLeaves()" id="RequestLeaveID">
 
     <ion-item>
@@ -131,12 +135,12 @@
 
     <ion-item>
       <ion-label floating>End Date</ion-label>
-      <ion-input type="text" readonly [(ngModel)]="endDate" formControlName="endDate" [disabled]="EditFlag==2"></ion-input>
+      <ion-datetime  readonly [(ngModel)]="endDate" formControlName="endDate" [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'" [disabled]="EditFlag==2"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Return Date</ion-label>
-      <ion-input type="text" readonly [(ngModel)]="returnDate" formControlName="returnDate" [disabled]="EditFlag==2"></ion-input>
+      <ion-datetime [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'" readonly [(ngModel)]="returnDate" formControlName="returnDate" [disabled]="EditFlag==2"></ion-datetime>
     </ion-item>
 
 
