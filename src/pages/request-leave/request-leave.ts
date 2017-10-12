@@ -5,6 +5,7 @@ import { LeaveServicesApi, IRequestType, IRequestData, ILeaveRequest, ApprovalSt
 import { LeaveListPage } from '../leave-list/leave-list';
 import { Chart } from 'chart.js';
 import * as moment from 'moment';
+import { DatePickerDirective } from 'ion-datepicker';
 
 @IonicPage()
 @Component({
@@ -12,11 +13,18 @@ import * as moment from 'moment';
   templateUrl: 'request-leave.html',
 })
 export class RequestLeavePage {
-
+  
+  filteredArr;
+  localDateval = new Date();
   public item: any;
 
   @ViewChild('doughnutCanvas') doughnutCanvas;
   @ViewChild('barCanvas') barCanvas;
+  @ViewChild(DatePickerDirective) private datepickerDirective: DatePickerDirective;
+  
+    public closeDatepicker() {
+      this.datepickerDirective.modal.dismiss();
+    }
   doughnutChart: any;
   barChart: any;
 
@@ -301,23 +309,23 @@ export class RequestLeavePage {
     this.RequestDataObj.TypeId = item;
     this.RequestDataObj.StartDate = new Date().toDateString();
     this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
-      //
-      this.yearsValue.forEach(year => {
-        console.log(`Year : ${year}`)
-        this.weekendArr = this.LeaveServices.getFriSat(year, data.Calender); //all weekends in year
-        console.log(`this.weekendArr : ${this.weekendArr}`)
-        this.alldays = this.LeaveServices.getallDays(year);
+      // //
+      // this.yearsValue.forEach(year => {
+      //   console.log(`Year : ${year}`)
+      //   this.weekendArr = this.LeaveServices.getFriSat(year, data.Calender); //all weekends in year
+      //   console.log(`this.weekendArr : ${this.weekendArr}`)
+      //   this.alldays = this.LeaveServices.getallDays(year);
 
-        this.daysArr = this.alldays.filter(x => this.weekendArr.indexOf(x) == -1); //all days without weekends
-        this.daysArr.forEach(element => {
-          let newDay = new Date(element).getDate();
-          this.startDate = new Date(element);
-          console.log(`this.startDate :: ${this.startDate}`)
-          this.newDaysArr.push(newDay);
-        });
-        this.daysValue = this.newDaysArr;
-      });
-      //
+      //   this.daysArr = this.alldays.filter(x => this.weekendArr.indexOf(x) == -1); //all days without weekends
+      //   this.daysArr.forEach(element => {
+      //     let newDay = new Date(element).getDate();
+      //     this.startDate = new Date(element);
+      //     console.log(`this.startDate :: ${this.startDate}`)
+      //     this.newDaysArr.push(newDay);
+      //   });
+      //   this.daysValue = this.newDaysArr;
+      // });
+      // //
       console.log("data GetRequestLeaveData ", data);
       this.workhour = data.Calender.WorkHours;
       this.requestData = data;
@@ -342,16 +350,16 @@ export class RequestLeavePage {
       }
       else { //العارضه
         this.pickFormat = 'MMM DD YYYY';
-        this.displayFormat = "MMM DD, YYYY hh:mm";
+        this.displayFormat = "MMM DD, YYYY hh:mm A";
       }
       //
       if (data.LeaveType.AbsenceType == 8) {
-        this.minDate = this.bloodyIsoString(new Date()).slice(0, -6);
+        this.minDate = new Date();
         //console.log(`Fatma: ${this.minDate}`);
         //this.startDate = new Date();
       }
       else {
-        this.minDate = this.bloodyIsoString(new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0)));
+        this.minDate = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
       }
       this.reservedDays = data.requestVal.ReservedDays
       this.balBefore = data.requestVal.BalBefore;
@@ -369,7 +377,10 @@ export class RequestLeavePage {
     })
   }
   dateChange(item) {
-    this.bindForm();
+    console.log(item);
+    this.startDate = new Date(item).toISOString();
+    console.log(this.startDate);
+    
   }
   numberChange(item) {
     this.bindForm();
