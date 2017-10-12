@@ -13,7 +13,7 @@ import { DatePickerDirective } from 'ion-datepicker';
   templateUrl: 'request-leave.html',
 })
 export class RequestLeavePage {
-  
+
   filteredArr;
   localDateval = new Date();
   public item: any;
@@ -21,10 +21,10 @@ export class RequestLeavePage {
   @ViewChild('doughnutCanvas') doughnutCanvas;
   @ViewChild('barCanvas') barCanvas;
   @ViewChild(DatePickerDirective) private datepickerDirective: DatePickerDirective;
-  
-    public closeDatepicker() {
-      this.datepickerDirective.modal.dismiss();
-    }
+
+  public closeDatepicker() {
+    this.datepickerDirective.modal.dismiss();
+  }
   doughnutChart: any;
   barChart: any;
 
@@ -34,8 +34,7 @@ export class RequestLeavePage {
   public YearsArr: Array<number> = [];
   public yearsValue: Array<number> = [];
   //
-  public daysArr: Array<number> = [];
-  public daysValue: Array<number> = [];
+
   //Form ngModel
   public leaveType: any;
   public startDate: any;
@@ -101,17 +100,19 @@ export class RequestLeavePage {
   displayFormat: string;
   public disableFlagNoOfDays: boolean = false;
   public disableFlagFarc: boolean = false;
-  public weekendArr: Array<any> = [];
-  public alldays: Array<any> = [];
-  public newDaysArr: Array<number> = [];
+  // public weekendArr: Array<any> = [];
+  // public alldays: Array<any> = [];
+  // public newDaysArr: Array<number> = [];
+  // public daysArr: Array<number> = [];
+  // public daysValue: Array<number> = [];
 
 
-  public val: any;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
     private formBuilder: FormBuilder) {
-    console.log(`vvvval : ${this.val}`)
+    this.disableFlagNoOfDays = true;
+    this.disableFlagFarc = true;
     //Edit Mode
     this.item = this.navParams.data;
     //form validation
@@ -153,6 +154,20 @@ export class RequestLeavePage {
     if (fraction == 0) { this.disableFlagNoOfDays = false; }
     else if (fraction && fraction != 0) { this.disableFlagNoOfDays = true; }
     else { this.disableFlagNoOfDays = false; }
+  }
+  BlurDateTime(startDate) {
+    console.log(` BlurDateTime(startDate) : ${startDate}`)
+    if (startDate == null || !startDate) {
+      console.log(` Enable`)
+      this.disableFlagNoOfDays = true;
+      this.disableFlagFarc = true;
+    }
+    else if (startDate) {
+      console.log(` Disable`)
+      this.disableFlagNoOfDays = false;
+      this.disableFlagFarc = false;
+    }
+
   }
   // // EditFlag = 0 ---> Request  , EditFlag = 1 ---> Edit , EditFlad = 2 --->show
   ionViewWillEnter() {
@@ -309,7 +324,7 @@ export class RequestLeavePage {
     this.RequestDataObj.TypeId = item;
     this.RequestDataObj.StartDate = new Date().toDateString();
     this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
-      // //
+      //
       // this.yearsValue.forEach(year => {
       //   console.log(`Year : ${year}`)
       //   this.weekendArr = this.LeaveServices.getFriSat(year, data.Calender); //all weekends in year
@@ -325,7 +340,7 @@ export class RequestLeavePage {
       //   });
       //   this.daysValue = this.newDaysArr;
       // });
-      // //
+      //
       console.log("data GetRequestLeaveData ", data);
       this.workhour = data.Calender.WorkHours;
       this.requestData = data;
@@ -380,7 +395,7 @@ export class RequestLeavePage {
     console.log(item);
     this.startDate = new Date(item).toISOString();
     console.log(this.startDate);
-    
+
   }
   numberChange(item) {
     this.bindForm();
@@ -401,9 +416,9 @@ export class RequestLeavePage {
   }
 
   bindForm() {
-
-    let MilliDate = new Date(this.startDate).setHours(8);
-    this.startDate = new Date(MilliDate);
+    console.log(`SSSSS : ${this.startDate}`)
+    // let MilliDate = new Date(this.startDate).setHours(8);
+    // this.startDate = new Date(MilliDate);
     console.log("bindForm startDate", this.startDate);
     console.log(`bindForm EndDate : ${this.endDate}`);
     console.log("bindForm Calender : ", this.requestData.Calender)
@@ -483,6 +498,9 @@ export class RequestLeavePage {
     }
 
     return null;
+  }
+  static isRequired(control: FormControl) {
+    console.log(`hhhhhh : $`)
   }
   static isValidReqReason(control: FormControl) {
 

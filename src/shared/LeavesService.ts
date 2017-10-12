@@ -193,6 +193,7 @@ export class LeaveServicesApi {
         hasFraction = (leaveType && fraction != null);
         hasNofDays = (leaveType && noOfDayes != null);
         console.log(`hasFraction : ${hasFraction} , hasNofDays : ${hasNofDays}`);
+        console.log(`calcDates startDate : ${startDate}`)
         //
         if (startDate && leaveType.AllowFraction) {  //لو اجازه عارضه
             WorkStartHour = new Date(WorkStartTimeString).getHours(); //8
@@ -205,6 +206,7 @@ export class LeaveServicesApi {
                 endDate = this.addDays(startDate, NofDays, calender, leaveType);
                 let WorkEndHour: number = new Date(endDate).getHours(); //8
                 endDate = new Date(endDate).setHours((WorkEndHour + WorkingHours), 0, 0, 0);//16 //For hours
+                returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType).setHours(WorkStartHour,0,0,0);
             }
             if (hasFraction && fraction != 0) {
                 console.log("yaaaaaaaaaaah, hasFraction");
@@ -224,14 +226,15 @@ export class LeaveServicesApi {
         }
         else { //لو مش اجازه عارضه
             NofDays = Number.parseFloat(noOfDayes) + (fraction ? Number.parseFloat(fraction) : 0);
-            endDate = this.addDays(new Date(bloodyStartDate).toDateString(), NofDays, calender, leaveType);
+            endDate = this.addDays(bloodyStartDate, NofDays, calender, leaveType);
+            returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType);
         }
         // // //
-        if ((startDate && !hasFraction) || (startDate && fraction == 0)) {
-            returnDate = this.addDays(new Date(bloodyStartDate).toDateString(), NofDays + 1, calender, leaveType);
-        }
+        // if ((startDate && !hasFraction) || (startDate && fraction == 0)) {
+        //     returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType);
+        // }
 
-        console.log(`Before Return: startDate: ${startDate} endDate: ${endDate}`)
+        console.log(`Before Return: startDate: ${startDate} // endDate: ${endDate} // returnDate ${returnDate}`)
         return {
             startDate: startDate,
             endDate: endDate,
@@ -239,7 +242,7 @@ export class LeaveServicesApi {
         }
     }
 
-    getFriSat(year,calender) {
+    getFriSat(year, calender) {
         var offdays: Array<any> = [];
         let i = 0;
         for (let month = 1; month <= 12; month++) {
