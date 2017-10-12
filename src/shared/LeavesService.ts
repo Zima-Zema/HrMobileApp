@@ -237,6 +237,48 @@ export class LeaveServicesApi {
         }
     }
 
+    getFriSat(year,calender) {
+        var offdays: Array<any> = [];
+        let i = 0;
+        for (let month = 1; month <= 12; month++) {
+            let tdays = new Date(year, month, 0).getDate();
+            for (let date = 1; date <= tdays; date++) {
+                let smonth = (month < 10) ? "0" + month : month;
+                let sdate = (date < 10) ? "0" + date : date;
+                let dd = year + "-" + smonth + "-" + sdate;
+                let day = new Date();
+                day.setDate(date);
+                day.setMonth(month - 1);
+                day.setFullYear(year);
+                if (day.getDay() == calender.weekend1 || day.getDay() == calender.weekend2) {
+                    offdays[i++] = dd;
+                }
+            }
+        }
+        return offdays;
+    }
+
+
+
+    getallDays(year) {
+        var offdays: Array<any> = [];
+        let i = 0;
+        for (let month = 1; month <= 12; month++) {
+            let tdays = new Date(year, month, 0).getDate();
+            for (let date = 1; date <= tdays; date++) {
+                let smonth = (month < 10) ? "0" + month : month;
+                let sdate = (date < 10) ? "0" + date : date;
+                let dd = year + "-" + smonth + "-" + sdate;
+                let day = new Date();
+                day.setDate(date);
+                day.setMonth(month - 1);
+                day.setFullYear(year);
+                offdays[i++] = dd;
+            }
+        }
+        return offdays;
+    }
+
     // OriginalcalcDates(startDate, noOfDayes, calender, leaveType, fraction) {
     //     let startHours;
     //     let startMin;
