@@ -98,8 +98,8 @@ export class RequestLeavePage {
   public static mustReason: boolean = true;
   pickFormat: string;
   displayFormat: string;
-  public disableFlagNoOfDays: boolean = false;
-  public disableFlagFarc: boolean = false;
+  public disableFlagNoOfDays: boolean = true;
+  public disableFlagFarc: boolean = true;
   // public weekendArr: Array<any> = [];
   // public alldays: Array<any> = [];
   // public newDaysArr: Array<number> = [];
@@ -119,7 +119,7 @@ export class RequestLeavePage {
     this.RequestLeaveForm = this.formBuilder.group({
       leaveType: ['', Validators.required],
       startDate: ['', Validators.required],
-      noOfDays: ['', Validators.compose([])],
+      noOfDays: [''],
       allowedDays: [''],
       reservedDays: [''],
       endDate: [''],
@@ -324,25 +324,10 @@ export class RequestLeavePage {
     this.RequestDataObj.TypeId = item;
     this.RequestDataObj.StartDate = new Date().toDateString();
     this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
-      //
-      // this.yearsValue.forEach(year => {
-      //   console.log(`Year : ${year}`)
-      //   this.weekendArr = this.LeaveServices.getFriSat(year, data.Calender); //all weekends in year
-      //   console.log(`this.weekendArr : ${this.weekendArr}`)
-      //   this.alldays = this.LeaveServices.getallDays(year);
-
-      //   this.daysArr = this.alldays.filter(x => this.weekendArr.indexOf(x) == -1); //all days without weekends
-      //   this.daysArr.forEach(element => {
-      //     let newDay = new Date(element).getDate();
-      //     this.startDate = new Date(element);
-      //     console.log(`this.startDate :: ${this.startDate}`)
-      //     this.newDaysArr.push(newDay);
-      //   });
-      //   this.daysValue = this.newDaysArr;
-      // });
-      //
+ 
       console.log("data GetRequestLeaveData ", data);
       this.workhour = data.Calender.WorkHours;
+      this.filteredArr = this.LeaveServices.getOffDays(data.Calender);
       this.requestData = data;
       this.allowedDays = data.requestVal.AllowedDays;
       this.allowFraction = data.LeaveType.AllowFraction;
@@ -350,7 +335,7 @@ export class RequestLeavePage {
       RequestLeavePage.allowed = data.requestVal.AllowedDays;
       RequestLeavePage.mustReason = data.LeaveType.MustAddCause;
       //console.log("RequestLeavePage.mustReason", RequestLeavePage.mustReason)
-
+      console.log(`second here`)
       if (RequestLeavePage.mustReason == true) {
         if (this.EditFlag == 0) { //Request Mode -- > set ddl to 0 
           this.RequestLeaveForm.controls['reason'].setValue(0);
@@ -366,15 +351,18 @@ export class RequestLeavePage {
       else { //العارضه
         this.pickFormat = 'MMM DD YYYY';
         this.displayFormat = "MMM DD, YYYY hh:mm A";
+        
       }
       //
       if (data.LeaveType.AbsenceType == 8) {
         this.minDate = new Date();
+        this.localDateval = new Date();
         //console.log(`Fatma: ${this.minDate}`);
         //this.startDate = new Date();
       }
       else {
         this.minDate = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+        this.localDateval = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
       }
       this.reservedDays = data.requestVal.ReservedDays
       this.balBefore = data.requestVal.BalBefore;
@@ -393,8 +381,10 @@ export class RequestLeavePage {
   }
   dateChange(item) {
     console.log(item);
-    this.startDate = new Date(item).toISOString();
+    this.startDate = this.bloodyIsoString(new Date(new Date(item).toDateString())).slice(0, -15);
     console.log(this.startDate);
+
+    this.bindForm();
 
   }
   numberChange(item) {
@@ -416,6 +406,9 @@ export class RequestLeavePage {
   }
 
   bindForm() {
+
+
+    //this.startDate = new Date(this.startDate).toLocaleDateString();
     console.log(`SSSSS : ${this.startDate}`)
     // let MilliDate = new Date(this.startDate).setHours(8);
     // this.startDate = new Date(MilliDate);
@@ -425,7 +418,7 @@ export class RequestLeavePage {
     console.log(`bindForm noOfDays: ${this.noOfDays} , fraction : ${this.fraction}`)
     console.log(`bindForm LeaveType : ${this.requestData.LeaveType}`)
     // if (this.startDate && this.noOfDays) {
-    if (this.startDate) {
+    if (this.startDate && (this.noOfDays || this.fraction)) {
       let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
       console.log("res : ", res);
 
@@ -503,7 +496,7 @@ export class RequestLeavePage {
     console.log(`hhhhhh : $`)
   }
   static isValidReqReason(control: FormControl) {
-
+    console.log(`first here RequestLeavePage.mustReason : ${RequestLeavePage.mustReason}`)
     // if (RequestLeavePage.mustReason == null) {
     //   return {
     //     "noLeave": "Select Leave Type First"

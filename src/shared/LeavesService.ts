@@ -206,7 +206,7 @@ export class LeaveServicesApi {
                 endDate = this.addDays(startDate, NofDays, calender, leaveType);
                 let WorkEndHour: number = new Date(endDate).getHours(); //8
                 endDate = new Date(endDate).setHours((WorkEndHour + WorkingHours), 0, 0, 0);//16 //For hours
-                returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType).setHours(WorkStartHour,0,0,0);
+                returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType).setHours(WorkStartHour, 0, 0, 0);
             }
             if (hasFraction && fraction != 0) {
                 console.log("yaaaaaaaaaaah, hasFraction");
@@ -242,21 +242,23 @@ export class LeaveServicesApi {
         }
     }
 
-    getFriSat(year, calender) {
-        var offdays: Array<any> = [];
-        let i = 0;
+    getOffDays(calender) {
+        let arr: Array<any> = calender.StanderdHolidays
+        let year = new Date(calender.WorkStartTime).getFullYear();
+        let offdays: Array<any> = [];
+        calender.StanderdHolidays.forEach((ele) => {
+            offdays.push(new Date(year, ele.SMonth, ele.SDay))
+        })
         for (let month = 1; month <= 12; month++) {
             let tdays = new Date(year, month, 0).getDate();
             for (let date = 1; date <= tdays; date++) {
-                let smonth = (month < 10) ? "0" + month : month;
-                let sdate = (date < 10) ? "0" + date : date;
-                let dd = year + "-" + smonth + "-" + sdate;
+
                 let day = new Date();
                 day.setDate(date);
                 day.setMonth(month - 1);
                 day.setFullYear(year);
                 if (day.getDay() == calender.weekend1 || day.getDay() == calender.weekend2) {
-                    offdays[i++] = dd;
+                    offdays.push(day);
                 }
             }
         }
