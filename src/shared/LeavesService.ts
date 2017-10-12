@@ -38,9 +38,11 @@ export interface ILeaveRequest {
     ReplaceEmpId: number,
     NofDays: number,
     FractionDays: number,
-    StartDate: Date,
+    StartDate: string,
     Culture: string,
-    EndDate: Date,
+    EndDate: string,
+    ReturnDate: string,
+    ReasonDesc: string
     ApprovalStatus: ApprovalStatusEnum
 }
 
@@ -222,11 +224,11 @@ export class LeaveServicesApi {
         }
         else { //لو مش اجازه عارضه
             NofDays = Number.parseFloat(noOfDayes) + (fraction ? Number.parseFloat(fraction) : 0);
-            endDate = this.addDays(bloodyStartDate, NofDays, calender, leaveType);
+            endDate = this.addDays(new Date(bloodyStartDate).toDateString(), NofDays, calender, leaveType);
         }
         // // //
         if ((startDate && !hasFraction) || (startDate && fraction == 0)) {
-            returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType);
+            returnDate = this.addDays(new Date(bloodyStartDate).toDateString(), NofDays + 1, calender, leaveType);
         }
 
         console.log(`Before Return: startDate: ${startDate} endDate: ${endDate}`)

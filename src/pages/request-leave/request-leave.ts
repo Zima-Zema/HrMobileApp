@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidatorFn } from "@angular/forms";
-import { LeaveServicesApi, IRequestType, IRequestData } from '../../shared/LeavesService';
+import { LeaveServicesApi, IRequestType, IRequestData, ILeaveRequest, ApprovalStatusEnum } from '../../shared/LeavesService';
 import { LeaveListPage } from '../leave-list/leave-list';
 import { Chart } from 'chart.js';
 import * as moment from 'moment';
@@ -59,6 +59,25 @@ export class RequestLeavePage {
     RequestId: 0,
     StartDate: ""
   }
+  requestObj: ILeaveRequest = {
+    Id: 0,
+    TypeId: 0,
+    ReqReason: 0,
+    BalBefore: 0,
+    BalanceBefore: 0,
+    submit: true,
+    CompanyId: 0,
+    EmpId: 0,
+    ReplaceEmpId: 0,
+    NofDays: 0,
+    FractionDays: 0,
+    StartDate: null,
+    Culture: "",
+    EndDate: "",
+    ReturnDate: "",
+    ReasonDesc: "",
+    ApprovalStatus: ApprovalStatusEnum.New
+  }
 
   public RequestLeaveForm: FormGroup;
   public LeavesData: Array<any> = [];
@@ -79,19 +98,19 @@ export class RequestLeavePage {
   public newDaysArr: Array<number> = [];
 
 
-public val:any;
+  public val: any;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
     private formBuilder: FormBuilder) {
-      console.log(`vvvval : ${this.val}`)
+    console.log(`vvvval : ${this.val}`)
     //Edit Mode
     this.item = this.navParams.data;
     //form validation
     this.RequestLeaveForm = this.formBuilder.group({
       leaveType: ['', Validators.required],
       startDate: ['', Validators.required],
-      noOfDays: ['', Validators.compose([Validators.required, RequestLeavePage.isValid])],
+      noOfDays: ['', Validators.compose([])],
       allowedDays: [''],
       reservedDays: [''],
       endDate: [''],
@@ -191,7 +210,7 @@ public val:any;
 
   GetYears() {
     let year = new Date().getFullYear();
-    for (let i = year; i <= year + 1; i++) {
+    for (let i = year; i <= year + 100; i++) {
       this.YearsArr.push(i);
     }
     return this.YearsArr;
@@ -273,9 +292,9 @@ public val:any;
 
   ionViewDidLoad() { }
   /////////////////////
-value(item){
-  console.log(`Chang DDDDDDDDDDDDDDDate : ${item}`)
-}
+  value(item) {
+    console.log(`Chang DDDDDDDDDDDDDDDate : ${item}`)
+  }
   leaveChange(item: any) {
     this.resetForm();
     //console.log("itemSelected ", item);
@@ -292,7 +311,7 @@ value(item){
         this.daysArr = this.alldays.filter(x => this.weekendArr.indexOf(x) == -1); //all days without weekends
         this.daysArr.forEach(element => {
           let newDay = new Date(element).getDate();
-          this.startDate=new Date(element);
+          this.startDate = new Date(element);
           console.log(`this.startDate :: ${this.startDate}`)
           this.newDaysArr.push(newDay);
         });
@@ -473,7 +492,32 @@ value(item){
     return null;
   }
   saveLeaves() {
-    this.navCtrl.pop();
+    console.log("startDate", this.startDate);
+    console.log("endDate", this.endDate);
+    console.log("returnDate", this.returnDate);
+    this.requestObj.TypeId = this.leaveType;
+    this.requestObj.EmpId = 1072;
+    this.requestObj.CompanyId = 0;
+    this.requestObj.Culture = "ar-EG";
+    this.requestObj.NofDays = Number.parseInt(this.noOfDays);
+    this.requestObj.FractionDays = Number.parseFloat(this.fraction);
+    this.requestObj.StartDate = new Date(new Date(this.startDate).toString()).toISOString().slice(0, -1);
+    this.requestObj.EndDate = new Date(new Date(this.endDate).toString()).toISOString().slice(0, -1);
+    this.requestObj.ReturnDate = new Date(new Date(this.returnDate).toString()).toISOString().slice(0, -1);
+    this.requestObj.ReqReason = Number.parseInt(this.reason);
+    this.requestObj.ReasonDesc = this.comments;
+    this.requestObj.ApprovalStatus = ApprovalStatusEnum.New;
+    this.requestObj.ReplaceEmpId = Number.parseInt(this.replacement);
+    this.requestObj.BalanceBefore = this.balBefore;
+    this.requestObj.BalBefore = this.balBefore;
+
+    console.log(this.requestObj);
+    this.LeaveServices.addLeaveRequest(this.requestObj).subscribe((data) => {
+      console.log(`The Return After Insert ${data}`);
+    }, (err) => {
+      console.log(`The Return Error ${err}`);
+    })
+    //this.navCtrl.pop();
     //.push(LeaveListPage);
   }
 
