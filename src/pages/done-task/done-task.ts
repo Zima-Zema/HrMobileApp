@@ -37,6 +37,7 @@ export class DoneTaskPage {
     public loadingCtrl: LoadingController,
     private storage: Storage) {
     this.coming_Task = this.navParams.get('Task');
+    
   }
 
   TollenObj: ITollen = {
