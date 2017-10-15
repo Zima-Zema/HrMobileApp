@@ -87,7 +87,9 @@ export class RequestLeavePage {
   static maxDays: number = null;
   static allowed: number = null;
   static frac: number = 0;
+  public static FullData: any = null;
   public static mustReason: boolean = true;
+  public static mustFrac: number = null;
   pickFormat: string;
   displayFormat: string;
   public disableFlagNoOfDays: boolean = false;
@@ -100,7 +102,7 @@ export class RequestLeavePage {
 
 
   constructor(public navCtrl: NavController,
-    public navParams: NavParams, 
+    public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
     private formBuilder: FormBuilder) {
     this.disableFlagNoOfDays = true;
@@ -111,7 +113,7 @@ export class RequestLeavePage {
     this.RequestLeaveForm = this.formBuilder.group({
       leaveType: ['', Validators.required],
       startDate: ['', Validators.required],
-      noOfDays: ['', Validators.compose([])],
+      noOfDays: ['', Validators.compose([RequestLeavePage.isRequired])],
       allowedDays: [''],
       reservedDays: [''],
       endDate: [''],
@@ -337,17 +339,23 @@ export class RequestLeavePage {
       this.workhour = data.Calender.WorkHours;
       this.requestData = data;
       this.allowedDays = data.requestVal.AllowedDays;
+      RequestLeavePage.FullData = data.LeaveType.AllowFraction;
       this.allowFraction = data.LeaveType.AllowFraction;
       RequestLeavePage.maxDays = data.requestVal.MaxDays;
       RequestLeavePage.allowed = data.requestVal.AllowedDays;
       RequestLeavePage.mustReason = data.LeaveType.MustAddCause;
-      //console.log("RequestLeavePage.mustReason", RequestLeavePage.mustReason)
 
       if (RequestLeavePage.mustReason == true) {
         if (this.EditFlag == 0) { //Request Mode -- > set ddl to 0 
           this.RequestLeaveForm.controls['reason'].setValue(0);
         }
         this.RequestLeaveForm.controls['reason'].markAsDirty({ onlySelf: true });
+      }
+      //
+      if (RequestLeavePage.FullData == false) //مش اجازه عارضه 
+      {
+        this.RequestLeaveForm.controls['noOfDays'].setValue(null);
+        this.RequestLeaveForm.controls['noOfDays'].markAsDirty({ onlySelf: true });
       }
       //
       if (!this.allowFraction) {
@@ -387,6 +395,7 @@ export class RequestLeavePage {
     this.bindForm();
   }
   numberChange(item) {
+    RequestLeavePage.mustFrac = this.RequestLeaveForm.controls['fraction'].value;
     this.bindForm();
   }
   fractionChange(item: number) {
@@ -405,7 +414,7 @@ export class RequestLeavePage {
   }
 
   bindForm() {
-    console.log(`SSSSS : ${this.startDate}`)
+    console.log(`SSSSS : ${typeof (this.startDate)}`)
     // let MilliDate = new Date(this.startDate).setHours(8);
     // this.startDate = new Date(MilliDate);
     console.log("bindForm startDate", this.startDate);
@@ -430,6 +439,7 @@ export class RequestLeavePage {
   resetForm() {
     RequestLeavePage.allowed = null;
     RequestLeavePage.maxDays = null;
+    RequestLeavePage.FullData = null;
     RequestLeavePage.frac = 0;
     this.startDate = null;
     this.noOfDays = null;
@@ -446,7 +456,6 @@ export class RequestLeavePage {
   }
 
   static isValid(control: FormControl) {
-
     console.log("validationAllowed", RequestLeavePage.allowed);
     if (RequestLeavePage.allowed == null) {
       return {
@@ -488,11 +497,22 @@ export class RequestLeavePage {
 
     return null;
   }
- static isRequired(control:FormControl){
-   console.log(`hhhhhh : $`)
+  static isRequired(control: FormControl) {
+    console.log(`isRequired : ${RequestLeavePage.FullData} // control.value ${control.value}`);
+    console.log(`isRequired fraction ${RequestLeavePage.mustFrac}`)
+    if (RequestLeavePage.FullData == false && (control.value == null || control.value == "")) {
+      return {
+        'RequiredDays': "Required"
+      }
+    }
+    else if (RequestLeavePage.FullData == true && (RequestLeavePage.mustFrac == null || RequestLeavePage.mustFrac == 0) && (control.value == null || control.value == "")) {
+      console.log(`2ol 3aaaaaaaaaaaaaaaaaaaaaaa`);
+      return {
+        'RequiredDays': "No. Of Days OR Fraction Should Be Inserted."
+      }
+    }
   }
   static isValidReqReason(control: FormControl) {
-
     // if (RequestLeavePage.mustReason == null) {
     //   return {
     //     "noLeave": "Select Leave Type First"
