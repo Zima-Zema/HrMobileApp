@@ -29,7 +29,7 @@
         </ion-avatar>
         <!-- <h2>{{item.Type}}</h2> -->
         <h5 >{{getMoment(item.StartDate)}} - {{getMoment(item.EndDate)}} </h5>
-        <ion-note item-end *ngIf="item.NofDays==1">{{item.NofDays}} day </ion-note>
+        <ion-note item-end *ngIf="item.NofDays<=1">{{item.NofDays}} day </ion-note>
         <ion-note item-end *ngIf="item.NofDays > 1">{{item.NofDays}} days </ion-note>
         <p [ngClass]="{grey:item.ApprovalStatus==1,yellow:item.ApprovalStatus==2,green:item.ApprovalStatus==6,red:item.ApprovalStatus==9,blue:true}">{{item.ApprovalStatus|approvalPipe}}</p>
       <!-- </ion-item> -->

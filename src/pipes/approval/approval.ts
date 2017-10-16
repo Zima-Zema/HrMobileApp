@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 export enum ApprovalStatusEnum {
-  New = 1, Submit, ApprovalEmployeeReview, ManagerReview, Accepted, Approved, CancelBeforeAccepted, CancelAfterAccepted, Rejected
+  Draft = 1, Submit, ApprovalEmployeeReview, ManagerReview, Accepted, Approved, CancelBeforeAccepted, CancelAfterAccepted, Rejected
 }
 @Pipe({
   name: 'approvalPipe',

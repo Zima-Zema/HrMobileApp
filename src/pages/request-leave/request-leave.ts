@@ -28,14 +28,11 @@ export class RequestLeavePage {
 
   doughnutChart: any;
   barChart: any;
-
   //public EditFlag: boolean = false;
   public EditFlag: number = 0;
   public BtnTxt: string = "Submit";
   public YearsArr: Array<number> = [];
   public yearsValue: Array<number> = [];
-  //
-
   //Form ngModel
   public leaveType: any;
   public startDate: any;
@@ -149,27 +146,44 @@ export class RequestLeavePage {
         this.startDate = this.bloodyIsoString(new Date(new Date(this.item.StartDate).toDateString())).slice(0, -15);
         this.minDate = this.bloodyIsoString(SDate);
         this.noOfDays = this.item.NofDays;
-        this.returnDate = this.bloodyIsoString(new Date(new Date(this.item.ReturnDate).toDateString())).slice(0, -15);
-        this.endDate = this.bloodyIsoString(new Date(new Date(this.item.EndDate).toDateString())).slice(0, -15);
+        // this.returnDate = this.bloodyIsoString(new Date(new Date(this.item.ReturnDate).toDateString())).slice(0, -15);
+        // this.endDate = this.bloodyIsoString(new Date(new Date(this.item.EndDate).toDateString())).slice(0, -15);
         this.replacement = this.item.ReplaceEmpId;
         this.comments = this.item.ReasonDesc;
         this.reason = this.item.ReqReason;
       }
       //Show Mode
       else {
-        console.log("Show Mode");
+        console.log("Edit Mode ", this.item);
         this.EditFlag = 2;
+        this.BtnTxt = "Update";
         this.leaveChange(this.item.TypeId);
         this.leaveType = this.item.TypeId;
         let SDate = new Date(this.item.StartDate);
-        this.startDate = this.bloodyIsoString(SDate);
+        this.startDate = this.bloodyIsoString(new Date(new Date(this.item.StartDate).toDateString())).slice(0, -15);
         this.minDate = this.bloodyIsoString(SDate);
         this.noOfDays = this.item.NofDays;
-        this.returnDate = this.item.ReturnDate;
-        this.endDate = this.item.EndDate;
+        // this.returnDate = this.bloodyIsoString(new Date(new Date(this.item.ReturnDate).toDateString())).slice(0, -15);
+        // this.endDate = this.bloodyIsoString(new Date(new Date(this.item.EndDate).toDateString())).slice(0, -15);
         this.replacement = this.item.ReplaceEmpId;
-        this.reason = this.item.ReqReason;
         this.comments = this.item.ReasonDesc;
+        this.reason = this.item.ReqReason;
+
+        ////////////////////////////////////////////////////////////
+        // console.log("Show Mode");
+        // this.EditFlag = 2;
+        // this.leaveChange(this.item.TypeId);
+        // this.leaveType = this.item.TypeId;
+        // let SDate = new Date(this.item.StartDate);
+        // this.startDate = this.bloodyIsoString(new Date(new Date(this.item.StartDate).toDateString()));
+        // console.log("SHOW MODEL  : ", this.startDate)
+        // this.minDate = this.bloodyIsoString(SDate);
+        // this.noOfDays = this.item.NofDays;
+        // this.returnDate = this.item.ReturnDate;
+        // this.endDate = this.item.EndDate;
+        // this.replacement = this.item.ReplaceEmpId;
+        // this.reason = this.item.ReqReason;
+        // this.comments = this.item.ReasonDesc;
       }
     }
     //Request Mode
@@ -225,14 +239,21 @@ export class RequestLeavePage {
           backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
           ],
           hoverBackgroundColor: [
             "#FF6384",
             "#36A2EB",
+            "#FFCE56",
+            "#27AE60",
+            "#7B68EE",
+            "#F39C12"
           ]
         }]
       }
-
     });
     // //Bar Chart
     this.barChart = new Chart(this.barCanvas.nativeElement, {
@@ -279,11 +300,24 @@ export class RequestLeavePage {
   }
 
   ionViewDidEnter() {
+    console.log(`ionViewDidEnter EditFlag :: ${this.EditFlag} `);
     if (this.EditFlag == 0) {
-      console.log(`ionViewDidLoad Reqqqqqqqqqqqqqqqqqqq ::: ${this.EditFlag}`)
+      console.log(`ionViewDidEnter request mode :: ${this.EditFlag} `);
       this.RequestLeaveForm.controls['noOfDays'].disable();
       this.RequestLeaveForm.controls['startDate'].disable();
       this.RequestLeaveForm.controls['fraction'].disable();
+    }
+    else if (this.EditFlag == 1 && (this.RequestLeaveForm.controls['noOfDays'].value != 0 || this.RequestLeaveForm.controls['noOfDays'].value != "")) {
+      console.log(`ionViewDidEnter noOfDays :: ${this.RequestLeaveForm.controls['noOfDays'].value} `);
+      this.RequestLeaveForm.controls['noOfDays'].enable();
+      this.RequestLeaveForm.controls['startDate'].enable();
+      this.RequestLeaveForm.controls['fraction'].disable();
+    }
+    else if (this.EditFlag == 1 && (this.RequestLeaveForm.controls['fraction'].value != 0 || this.RequestLeaveForm.controls['fraction'].value != null)) {
+      console.log(`ionViewDidEnter fraction :: ${this.RequestLeaveForm.controls['fraction'].value} `);
+      this.RequestLeaveForm.controls['noOfDays'].disable();
+      this.RequestLeaveForm.controls['startDate'].enable();
+      this.RequestLeaveForm.controls['fraction'].enable();
     }
   }
   /////////////////////
@@ -316,16 +350,24 @@ export class RequestLeavePage {
       }
       //
       if (!RequestLeavePage.FullData) {
-        this.RequestLeaveForm.controls['noOfDays'].setValidators(RequestLeavePage.isDaysRequired);
+        console.log("No 3arda");
+        this.RequestLeaveForm.controls['noOfDays'].setValidators([RequestLeavePage.isDaysRequired, RequestLeavePage.isRequired]);
         this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity();
         this.RequestLeaveForm.controls['noOfDays'].markAsDirty({ onlySelf: true });
       }
       else if (RequestLeavePage.FullData) {
-        this.RequestLeaveForm.controls['noOfDays'].setValidators(RequestLeavePage.isDaysRequired);
-        this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity();
+        console.log("3arda");
+        //this.RequestLeaveForm.controls['noOfDays'].enable();
+        this.RequestLeaveForm.controls['noOfDays'].setValidators([RequestLeavePage.isDaysRequired, RequestLeavePage.isRequired]);
+        console.log(`1`);
+        this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity(); //call
+        console.log(`2`);
         this.RequestLeaveForm.controls['fraction'].setValidators(RequestLeavePage.isDaysRequired);
-        this.RequestLeaveForm.controls['fraction'].updateValueAndValidity();
+        console.log(`3`);
+        this.RequestLeaveForm.controls['fraction'].updateValueAndValidity(); //call
+        console.log(`4`);
         this.RequestLeaveForm.controls['noOfDays'].markAsDirty({ onlySelf: true });
+        console.log(`5`);
         this.RequestLeaveForm.controls['fraction'].markAsDirty({ onlySelf: true });
       }
       //
@@ -352,9 +394,19 @@ export class RequestLeavePage {
       this.reservedDays = data.requestVal.ReservedDays
       this.balBefore = data.requestVal.BalBefore;
       if (this.EditFlag == 1 || this.EditFlag == 2) {
-        this.fraction = this.noOfDays % 1;
-        this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? this.fraction : 0));
-        this.noOfDays = Math.trunc(this.noOfDays);
+        if (new Date(this.item.EndDate).getHours() > new Date(this.item.ReturnDate).getHours()) {
+          this.fraction = -(this.noOfDays % 1);
+          this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? this.fraction : 0));
+          this.noOfDays = Math.trunc(this.noOfDays);
+        } else {
+          //doing Magic here
+          this.fraction = this.noOfDays % 1;
+          this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? this.fraction : 0));
+          this.noOfDays = Math.trunc(this.noOfDays);
+        }
+        if (this.noOfDays > 0) {
+          this.bindForm();
+        }
       }
       else {
         this.balAfter = undefined;
@@ -365,21 +417,22 @@ export class RequestLeavePage {
     })
   }
   dateChange(item) {
+    console.log(` dateChange item : ${item}`)
     this.RequestLeaveForm.controls['noOfDays'].enable();
     this.RequestLeaveForm.controls['fraction'].enable();
     console.log(item);
     this.startDate = this.bloodyIsoString(new Date(new Date(item).toDateString())).slice(0, -15);
     console.log(this.startDate);
-
     this.bindForm();
   }
+  //
   numberChange(item) {
     console.log(` numberChange item : ${item}`)
-    if (item > 0) {
+    if (item > 0 || item < 0) {
       this.RequestLeaveForm.controls['fraction'].disable();
       this.RequestLeaveForm.controls['fraction'].clearValidators();
     }
-    else if (item == "") {
+    else if (item == "" || item == 0) {
       this.RequestLeaveForm.controls['fraction'].enable();
       this.RequestLeaveForm.controls['fraction'].setValidators(RequestLeavePage.isDaysRequired);
       this.RequestLeaveForm.controls['fraction'].updateValueAndValidity();
@@ -393,7 +446,7 @@ export class RequestLeavePage {
     if (item) {
       if (item == 0) {
         this.RequestLeaveForm.controls['noOfDays'].enable();
-        this.RequestLeaveForm.controls['noOfDays'].setValidators(RequestLeavePage.isDaysRequired);
+        this.RequestLeaveForm.controls['noOfDays'].setValidators([RequestLeavePage.isDaysRequired, RequestLeavePage.isRequired]);
         this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity();
         this.RequestLeaveForm.controls['noOfDays'].markAsDirty({ onlySelf: true });
       }
@@ -423,14 +476,12 @@ export class RequestLeavePage {
     if (this.startDate && (this.noOfDays || this.fraction)) {
       let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
       console.log("res : ", res);
+      this.endDate = this.allowFraction ? new Date(res.endDate).toISOString() : new Date(res.endDate).toISOString();
+      console.log(`End Date ${this.endDate}`);
+      this.returnDate = this.allowFraction ? new Date(res.returnDate).toISOString() : new Date(res.returnDate).toISOString();
+      this.startDate = this.allowFraction ? new Date(res.startDate).toISOString() : new Date(res.startDate).toISOString();
+      this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
 
-      if (this.EditFlag == 0 || this.EditFlag == 1) {
-        this.endDate = this.allowFraction ? new Date(res.endDate).toISOString() : new Date(res.endDate).toISOString();
-        console.log(`End Date ${this.endDate}`);
-        this.returnDate = this.allowFraction ? new Date(res.returnDate).toISOString() : new Date(res.returnDate).toISOString();
-        this.startDate = this.allowFraction ? new Date(res.startDate).toISOString() : new Date(res.startDate).toISOString();
-        this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0));
-      }
     }
   }
   resetForm() {
@@ -442,7 +493,7 @@ export class RequestLeavePage {
     this.noOfDays = null;
     this.allowedDays = undefined;
     this.reservedDays = undefined;
-    this.returnDate;
+    this.returnDate = null;
     this.endDate = null;
     this.balBefore = undefined;
     this.balAfter = undefined;
@@ -451,49 +502,22 @@ export class RequestLeavePage {
     this.reason = null;;
     this.fraction = null;;
   }
-
-  static isValid(control: FormControl) {
-    console.log("validationAllowed", RequestLeavePage.allowed);
-    if (RequestLeavePage.allowed == null) {
-      return {
-        "noLeave": "Select Leave Type First"
-      }
-    }
-    let x = (Number.parseInt(control.value) + Number.parseFloat(RequestLeavePage.frac.toString()));
-    console.log(`x :: ${x}`)
-    if (x > RequestLeavePage.maxDays && RequestLeavePage.maxDays != null) {
-      return {
-        "maximum": "bigger than Maximum"
-      }
-    }
-
-    if (control.value > RequestLeavePage.allowed) {
-      return {
-        "allowed": "bigger than allowed"
-      };
-    }
-    if (isNaN(control.value)) {
-      return {
-        "general": "not a number"
-      };
-    }
-
-    if (control.value % 1 !== 0) {
-      return {
-        "general": "not a whole number"
-      };
-    }
-
-    if (Number.parseInt(control.value) <= 0) {
+  static isRequired(control: FormControl) {
+    console.log("wallahy ana hena isRequired ", control);
+    if (Number.parseInt(control.value) < 0) {
+      console.log(`Generaaaaaaaaaal`)
       return {
         "general": "zero or negative not allowed."
       }
     }
+    else {
+      return null;
+    }
 
-    return null;
   }
+
   static isDaysRequired(control: FormControl) {
-    console.log(`isDaysRequired : ${RequestLeavePage.FullData} // control.value ${control.value}`);
+    console.log("isDaysRequired :  control.value ", control);
     if (control.value >= 1) { //to make sure the coming value is no. of days not a fraction
       let x = Number.parseInt(control.value);
       console.log(`x :: ${x}`);
@@ -517,11 +541,7 @@ export class RequestLeavePage {
           "general": "not a whole number"
         };
       }
-      if (Number.parseInt(control.value) <= 0) {
-        return {
-          "general": "zero or negative not allowed."
-        }
-      }
+
     }
     if (RequestLeavePage.FullData == false && (control.value == null || control.value == "")) {
       console.log(`2ol no 3arda`);
@@ -540,6 +560,48 @@ export class RequestLeavePage {
       return null;
     }
   }
+
+  // static isValid(control: FormControl) {
+  //   console.log("validationAllowed", RequestLeavePage.allowed);
+  //   if (RequestLeavePage.allowed == null) {
+  //     return {
+  //       "noLeave": "Select Leave Type First"
+  //     }
+  //   }
+  //   let x = (Number.parseInt(control.value) + Number.parseFloat(RequestLeavePage.frac.toString()));
+  //   console.log(`x :: ${x}`)
+  //   if (x > RequestLeavePage.maxDays && RequestLeavePage.maxDays != null) {
+  //     return {
+  //       "maximum": "bigger than Maximum"
+  //     }
+  //   }
+
+  //   if (control.value > RequestLeavePage.allowed) {
+  //     return {
+  //       "allowed": "bigger than allowed"
+  //     };
+  //   }
+  //   if (isNaN(control.value)) {
+  //     return {
+  //       "general": "not a number"
+  //     };
+  //   }
+
+  //   if (control.value % 1 !== 0) {
+  //     return {
+  //       "general": "not a whole number"
+  //     };
+  //   }
+
+  //   if (Number.parseInt(control.value) <= 0) {
+  //     return {
+  //       "general": "zero or negative not allowed."
+  //     }
+  //   }
+
+  //   return null;
+  // }
+
   static isValidReqReason(control: FormControl) {
     console.log(`first here RequestLeavePage.mustReason : ${RequestLeavePage.mustReason}`)
     // if (RequestLeavePage.mustReason == null) {
