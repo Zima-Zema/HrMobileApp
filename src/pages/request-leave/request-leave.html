@@ -53,13 +53,13 @@
     </ion-item>
   </ion-list>
 -->
-  <form [formGroup]="RequestLeaveForm" (ngSubmit)="saveLeaves()" id="RequestLeaveID">
+  <form [formGroup]="RequestLeaveForm" id="RequestLeaveID">
 
     <ion-item>
       <ion-label floating>Leave Type</ion-label>
       <ion-select [(ngModel)]="leaveType" (ionChange)="leaveChange(leaveType)" formControlName="leaveType" interface="popover"
         [disabled]="EditFlag==2">
-        <ion-option *ngFor="let item of LeavesData.LeaveTypeList" value="{{item.Id}}">{{item.Name}}</ion-option>
+        <ion-option *ngFor="let item of LeavesData" value="{{item.Id}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
 
@@ -104,7 +104,7 @@
       <ion-label floating>Leave Reason</ion-label>
       <ion-select [(ngModel)]="reason" (ionChange)="reasonChange(reason)" formControlName="reason" interface="popover" [disabled]="EditFlag==2">
         <ion-option value="0">No Reason</ion-option>
-        <ion-option *ngFor="let item of LeavesData.LeaveReasonList" value="{{item.CodeId}}">{{item.Name}}</ion-option>
+        <ion-option *ngFor="let item of LeaveReasonList" value="{{item.CodeId}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
 
@@ -164,7 +164,7 @@
     <ion-item>
       <ion-label floating>Replacement Employee</ion-label>
       <ion-select [(ngModel)]="replacement" formControlName="replacement" interface="popover" [disabled]="EditFlag==2">
-        <ion-option *ngFor="let item of LeavesData.Replacements" value="{{item.id}}">{{item.name}}</ion-option>
+        <ion-option *ngFor="let item of Replacements" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
 
@@ -177,5 +177,12 @@
   </form>
 </ion-content>
 <ion-footer *ngIf="EditFlag==0 || EditFlag==1">
-  <button ion-button block form="RequestLeaveID" color="primary" type="submit" [disabled]="!RequestLeaveForm.valid">{{BtnTxt}}</button>
+ 
+    <button ion-button class="submit" form="RequestLeaveID" color="primary" type="submit" (click)="saveLeaves(true)" [disabled]="!RequestLeaveForm.valid">{{BtnTxt}}</button>
+
+    <button ion-button class="save" form="RequestLeaveID" color="secondary" type="submit" (click)="saveLeaves(false)" [disabled]="!RequestLeaveForm.valid">Save</button>
+
+
+
+
 </ion-footer>

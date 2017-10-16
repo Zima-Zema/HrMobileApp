@@ -81,12 +81,15 @@ export class RequestLeavePage {
     EndDate: "",
     ReturnDate: "",
     ReasonDesc: "",
+    Type: "",
     ApprovalStatus: ApprovalStatusEnum.New
   }
 
   public RequestLeaveForm: FormGroup;
   public LeavesData: Array<any> = [];
   public ChartData: Array<any> = [];
+  public LeaveReasonList: Array<any> = [];
+  public Replacements: Array<any> = [];
   public requestData: any;
   public workhour: number;
   allowFraction: boolean = false;
@@ -119,14 +122,16 @@ export class RequestLeavePage {
       replacement: [''],
       comments: [''],
       reason: ['', Validators.compose([RequestLeavePage.isValidReqReason])],
-      fraction: ['',]
+      fraction: ['']
 
     });
     // this.leaving = 1067;  //annual leave
     this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((Konafa) => {
       console.log("leavetyps>>>", Konafa);
-      this.LeavesData = Konafa;
+      this.LeavesData = Konafa.LeaveTypeList;
       this.ChartData = Konafa.ChartData;
+      this.Replacements = Konafa.Replacements;
+      this.LeaveReasonList = Konafa.LeaveReasonList;
       this.loadCharts(this.ChartData);
     }, (e) => {
     })
@@ -142,6 +147,7 @@ export class RequestLeavePage {
         this.BtnTxt = "Update";
         this.leaveChange(this.item.TypeId);
         this.leaveType = this.item.TypeId;
+        console.log("AllowFrac",this.allowFraction);
         let SDate = new Date(this.item.StartDate);
         this.startDate = this.bloodyIsoString(new Date(new Date(this.item.StartDate).toDateString())).slice(0, -15);
         this.minDate = this.bloodyIsoString(SDate);
@@ -620,10 +626,12 @@ export class RequestLeavePage {
     // }
     return null;
   }
-  saveLeaves() {
-    console.log("startDate", this.startDate);
-    console.log("endDate", this.endDate);
-    console.log("returnDate", this.returnDate);
+  saveLeaves(item) {
+    console.log(typeof item);
+    console.log("submit>>", item);
+    // console.log("startDate", this.startDate);
+    // console.log("endDate", this.endDate);
+    // console.log("returnDate", this.returnDate);
     this.requestObj.TypeId = this.leaveType;
     this.requestObj.EmpId = 1072;
     this.requestObj.CompanyId = 0;
@@ -639,10 +647,20 @@ export class RequestLeavePage {
     this.requestObj.ReplaceEmpId = Number.parseInt(this.replacement);
     this.requestObj.BalanceBefore = this.balBefore;
     this.requestObj.BalBefore = this.balBefore;
+    this.requestObj.submit = item;
+    this.requestObj.Type = this.LeavesData.find((ele) => ele.Id == this.requestObj.TypeId).Name;
 
-    console.log(this.requestObj);
+    // console.log(this.requestObj);
+    // LeaveListPage.motherArr.push(this.requestObj);
+    // console.log(LeaveListPage.motherArr);
+
+
+
     this.LeaveServices.addLeaveRequest(this.requestObj).subscribe((data) => {
       console.log(`The Return After Insert ${data}`);
+      data.Type = this.requestObj.Type;
+      LeaveListPage.motherArr.push(data);
+      this.navCtrl.pop();
     }, (err) => {
       console.log(`The Return Error ${err}`);
     })

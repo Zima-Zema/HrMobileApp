@@ -10,7 +10,7 @@
         <ion-icon name="add"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-searchbar *ngIf="toggled"  placeholder="Filter By Day, Month or Year" [(ngModel)]="queryText" (ionInput)="filterItems()"></ion-searchbar>
+    <ion-searchbar *ngIf="toggled" placeholder="Filter By Day, Month or Year" [(ngModel)]="queryText" (ionInput)="filterItems()"></ion-searchbar>
   </ion-navbar>
 
 </ion-header>
@@ -29,12 +29,12 @@
         </ion-avatar>
         <!-- <h2>{{item.Type}}</h2> -->
         <h5 >{{getMoment(item.StartDate)}} - {{getMoment(item.EndDate)}} </h5>
-        <ion-note item-end *ngIf="item.NofDays<=1">{{item.NofDays}} day </ion-note>
+        <ion-note item-end *ngIf="item.NofDays <= 1">{{item.NofDays}} day </ion-note>
         <ion-note item-end *ngIf="item.NofDays > 1">{{item.NofDays}} days </ion-note>
         <p [ngClass]="{grey:item.ApprovalStatus==1,yellow:item.ApprovalStatus==2,green:item.ApprovalStatus==6,red:item.ApprovalStatus==9,blue:true}">{{item.ApprovalStatus|approvalPipe}}</p>
       <!-- </ion-item> -->
       </button>
-        <ion-item-options >
+        <ion-item-options>
           <button *ngIf="item.ApprovalStatus==1 || item.ApprovalStatus==3" ion-button color="newGreen" class="TrashLeave" (click)="EditLeaves(item)">
           <ion-icon name="brush"></ion-icon>
         </button>
