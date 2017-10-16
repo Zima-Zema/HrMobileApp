@@ -101,21 +101,11 @@ export class RequestLeavePage {
   public static mustNoOfDays: number = null;
   pickFormat: string;
   displayFormat: string;
-  public disableFlagNoOfDays: boolean = true;
-  public disableFlagFarc: boolean = true;
-  // public weekendArr: Array<any> = [];
-  // public alldays: Array<any> = [];
-  // public newDaysArr: Array<number> = [];
-  // public daysArr: Array<number> = [];
-  // public daysValue: Array<number> = [];
-
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
     private formBuilder: FormBuilder) {
-    this.disableFlagNoOfDays = true;
-    this.disableFlagFarc = true;
     //Edit Mode
     this.item = this.navParams.data;
     //form validation
@@ -144,39 +134,7 @@ export class RequestLeavePage {
     }, (e) => {
     })
     this.yearsValue = this.GetYears();
-
-
-
   }
-  // ///////////////// disable one input due to focuse in another
-  // FocusInput() {
-  //   console.log(`Focus`);
-  //    this.disableFlagFarc = true; }
-  // FocusInputFrac() { this.disableFlagNoOfDays = true; }
-  // BlurInput(noOfDays) {
-  //   console.log(`BlurInput : ${noOfDays}`);
-  //   if (noOfDays) { this.disableFlagFarc = true; }
-  //   else { this.disableFlagFarc = false; }
-  // }
-  // BlurInputFrac(fraction) {
-  //   if (fraction == 0) { this.disableFlagNoOfDays = false; }
-  //   else if (fraction && fraction != 0) { this.disableFlagNoOfDays = true; }
-  //   else { this.disableFlagNoOfDays = false; }
-  // }
-  // BlurDateTime(startDate) {
-  //   console.log(` BlurDateTime(startDate) : ${startDate}`)
-  //   if (startDate == null || !startDate) {
-  //     console.log(` Enable`)
-  //     this.disableFlagNoOfDays = true;
-  //     this.disableFlagFarc = true;
-  //   }
-  //   else if (startDate) {
-  //     console.log(` Disable`)
-  //     this.disableFlagNoOfDays = false;
-  //     this.disableFlagFarc = false;
-  //   }
-
-  // }
   // // EditFlag = 0 ---> Request  , EditFlag = 1 ---> Edit , EditFlad = 2 --->show
   ionViewWillEnter() {
     if (Object.keys(this.item).length > 0) {
@@ -188,11 +146,11 @@ export class RequestLeavePage {
         this.leaveChange(this.item.TypeId);
         this.leaveType = this.item.TypeId;
         let SDate = new Date(this.item.StartDate);
-        this.startDate = new Date(this.item.StartDate).toISOString().slice(0, -1);
+        this.startDate = this.bloodyIsoString(new Date(new Date(this.item.StartDate).toDateString())).slice(0, -15);
         this.minDate = this.bloodyIsoString(SDate);
         this.noOfDays = this.item.NofDays;
-        this.returnDate = this.item.ReturnDate;
-        this.endDate = this.item.EndDate;
+        this.returnDate = this.bloodyIsoString(new Date(new Date(this.item.ReturnDate).toDateString())).slice(0, -15);
+        this.endDate = this.bloodyIsoString(new Date(new Date(this.item.EndDate).toDateString())).slice(0, -15);
         this.replacement = this.item.ReplaceEmpId;
         this.comments = this.item.ReasonDesc;
         this.reason = this.item.ReqReason;
@@ -320,10 +278,13 @@ export class RequestLeavePage {
     // console.log(e);
   }
 
-  ionViewDidLoad() {
-    this.RequestLeaveForm.controls['noOfDays'].disable();
-    this.RequestLeaveForm.controls['startDate'].disable();
-    this.RequestLeaveForm.controls['fraction'].disable();
+  ionViewDidEnter() {
+    if (this.EditFlag == 0) {
+      console.log(`ionViewDidLoad Reqqqqqqqqqqqqqqqqqqq ::: ${this.EditFlag}`)
+      this.RequestLeaveForm.controls['noOfDays'].disable();
+      this.RequestLeaveForm.controls['startDate'].disable();
+      this.RequestLeaveForm.controls['fraction'].disable();
+    }
   }
   /////////////////////
   value(item) {
@@ -354,16 +315,9 @@ export class RequestLeavePage {
         this.RequestLeaveForm.controls['reason'].markAsDirty({ onlySelf: true });
       }
       //
-      // if (!RequestLeavePage.FullData || RequestLeavePage.FullData) {
-      //   this.RequestLeaveForm.controls['noOfDays'].setValue(null);
-      //   this.RequestLeaveForm.controls['noOfDays'].markAsDirty({ onlySelf: true });
-      //   this.RequestLeaveForm.controls['fraction'].setValue(0);
-      //   this.RequestLeaveForm.controls['fraction'].markAsDirty({ onlySelf: true });
-      // }
       if (!RequestLeavePage.FullData) {
         this.RequestLeaveForm.controls['noOfDays'].setValidators(RequestLeavePage.isDaysRequired);
         this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity();
-        // this.RequestLeaveForm.controls['noOfDays'].setValue(null);
         this.RequestLeaveForm.controls['noOfDays'].markAsDirty({ onlySelf: true });
       }
       else if (RequestLeavePage.FullData) {
@@ -371,7 +325,6 @@ export class RequestLeavePage {
         this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity();
         this.RequestLeaveForm.controls['fraction'].setValidators(RequestLeavePage.isDaysRequired);
         this.RequestLeaveForm.controls['fraction'].updateValueAndValidity();
-        // this.RequestLeaveForm.controls['noOfDays'].setValue(null);
         this.RequestLeaveForm.controls['noOfDays'].markAsDirty({ onlySelf: true });
         this.RequestLeaveForm.controls['fraction'].markAsDirty({ onlySelf: true });
       }
@@ -395,7 +348,6 @@ export class RequestLeavePage {
         this.minDate = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
         this.localDateval = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
         this.localDateval = this.LeaveServices.getInitialDate(this.localDateval, data.Calender);
-
       }
       this.reservedDays = data.requestVal.ReservedDays
       this.balBefore = data.requestVal.BalBefore;
@@ -450,14 +402,6 @@ export class RequestLeavePage {
         this.RequestLeaveForm.controls['noOfDays'].clearValidators();
       }
       RequestLeavePage.frac = item;
-      // if (RequestLeavePage.FullData == true && (this.noOfDays =="" ||this.noOfDays ==null)) {
-      //   this.RequestLeaveForm.controls['fraction'].setValidators(RequestLeavePage.isRequired);
-      //   this.RequestLeaveForm.controls['fraction'].updateValueAndValidity();
-      // }
-
-      // if (this.noOfDays) {
-      //   this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity(this.RequestLeaveForm.controls['noOfDays'].value);
-      // }
     }
     else {
       RequestLeavePage.frac = 0
@@ -468,7 +412,6 @@ export class RequestLeavePage {
   }
 
   bindForm() {
-    console.log(`SSSSS : ${typeof (this.startDate)}`)
     // let MilliDate = new Date(this.startDate).setHours(8);
     // this.startDate = new Date(MilliDate);
     console.log("bindForm startDate", this.startDate);
@@ -574,7 +517,6 @@ export class RequestLeavePage {
           "general": "not a whole number"
         };
       }
-
       if (Number.parseInt(control.value) <= 0) {
         return {
           "general": "zero or negative not allowed."
@@ -646,5 +588,32 @@ export class RequestLeavePage {
     //.push(LeaveListPage);
   }
 
-
+  // ///////////////// disable one input due to focuse in another
+  // FocusInput() {
+  //   console.log(`Focus`);
+  //    this.disableFlagFarc = true; }
+  // FocusInputFrac() { this.disableFlagNoOfDays = true; }
+  // BlurInput(noOfDays) {
+  //   console.log(`BlurInput : ${noOfDays}`);
+  //   if (noOfDays) { this.disableFlagFarc = true; }
+  //   else { this.disableFlagFarc = false; }
+  // }
+  // BlurInputFrac(fraction) {
+  //   if (fraction == 0) { this.disableFlagNoOfDays = false; }
+  //   else if (fraction && fraction != 0) { this.disableFlagNoOfDays = true; }
+  //   else { this.disableFlagNoOfDays = false; }
+  // }
+  // BlurDateTime(startDate) {
+  //   console.log(` BlurDateTime(startDate) : ${startDate}`)
+  //   if (startDate == null || !startDate) {
+  //     console.log(` Enable`)
+  //     this.disableFlagNoOfDays = true;
+  //     this.disableFlagFarc = true;
+  //   }
+  //   else if (startDate) {
+  //     console.log(` Disable`)
+  //     this.disableFlagNoOfDays = false;
+  //     this.disableFlagFarc = false;
+  //   }
+  // }
 }
