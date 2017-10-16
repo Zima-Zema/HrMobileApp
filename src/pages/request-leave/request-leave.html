@@ -59,7 +59,7 @@
       <ion-label floating>Leave Type</ion-label>
       <ion-select [(ngModel)]="leaveType" (ionChange)="leaveChange(leaveType)" formControlName="leaveType" interface="popover"
         [disabled]="EditFlag==2">
-        <ion-option *ngFor="let item of LeavesData.LeaveTypeList" value="{{item.Id}}">{{item.Name}}</ion-option>
+        <ion-option *ngFor="let item of LeavesData" value="{{item.Id}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
 
@@ -102,7 +102,7 @@
       <ion-label floating>Leave Reason</ion-label>
       <ion-select [(ngModel)]="reason" (ionChange)="reasonChange(reason)" formControlName="reason" interface="popover" [disabled]="EditFlag==2">
         <ion-option value="0">No Reason</ion-option>
-        <ion-option *ngFor="let item of LeavesData.LeaveReasonList" value="{{item.CodeId}}">{{item.Name}}</ion-option>
+        <ion-option *ngFor="let item of LeaveReasonList" value="{{item.CodeId}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
 
@@ -162,7 +162,7 @@
     <ion-item>
       <ion-label floating>Replacement Employee</ion-label>
       <ion-select [(ngModel)]="replacement" formControlName="replacement" interface="popover" [disabled]="EditFlag==2">
-        <ion-option *ngFor="let item of LeavesData.Replacements" value="{{item.id}}">{{item.name}}</ion-option>
+        <ion-option *ngFor="let item of Replacements" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
 

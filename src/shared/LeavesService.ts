@@ -42,7 +42,8 @@ export interface ILeaveRequest {
     Culture: string,
     EndDate: string,
     ReturnDate: string,
-    ReasonDesc: string
+    ReasonDesc: string,
+    Type:string,
     ApprovalStatus: ApprovalStatusEnum
 }
 

@@ -28,7 +28,7 @@ export class LeaveListPage {
   public LeavesFilter: Array<any> = [];
   public queryText: string;
   public Leaves_Arr: Array<any> = [];
-  public motherArr;
+  public static motherArr = [];
   DeleteObj: IDeleteRequest = {
     Id: 0,
     Language: "ar-EG"
@@ -46,20 +46,20 @@ export class LeaveListPage {
     this.toggled = this.toggled ? false : true;
   }
 
- getMoment(data){
-  return moment(data).format('ddd, MMM DD, YYYY')
- }
+  getMoment(data) {
+    return moment(data).format('ddd, MMM DD, YYYY')
+  }
   ionViewDidLoad() {
     this.Leaves_Arr = [];
-    this.motherArr = [];
+    LeaveListPage.motherArr = [];
     var LeavesLoader = this.loadingCtrl.create({
       content: "Loading Leaves..."
     });
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
-        console.log("From Db : ",data);
+        console.log("From Db : ", data);
         this.LeavesCount = data.length;
-        this.motherArr = data;
+        LeaveListPage.motherArr = data;
         // data.forEach(element => {
         //   element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
         //   element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');
@@ -84,6 +84,12 @@ export class LeaveListPage {
   }
   ionViewWillEnter() {
     this.toggled = false;
+    if (LeaveListPage.motherArr.length > this.Leaves_Arr.length) {
+      this.Leaves_Arr = _.chain(LeaveListPage.motherArr).groupBy('Type').toPairs()
+        .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
+      this.LeavesCount = LeaveListPage.motherArr.length;
+    }
+
   }
 
   filterItems() {
@@ -137,10 +143,10 @@ export class LeaveListPage {
       .subscribe((data) => {
         console.log("deleted", data);
         //
-        this.motherArr = this.motherArr.filter((element) => {
+        LeaveListPage.motherArr = LeaveListPage.motherArr.filter((element) => {
           return element.Id !== item.Id;
         })
-        this.Leaves_Arr = _.chain(this.motherArr).groupBy('Type').toPairs()
+        this.Leaves_Arr = _.chain(LeaveListPage.motherArr).groupBy('Type').toPairs()
           .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
         this.LeavesCount--;
         //
