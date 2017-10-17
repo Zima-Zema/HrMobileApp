@@ -43,10 +43,33 @@ export interface ILeaveRequest {
     EndDate: string,
     ReturnDate: string,
     ReasonDesc: string,
-    Type:string,
+    Type: string,
     ApprovalStatus: ApprovalStatusEnum
 }
 
+export interface IValidationMsg {
+    AssignError: string,
+    IsReplacementError: string,
+    ReplacmentError: string,
+    WaitingError: string,
+    WaitingMonth: string,
+    HasRequestError: string,
+    StarsError: string,
+    Stars: number,
+    DeptPercentError: string,
+    percentage: number,
+    IsError: boolean
+}
+export interface IValidate {
+    Id: number,
+    TypeId: number,
+    EmpId: number,
+    CompanyId: number,
+    EndDate: string,
+    StartDate: string,
+    Culture: string,
+    ReplaceEmpId: number,
+}
 
 @Injectable()
 export class LeaveServicesApi {
@@ -113,6 +136,21 @@ export class LeaveServicesApi {
                 return err;
             });
     }
+    ///////////////////////////////////////////////////////////////////
+    //Validation
+    validateRequest(body: IValidate): Observable<IValidationMsg> {
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}/newApi/Leaves/ValidateLeaveRequest`, bodyString, { headers: headers })
+            .map((res: Response) => {
+                console.log("res.json ::: ", res.json());
+                return res.json();
+            }).catch((err) => {
+                console.log("the error in Service ::", err);
+                return err;
+            });
+    }
+    ////////////////////////////////////////////////////////////////
     //Update LeaveRequest
     editLeaveRequest(body: ILeaveRequest): Observable<any> {
         let bodyString = JSON.stringify(body);
@@ -291,7 +329,7 @@ export class LeaveServicesApi {
 
 
     getInitialDate(initialDate: Date, calender): Date {
-//20/10 fri 5 
+        //20/10 fri 5 
         if (calender.weekend1 < calender.weekend2) {
             if (initialDate.getDay() == calender.weekend1) {
                 initialDate = new Date(new Date(initialDate.getTime() + (2 * 24 * 60 * 60 * 1000)).setHours(0, 0));
@@ -299,22 +337,22 @@ export class LeaveServicesApi {
             } else if (initialDate.getDay() == calender.weekend2) {
                 initialDate = new Date(new Date(initialDate.getTime() + (1 * 24 * 60 * 60 * 1000)).setHours(0, 0));
                 return initialDate;
-            }else{
+            } else {
                 return initialDate;
             }
         }
-        else{
+        else {
             if (initialDate.getDay() == calender.weekend1) {
                 initialDate = new Date(new Date(initialDate.getTime() + (1 * 24 * 60 * 60 * 1000)).setHours(0, 0));
                 return initialDate;
             } else if (initialDate.getDay() == calender.weekend2) {
                 initialDate = new Date(new Date(initialDate.getTime() + (2 * 24 * 60 * 60 * 1000)).setHours(0, 0));
                 return initialDate;
-            }else{
+            } else {
                 return initialDate;
             }
         }
-        
+
 
 
     }

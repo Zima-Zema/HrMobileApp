@@ -29,6 +29,8 @@ export class LeaveListPage {
   public queryText: string;
   public Leaves_Arr: Array<any> = [];
   public static motherArr = [];
+  public apprNewDate: string = new Date().toDateString();
+  public apprStartDate: string;
   DeleteObj: IDeleteRequest = {
     Id: 0,
     Language: "ar-EG"
@@ -49,6 +51,9 @@ export class LeaveListPage {
   getMoment(data) {
     return moment(data).format('ddd, MMM DD, YYYY')
   }
+  getSDate(Sdate) {
+    return moment(Sdate).format('ddd MMM DD YYYY')
+  }
   ionViewDidLoad() {
     this.Leaves_Arr = [];
     LeaveListPage.motherArr = [];
@@ -58,6 +63,8 @@ export class LeaveListPage {
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
         console.log("From Db : ", data);
+
+
         this.LeavesCount = data.length;
         LeaveListPage.motherArr = data;
         // data.forEach(element => {
@@ -69,6 +76,8 @@ export class LeaveListPage {
         this.LeavesData = _.chain(data).groupBy('Type').toPairs()
           .map(item => _.zipObject(['divisionType', 'divisionTypes'], item)).value();
         this.Leaves_Arr = this.LeavesData;
+        console.log("this.Leaves_Arr : ", this.Leaves_Arr);
+
         LeavesLoader.dismiss();
       }, (e) => {
         let toast = this.toastCtrl.create({
@@ -94,6 +103,11 @@ export class LeaveListPage {
 
   filterItems() {
     this.Leaves_Arr = [];
+    // data.forEach(element => {
+    //   element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
+    //   element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');
+    //   element.EndDate = moment(element.EndDate).format('ddd, MMM DD, YYYY');
+    // });
     let val = this.queryText.toLowerCase();
     _.forEach(this.LeavesData, td => {
       let leavs = _.filter(td.divisionTypes, t => (<any>t).StartDate.toLowerCase().includes(val));
@@ -104,16 +118,15 @@ export class LeaveListPage {
     this.Leaves_Arr = this.LeavesFilter;
     this.LeavesFilter = [];
   }
-
+  ShowLeaves(item) {
+    item.readOnly = true;
+    this.navCtrl.push(RequestLeavePage, item);
+  }
   addLeave() {
     this.navCtrl.push(RequestLeavePage);
   }
   EditLeaves(item) {
     item.readOnly = false;
-    this.navCtrl.push(RequestLeavePage, item);
-  }
-  ShowLeaves(item) {
-    item.readOnly = true;
     this.navCtrl.push(RequestLeavePage, item);
   }
   DeleteLeave(itemLeave) {
@@ -135,7 +148,6 @@ export class LeaveListPage {
     });
     alert.present();
   }
-
   ConfirmDelete(item) {
     this.DeleteObj.Id = item.Id;
     console.log("this.DeleteObj ", this.DeleteObj)
@@ -165,5 +177,14 @@ export class LeaveListPage {
         });
         toast.present();
       })
+  }
+  EditAppLeaves(item) {
+    this.navCtrl.push(LeaveEditPage, item);
+  }
+  DeleteAppLeaves(item) {
+
+  }
+  CutAppLeaves(item) {
+
   }
 }

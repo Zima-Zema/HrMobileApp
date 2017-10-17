@@ -53,8 +53,11 @@
     </ion-item>
   </ion-list>
 -->
-  <form [formGroup]="RequestLeaveForm" id="RequestLeaveID">
 
+<span *ngIf="errorArray.length > 0">
+  <p *ngFor="let error of errorArray" style="color:crimson">{{error}}</p>
+</span>
+  <form [formGroup]="RequestLeaveForm" id="RequestLeaveID">
     <ion-item>
       <ion-label floating>Leave Type</ion-label>
       <ion-select [(ngModel)]="leaveType" (ionChange)="leaveChange(leaveType)" formControlName="leaveType" interface="popover"
@@ -133,14 +136,13 @@
 
     <ion-item>
       <ion-label floating>End Date</ion-label>
-      <ion-datetime readonly [(ngModel)]="endDate" formControlName="endDate" [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'"
-        [disabled]="EditFlag==2"></ion-datetime>
+      <ion-datetime disabled [(ngModel)]="endDate" (ionChanged)="endDateChange(endDate)" formControlName="endDate" [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Return Date</ion-label>
-      <ion-datetime [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'" readonly [(ngModel)]="returnDate"
-        formControlName="returnDate" [disabled]="EditFlag==2"></ion-datetime>
+      <ion-datetime [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'" disabled [(ngModel)]="returnDate"
+        formControlName="returnDate" ></ion-datetime>
     </ion-item>
 
 
@@ -149,13 +151,13 @@
         <ion-col>
           <ion-item>
             <ion-label floating>Balance Before</ion-label>
-            <ion-input type="number" readonly [(ngModel)]="balBefore" formControlName="balBefore" [disabled]="EditFlag==2"></ion-input>
+            <ion-input type="number" disabled [(ngModel)]="balBefore" formControlName="balBefore" [disabled]="EditFlag==2"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item>
             <ion-label floating>Balance After</ion-label>
-            <ion-input type="number" readonly [(ngModel)]="balAfter" formControlName="balAfter" [disabled]="EditFlag==2"></ion-input>
+            <ion-input type="number" disabled [(ngModel)]="balAfter" formControlName="balAfter" [disabled]="EditFlag==2"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>

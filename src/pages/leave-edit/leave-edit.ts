@@ -30,16 +30,18 @@ export class LeaveEditPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder) 
+    {
     this.yearsValue = this.GetYears();
     this.item = this.navParams.data;
     console.log("item : ", this.item);
-    let SDate=new Date( this.item.StartDate);
+    let SDate = new Date(this.item.StartDate);
     this.minDate = this.bloodyIsoString(SDate);
 
     this.EditLeaveForm = this.formBuilder.group({
+       leaveType: ['', Validators.required],
       startDate: ['', Validators.required],
-      noOfDays: ['', Validators.required]
+      noOfDays: [''],
     });
 
   }

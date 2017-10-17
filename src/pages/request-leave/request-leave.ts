@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidatorFn } from "@angular/forms";
-import { LeaveServicesApi, IRequestType, IRequestData, ILeaveRequest, ApprovalStatusEnum } from '../../shared/LeavesService';
+import { LeaveServicesApi, IRequestType, IRequestData, ILeaveRequest, ApprovalStatusEnum, IValidate, IValidationMsg } from '../../shared/LeavesService';
 import { LeaveListPage } from '../leave-list/leave-list';
 import { Chart } from 'chart.js';
 import * as moment from 'moment';
@@ -48,6 +48,7 @@ export class RequestLeavePage {
   public reason: any;
   public fraction: any;
   public minDate: any;
+  public errorArray: Array<string> = [];
   // minDate = this.bloodyIsoString(new Date());
   // minDate = this.bloodyIsoString(new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0)));
 
@@ -83,6 +84,16 @@ export class RequestLeavePage {
     ReasonDesc: "",
     Type: "",
     ApprovalStatus: ApprovalStatusEnum.Draft
+  }
+  validateObj: IValidate = {
+    Id: 0,
+    TypeId: 0,
+    CompanyId: 0,
+    Culture: "",
+    EmpId: 0,
+    EndDate: "",
+    StartDate: null,
+    ReplaceEmpId: 0,
   }
 
   public RequestLeaveForm: FormGroup;
@@ -450,6 +461,10 @@ export class RequestLeavePage {
     }
   }
   //
+  endDateChange(endDate) {
+
+  }
+  //
   numberChange(item) {
     console.log(` numberChange item : ${item}`)
     if (this.EditFlag != 2) {
@@ -681,27 +696,36 @@ export class RequestLeavePage {
 
     if (this.requestObj.Id && this.EditFlag == 1) {
       console.log("We Are Editing");
-      // this.LeaveServices.editLeaveRequest(this.requestObj).subscribe((data) => {
-      //   LeaveListPage.motherArr = LeaveListPage.motherArr.filter((ele) => ele.Id !== this.item.Id);
-      //   console.log(`The Return After Insert ${data}`);
-      //   data.Type = this.requestObj.Type;
-      //   LeaveListPage.motherArr.push(data);
-      //   this.navCtrl.pop();
-      // }, (err) => {
-      //   console.log(`The Return Error ${err}`);
-      // })
+      this.LeaveServices.editLeaveRequest(this.requestObj).subscribe((data) => {
+        if (data.length) {
+          this.errorArray = data;
+        }
+        else {
+          LeaveListPage.motherArr = LeaveListPage.motherArr.filter((ele) => ele.Id !== this.item.Id);
+          console.log(`The Return After Insert ${data}`);
+          data.Type = this.requestObj.Type;
+          LeaveListPage.motherArr.push(data);
+          this.navCtrl.pop();
+        }
+
+      }, (err) => {
+        console.log(`The Return Error ${err}`);
+      })
     }
     else if (!this.requestObj.Id && this.EditFlag == 0) {
       this.requestObj.Id = 0;
       console.log("We Are Inserting");
-      // this.LeaveServices.addLeaveRequest(this.requestObj).subscribe((data) => {
-      //   console.log(`The Return After Insert ${data}`);
-      //   data.Type = this.requestObj.Type;
-      //   LeaveListPage.motherArr.push(data);
-      //   this.navCtrl.pop();
-      // }, (err) => {
-      //   console.log(`The Return Error ${err}`);
-      // })
+      this.LeaveServices.addLeaveRequest(this.requestObj).subscribe((data) => {
+        if (data.length) {
+          this.errorArray = data;
+        } else {
+          data.Type = this.requestObj.Type;
+          LeaveListPage.motherArr.push(data);
+          this.navCtrl.pop();
+        }
+      }, (err) => {
+        console.log(`The Return Error ${err}`);
+      })
     }
 
   }
