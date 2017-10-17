@@ -24,7 +24,7 @@ export interface IDeleteRequest {
     Language: string
 }
 export enum ApprovalStatusEnum {
-    New = 1, Submit, ApprovalEmployeeReview, ManagerReview, Accepted, Approved, CancelBeforeAccepted, CancelAfterAccepted, Rejected
+    Draft = 1, Submit, ApprovalEmployeeReview, ManagerReview, Accepted, Approved, CancelBeforeAccepted, CancelAfterAccepted, Rejected
 }
 export interface ILeaveRequest {
     Id: number,
