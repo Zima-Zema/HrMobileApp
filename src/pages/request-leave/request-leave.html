@@ -42,20 +42,11 @@
 
     </ion-slides>
   </ion-card>
-
-  <!-- 
-  <ion-list>
-    <ion-item>
-      <ion-label>Leave Type</ion-label>
-      <ion-select [(ngModel)]="leaving" (ionChange)="leaveChange(leaving)" interface="popover">
-        <ion-option *ngFor="let item of LeavesData.LeaveTypeList" value="{{item.Id}}">{{item.Name}}</ion-option>
-      </ion-select>
-    </ion-item>
-  </ion-list>
--->
-
-<span *ngIf="errorArray.length > 0">
-  <p *ngFor="let error of errorArray" style="color:crimson">{{error}}</p>
+  <span *ngIf="errorMsgObj.IsError">
+   <p *ngIf="errorMsgObj.AssignError" style="color:crimson">{{errorMsgObj.AssignError}}</p>
+   <p *ngIf="errorMsgObj.DeptPercentError" style="color:crimson">{{errorMsgObj.DeptPercentError}} - {{errorMsgObj.Percentage}}</p>
+   <p *ngIf="errorMsgObj.StarsError" style="color:crimson">{{errorMsgObj.StarsError}}</p>
+   <p *ngIf="errorMsgObj.WaitingError" style="color:crimson">{{errorMsgObj.WaitingError}} - {{errorMsgObj.WaitingMonth}}</p>
 </span>
   <form [formGroup]="RequestLeaveForm" id="RequestLeaveID">
     <ion-item>
@@ -72,7 +63,10 @@
         formControlName="startDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat" [disabled]="EditFlag==2" [min]="minDate"
         [yearValues]="yearsValue"></ion-datetime>
     </ion-item>
-
+    <span *ngIf="errorMsgObj.IsError && (errorMsgObj.HasRequestError || errorMsgObj.IsReplacementError)">
+   <p *ngIf="errorMsgObj.HasRequestError" style="color:crimson">{{errorMsgObj.HasRequestError}}</p>
+   <p *ngIf="errorMsgObj.IsReplacementError" style="color:crimson">{{errorMsgObj.IsReplacementError}}</p>
+</span>
     <ion-item>
       <ion-label floating>No. Of Days</ion-label>
       <ion-input type="number" maxlength="2" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays"
@@ -136,13 +130,13 @@
 
     <ion-item>
       <ion-label floating>End Date</ion-label>
-      <ion-datetime disabled [(ngModel)]="endDate" (ionChanged)="endDateChange(endDate)" formControlName="endDate" [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'"></ion-datetime>
+      <ion-datetime disabled [(ngModel)]="endDate" formControlName="endDate" [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Return Date</ion-label>
       <ion-datetime [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'" disabled [(ngModel)]="returnDate"
-        formControlName="returnDate" ></ion-datetime>
+        formControlName="returnDate"></ion-datetime>
     </ion-item>
 
 
@@ -165,11 +159,13 @@
 
     <ion-item>
       <ion-label floating>Replacement Employee</ion-label>
-      <ion-select [(ngModel)]="replacement" formControlName="replacement" interface="popover" [disabled]="EditFlag==2">
+      <ion-select [(ngModel)]="replacement" formControlName="replacement" (ionChange)="replacementChange(replacement)" interface="popover" [disabled]="EditFlag==2">
         <ion-option *ngFor="let item of Replacements" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
-
+    <span *ngIf="errorMsgObj.IsError && errorMsgObj.ReplacementError">
+   <p *ngIf="errorMsgObj.ReplacementError" style="color:crimson">{{errorMsgObj.ReplacementError}}</p>
+</span>
     <ion-item>
       <ion-label>Comments</ion-label>
       <br>
@@ -180,9 +176,9 @@
 </ion-content>
 <ion-footer *ngIf="EditFlag==0 || EditFlag==1">
 
-  <button ion-button class="submit" form="RequestLeaveID" color="primary" type="submit" (click)="saveLeaves(true)" [disabled]="!RequestLeaveForm.valid">{{BtnTxt}}</button>
+  <button ion-button class="submit" form="RequestLeaveID" color="primary" type="submit" (click)="saveLeaves(true)" [disabled]="!RequestLeaveForm.valid || errorMsgObj.IsError">{{BtnTxt}}</button>
 
-  <button ion-button class="save" form="RequestLeaveID" color="secondary" type="submit" (click)="saveLeaves(false)" [disabled]="!RequestLeaveForm.valid">Save</button>
+  <button ion-button class="save" form="RequestLeaveID" color="secondary" type="submit" (click)="saveLeaves(false)" [disabled]="!RequestLeaveForm.valid || errorMsgObj.IsError">Save</button>
 
 
 
