@@ -70,6 +70,12 @@ export interface IValidate {
     Culture: string,
     ReplaceEmpId: number,
 }
+export interface ICancelVM {
+    RequestId: number,
+    Language: string,
+    CompanyId: number
+}
+
 
 @Injectable()
 export class LeaveServicesApi {
@@ -164,11 +170,24 @@ export class LeaveServicesApi {
                 return err;
             });
     }
-
+    ////////////////////////////////////////////////
     removeLeaveRequest(body: IDeleteRequest): Observable<any> {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}/newApi/Leaves/DeleteLeave`, bodyString, { headers: headers })
+            .map((res: Response) => {
+                console.log("res.json ::: ", res.json());
+                return res.json();
+            }).catch((err) => {
+                console.log("the error in Service ::", err);
+                return err;
+            });
+    }
+    /////////////////////////////////////////////////////
+    CancelAppLeave(body: ICancelVM) {
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}/newApi/Leaves/CancelLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
                 return res.json();
@@ -328,6 +347,8 @@ export class LeaveServicesApi {
     }
 
 
+
+
     getInitialDate(initialDate: Date, calender): Date {
         //20/10 fri 5 
         if (calender.weekend1 < calender.weekend2) {
@@ -352,9 +373,6 @@ export class LeaveServicesApi {
                 return initialDate;
             }
         }
-
-
-
     }
     // OriginalcalcDates(startDate, noOfDayes, calender, leaveType, fraction) {
     //     let startHours;

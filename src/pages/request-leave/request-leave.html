@@ -178,12 +178,6 @@
   </form>
 </ion-content>
 <ion-footer *ngIf="EditFlag==0 || EditFlag==1">
-
   <button ion-button class="submit" form="RequestLeaveID" color="primary" type="submit" (click)="saveLeaves(true)" [disabled]="!RequestLeaveForm.valid || errorMsgObj.IsError">{{BtnTxt}}</button>
-
   <button ion-button class="save" form="RequestLeaveID" color="secondary" type="submit" (click)="saveLeaves(false)" [disabled]="!RequestLeaveForm.valid || errorMsgObj.IsError">Save</button>
-
-
-
-
 </ion-footer>
