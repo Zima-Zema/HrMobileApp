@@ -48,6 +48,7 @@ export class RequestLeavePage {
   public reason: any;
   public fraction: any;
   public minDate: any;
+  public rate: number = 0;
   public errorArray: Array<string> = [];
   // minDate = this.bloodyIsoString(new Date());
   // minDate = this.bloodyIsoString(new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0)));
@@ -475,7 +476,7 @@ export class RequestLeavePage {
   }
   //
   replacementChange(replacement) {
-    console.log("replacementChange",replacement);
+    console.log("replacementChange", replacement);
     this.validateObj.Id = this.item.Id ? this.item.Id : 0;
     this.validateObj.CompanyId = 0;
     this.validateObj.Culture = "ar-EG";
@@ -485,10 +486,11 @@ export class RequestLeavePage {
     this.validateObj.ReplaceEmpId = replacement;
     this.validateObj.TypeId = this.leaveType;
     if (this.endDate) {
-
+      console.log("this.validateObj: ", this.validateObj);
       this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
         this.errorMsgObj = null;
         this.errorMsgObj = data;
+        this.rate = this.errorMsgObj.Stars;
         console.log(this.errorMsgObj);
       })
     }
@@ -562,10 +564,12 @@ export class RequestLeavePage {
       this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toISOString().slice(0, -1);
       this.validateObj.ReplaceEmpId = this.replacement;
       this.validateObj.TypeId = this.leaveType;
+      console.log("this.validateObj: ", this.validateObj);
       if (this.endDate) {
         this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
           this.errorMsgObj = null;
           this.errorMsgObj = data;
+          this.rate = this.errorMsgObj.Stars;
           console.log(this.errorMsgObj);
         })
       }

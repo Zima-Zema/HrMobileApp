@@ -31,3 +31,12 @@
     padding: 5px;
     
 }
+ul {
+    float: none;
+    text-align: center; 
+    &.rating li {
+        padding: 0px 0px !important;
+        background: none;
+        color: #ffb400;
+    }
+  }
