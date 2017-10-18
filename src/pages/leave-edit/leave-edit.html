@@ -10,8 +10,6 @@
 <ion-content padding>
 
   <form [formGroup]="EditLeaveForm" (ngSubmit)="UpdateLeaves()">
-
-
     <ion-item>
       <ion-label floating>Start Date</ion-label>
       <ion-datetime [(ngModel)]="startDate" formControlName="startDate" displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM DD YYYY:HH:mm"

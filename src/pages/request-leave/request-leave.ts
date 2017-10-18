@@ -95,7 +95,19 @@ export class RequestLeavePage {
     StartDate: null,
     ReplaceEmpId: 0,
   }
-
+  errorMsgObj: IValidationMsg = {
+    AssignError: null,
+    DeptPercentError: null,
+    HasRequestError: null,
+    IsError: false,
+    IsReplacementError: null,
+    percentage: null,
+    ReplacmentError: null,
+    Stars: 0,
+    StarsError: null,
+    WaitingError: null,
+    WaitingMonth: null
+  }
   public RequestLeaveForm: FormGroup;
   public LeavesData: Array<any> = [];
   public ChartData: Array<any> = [];
@@ -119,6 +131,7 @@ export class RequestLeavePage {
     private formBuilder: FormBuilder) {
     //Edit Mode
     this.item = this.navParams.data;
+    this.errorMsgObj.IsError = false
     //form validation
     this.RequestLeaveForm = this.formBuilder.group({
       leaveType: ['', Validators.required],
@@ -461,8 +474,24 @@ export class RequestLeavePage {
     }
   }
   //
-  endDateChange(endDate) {
-    console.log("endDateChange");
+  replacementChange(replacement) {
+    console.log("replacementChange",replacement);
+    this.validateObj.Id = this.item.Id ? this.item.Id : 0;
+    this.validateObj.CompanyId = 0;
+    this.validateObj.Culture = "ar-EG";
+    this.validateObj.EmpId = 1072;
+    this.validateObj.EndDate = new Date(new Date(this.endDate).toString()).toISOString().slice(0, -1);
+    this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toISOString().slice(0, -1);
+    this.validateObj.ReplaceEmpId = replacement;
+    this.validateObj.TypeId = this.leaveType;
+    if (this.endDate) {
+
+      this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
+        this.errorMsgObj = null;
+        this.errorMsgObj = data;
+        console.log(this.errorMsgObj);
+      })
+    }
   }
   //
   numberChange(item) {
@@ -510,20 +539,39 @@ export class RequestLeavePage {
   bindForm() {
     // let MilliDate = new Date(this.startDate).setHours(8);
     // this.startDate = new Date(MilliDate);
-    console.log("bindForm startDate", this.startDate);
-    console.log(`bindForm EndDate : ${this.endDate}`);
-    console.log("bindForm Calender : ", this.requestData.Calender)
-    console.log(`bindForm noOfDays: ${this.noOfDays} , fraction : ${this.fraction}`)
-    console.log(`bindForm LeaveType : ${this.requestData.LeaveType}`)
+    // console.log("bindForm startDate", this.startDate);
+    // console.log(`bindForm EndDate : ${this.endDate}`);
+    // console.log("bindForm Calender : ", this.requestData.Calender)
+    // console.log(`bindForm noOfDays: ${this.noOfDays} , fraction : ${this.fraction}`)
+    // console.log(`bindForm LeaveType : ${this.requestData.LeaveType}`)
     // if (this.startDate && this.noOfDays) {
     if (this.startDate && (this.noOfDays || this.fraction)) {
       let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
-      console.log("res : ", res);
+      //console.log("res : ", res);
       this.endDate = this.allowFraction ? new Date(res.endDate).toISOString() : new Date(res.endDate).toISOString();
-      console.log(`End Date ${this.endDate}`);
+      //console.log(`End Date ${this.endDate}`);
       this.returnDate = this.allowFraction ? new Date(res.returnDate).toISOString() : new Date(res.returnDate).toISOString();
       this.startDate = this.allowFraction ? new Date(res.startDate).toISOString() : new Date(res.startDate).toISOString();
       this.balAfter = this.balBefore - Math.abs((Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0)));
+
+      this.validateObj.Id = this.item.Id ? this.item.Id : 0;
+      this.validateObj.CompanyId = 0;
+      this.validateObj.Culture = "ar-EG";
+      this.validateObj.EmpId = 1072;
+      this.validateObj.EndDate = new Date(new Date(this.endDate).toString()).toISOString().slice(0, -1);
+      this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toISOString().slice(0, -1);
+      this.validateObj.ReplaceEmpId = this.replacement;
+      this.validateObj.TypeId = this.leaveType;
+      if (this.endDate) {
+        this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
+          this.errorMsgObj = null;
+          this.errorMsgObj = data;
+          console.log(this.errorMsgObj);
+        })
+      }
+
+
+
 
     }
   }
