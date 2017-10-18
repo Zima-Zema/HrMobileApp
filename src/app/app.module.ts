@@ -32,7 +32,7 @@ import { DoneTaskPageModule } from '../pages/done-task/done-task.module';
 import { LeaveListPageModule } from '../pages/leave-list/leave-list.module';
 import { RequestLeavePageModule } from '../pages/request-leave/request-leave.module';
 import { LeaveEditPageModule } from '../pages/leave-edit/leave-edit.module';
-
+import { CutLeavePageModule} from '../pages/cut-leave/cut-leave.module';
 //from Ali
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -87,7 +87,7 @@ export function creatConfig(): SignalRConfiguration {
     RequestLeavePageModule,
     LeaveEditPageModule,
     SettingsPageModule,
-    
+    CutLeavePageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

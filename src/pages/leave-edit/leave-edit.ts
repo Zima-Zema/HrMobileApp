@@ -45,8 +45,6 @@ export class LeaveEditPage {
     });
 
   }
-
-
   bloodyIsoString(bloodyDate: Date) {
 
     let tzo = -bloodyDate.getTimezoneOffset(),

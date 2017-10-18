@@ -1,0 +1,16 @@
+ 
+
+.ios, .md {
+    page-cut-leave {
+        .scroll-content {
+            background-color: map-get($colors, light);
+        }
+        ion-card-header {
+            font-weight: bold;
+        } 
+    }
+}
+
+.confirm{
+    width:100%
+}

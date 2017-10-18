@@ -159,7 +159,8 @@
 
     <ion-item>
       <ion-label floating>Replacement Employee</ion-label>
-      <ion-select [(ngModel)]="replacement" formControlName="replacement" (ionChange)="replacementChange(replacement)" interface="popover" [disabled]="EditFlag==2">
+      <ion-select [(ngModel)]="replacement" formControlName="replacement" (ionChange)="replacementChange(replacement)" interface="popover"
+        [disabled]="EditFlag==2">
         <ion-option *ngFor="let item of Replacements" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
@@ -175,12 +176,6 @@
   </form>
 </ion-content>
 <ion-footer *ngIf="EditFlag==0 || EditFlag==1">
-
   <button ion-button class="submit" form="RequestLeaveID" color="primary" type="submit" (click)="saveLeaves(true)" [disabled]="!RequestLeaveForm.valid || errorMsgObj.IsError">{{BtnTxt}}</button>
-
   <button ion-button class="save" form="RequestLeaveID" color="secondary" type="submit" (click)="saveLeaves(false)" [disabled]="!RequestLeaveForm.valid || errorMsgObj.IsError">Save</button>
-
-
-
-
 </ion-footer>

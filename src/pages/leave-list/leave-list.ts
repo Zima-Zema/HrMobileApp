@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController, AlertController } from 'ionic-angular';
 import { RequestLeavePage } from '../request-leave/request-leave';
 import { LeaveEditPage } from '../leave-edit/leave-edit';
-import { LeaveServicesApi, IRequestType, IDeleteRequest } from '../../shared/LeavesService';
+import { LeaveServicesApi, IRequestType, IDeleteRequest, ICancelVM } from '../../shared/LeavesService';
+import { CutLeavePage} from '../cut-leave/cut-leave';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -22,6 +23,11 @@ export class LeaveListPage {
     1072
     //17
   }
+  CancelVMObj: ICancelVM = {
+    Language: "ar-EG",
+    CompanyId: 0,
+    RequestId: 0
+  }
   public LeavesData: Array<any> = [];
   public LeavesCount: number = 0;
   public img_color: any;
@@ -29,7 +35,10 @@ export class LeaveListPage {
   public queryText: string;
   public Leaves_Arr: Array<any> = [];
   public static motherArr = [];
-  public apprNewDate: string = new Date().toDateString();
+  public apprNewDate: any = new Date().toLocaleDateString();
+  //moment(new Date(new Date().setHours(0,0,0,0))).format().slice(0,-6);
+
+  //new Date().toDateString();
   public apprStartDate: string;
   DeleteObj: IDeleteRequest = {
     Id: 0,
@@ -43,17 +52,14 @@ export class LeaveListPage {
     public toastCtrl: ToastController,
     public alertCtrl: AlertController) {
   }
-
   public toggle(): void {
     this.toggled = this.toggled ? false : true;
   }
 
-  getMoment(data) {
-    return moment(data).format('ddd, MMM DD, YYYY')
-  }
-  getSDate(Sdate) {
-    return moment(Sdate).format('ddd MMM DD YYYY')
-  }
+  // getMoment(data) {
+  //   // console.log("moment is called")
+  //   return moment(data).format('ddd, MMM DD, YYYY');
+  // }
   ionViewDidLoad() {
     this.Leaves_Arr = [];
     LeaveListPage.motherArr = [];
@@ -94,9 +100,12 @@ export class LeaveListPage {
   ionViewWillEnter() {
     this.toggled = false;
     if (LeaveListPage.motherArr.length > this.Leaves_Arr.length) {
+
+
       this.Leaves_Arr = _.chain(LeaveListPage.motherArr).groupBy('Type').toPairs()
         .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
       this.LeavesCount = LeaveListPage.motherArr.length;
+      console.log("Repeate ME ionViewWillEnter");
     }
 
   }
@@ -117,6 +126,7 @@ export class LeaveListPage {
     });
     this.Leaves_Arr = this.LeavesFilter;
     this.LeavesFilter = [];
+    console.log("Repeate ME filterItems");
   }
   ShowLeaves(item) {
     item.readOnly = true;
@@ -129,7 +139,7 @@ export class LeaveListPage {
     item.readOnly = false;
     this.navCtrl.push(RequestLeavePage, item);
   }
-  DeleteLeave(itemLeave) {
+  ConfirmDelete(itemLeave) {
     const alert = this.alertCtrl.create({
       title: 'Confirm Remove',
       message: 'Are you sure you want to remove this leave request?',
@@ -141,14 +151,23 @@ export class LeaveListPage {
         {
           text: 'Yes',
           handler: () => {
-            this.ConfirmDelete(itemLeave)
+            console.log("Confirm Delete : ", itemLeave, "--", typeof (itemLeave));
+            if (typeof (itemLeave) == "number") {
+              console.log("Approved");
+              this.DeleteAppLeaves(itemLeave);
+            }
+            else if (typeof (itemLeave) == "object") {
+              console.log("Normal delete");
+              this.DeleteLeave(itemLeave)
+            }
+            //
           }
         }
       ]
     });
     alert.present();
   }
-  ConfirmDelete(item) {
+  DeleteLeave(item) {
     this.DeleteObj.Id = item.Id;
     console.log("this.DeleteObj ", this.DeleteObj)
     this.LeaveServices.removeLeaveRequest(this.DeleteObj)
@@ -161,9 +180,10 @@ export class LeaveListPage {
         this.Leaves_Arr = _.chain(LeaveListPage.motherArr).groupBy('Type').toPairs()
           .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
         this.LeavesCount--;
+        console.log("Repeate ME ConfirmDelete");
         //
         let toast = this.toastCtrl.create({
-          message: "Leave Is Deletede Successfully...",
+          message: "Leave Is Deleted Successfully...",
           duration: 3000,
           position: 'bottom'
         });
@@ -171,7 +191,7 @@ export class LeaveListPage {
       }, (err: Error) => {
         console.log("error : ", err.message);
         let toast = this.toastCtrl.create({
-          message: "Error in Deleting Leaves, Please Try again later.",
+          message: "Error in Deleting Leave, Please Try again later.",
           duration: 3000,
           position: 'bottom'
         });
@@ -181,10 +201,38 @@ export class LeaveListPage {
   EditAppLeaves(item) {
     this.navCtrl.push(LeaveEditPage, item);
   }
-  DeleteAppLeaves(item) {
+  DeleteAppLeaves(itemId) {
+    this.CancelVMObj.RequestId = itemId;
+    this.LeaveServices.CancelAppLeave(this.CancelVMObj).subscribe((data) => {
+      console.log(data);
+      if (data.length == 0) {
+        LeaveListPage.motherArr.forEach((ele) => {
+          if (ele.Id == itemId) {
+            ele.ApprovalStatus = 8;
+            return;
+          }
+        })
+        this.Leaves_Arr = _.chain(LeaveListPage.motherArr).groupBy('Type').toPairs()
+          .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
+      }
+      let toast = this.toastCtrl.create({
+        message: "Leave Is cancelled Successfully...",
+        duration: 3000,
+        position: 'bottom'
+      });
+      toast.present();
+    }, (e: Error) => {
+      console.log(e.message);
+      let toast = this.toastCtrl.create({
+        message: "Error in Cancelling Leave, Please Try again later.",
+        duration: 3000,
+        position: 'bottom'
+      });
+      toast.present();
+    })
 
   }
   CutAppLeaves(item) {
-
+    this.navCtrl.push(CutLeavePage,item);
   }
 }
