@@ -24,6 +24,7 @@ export class RequestLeavePage {
 
   public closeDatepicker() {
     this.datepickerDirective.modal.dismiss();
+    
   }
   doughnutChart: any;
   barChart: any;
@@ -356,13 +357,16 @@ export class RequestLeavePage {
       //
       if (data.LeaveType.AbsenceType == 8) {
         this.minDate = new Date();
+
         this.localDateval = new Date();
-        //console.log(`Fatma: ${this.minDate}`);
-        //this.startDate = new Date();
+        this.localDateval = this.LeaveServices.getInitialDate(this.localDateval,data.Calender);
+
       }
       else {
         this.minDate = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
         this.localDateval = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+        this.localDateval = this.LeaveServices.getInitialDate(this.localDateval,data.Calender);
+
       }
       this.reservedDays = data.requestVal.ReservedDays
       this.balBefore = data.requestVal.BalBefore;

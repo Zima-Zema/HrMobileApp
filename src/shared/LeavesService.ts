@@ -243,9 +243,11 @@ export class LeaveServicesApi {
     }
 
     getOffDays(calender) {
-        let arr: Array<any> = calender.StanderdHolidays
         let year = new Date(calender.WorkStartTime).getFullYear();
         let offdays: Array<any> = [];
+        calender.CustomHolidays.forEach(element => {
+            offdays.push(new Date(element));
+        });
         calender.StanderdHolidays.forEach((ele) => {
             offdays.push(new Date(year, ele.SMonth, ele.SDay))
         })
@@ -286,6 +288,35 @@ export class LeaveServicesApi {
         return offdays;
     }
 
+
+    getInitialDate(initialDate: Date, calender): Date {
+//20/10 fri 5 
+        if (calender.weekend1 < calender.weekend2) {
+            if (initialDate.getDay() == calender.weekend1) {
+                initialDate = new Date(new Date(initialDate.getTime() + (2 * 24 * 60 * 60 * 1000)).setHours(0, 0));
+                return initialDate;
+            } else if (initialDate.getDay() == calender.weekend2) {
+                initialDate = new Date(new Date(initialDate.getTime() + (1 * 24 * 60 * 60 * 1000)).setHours(0, 0));
+                return initialDate;
+            }else{
+                return initialDate;
+            }
+        }
+        else{
+            if (initialDate.getDay() == calender.weekend1) {
+                initialDate = new Date(new Date(initialDate.getTime() + (1 * 24 * 60 * 60 * 1000)).setHours(0, 0));
+                return initialDate;
+            } else if (initialDate.getDay() == calender.weekend2) {
+                initialDate = new Date(new Date(initialDate.getTime() + (2 * 24 * 60 * 60 * 1000)).setHours(0, 0));
+                return initialDate;
+            }else{
+                return initialDate;
+            }
+        }
+        
+
+
+    }
     // OriginalcalcDates(startDate, noOfDayes, calender, leaveType, fraction) {
     //     let startHours;
     //     let startMin;
