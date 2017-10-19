@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, } from 'ionic-angular';
 import { NotificationsPage } from '../notifications/notifications';
 import { TasksPage } from '../tasks/tasks';
 import { NotificationServiceApi, INotifyParams, INotification } from '../../shared/NotificationService';
@@ -11,6 +11,7 @@ import { IUser } from "../../shared/IUser";
 import { LeaveListPage } from '../leave-list/leave-list';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsPage } from '../settings/settings';
+import { BackgroundMode } from '@ionic-native/background-mode';
 @IonicPage()
 @Component({
   selector: 'page-welcome',
@@ -32,14 +33,25 @@ export class WelcomePage {
   get notificationNumber() {
     return WelcomePage.notificationNumber;
   }
-  constructor(public navCtrl: NavController,
+  constructor(
+    public platform: Platform,
+    public navCtrl: NavController,
     public navParams: NavParams,
     public notifyApi: NotificationServiceApi,
     private signalr: SignalR,
     public localNotifications: LocalNotifications,
     private storage: Storage,
-    translate: TranslateService
+    translate: TranslateService,
+    private backgroundMode: BackgroundMode
   ) {
+    this.platform.registerBackButtonAction((event) => {
+      if (this.navCtrl.length() <= 1) {
+        this.backgroundMode.moveToBackground();
+      }
+    });
+
+
+
     this.lang = translate.getDefaultLang();
     if (this.lang === 'ar') {
       this.menuDir = "right";

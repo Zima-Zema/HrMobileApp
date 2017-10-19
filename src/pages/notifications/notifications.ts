@@ -26,6 +26,8 @@ export class NotificationsPage {
   private start: number = 0;
   errorMsg: string = undefined;
   constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private loadingCtrl: LoadingController, private modalCtrl: ModalController, private storage: Storage) {
+    let view = this.navCtrl.getActive();
+    console.log("The Bloody Modal>>",view);
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
