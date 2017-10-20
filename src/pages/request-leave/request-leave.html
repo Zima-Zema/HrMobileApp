@@ -53,7 +53,7 @@
     </ion-item>
   </ion-list>
 -->
-  <form [formGroup]="RequestLeaveForm" (ngSubmit)="saveLeaves()" id="RequestLeaveID">
+  <form [formGroup]="RequestLeaveForm" id="RequestLeaveID">
 
     <ion-item>
       <ion-label floating>Leave Type</ion-label>
@@ -65,10 +65,9 @@
 
     <ion-item>
       <ion-label floating>Start Date</ion-label>
-      <ion-datetime ion-datepicker [(ngModel)]="startDate" (ionChanged)="dateChange($event)" 
-        [disabledDates]="filteredArr" [(value)]="localDateval" formControlName="startDate" 
-        [displayFormat]="displayFormat" [pickerFormat]="pickFormat"
-        [disabled]="EditFlag==2" [min]="minDate" [yearValues]="yearsValue"  ></ion-datetime>
+      <ion-datetime ion-datepicker [(ngModel)]="startDate" (ionChanged)="dateChange($event)" [disabledDates]="filteredArr" [(value)]="localDateval"
+        formControlName="startDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat" [disabled]="EditFlag==2" [min]="minDate"
+        [yearValues]="yearsValue"></ion-datetime>
     </ion-item>
 
     <ion-item>
@@ -179,5 +178,12 @@
   </form>
 </ion-content>
 <ion-footer *ngIf="EditFlag==0 || EditFlag==1">
-  <button ion-button block form="RequestLeaveID" color="primary" type="submit" [disabled]="!RequestLeaveForm.valid">{{BtnTxt}}</button>
+ 
+    <button ion-button class="submit" form="RequestLeaveID" color="primary" type="submit" (click)="saveLeaves(true)" [disabled]="!RequestLeaveForm.valid">{{BtnTxt}}</button>
+
+    <button ion-button class="save" form="RequestLeaveID" color="secondary" type="submit" (click)="saveLeaves(false)" [disabled]="!RequestLeaveForm.valid">Save</button>
+
+
+
+
 </ion-footer>

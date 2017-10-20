@@ -534,10 +534,12 @@ export class RequestLeavePage {
     // }
     return null;
   }
-  saveLeaves() {
-    console.log("startDate", this.startDate);
-    console.log("endDate", this.endDate);
-    console.log("returnDate", this.returnDate);
+  saveLeaves(item) {
+     console.log(typeof item);
+     console.log("submit>>", item);
+    // console.log("startDate", this.startDate);
+    // console.log("endDate", this.endDate);
+    // console.log("returnDate", this.returnDate);
     this.requestObj.TypeId = this.leaveType;
     this.requestObj.EmpId = 1072;
     this.requestObj.CompanyId = 0;
@@ -553,6 +555,7 @@ export class RequestLeavePage {
     this.requestObj.ReplaceEmpId = Number.parseInt(this.replacement);
     this.requestObj.BalanceBefore = this.balBefore;
     this.requestObj.BalBefore = this.balBefore;
+    this.requestObj.submit = item;
 
     console.log(this.requestObj);
     this.LeaveServices.addLeaveRequest(this.requestObj).subscribe((data) => {
