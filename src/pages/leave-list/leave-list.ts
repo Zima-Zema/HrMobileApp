@@ -46,6 +46,9 @@ export class LeaveListPage {
     this.toggled = this.toggled ? false : true;
   }
 
+ getMoment(data){
+  return moment(data).format('ddd, MMM DD, YYYY')
+ }
   ionViewDidLoad() {
     this.Leaves_Arr = [];
     this.motherArr = [];
@@ -54,13 +57,14 @@ export class LeaveListPage {
     });
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
+        console.log("From Db : ",data);
         this.LeavesCount = data.length;
         this.motherArr = data;
-        data.forEach(element => {
-          element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
-          element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');
-          element.EndDate = moment(element.EndDate).format('ddd, MMM DD, YYYY');
-        });
+        // data.forEach(element => {
+        //   element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
+        //   element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');
+        //   element.EndDate = moment(element.EndDate).format('ddd, MMM DD, YYYY');
+        // });
 
         this.LeavesData = _.chain(data).groupBy('Type').toPairs()
           .map(item => _.zipObject(['divisionType', 'divisionTypes'], item)).value();

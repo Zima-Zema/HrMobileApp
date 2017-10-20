@@ -67,31 +67,26 @@
       <ion-label floating>Start Date</ion-label>
       <ion-datetime ion-datepicker [(ngModel)]="startDate" (ionChanged)="dateChange($event)" [disabledDates]="filteredArr" [(value)]="localDateval"
         formControlName="startDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat" [disabled]="EditFlag==2" [min]="minDate"
-        [yearValues]="yearsValue"></ion-datetime>
+        [yearValues]="yearsValue" ></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label floating>No. Of Days</ion-label>
-      <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays" [min]="1"
-        [disabled]="EditFlag==2" (ionFocus)="FocusInput()" (ionBlur)="BlurInput(noOfDays)"></ion-input>
+      <ion-input type="number"  maxlength="2" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays" [min]="1"
+        [disabled]="EditFlag==2" ></ion-input>
     </ion-item>
-    <span *ngIf="!RequestLeaveForm.controls.reason.valid && (RequestLeaveForm.controls.reason.dirty) && EditFlag!=2">
+    <span *ngIf="!RequestLeaveForm.controls.noOfDays.valid && (RequestLeaveForm.controls.noOfDays.dirty) && EditFlag!=2">
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('RequiredDays')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('RequiredDays')}}</p>  
-    </span>
-
-
-    <span *ngIf="!RequestLeaveForm.controls.noOfDays.valid  && (RequestLeaveForm.controls.noOfDays.dirty) && EditFlag!=2 ">
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('maximum')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('maximum')}} - {{requestData.LeaveType.MaxDays}}</p>
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('allowed')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('allowed')}} - {{allowedDays}}</p>      
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('noLeave')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('noLeave')}}</p>      
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('general')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('general')}}</p>      
-      
-    </span>
+    </span> 
 
     <ion-item *ngIf="allowFraction">
       <ion-label floating>Fraction</ion-label>
       <ion-select [(ngModel)]="fraction" (ionChange)="fractionChange(fraction)" formControlName="fraction" interface="popover"
-        [disabled]="EditFlag==2 " (ionFocus)="FocusInputFrac()" (ionBlur)="BlurInputFrac(fraction)">
+        [disabled]="EditFlag==2 " >
         <ion-option value="0">No Fraction</ion-option>
         <ion-option value="+0.25">Quarter At Start Day</ion-option>
         <ion-option value="+0.5">Half At Start Day</ion-option>
@@ -99,7 +94,9 @@
         <ion-option value="-0.5">Half At End Day</ion-option>
       </ion-select>
     </ion-item>
-
+    <span *ngIf="!RequestLeaveForm.controls.fraction.valid && (RequestLeaveForm.controls.fraction.dirty) && EditFlag!=2">
+      <p *ngIf="RequestLeaveForm.get('fraction').hasError('RequiredDays')" style="color:crimson ">{{RequestLeaveForm.get('fraction').getError('RequiredDays')}}</p>  
+    </span>
 
     <ion-item>
       <ion-label floating>Leave Reason</ion-label>
