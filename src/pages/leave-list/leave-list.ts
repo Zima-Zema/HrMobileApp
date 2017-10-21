@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 import { RequestLeavePage } from '../request-leave/request-leave';
 import { LeaveEditPage } from '../leave-edit/leave-edit';
 import { LeaveServicesApi, IRequestType, IDeleteRequest, ICancelVM } from '../../shared/LeavesService';
-import { CutLeavePage} from '../cut-leave/cut-leave';
+import { CutLeavePage } from '../cut-leave/cut-leave';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -36,7 +36,6 @@ export class LeaveListPage {
   public Leaves_Arr: Array<any> = [];
   public static motherArr = [];
   public apprNewDate: any = new Date().toLocaleDateString();
-  //moment(new Date(new Date().setHours(0,0,0,0))).format().slice(0,-6);
 
   //new Date().toDateString();
   public apprStartDate: string;
@@ -151,16 +150,32 @@ export class LeaveListPage {
         {
           text: 'Yes',
           handler: () => {
-            console.log("Confirm Delete : ", itemLeave, "--", typeof (itemLeave));
-            if (typeof (itemLeave) == "number") {
-              console.log("Approved");
-              this.DeleteAppLeaves(itemLeave);
-            }
-            else if (typeof (itemLeave) == "object") {
-              console.log("Normal delete");
-              this.DeleteLeave(itemLeave)
-            }
+            //   if (typeof (itemLeave) == "number") {
+            //   this.DeleteAppLeaves(itemLeave);
+            //  }
+            // else if (typeof (itemLeave) == "object") {
+            this.DeleteLeave(itemLeave)
+            // }
             //
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+  ConfirmAppCancel(itemLeave) {
+    const alert = this.alertCtrl.create({
+      title: 'Confirm Cancel',
+      message: 'Are you sure you want to cancel this leave request?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.DeleteAppLeaves(itemLeave);
           }
         }
       ]
@@ -233,6 +248,6 @@ export class LeaveListPage {
 
   }
   CutAppLeaves(item) {
-    this.navCtrl.push(CutLeavePage,item);
+    this.navCtrl.push(CutLeavePage, item);
   }
 }

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidatorFn } from "@angular/forms";
 import { LeaveServicesApi, IRequestType, IRequestData, ILeaveRequest, ApprovalStatusEnum, IValidate, IValidationMsg } from '../../shared/LeavesService';
 import { LeaveListPage } from '../leave-list/leave-list';
@@ -129,7 +129,9 @@ export class RequestLeavePage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private loadingCtrl: LoadingController,
+    private ToastCtrl: ToastController) {
     //Edit Mode
     this.item = this.navParams.data;
     this.errorMsgObj.IsError = false
@@ -231,36 +233,6 @@ export class RequestLeavePage {
   public disableFlagFarc: boolean = true;
   public disableFlagNoOfDays: boolean = true;
   public disableStartDate: boolean = true;
-
-  // FocusInput() {
-  //   console.log(`Focus`);
-  //   this.disableFlagFarc = true;
-  // }
-  // FocusInputFrac() { this.disableFlagNoOfDays = true; }
-  // BlurInput(noOfDays) {
-  //   console.log(`BlurInput : ${noOfDays}`);
-  //   if (noOfDays) { this.disableFlagFarc = true; }
-  //   else { this.disableFlagFarc = false; }
-  // }
-  // BlurInputFrac(fraction) {
-  //   if (fraction == 0) { this.disableFlagNoOfDays = false; }
-  //   else if (fraction && fraction != 0) { this.disableFlagNoOfDays = true; }
-  //   else { this.disableFlagNoOfDays = false; }
-  // }
-
-  // BlurDateTime(startDate) {
-  //   console.log(` BlurDateTime(startDate) : ${startDate}`)
-  //   if (startDate == null || !startDate) {
-  //     console.log(`BlurDateTime Enable`)
-  //     this.disableFlagNoOfDays = true;
-  //     this.disableFlagFarc = true;
-  //   }
-  //   else if (startDate) {
-  //     console.log(`BlurDateTime Disable`)
-  //     this.disableFlagNoOfDays = false;
-  //     this.disableFlagFarc = false;
-  //   }
-  // }
 
   bloodyIsoString(bloodyDate: Date) {
     let tzo = -bloodyDate.getTimezoneOffset(),
@@ -599,11 +571,32 @@ export class RequestLeavePage {
   }
   static isRequired(control: FormControl) {
     console.log("isRequired : control.value : ", control.value);
-    if (Number.parseInt(control.value) < 0) {
+    let x = Number.parseInt(control.value)
+    if (x < 0) {
       console.log(`Generaaaaaaaaaal`)
       return {
         "general": "zero or negative not allowed."
       }
+    }
+    if (x > RequestLeavePage.maxDays && RequestLeavePage.maxDays != null) {
+      return {
+        "maximum": "bigger than Maximum"
+      }
+    }
+    if (control.value > RequestLeavePage.allowed) {
+      return {
+        "allowed": "bigger than allowed"
+      };
+    }
+    if (isNaN(control.value)) {
+      return {
+        "general": "not a number"
+      };
+    }
+    if (control.value % 1 !== 0) {
+      return {
+        "general": "not a whole number"
+      };
     }
     else {
       return null;
@@ -613,31 +606,8 @@ export class RequestLeavePage {
 
   static isDaysRequired(control: FormControl) {
     console.log("isDaysRequired :  control.value : ", control.value);
-    if (control.value >= 1) { //to make sure the coming value is no. of days not a fraction
-      let x = Number.parseInt(control.value);
-      console.log(`x :: ${x}`);
-      if (x > RequestLeavePage.maxDays && RequestLeavePage.maxDays != null) {
-        return {
-          "maximum": "bigger than Maximum"
-        }
-      }
-      if (control.value > RequestLeavePage.allowed) {
-        return {
-          "allowed": "bigger than allowed"
-        };
-      }
-      if (isNaN(control.value)) {
-        return {
-          "general": "not a number"
-        };
-      }
-      if (control.value % 1 !== 0) {
-        return {
-          "general": "not a whole number"
-        };
-      }
-
-    }
+    // if (control.value >= 1) { //to make sure the coming value is no. of days not a fraction
+    // }
     if (RequestLeavePage.FullData == false && (control.value == null || control.value == "")) {
       console.log(`2ol no 3arda`);
       return {
@@ -656,46 +626,6 @@ export class RequestLeavePage {
     }
   }
 
-  // static isValid(control: FormControl) {
-  //   console.log("validationAllowed", RequestLeavePage.allowed);
-  //   if (RequestLeavePage.allowed == null) {
-  //     return {
-  //       "noLeave": "Select Leave Type First"
-  //     }
-  //   }
-  //   let x = (Number.parseInt(control.value) + Number.parseFloat(RequestLeavePage.frac.toString()));
-  //   console.log(`x :: ${x}`)
-  //   if (x > RequestLeavePage.maxDays && RequestLeavePage.maxDays != null) {
-  //     return {
-  //       "maximum": "bigger than Maximum"
-  //     }
-  //   }
-
-  //   if (control.value > RequestLeavePage.allowed) {
-  //     return {
-  //       "allowed": "bigger than allowed"
-  //     };
-  //   }
-  //   if (isNaN(control.value)) {
-  //     return {
-  //       "general": "not a number"
-  //     };
-  //   }
-
-  //   if (control.value % 1 !== 0) {
-  //     return {
-  //       "general": "not a whole number"
-  //     };
-  //   }
-
-  //   if (Number.parseInt(control.value) <= 0) {
-  //     return {
-  //       "general": "zero or negative not allowed."
-  //     }
-  //   }
-
-  //   return null;
-  // }
 
   static isValidReqReason(control: FormControl) {
     console.log(`first here RequestLeavePage.mustReason : ${RequestLeavePage.mustReason}`)
@@ -748,36 +678,91 @@ export class RequestLeavePage {
 
     if (this.requestObj.Id && this.EditFlag == 1) {
       console.log("We Are Editing");
-      this.LeaveServices.editLeaveRequest(this.requestObj).subscribe((data) => {
-        if (data.length) {
-          this.errorArray = data;
-        }
-        else {
-          LeaveListPage.motherArr = LeaveListPage.motherArr.filter((ele) => ele.Id !== this.item.Id);
-          console.log(`The Return After Insert ${data}`);
-          data.Type = this.requestObj.Type;
-          LeaveListPage.motherArr.push(data);
-          this.navCtrl.pop();
-        }
+      //Loader
+      let EditLeavesLoader = this.loadingCtrl.create({
+        content: "Editing Leaves..."
+      });
+      //Toaster
+      let EditErrorToast = this.ToastCtrl.create({
+        message: "Error in updating Leave, Please Try again later.",
+        duration: 3000,
+        position: 'middle'
+      });
+      let EditSuccessToast = this.ToastCtrl.create({
+        message: 'Leave is edited successfully.',
+        duration: 2000,
+        position: 'bottom'
+      });
 
-      }, (err) => {
-        console.log(`The Return Error ${err}`);
-      })
+      EditLeavesLoader.present().then(() => {
+        this.LeaveServices.editLeaveRequest(this.requestObj).subscribe((data) => {
+          if (data.length) {
+            this.errorArray = data; //error coming
+            EditLeavesLoader.dismiss().then(() => {
+              EditErrorToast.present();
+            });
+          }
+          else {
+            LeaveListPage.motherArr = LeaveListPage.motherArr.filter((ele) => ele.Id !== this.item.Id);
+            console.log(`The Return After Insert ${data}`);
+            data.Type = this.requestObj.Type;
+            LeaveListPage.motherArr.push(data);
+            this.navCtrl.pop();
+            EditLeavesLoader.dismiss().then(() => {
+              EditSuccessToast.present();
+            });
+          }
+
+        }, (err) => {
+          console.log(`The Return Error ${err}`);
+          EditLeavesLoader.dismiss().then(() => {
+            EditErrorToast.present();
+          });
+        });
+      });//EditLeaves Loader
     }
     else if (!this.requestObj.Id && this.EditFlag == 0) {
       this.requestObj.Id = 0;
       console.log("We Are Inserting");
-      this.LeaveServices.addLeaveRequest(this.requestObj).subscribe((data) => {
-        if (data.length) {
-          this.errorArray = data;
-        } else {
-          data.Type = this.requestObj.Type;
-          LeaveListPage.motherArr.push(data);
-          this.navCtrl.pop();
-        }
-      }, (err) => {
-        console.log(`The Return Error ${err}`);
-      })
+      //Loader
+      let AddLeavesLoader = this.loadingCtrl.create({
+        content: "Adding Leaves..."
+      });
+      //Toaster
+      let AddErrorToast = this.ToastCtrl.create({
+        message: "Error in Adding Leave, Please Try again later.",
+        duration: 3000,
+        position: 'middle'
+      });
+      let AddSuccessToast = this.ToastCtrl.create({
+        message: 'Leave is Added successfully.',
+        duration: 2000,
+        position: 'bottom'
+      });
+
+      AddLeavesLoader.present().then(() => {
+        this.LeaveServices.addLeaveRequest(this.requestObj).subscribe((data) => {
+          if (data.length) {
+            this.errorArray = data;
+            AddLeavesLoader.dismiss().then(() => {
+              AddErrorToast.present();
+            })
+          } else {
+            data.Type = this.requestObj.Type;
+            LeaveListPage.motherArr.push(data);
+            this.navCtrl.pop();
+            AddLeavesLoader.dismiss().then(() => {
+              AddSuccessToast.present();
+            })
+          }
+        }, (err) => {
+          console.log(`The Return Error ${err}`);
+          AddLeavesLoader.dismiss().then(() => {
+            AddErrorToast.present();
+          })
+        })
+      })//AddLeaves Loader
+
     }
 
   }
@@ -809,5 +794,46 @@ export class RequestLeavePage {
   //     this.disableFlagNoOfDays = false;
   //     this.disableFlagFarc = false;
   //   }
+  // }
+  ///////////////////////////////////////////
+   // static isValid(control: FormControl) {
+  //   console.log("validationAllowed", RequestLeavePage.allowed);
+  //   if (RequestLeavePage.allowed == null) {
+  //     return {
+  //       "noLeave": "Select Leave Type First"
+  //     }
+  //   }
+  //   let x = (Number.parseInt(control.value) + Number.parseFloat(RequestLeavePage.frac.toString()));
+  //   console.log(`x :: ${x}`)
+  //   if (x > RequestLeavePage.maxDays && RequestLeavePage.maxDays != null) {
+  //     return {
+  //       "maximum": "bigger than Maximum"
+  //     }
+  //   }
+
+  //   if (control.value > RequestLeavePage.allowed) {
+  //     return {
+  //       "allowed": "bigger than allowed"
+  //     };
+  //   }
+  //   if (isNaN(control.value)) {
+  //     return {
+  //       "general": "not a number"
+  //     };
+  //   }
+
+  //   if (control.value % 1 !== 0) {
+  //     return {
+  //       "general": "not a whole number"
+  //     };
+  //   }
+
+  //   if (Number.parseInt(control.value) <= 0) {
+  //     return {
+  //       "general": "zero or negative not allowed."
+  //     }
+  //   }
+
+  //   return null;
   // }
 }
