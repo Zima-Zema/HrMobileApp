@@ -310,7 +310,7 @@ export class LeaveServicesApi {
             offdays.push(new Date(element));
         });
         calender.StanderdHolidays.forEach((ele) => {
-            offdays.push(new Date(year, ele.SMonth, ele.SDay))
+            offdays.push(new Date(year, ele.SMonth - 1, ele.SDay))
         })
         for (let month = 1; month <= 12; month++) {
             let tdays = new Date(year, month, 0).getDate();
