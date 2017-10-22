@@ -125,7 +125,17 @@ export class RequestLeavePage {
   public static mustNoOfDays: number = null;
   pickFormat: string;
   displayFormat: string;
-
+  //Loader
+  public LoadingMsg = this.loadingCtrl.create({
+    spinner: 'dots'
+  });
+  //Toaster
+  public ErrorMsgToast = this.ToastCtrl.create({
+    message: "There Is Error, Please Try Again Later...",
+    duration: 3000,
+    position: 'middle'
+  });
+  //
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
@@ -152,18 +162,27 @@ export class RequestLeavePage {
       fraction: ['']
 
     });
+
     // this.leaving = 1067;  //annual leave
-    this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((Konafa) => {
-      console.log("leavetyps>>>", Konafa);
-      this.LeavesData = Konafa.LeaveTypeList;
-      this.ChartData = Konafa.ChartData;
-      this.Replacements = Konafa.Replacements;
-      this.LeaveReasonList = Konafa.LeaveReasonList;
-      this.loadCharts(this.ChartData);
-    }, (e) => {
-    })
+    this.LoadingMsg.present().then(() => {
+      this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((Konafa) => {
+        console.log("leavetyps>>>", Konafa);
+        this.LeavesData = Konafa.LeaveTypeList;
+        this.ChartData = Konafa.ChartData;
+        this.Replacements = Konafa.Replacements;
+        this.LeaveReasonList = Konafa.LeaveReasonList;
+        this.loadCharts(this.ChartData);
+        this.LoadingMsg.dismiss();
+      }, (e) => {
+        this.LoadingMsg.dismiss().then(() => {
+          this.ErrorMsgToast.present();
+        })
+      })
+    });//loader
     this.yearsValue = this.GetYears();
   }
+
+
   // // EditFlag = 0 ---> Request  , EditFlag = 1 ---> Edit , EditFlad = 2 --->show
   ionViewWillEnter() {
     if (Object.keys(this.item).length > 0) {
@@ -330,6 +349,7 @@ export class RequestLeavePage {
 
     });
   }
+  
   // events
   public chartClicked(e: any): void {
     //console.log(e);
@@ -350,85 +370,90 @@ export class RequestLeavePage {
     //console.log("itemSelected ", item);
     this.RequestDataObj.TypeId = item;
     this.RequestDataObj.StartDate = new Date().toDateString();
-    this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
+    this.LoadingMsg.present().then(() => {
 
-      console.log("data GetRequestLeaveData ", data);
-      this.workhour = data.Calender.WorkHours;
-      this.filteredArr = this.LeaveServices.getOffDays(data.Calender);
-      this.requestData = data;
-      this.allowedDays = data.requestVal.AllowedDays;
-      RequestLeavePage.FullData = data.LeaveType.AllowFraction;
-      this.allowFraction = data.LeaveType.AllowFraction;
-      RequestLeavePage.maxDays = data.requestVal.MaxDays;
-      RequestLeavePage.allowed = data.requestVal.AllowedDays;
-      RequestLeavePage.mustReason = data.LeaveType.MustAddCause;
-      if (RequestLeavePage.mustReason == true) {
-        if (this.EditFlag == 0) { //Request Mode -- > set ddl to 0
-          this.RequestLeaveForm.controls['reason'].setValue(0);
-        }
-        this.RequestLeaveForm.controls['reason'].markAsDirty({ onlySelf: true });
-      }
-      //
-      if (!RequestLeavePage.FullData && this.EditFlag != 2) {
-        console.log("No 3arda");
-        this.RequestLeaveForm.controls['noOfDays'].setValidators([RequestLeavePage.isDaysRequired, RequestLeavePage.isRequired]);
-        this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity();
-        this.RequestLeaveForm.controls['noOfDays'].markAsDirty({ onlySelf: true });
-      }
-      else if (RequestLeavePage.FullData && this.EditFlag != 2) {
-        console.log("3arda");
-        this.RequestLeaveForm.controls['noOfDays'].setValidators([RequestLeavePage.isDaysRequired, RequestLeavePage.isRequired]);
-        this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity(); //call
-        this.RequestLeaveForm.controls['fraction'].setValidators(RequestLeavePage.isDaysRequired);
-        this.RequestLeaveForm.controls['fraction'].updateValueAndValidity(); //call
-        this.RequestLeaveForm.controls['noOfDays'].markAsDirty({ onlySelf: true });
-        this.RequestLeaveForm.controls['fraction'].markAsDirty({ onlySelf: true });
-      }
-      //
-      if (!this.allowFraction) {
-        this.fraction = undefined;
-        this.pickFormat = 'MMM DD YYYY';
-        this.displayFormat = "MMM DD, YYYY"
-      }
-      else { //العارضه
-        this.pickFormat = 'MMM DD YYYY';
-        this.displayFormat = "MMM DD, YYYY hh:mm A";
-      }
-      //
-      if (data.LeaveType.AbsenceType == 8) {
-        this.minDate = new Date();
-        this.localDateval = new Date();
-        this.localDateval = this.LeaveServices.getInitialDate(this.localDateval, data.Calender);
-      }
-      else {
-        this.minDate = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
-        this.localDateval = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
-        this.localDateval = this.LeaveServices.getInitialDate(this.localDateval, data.Calender);
-      }
-      this.reservedDays = data.requestVal.ReservedDays
-      this.balBefore = data.requestVal.BalBefore;
-      if (this.EditFlag == 1 || this.EditFlag == 2) {
-        if (new Date(this.item.EndDate).getHours() > new Date(this.item.ReturnDate).getHours()) {
-          this.fraction = -(this.noOfDays % 1);
-          this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? this.fraction : 0));
-          this.noOfDays = Math.trunc(this.noOfDays);
-        } else {
-          //doing Magic here
-          this.fraction = this.noOfDays % 1;
-          this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? this.fraction : 0));
-          this.noOfDays = Math.trunc(this.noOfDays);
-        }
-        if (this.noOfDays > 0) {
-          this.bindForm();
-        }
-      }
-      else {
-        this.balAfter = undefined;
-      }
 
-    }, (err) => {
-      //console.log("error ", err)
-    })
+      this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
+        console.log("data GetRequestLeaveData ", data);
+        this.workhour = data.Calender.WorkHours;
+        this.filteredArr = this.LeaveServices.getOffDays(data.Calender);
+        this.requestData = data;
+        this.allowedDays = data.requestVal.AllowedDays;
+        RequestLeavePage.FullData = data.LeaveType.AllowFraction;
+        this.allowFraction = data.LeaveType.AllowFraction;
+        RequestLeavePage.maxDays = data.requestVal.MaxDays;
+        RequestLeavePage.allowed = data.requestVal.AllowedDays;
+        RequestLeavePage.mustReason = data.LeaveType.MustAddCause;
+        if (RequestLeavePage.mustReason == true) {
+          if (this.EditFlag == 0) { //Request Mode -- > set ddl to 0
+            this.RequestLeaveForm.controls['reason'].setValue(0);
+          }
+          this.RequestLeaveForm.controls['reason'].markAsDirty({ onlySelf: true });
+        }
+        //
+        if (!RequestLeavePage.FullData && this.EditFlag != 2) {
+          console.log("No 3arda");
+          this.RequestLeaveForm.controls['noOfDays'].setValidators([RequestLeavePage.isDaysRequired, RequestLeavePage.isRequired]);
+          this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity();
+          this.RequestLeaveForm.controls['noOfDays'].markAsDirty({ onlySelf: true });
+        }
+        else if (RequestLeavePage.FullData && this.EditFlag != 2) {
+          console.log("3arda");
+          this.RequestLeaveForm.controls['noOfDays'].setValidators([RequestLeavePage.isDaysRequired, RequestLeavePage.isRequired]);
+          this.RequestLeaveForm.controls['noOfDays'].updateValueAndValidity(); //call
+          this.RequestLeaveForm.controls['fraction'].setValidators(RequestLeavePage.isDaysRequired);
+          this.RequestLeaveForm.controls['fraction'].updateValueAndValidity(); //call
+          this.RequestLeaveForm.controls['noOfDays'].markAsDirty({ onlySelf: true });
+          this.RequestLeaveForm.controls['fraction'].markAsDirty({ onlySelf: true });
+        }
+        //
+        if (!this.allowFraction) {
+          this.fraction = undefined;
+          this.pickFormat = 'MMM DD YYYY';
+          this.displayFormat = "MMM DD, YYYY"
+        }
+        else { //العارضه
+          this.pickFormat = 'MMM DD YYYY';
+          this.displayFormat = "MMM DD, YYYY hh:mm A";
+        }
+        //
+        if (data.LeaveType.AbsenceType == 8) {
+          this.minDate = new Date();
+          this.localDateval = new Date();
+          this.localDateval = this.LeaveServices.getInitialDate(this.localDateval, data.Calender);
+        }
+        else {
+          this.minDate = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+          this.localDateval = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+          this.localDateval = this.LeaveServices.getInitialDate(this.localDateval, data.Calender);
+        }
+        this.reservedDays = data.requestVal.ReservedDays
+        this.balBefore = data.requestVal.BalBefore;
+        if (this.EditFlag == 1 || this.EditFlag == 2) {
+          if (new Date(this.item.EndDate).getHours() > new Date(this.item.ReturnDate).getHours()) {
+            this.fraction = -(this.noOfDays % 1);
+            this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? this.fraction : 0));
+            this.noOfDays = Math.trunc(this.noOfDays);
+          } else {
+            //doing Magic here
+            this.fraction = this.noOfDays % 1;
+            this.balAfter = this.balBefore - (Number.parseFloat(this.noOfDays) + (this.fraction ? this.fraction : 0));
+            this.noOfDays = Math.trunc(this.noOfDays);
+          }
+          if (this.noOfDays > 0) {
+            this.bindForm();
+          }
+        }
+        else {
+          this.balAfter = undefined;
+        }
+        this.LoadingMsg.dismiss();
+      }, (err) => {
+        this.LoadingMsg.dismiss().then(() => {
+          this.ErrorMsgToast.present();
+        })
+      });
+    });//loader
   }
   dateChange(item) {
     //this.ResetMiniForm();
@@ -469,12 +494,19 @@ export class RequestLeavePage {
     this.validateObj.TypeId = this.leaveType;
     if (this.endDate) {
       console.log("this.validateObj: ", this.validateObj);
+      this.LoadingMsg.present().then(()=>{    
       this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
         this.errorMsgObj = null;
         this.errorMsgObj = data;
         this.rate = this.errorMsgObj.Stars;
         console.log(this.errorMsgObj);
+        this.LoadingMsg.dismiss();
+      },(e)=>{
+        this.LoadingMsg.dismiss().then(()=>{
+          this.ErrorMsgToast.present();
+        })
       })
+      });//loader
     }
   }
   //
@@ -548,12 +580,19 @@ export class RequestLeavePage {
       this.validateObj.TypeId = this.leaveType;
       console.log("this.validateObj: ", this.validateObj);
       if (this.endDate) {
+        this.LoadingMsg.present().then(()=>{     
         this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
           this.errorMsgObj = null;
           this.errorMsgObj = data;
           this.rate = this.errorMsgObj.Stars;
           console.log(this.errorMsgObj);
+          this.LoadingMsg.dismiss();
+        },(e)=>{
+          this.LoadingMsg.dismiss().then(()=>{
+            this.ErrorMsgToast.present();
+          })
         })
+        });//Loader
       }
     }
   }

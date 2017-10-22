@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { IValidationMsg, IValidate, IRequestData, LeaveServicesApi, IEdit } from '../../shared/LeavesService';
-
+import { LeaveListPage } from '../leave-list/leave-list'
 @IonicPage()
 @Component({
   selector: 'page-leave-edit',
@@ -74,10 +74,23 @@ export class LeaveEditPage {
   //
   public EditLeaveForm: FormGroup;
 
+  //Loader
+  public LoadingMsg = this.loadingCtrl.create({
+    spinner: 'dots'
+  });
+  //Toaster
+  public ErrorMsgToast = this.toastCtrl.create({
+    message: "There Is Error, Please Try Again Later...",
+    duration: 3000,
+    position: 'middle'
+  });
+  //
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private LeaveServices: LeaveServicesApi,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController) {
 
     this.comingLeave = this.navParams.data;
     this.actualNOfDays = this.comingLeave.NofDays;
@@ -97,14 +110,23 @@ export class LeaveEditPage {
     //
     this.RequestDataObj.TypeId = this.comingLeave.TypeId;
     this.RequestDataObj.StartDate = new Date().toDateString();
-    this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
-      console.log("GetRequestLeaveData : ", data)
-      this.calender = data.Calender;
-      this.leaveType = data.LeaveType;
-      this.filteredArr = this.LeaveServices.getOffDays(data.Calender);
-      this.localDateval = new Date();
-      this.localDateval = this.LeaveServices.getInitialDate(this.localDateval, data.Calender)
-    });
+    this.LoadingMsg.present().then(() => {
+
+
+      this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
+        console.log("GetRequestLeaveData : ", data)
+        this.calender = data.Calender;
+        this.leaveType = data.LeaveType;
+        this.filteredArr = this.LeaveServices.getOffDays(data.Calender);
+        this.localDateval = new Date();
+        this.localDateval = this.LeaveServices.getInitialDate(this.localDateval, data.Calender);
+        this.LoadingMsg.dismiss();
+      }, (e) => {
+        this.LoadingMsg.dismiss().then(() => {
+          this.ErrorMsgToast.present();
+        })
+      });
+    });//loader
   }
 
   //
@@ -150,12 +172,20 @@ export class LeaveEditPage {
       this.validateObj.TypeId = this.comingLeave.TypeId;
       console.log("this.validateObj: ", this.validateObj);
       if (this.actualEndDate) {
-        this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
-          this.errorMsgObj = null;
-          this.errorMsgObj = data;
-          this.rate = this.errorMsgObj.Stars;
-          console.log(this.errorMsgObj);
-        })
+        this.LoadingMsg.present().then(() => {
+
+          this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
+            this.errorMsgObj = null;
+            this.errorMsgObj = data;
+            this.rate = this.errorMsgObj.Stars;
+            console.log(this.errorMsgObj);
+            this.LoadingMsg.dismiss();
+          }, (e) => {
+            this.LoadingMsg.dismiss().then(() => {
+              this.ErrorMsgToast.present();
+            })
+          })
+        });//Loader
       }
     }
   }
@@ -168,13 +198,22 @@ export class LeaveEditPage {
     this.editObj.Language = "en-GB";
     this.editObj.RequestId = this.comingLeave.Id;
     console.log("editObj", this.editObj);
-    this.LeaveServices.editApprovedLeave(this.editObj).subscribe((data) => {
-      if (data.length !== 0) {
+    this.LoadingMsg.present().then(() => {
+      this.LeaveServices.editApprovedLeave(this.editObj).subscribe((data) => {
+        LeaveListPage.motherArr = LeaveListPage.motherArr.filter((ele) => ele.Id !== this.comingLeave.Id);
+        this.comingLeave.StartDate = this.actualStartDate;
+        this.comingLeave.ActualEndDate = this.actualEndDate;
+        this.comingLeave.EndDate = this.actualEndDate;
+        LeaveListPage.motherArr.push(this.comingLeave);
+        
         this.navCtrl.pop();
-      }
-    }, (error) => {
-
-    });
+        this.LoadingMsg.dismiss()
+      }, (error) => {
+        this.LoadingMsg.dismiss().then(() => {
+          this.ErrorMsgToast.present();
+        })
+      });
+    })
   }
 
 }

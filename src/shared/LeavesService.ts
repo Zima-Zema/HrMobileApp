@@ -82,13 +82,13 @@ export interface IBreak {
     BreakEndDate: string,
     BreakNofDays: number
 }
-export interface IEdit{
+export interface IEdit {
     RequestId: number,
     Language: string,
     CompanyId: number,
-    EditedStartDate:string,
-    EditedEndDate:string,
-    EditedReturnDate:string
+    EditedStartDate: string,
+    EditedEndDate: string,
+    EditedReturnDate: string
 }
 
 
@@ -225,18 +225,18 @@ export class LeaveServicesApi {
             });
     }
     ///////////////////////////////////////////////////////
-editApprovedLeave(body:IEdit){
-    let bodyString = JSON.stringify(body);
-    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-    return this._http.post(`${this.baseURL}/newApi/Leaves/EditLeave`, bodyString, { headers: headers })
-        .map((res: Response) => {
-            console.log("res.json ::: ", res.json());
-            return res.json();
-        }).catch((err) => {
-            console.log("the error in Service ::", err);
-            return err;
-        });
-}
+    editApprovedLeave(body: IEdit) {
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}/newApi/Leaves/EditLeave`, bodyString, { headers: headers })
+            .map((res: Response) => {
+                console.log("res.json ::: ", res.json());
+                return res.json();
+            }).catch((err) => {
+                console.log("the error in Service ::", err);
+                return err;
+            });
+    }
     ///////////////////////////////////////////////////////
     addDays(startDate, noOfDayes, calender, leaveType): Date {
         let count = 0;
