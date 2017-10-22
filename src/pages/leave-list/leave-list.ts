@@ -68,8 +68,6 @@ export class LeaveListPage {
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
         console.log("From Db : ", data);
-
-
         this.LeavesCount = data.length;
         LeaveListPage.motherArr = data;
         // data.forEach(element => {

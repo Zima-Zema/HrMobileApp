@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { LeaveServicesApi, IRequestData, IBreak } from "../../shared/LeavesService"
 import { FormGroup, Validators, FormBuilder } from "@angular/forms";
-
+import { LeaveListPage } from '../leave-list/leave-list'
 @IonicPage()
 @Component({
   selector: 'page-cut-leave',
@@ -49,14 +49,18 @@ export class CutLeavePage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private LeaveServices: LeaveServicesApi,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private ToastCtrl: ToastController,
+    private LoadingCtrl: LoadingController) {
     //
     this.LeaveComing = this.navParams.data;
-
+    console.log("LeaveComing : ", this.LeaveComing)
+    //
     console.log("coming Data : ", this.LeaveComing);
     this.startDate = this.LeaveComing.StartDate;
     this.noFDays = this.LeaveComing.NofDays;
     this.endDate = this.LeaveComing.EndDate;
+    this.ReturnDate = this.LeaveComing.ReturnDate;
     //
     this.CutLeaveForm = this.formBuilder.group({
       ReturnDate: ['', Validators.required],
@@ -102,9 +106,9 @@ export class CutLeavePage {
     console.log(` dateChange item : ${item}`)
     if (item) {
       this.ReturnDate = this.bloodyIsoString(new Date(new Date(item).toDateString())).slice(0, -15);
-      console.log("dateChange", this.ReturnDate);
+      //console.log("dateChange", this.ReturnDate);
       let res = this.LeaveServices.cutLeave(this.startDate, this.ReturnDate, this.noFDays, this.endDate, this.calender, this.leaveType, this.BalBefore);
-      console.log(res);
+      console.log("dateChange res : ", res)
       this.ActualendDate = new Date(res.endDate).toISOString();
       this.NofDaysAfter = res.noFDays;
       this.balAfter = res.balance;
@@ -116,16 +120,51 @@ export class CutLeavePage {
   }
 
   CutLeaves() {
+    //Loader
+    let CutLoader = this.LoadingCtrl.create({
+      content: "Cutting Leave..."
+    })
+    //Toaster
+    let CutErrorToast = this.ToastCtrl.create({
+      message: "Error in cutting this leave , please try again later.",
+      duration: 3000,
+      position: 'middle'
+    });
+    let CutSuccessToast = this.ToastCtrl.create({
+      message: "Success to cut this Leave.",
+      duration: 2000,
+      position: 'bottom'
+    })
+    //
     this.breakObj.CompanyId = 0;
     this.breakObj.Language = "en-GB";
     this.breakObj.RequestId = this.LeaveComing.Id;
-    this.breakObj.BreakEndDate = new Date(this.ActualendDate).toLocaleDateString();
+    this.breakObj.BreakEndDate = new Date(new Date(this.ActualendDate).toString()).toISOString().slice(0, -1); //new Date(this.ActualendDate).toLocaleDateString();
     this.breakObj.BreakNofDays = this.NofDaysAfter;
-    this.LeaveServices.breakLeave(this.breakObj).subscribe((data)=>{
-      if (data.length) {
-        this.navCtrl.pop();
-      }
-    })
+    //
+    CutLoader.present().then(() => {
+      this.LeaveServices.breakLeave(this.breakObj).subscribe((data) => {
+        if (data.length) {
+          CutLoader.dismiss().then(() => {
+            CutErrorToast.present();
+          })
+        }
+        else {
+          LeaveListPage.motherArr = LeaveListPage.motherArr.filter((ele) => ele.Id !== this.LeaveComing.Id);
+          this.LeaveComing.ActualEndDate = this.breakObj.BreakEndDate;
+          this.LeaveComing.EndDate = this.breakObj.BreakEndDate;
+          this.LeaveComing.NofDays = this.breakObj.BreakNofDays;
+          //this.breakObj.RequestId;
+          LeaveListPage.motherArr.push(this.LeaveComing);
+          console.log("mother Array : ", LeaveListPage.motherArr);
+          console.log("breakObj : ", this.breakObj)
+          this.navCtrl.pop();
+          CutLoader.dismiss().then(() => {
+            CutSuccessToast.present();
+          })
+        }
+      })
+    }); // Cut Loader
     console.log("Cut: ", this.breakObj);
   }
 
