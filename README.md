@@ -1,4 +1,11 @@
-<b> HrMobileApp </b>
+### HrMobileApp 
+
+## Features
+
+* add and delete tasks, edit their title, description, start and due dates, set their priority and status
+* support for subtasks
+* smart collections showing you your important, current and upcoming tasks
+* simply drag and drop tasks to other calendars or make them subtasks
 
 
 <img src="https://image.ibb.co/j7si36/1.png" width="40%">         <img src="https://image.ibb.co/dwoqi6/3.png" width="40%">
