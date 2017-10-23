@@ -26,8 +26,7 @@ Substitute ios for android if not on a Mac.
 
 # HrMobileApp
 
-<img src="https://image.ibb.co/j7si36/1.png" width="50%">
-<img src="https://image.ibb.co/dwoqi6/3.png" width="50%">
+<img src="https://image.ibb.co/j7si36/1.png" width="40%"><img src="https://image.ibb.co/dwoqi6/3.png" width="40%">
 <img src="https://image.ibb.co/f9H5GR/5.png" width="50%">
 <img src="https://image.ibb.co/n0Y1qm/6.png" width="50%">
 <img src="https://image.ibb.co/hv09bR/15.png" width="50%">
