@@ -27,4 +27,4 @@ Substitute ios for android if not on a Mac.
 # HrMobileApp
 
 
-![alt text](https://image.ibb.co/j77ai6/31.png)
+![alt text](https://image.ibb.co/j77ai6/31.png){:height="50%" width="50%"}
