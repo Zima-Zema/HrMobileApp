@@ -4,6 +4,7 @@ import { NotificationDetailsPage } from '../notification-details/notification-de
 import { NotificationServiceApi, INotification, INotifyParams } from "../../shared/NotificationService";
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
+import { WelcomePage } from '../welcome/welcome';
 
 
 @IonicPage()
@@ -21,13 +22,19 @@ export class NotificationsPage {
   }
   user: IUser;
   //http://localhost:36207/SpecialData/Photos/0/1054.jpeg?dummy=1503580792563
-  baseUrl: string = "http://www.enterprise-hr.com/";
-  notifications: Array<INotification> = [];
+  baseUrl: string = "";
+  public static notificationsList: Array<INotification> = [];
+  public notifications: Array<INotification> = [];
   private start: number = 0;
   errorMsg: string = undefined;
   constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private loadingCtrl: LoadingController, private modalCtrl: ModalController, private storage: Storage) {
     let view = this.navCtrl.getActive();
-    console.log("The Bloody Modal>>",view);
+    console.log("The Bloody Modal>>", view);
+    this.storage.get("BaseURL").then((val) => {
+      this.baseUrl = val;
+      console.log("BaseUrl From Notity services>>>", this.baseUrl);
+
+    });
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
@@ -35,10 +42,7 @@ export class NotificationsPage {
         this.notifyParams.Language = this.user.Language;
         this.notifyParams.CompanyId = this.user.CompanyId;
       }
-
     });
-
-
   }
 
   ionViewWillEnter() {
@@ -54,8 +58,10 @@ export class NotificationsPage {
       content: "Loading...",
     });
     loader.present().then(() => {
+      NotificationsPage.notificationsList = [];
       this.notifications = [];
       this.notifyApi.getNotifications(this.start, this.notifyParams).subscribe((data) => {
+        NotificationsPage.notificationsList = data.value;
         this.notifications = data.value;
         loader.dismiss();
         //this.flag=false;
@@ -97,6 +103,7 @@ export class NotificationsPage {
       //   this.flag=false;
       // }
       for (let notification of data.value) {
+        NotificationsPage.notificationsList.push(notification);
         this.notifications.push(notification);
       }
 
@@ -116,15 +123,17 @@ export class NotificationsPage {
   }
   /////////////////////////////////////////
   notificationTapped(event, notification) {
-    // let modal = this.modalCtrl.create(NotificationDetailsPage, notification);
-    // modal.present();
-    // modal.onDidDismiss((data) => {
-    //   console.log("ModalReturn", data);
-    //   this.notifications.find(n => n.Id == data).Read = true;
-    // })
-    this.notifications.find(n => n.Id == notification.Id).Read = true;
-    this.navCtrl.push(NotificationDetailsPage, notification);
-    
+    let modal = this.modalCtrl.create(NotificationDetailsPage, notification);
+    modal.present();
+    modal.onDidDismiss((data) => {
+      console.log("ModalReturn", data);
+      NotificationsPage.notificationsList.find(n => n.Id == data).Read = true;
+      this.notifications.find(n => n.Id == data).Read = true;
+      WelcomePage.notificationNumber = NotificationsPage.notificationsList.filter((val) => val.Read == false).length;
+    })
+    // this.notifications.find(n => n.Id == notification.Id).Read = true;
+    // this.navCtrl.push(NotificationDetailsPage, notification);
+
 
   }
 

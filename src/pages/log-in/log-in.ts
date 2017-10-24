@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController, AlertController } from 'ionic-angular';
 import { WelcomePage } from '../welcome/welcome';
 import { ForceChangePasswordPage } from '../force-change-password/force-change-password';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
 import { LoginServiceApi } from "../../shared/loginService";
 import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
@@ -27,7 +27,7 @@ export class LogInPage {
     public passwordExisted: boolean = false;
     public type = 'password';
     public showPass = false;
-
+    static baseUrl: string;
     constructor(
         private logInService: LoginServiceApi,
         private navCtrl: NavController,
@@ -74,7 +74,7 @@ export class LogInPage {
 
     createForm() {
         this.logInForm = this.formBuilder.group({
-            companyName: [null, Validators.compose([Validators.required])],
+            companyName: [null, Validators.compose([Validators.required, LogInPage.isValidUrl])],
             userName: [null, Validators.compose([Validators.required])],
             password: [null, Validators.compose([Validators.required])],
             rememberMe: false
@@ -121,7 +121,7 @@ export class LogInPage {
                     this.User = data;
                     if (this.User.ResetPassword) {
                         loader.dismiss();
-                        this.navCtrl.push(ForceChangePasswordPage,{UserName:userName,Password:password});
+                        this.navCtrl.push(ForceChangePasswordPage, { UserName: userName, Password: password });
                     }
                     else {
                         if (rememberMe) {
@@ -179,7 +179,17 @@ export class LogInPage {
                 break;
         }
     }
-    tasks(){
+
+    static isValidUrl(control: FormControl) {
+        let regExp = /(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g; ///[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
+        // if (!regExp.test(control.value)) {
+        //     return { 'wrongurl': "Invalid Url ex: www.example.com" };
+        // }
+        return null;
+    }
+
+    tasks() {
         this.navCtrl.setRoot(WelcomePage);
         this.navCtrl.popToRoot();
     }

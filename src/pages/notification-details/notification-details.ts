@@ -46,7 +46,9 @@ export class NotificationDetailsPage {
       this.notifyDate = moment(this.notify.SentDate).format('LL');
       this.notifySubject = this.notify.From;
       this.notifyMsg = this.notify.Message;
+      console.log('this.updateObj before',this.updateObj)
       if (this.notify.Read == false) {
+        console.log('this.updateObj',this.updateObj);
         this.notifyApi.updateNotification(this.updateObj).subscribe((data) => {
           console.log("updateNotification");
           WelcomePage.notificationNumber--;

@@ -12,6 +12,7 @@ import { LeaveListPage } from '../leave-list/leave-list';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsPage } from '../settings/settings';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import * as _ from 'lodash';
 @IonicPage()
 @Component({
   selector: 'page-welcome',
@@ -29,7 +30,7 @@ export class WelcomePage {
   user: IUser;
   menuDir;
   lang;
-  baseUrl: string = "http://www.enterprise-hr.com/";
+  baseUrl: string = "";
   get notificationNumber() {
     return WelcomePage.notificationNumber;
   }
@@ -70,28 +71,33 @@ export class WelcomePage {
         this.user_name = udata.UserName;
         this.user_email = udata.Email;
       }
-      this.signalr.connect().then((connection) => {
-        console.log("connection>>>", connection);
+      this.storage.get('BaseURL').then((val) => {
+        this.baseUrl = val;
+        this.signalr.connect({
+          url: val,
+        }).then((connection) => {
+          console.log("connection>>>", connection);
 
-        connection.listenFor('AppendMessage').subscribe((message: INotification) => {
-          console.log("the message>>>", message);
-          WelcomePage.notificationNumber++;
-          this.localNotifications.registerPermission().then((grant) => {
-            this.localNotifications.schedule({
-              id: message.Id,
-              text: message.Message,
-              at: new Date().getTime(),
-              led: 'FF0000',
-              title: message.From,
-              icon: '' + this.baseUrl + 'SpecialData/Photos/' + this.user.CompanyId + '/' + message.PicUrl + '?dummy=1503580792563',
-              data: message
-            });
+          connection.listenFor('AppendMessage').subscribe((message: INotification) => {
+            console.log("the message>>>", message);
+            WelcomePage.notificationNumber++;
+            this.localNotifications.registerPermission().then((grant) => {
+              this.localNotifications.schedule({
+                id: message.Id,
+                text: message.Message,
+                at: new Date().getTime(),
+                led: 'FF0000',
+                title: message.From,
+                icon: '' + this.baseUrl + 'SpecialData/Photos/' + this.user.CompanyId + '/' + message.PicUrl + '?dummy=1503580792563',
+                data: message
+              });
 
-          })
+            })
 
 
+          });
         });
-      });
+      })
 
       this.localNotifications.on('click', (data) => {
         this.navCtrl.push(NotificationsPage);
@@ -102,15 +108,21 @@ export class WelcomePage {
   }
 
   ionViewWillEnter() {
+    if (NotificationsPage.notificationsList && NotificationsPage.notificationsList.length) {
+      WelcomePage.notificationNumber = NotificationsPage.notificationsList.filter((val) => val.Read == false).length;
+    }
+    else {
+      if (WelcomePage.notificationNumber < 0 || WelcomePage.notificationNumber == undefined) {
 
-    if (WelcomePage.notificationNumber < 0 || WelcomePage.notificationNumber == undefined) {
-      this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
-        console.log("Notification Number>>>", data);
-        WelcomePage.notificationNumber = data;
-        console.log("WelcomePage.notificationNumber>>>", WelcomePage.notificationNumber);
-      }, (err) => {
-        console.log("WelcomePage.notificationNumber Error>>>", err);
-      });
+        this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
+          console.log("Notification Number>>>", data);
+          WelcomePage.notificationNumber = data;
+          console.log("WelcomePage.notificationNumber>>>", WelcomePage.notificationNumber);
+        }, (err) => {
+          console.log("WelcomePage.notificationNumber Error>>>", err);
+        });
+
+      }
     }
   }
 

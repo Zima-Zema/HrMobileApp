@@ -7,7 +7,7 @@ export interface ILogin {
     UserName: string;
     Password: string;
     ResetPassword: string;
-    confirm:string
+    confirm: string
 }
 
 @Injectable()
@@ -34,17 +34,17 @@ export class LoginServiceApi {
                 () => {
                     return new Promise((resolve, reject) => {
                         if (this.storageKeys.indexOf("BaseURL") == -1) {
-                            if (companyName.toUpperCase() == "DefaultCompany".toUpperCase()) {
-                                this.baseURL = ('http://www.enterprise-hr.com/');
-                                this._storage.set("BaseURL", this.baseURL).then(() => {
-                                    this._storage.set("CompanyName", companyName).then(() => {
-                                        resolve();
-                                    });
+                            //if (companyName.toUpperCase() == "DefaultCompany".toUpperCase()) {
+                            this.baseURL = (`http://${companyName}/`);
+                            this._storage.set("BaseURL", this.baseURL).then(() => {
+                                this._storage.set("CompanyName", companyName).then(() => {
+                                    resolve();
                                 });
-                            }
-                            else {
-                                resolve("Invalid Company Name !!");
-                            }
+                            });
+                            //}
+                            // else {
+                            //     resolve("Invalid Company Name !!");
+                            // }
                         }
                         else {
                             this._storage.get("BaseURL").then((val) => {
@@ -80,6 +80,7 @@ export class LoginServiceApi {
                                             resolve("Error in Server .. Try agian later !!");
                                         }
                                         else if (error.type == 3) {
+                                            this._storage.clear();
                                             resolve("Error in Service URL .. Please Contact Customer Service !!");
                                         }
                                         else {
@@ -168,7 +169,7 @@ export class LoginServiceApi {
         });
     }
 
-    resetPassword(body:ILogin){
+    resetPassword(body: ILogin) {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/Security/Reset`, bodyString, { headers: headers }).retry(1)
@@ -181,5 +182,5 @@ export class LoginServiceApi {
                 return err;
             });
     }
-    
+
 }

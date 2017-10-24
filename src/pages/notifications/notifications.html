@@ -1,10 +1,9 @@
-
 <ion-header>
 
   <ion-navbar>
     <ion-title>Notifications</ion-title>
     <ion-buttons end>
-      <button ion-button (click)="ionViewWillEnter()">
+      <button ion-button (click)="ionViewDidLoad()">
         <ion-icon name="refresh" md="md-refresh" class="closeBtn"></ion-icon>
       </button>
     </ion-buttons>
@@ -17,21 +16,21 @@ notifications.length
   <ion-note *ngIf="errorMsg != undefined">{{errorMsg}}</ion-note>
   <ion-note *ngIf="notifications.length == 0 && errorMsg == undefined">You Have NO Notification Right Now</ion-note>
   <ion-list [virtualScroll]="notifications" approxItemHeight="50px">
-    <ion-item *virtualItem="let notification" class="item-content"  (click)="notificationTapped($event,notification)" [ngClass]="{'item-content':!notification.Read}">
+    <ion-item *virtualItem="let notification" class="item-content" (click)="notificationTapped($event,notification)" [ngClass]="{'item-content':!notification.Read}">
       <ion-avatar item-start>
-     
+
         <ion-img src="{{baseUrl}}SpecialData/Photos/{{user.CompanyId}}/{{notification.PicUrl}}?dummy=1503580792563">
         </ion-img>
-        
+
       </ion-avatar>
       <h2>{{notification.From}}</h2>
       <h3 [innerHTML]="notification.Message"></h3>
-     
+
     </ion-item>
   </ion-list>
 
-<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
-  <ion-infinite-scroll-content></ion-infinite-scroll-content>
-</ion-infinite-scroll>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 </ion-content>
