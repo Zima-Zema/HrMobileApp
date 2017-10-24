@@ -97,10 +97,7 @@ export class LeaveServicesApi {
 
     private baseURL: string =
     'http://192.168.1.17:36207';
-    //
     // "http://www.enterprise-hr.com";
-
-
     constructor(private _http: Http, private _storage: Storage) {
     }
 
@@ -311,7 +308,7 @@ export class LeaveServicesApi {
                 endDate = new Date(endDate).setHours((WorkEndHour + WorkingHours), WorkStartMin, 0, 0);//16 //For hours
                 returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType).setHours(WorkStartHour, WorkStartMin, 0, 0);
             }
-            if (hasFraction && fraction != 0) {
+            if (hasFraction) {
                 console.log("yaaaaaaaaaaah, hasFraction");
                 if (fraction >= 0) {
                     let WorkEndHour: number = new Date(startDate).getHours(); //8

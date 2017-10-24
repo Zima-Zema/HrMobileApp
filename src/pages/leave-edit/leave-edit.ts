@@ -75,7 +75,7 @@ export class LeaveEditPage {
   public EditLeaveForm: FormGroup;
 
   //Loader
-  public LoadingMsg = this.loadingCtrl.create({
+  public LoadingCons = this.loadingCtrl.create({
     spinner: 'dots'
   });
   //Toaster
@@ -110,7 +110,7 @@ export class LeaveEditPage {
     //
     this.RequestDataObj.TypeId = this.comingLeave.TypeId;
     this.RequestDataObj.StartDate = new Date().toDateString();
-    this.LoadingMsg.present().then(() => {
+    this.LoadingCons.present().then(() => {
 
 
       this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
@@ -120,9 +120,9 @@ export class LeaveEditPage {
         this.filteredArr = this.LeaveServices.getOffDays(data.Calender);
         this.localDateval = new Date();
         this.localDateval = this.LeaveServices.getInitialDate(this.localDateval, data.Calender);
-        this.LoadingMsg.dismiss();
+        this.LoadingCons.dismiss();
       }, (e) => {
-        this.LoadingMsg.dismiss().then(() => {
+        this.LoadingCons.dismiss().then(() => {
           this.ErrorMsgToast.present();
         })
       });
@@ -158,6 +158,11 @@ export class LeaveEditPage {
 
   }
   bindForm() {
+    //Loader
+    let LoadingValidate = this.loadingCtrl.create({
+      spinner: 'dots'
+    });
+    //
     if (this.actualStartDate && this.actualNOfDays) {
       let res = this.LeaveServices.calcDates(this.actualStartDate, this.actualNOfDays, this.calender, this.leaveType, 0);
       this.actualEndDate = new Date(res.endDate).toISOString();
@@ -172,16 +177,16 @@ export class LeaveEditPage {
       this.validateObj.TypeId = this.comingLeave.TypeId;
       console.log("this.validateObj: ", this.validateObj);
       if (this.actualEndDate) {
-        this.LoadingMsg.present().then(() => {
+        LoadingValidate.present().then(() => {
 
           this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
             this.errorMsgObj = null;
             this.errorMsgObj = data;
             this.rate = this.errorMsgObj.Stars;
             console.log(this.errorMsgObj);
-            this.LoadingMsg.dismiss();
+            LoadingValidate.dismiss();
           }, (e) => {
-            this.LoadingMsg.dismiss().then(() => {
+            LoadingValidate.dismiss().then(() => {
               this.ErrorMsgToast.present();
             })
           })
@@ -191,6 +196,11 @@ export class LeaveEditPage {
   }
 
   UpdateLeaves() {
+    //Loader
+    let LoadingApprov = this.loadingCtrl.create({
+      spinner: 'dots'
+    });
+    //
     this.editObj.EditedStartDate = new Date(this.actualStartDate).toLocaleDateString();
     this.editObj.EditedEndDate = new Date(this.actualEndDate).toLocaleDateString();
     this.editObj.EditedReturnDate = new Date(this.actualReturnDate).toLocaleDateString();
@@ -198,18 +208,18 @@ export class LeaveEditPage {
     this.editObj.Language = "en-GB";
     this.editObj.RequestId = this.comingLeave.Id;
     console.log("editObj", this.editObj);
-    this.LoadingMsg.present().then(() => {
+    LoadingApprov.present().then(() => {
       this.LeaveServices.editApprovedLeave(this.editObj).subscribe((data) => {
         LeaveListPage.motherArr = LeaveListPage.motherArr.filter((ele) => ele.Id !== this.comingLeave.Id);
         this.comingLeave.StartDate = this.actualStartDate;
         this.comingLeave.ActualEndDate = this.actualEndDate;
         this.comingLeave.EndDate = this.actualEndDate;
         LeaveListPage.motherArr.push(this.comingLeave);
-        
+
         this.navCtrl.pop();
-        this.LoadingMsg.dismiss()
+        LoadingApprov.dismiss()
       }, (error) => {
-        this.LoadingMsg.dismiss().then(() => {
+        LoadingApprov.dismiss().then(() => {
           this.ErrorMsgToast.present();
         })
       });
