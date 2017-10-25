@@ -21,6 +21,7 @@
     "passRequir":"Password is Required !!",
     "remmberMe":"Remember Me",
     "LogIn":"LogIn",
+    "LogOut":"LogOut",
 
     "LeaveRequests":"Leave Requests",
     "day":"day",

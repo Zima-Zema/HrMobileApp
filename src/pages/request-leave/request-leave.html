@@ -91,10 +91,10 @@
       <ion-select [(ngModel)]="fraction" (ionChange)="fractionChange(fraction)" formControlName="fraction" interface="popover"
         [disabled]="EditFlag==2 ">
         <ion-option value="0">No Fraction</ion-option>
-        <ion-option value="+0.25">Quarter At Start Day</ion-option>
-        <ion-option value="+0.5">Half At Start Day</ion-option>
-        <ion-option value="-0.25">Quarter At End Day</ion-option>
-        <ion-option value="-0.5">Half At End Day</ion-option>
+        <ion-option value="1">Quarter At Start Day</ion-option>
+        <ion-option value="2">Half At Start Day</ion-option>
+        <ion-option value="3">Quarter At End Day</ion-option>
+        <ion-option value="4">Half At End Day</ion-option>
       </ion-select>
       <span *ngIf="!RequestLeaveForm.controls.fraction.valid && (RequestLeaveForm.controls.fraction.dirty) && EditFlag!=2 ">
         {{RequestLeaveForm.controls.leaveType.value}}
@@ -136,12 +136,12 @@
 
     <ion-item>
       <ion-label floating>End Date</ion-label>
-      <ion-datetime disabled [(ngModel)]="endDate" formControlName="endDate" [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'"></ion-datetime>
+      <ion-datetime disabled [(ngModel)]="endDate" formControlName="endDate" displayFormat="MMM DD, YYYY"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label floating>Return Date</ion-label>
-      <ion-datetime [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'" disabled [(ngModel)]="returnDate"
+      <ion-datetime displayFormat="MMM DD, YYYY" disabled [(ngModel)]="returnDate"
         formControlName="returnDate"></ion-datetime>
     </ion-item>
 

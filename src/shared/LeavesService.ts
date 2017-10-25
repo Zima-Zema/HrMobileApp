@@ -37,7 +37,7 @@ export interface ILeaveRequest {
     EmpId: number,
     ReplaceEmpId: number,
     NofDays: number,
-    FractionDays: number,
+    DayFraction: number,
     StartDate: string,
     Culture: string,
     EndDate: string,
@@ -273,20 +273,11 @@ export class LeaveServicesApi {
     }
 
     calcDates(startDate, noOfDayes, calender, leaveType, fraction) {
-        let startHours;
-        let startMin;
-        let NofHours;
         let endDate;
         let returnDate;
         let NofDays;
         let hasFraction: boolean;
         let hasNofDays: boolean;
-        let calc_Date;
-        let WorkStartTimeString = calender.WorkStartTime;
-        let WorkStartHour: number;
-        let WorkStartMin: number;
-        let WorkingHours = calender.WorkHours;
-        let MilliDate;
         let bloodyStartDate = startDate;
         //
         hasFraction = (leaveType && fraction != null);
@@ -295,32 +286,26 @@ export class LeaveServicesApi {
         console.log(`calcDates startDate : ${startDate}`)
         //
         if (startDate && leaveType.AllowFraction) {  //لو اجازه عارضه
-            WorkStartHour = new Date(WorkStartTimeString).getHours(); //8
-            WorkStartMin = new Date(WorkStartTimeString).getMinutes(); //30 or 0
-            startDate = new Date(startDate).setHours(WorkStartHour, WorkStartMin, 0, 0); //12-10 8:00
+            startDate = new Date(startDate)
 
             console.log("calcDates After startDate : ", startDate);
             if (hasNofDays || (hasNofDays && fraction == 0)) {
                 console.log("yaaaaaaaaaaah, hasNofDays");
                 NofDays = Number.parseInt(noOfDayes);
                 endDate = this.addDays(startDate, NofDays, calender, leaveType);
-                let WorkEndHour: number = new Date(endDate).getHours(); //8
-                endDate = new Date(endDate).setHours((WorkEndHour + WorkingHours), WorkStartMin, 0, 0);//16 //For hours
-                returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType).setHours(WorkStartHour, WorkStartMin, 0, 0);
+                endDate = new Date(endDate)
+                returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType)
             }
             if (hasFraction) {
                 console.log("yaaaaaaaaaaah, hasFraction");
-                if (fraction >= 0) {
-                    let WorkEndHour: number = new Date(startDate).getHours(); //8
-                    endDate = new Date(startDate).setHours((WorkEndHour + (fraction * WorkingHours)), WorkStartMin, 0, 0);
+                if (fraction == 1 || fraction == 2) {
+                    endDate = new Date(startDate)
                     returnDate = endDate;
                 }
-                else if (fraction < 0) {
-                    let WorkEndHour: number = new Date(startDate).getHours(); //8
-                    endDate = new Date(startDate).setHours((WorkEndHour + WorkingHours), WorkStartMin, 0, 0);//16
-                    returnDate = this.addDays(bloodyStartDate, 2, calender, leaveType).setHours(WorkStartHour, WorkStartMin, 0, 0);
-
-                    startDate = new Date(startDate).setHours(((WorkEndHour + WorkingHours) + (fraction * WorkingHours)), WorkStartMin, 0, 0);
+                else if (fraction == 3 || fraction == 4) {
+                    endDate = new Date(startDate);
+                    returnDate = this.addDays(bloodyStartDate, 2, calender, leaveType);
+                    startDate = new Date(startDate);
                 }
             }
         }
@@ -329,18 +314,82 @@ export class LeaveServicesApi {
             endDate = this.addDays(bloodyStartDate, NofDays, calender, leaveType);
             returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType);
         }
-        // // //
-        // if ((startDate && !hasFraction) || (startDate && fraction == 0)) {
-        //     returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType);
-        // }
 
-        console.log(`Before Return: startDate: ${startDate} // endDate: ${endDate} // returnDate ${returnDate}`)
         return {
             startDate: startDate,
             endDate: endDate,
             returnDate: returnDate
         }
     }
+    // calcDates(startDate, noOfDayes, calender, leaveType, fraction) { //Old One
+    //     let startHours;
+    //     let startMin;
+    //     let NofHours;
+    //     let endDate;
+    //     let returnDate;
+    //     let NofDays;
+    //     let hasFraction: boolean;
+    //     let hasNofDays: boolean;
+    //     let calc_Date;
+    //     let WorkStartTimeString = calender.WorkStartTime;
+    //     let WorkStartHour: number;
+    //     let WorkStartMin: number;
+    //     let WorkingHours = calender.WorkHours;
+    //     let MilliDate;
+    //     let bloodyStartDate = startDate;
+    //     //
+    //     hasFraction = (leaveType && fraction != null);
+    //     hasNofDays = (leaveType && noOfDayes != null);
+    //     console.log(`hasFraction : ${hasFraction} , hasNofDays : ${hasNofDays}`);
+    //     console.log(`calcDates startDate : ${startDate}`)
+    //     //
+    //     if (startDate && leaveType.AllowFraction) {  //لو اجازه عارضه
+    //         WorkStartHour = new Date(WorkStartTimeString).getHours(); //8
+    //         WorkStartMin = new Date(WorkStartTimeString).getMinutes(); //30 or 0
+    //         startDate = new Date(startDate).setHours(WorkStartHour, WorkStartMin, 0, 0); //12-10 8:00
+
+    //         console.log("calcDates After startDate : ", startDate);
+    //         if (hasNofDays || (hasNofDays && fraction == 0)) {
+    //             console.log("yaaaaaaaaaaah, hasNofDays");
+    //             NofDays = Number.parseInt(noOfDayes);
+    //             endDate = this.addDays(startDate, NofDays, calender, leaveType);
+    //             let WorkEndHour: number = new Date(endDate).getHours(); //8
+    //             endDate = new Date(endDate).setHours((WorkEndHour + WorkingHours), WorkStartMin, 0, 0);//16 //For hours
+    //             returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType).setHours(WorkStartHour, WorkStartMin, 0, 0);
+    //         }
+    //         if (hasFraction) {
+    //             console.log("yaaaaaaaaaaah, hasFraction");
+    //             if (fraction >= 0) {
+    //                 let WorkEndHour: number = new Date(startDate).getHours(); //8
+    //                 endDate = new Date(startDate).setHours((WorkEndHour + (fraction * WorkingHours)), WorkStartMin, 0, 0);
+    //                 returnDate = endDate;
+    //             }
+    //             else if (fraction < 0) {
+    //                 let WorkEndHour: number = new Date(startDate).getHours(); //8
+    //                 endDate = new Date(startDate).setHours((WorkEndHour + WorkingHours), WorkStartMin, 0, 0);//16
+    //                 returnDate = this.addDays(bloodyStartDate, 2, calender, leaveType).setHours(WorkStartHour, WorkStartMin, 0, 0);
+
+    //                 startDate = new Date(startDate).setHours(((WorkEndHour + WorkingHours) + (fraction * WorkingHours)), WorkStartMin, 0, 0);
+    //             }
+    //         }
+    //     }
+    //     else { //لو مش اجازه عارضه
+    //         NofDays = Number.parseFloat(noOfDayes) + (fraction ? Number.parseFloat(fraction) : 0);
+    //         endDate = this.addDays(bloodyStartDate, NofDays, calender, leaveType);
+    //         returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType);
+    //     }
+    //     // // //
+    //     // if ((startDate && !hasFraction) || (startDate && fraction == 0)) {
+    //     //     returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType);
+    //     // }
+
+    //     console.log(`Before Return: startDate: ${startDate} // endDate: ${endDate} // returnDate ${returnDate}`)
+    //     return {
+    //         startDate: startDate,
+    //         endDate: endDate,
+    //         returnDate: returnDate
+    //     }
+    // }
 
     getOffDays(calender) {
         let year = new Date(calender.WorkStartTime).getFullYear();

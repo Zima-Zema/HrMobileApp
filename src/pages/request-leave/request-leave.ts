@@ -6,7 +6,8 @@ import { LeaveListPage } from '../leave-list/leave-list';
 import { Chart } from 'chart.js';
 import * as moment from 'moment';
 import { DatePickerDirective } from 'ion-datepicker';
-
+import { IUser } from '../../shared/IUser';
+import { Storage } from '@ionic/storage';
 @IonicPage()
 @Component({
   selector: 'page-request-leave',
@@ -73,14 +74,14 @@ export class RequestLeavePage {
 
   RequestTypeObj: IRequestType = {
     CompId: 0,
-    Culture: "en-GB",
-    EmpId: 1072
+    Culture: "",
+    EmpId: 0
   }
   RequestDataObj: IRequestData = {
     CompanyId: 0,
-    TypeId: 1067,
-    Culture: "ar-EG",
-    EmpId: 1072,
+    TypeId: 0,
+    Culture: "",
+    EmpId: 0,
     RequestId: 0,
     StartDate: ""
   }
@@ -95,7 +96,7 @@ export class RequestLeavePage {
     EmpId: 0,
     ReplaceEmpId: 0,
     NofDays: 0,
-    FractionDays: 0,
+    DayFraction: 0,
     StartDate: null,
     Culture: "",
     EndDate: "",
@@ -138,14 +139,25 @@ export class RequestLeavePage {
     position: 'middle'
   });
   //
+  user: IUser;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
     private formBuilder: FormBuilder,
     private loadingCtrl: LoadingController,
-    private ToastCtrl: ToastController) {
+    private ToastCtrl: ToastController,
+    private storage: Storage) {
+
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+        this.RequestTypeObj.CompId = this.RequestDataObj.CompanyId = this.user.CompanyId;
+        this.RequestTypeObj.Culture = this.RequestDataObj.Culture = this.user.Culture;
+        this.RequestTypeObj.EmpId = this.RequestDataObj.EmpId = this.user.EmpId;
 
 
+      }
+    });
 
 
     //Edit Mode
@@ -429,7 +441,7 @@ export class RequestLeavePage {
         }
         else { //العارضه
           this.pickFormat = 'MMM DD YYYY';
-          this.displayFormat = "MMM DD, YYYY hh:mm A";
+          this.displayFormat = "MMM DD, YYYY";
         }
         //
         if (data.LeaveType.AbsenceType == 8) {
@@ -508,9 +520,9 @@ export class RequestLeavePage {
     //
     console.log("replacementChange", replacement);
     this.validateObj.Id = this.item.Id ? this.item.Id : 0;
-    this.validateObj.CompanyId = 0;
-    this.validateObj.Culture = "ar-EG";
-    this.validateObj.EmpId = 1072;
+    this.validateObj.CompanyId = this.user.CompanyId;
+    this.validateObj.Culture = this.user.Culture;
+    this.validateObj.EmpId = this.user.EmpId;
     this.validateObj.EndDate = new Date(new Date(this.endDate).toString()).toISOString().slice(0, -1);
     this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toISOString().slice(0, -1);
     this.validateObj.ReplaceEmpId = replacement;
@@ -579,6 +591,35 @@ export class RequestLeavePage {
   reasonChange(reason) {
   }
 
+  calcBalAfter(balBefore, NofDays, Fraction) {
+    let balAfter;
+    if (NofDays) {
+      NofDays = Number.parseInt(NofDays);
+      balAfter = balBefore - NofDays;
+      return balAfter;
+    }
+    else {
+      NofDays = 0;
+      if (Fraction) {
+        switch (Fraction) {
+          case 1:
+          case 3: Fraction = 0.25;
+            break;
+          case 2:
+          case 4: Fraction = 0.50;
+            break;
+          default:
+            Fraction = 0;
+            break;
+        }
+        balAfter = balBefore - Fraction;
+
+        return balAfter;
+      }
+      return balBefore;
+    }
+  }
+
   bindForm() {
     console.log("bindForm");
     //Loader
@@ -595,14 +636,15 @@ export class RequestLeavePage {
       this.returnDate = this.allowFraction ? new Date(res.returnDate).toISOString() : new Date(res.returnDate).toISOString();
       this.startDate = this.allowFraction ? new Date(res.startDate).toISOString() : new Date(res.startDate).toISOString();
       //3 - Math.abs(((x==null ? 0: Number.parseFloat(1)) + (0.5 ? Number.parseFloat(0.5) : 0)));
-      this.balAfter = this.balBefore - Math.abs(((this.noOfDays ? Number.parseFloat(this.noOfDays) : 0) + (this.fraction ? Number.parseFloat(this.fraction) : 0)));
+
+      this.balAfter = this.calcBalAfter(this.balBefore, this.noOfDays, this.fraction); //this.balBefore - Math.abs(((this.noOfDays ? Number.parseFloat(this.noOfDays) : 0) + (this.fraction ? Number.parseFloat(this.fraction) : 0)));
       console.log("bindForm balAfter : ", this.balAfter)
       this.validateObj.Id = this.item.Id ? this.item.Id : 0;
-      this.validateObj.CompanyId = 0;
-      this.validateObj.Culture = "ar-EG";
-      this.validateObj.EmpId = 1072;
-      this.validateObj.EndDate = new Date(new Date(this.endDate).toString()).toISOString().slice(0, -1);
-      this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toISOString().slice(0, -1);
+      this.validateObj.CompanyId = this.user.CompanyId;
+      this.validateObj.Culture = this.user.Culture;
+      this.validateObj.EmpId = this.user.EmpId;
+      this.validateObj.EndDate = new Date(new Date(this.endDate).toString()).toLocaleDateString();//.slice(0, -1);
+      this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toLocaleDateString();//.slice(0, -1);
       this.validateObj.ReplaceEmpId = this.replacement;
       this.validateObj.TypeId = this.leaveType;
       console.log("this.validateObj: ", this.validateObj);
@@ -751,14 +793,14 @@ export class RequestLeavePage {
     }
 
     this.requestObj.TypeId = this.leaveType;
-    this.requestObj.EmpId = 1072;
-    this.requestObj.CompanyId = 0;
-    this.requestObj.Culture = "ar-EG";
+    this.requestObj.EmpId = this.user.EmpId;
+    this.requestObj.CompanyId = this.user.CompanyId;
+    this.requestObj.Culture = this.user.Culture;
     this.requestObj.NofDays = Number.parseInt(this.noOfDays);
-    this.requestObj.FractionDays = Number.parseFloat(this.fraction);
-    this.requestObj.StartDate = new Date(new Date(this.startDate).toString()).toISOString().slice(0, -1);
-    this.requestObj.EndDate = new Date(new Date(this.endDate).toString()).toISOString().slice(0, -1);
-    this.requestObj.ReturnDate = new Date(new Date(this.returnDate).toString()).toISOString().slice(0, -1);
+    this.requestObj.DayFraction = Number.parseInt(this.fraction);
+    this.requestObj.StartDate = new Date(new Date(this.startDate).toString()).toLocaleDateString();//.slice(0, -1);
+    this.requestObj.EndDate = new Date(new Date(this.endDate).toString()).toLocaleDateString()//.slice(0, -1);
+    this.requestObj.ReturnDate = new Date(new Date(this.returnDate).toString()).toLocaleDateString()//.slice(0, -1);
     this.requestObj.ReqReason = Number.parseInt(this.reason);
     this.requestObj.ReasonDesc = this.comments;
     this.requestObj.ApprovalStatus = ApprovalStatusEnum.Draft

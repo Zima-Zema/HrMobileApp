@@ -90,7 +90,12 @@
       </div>
       <button ion-button color="primary" block large round [disabled]="!logInForm.valid">
         <ion-icon name="log-in"></ion-icon>&nbsp;&nbsp;&nbsp; {{"LogIn" | translate}}</button>
+
+      
     </form>
+    
   </ion-list>
-  <button ion-button (click)="tasks()">{{"Tasks" | translate}}</button>
+  <button ion-button color="danger" (click)="Logout()" block large round>
+    <ion-icon name="log-out"></ion-icon>&nbsp;&nbsp;&nbsp; {{"LogOut" | translate}}</button>
+  <!-- <button ion-button (click)="tasks()">{{"Tasks" | translate}}</button> -->
 </ion-content>

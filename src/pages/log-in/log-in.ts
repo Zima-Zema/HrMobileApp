@@ -193,5 +193,10 @@ export class LogInPage {
         this.navCtrl.setRoot(WelcomePage);
         this.navCtrl.popToRoot();
     }
+    Logout() {
+        this.storage.clear();
+        this.navCtrl.setRoot(LogInPage);
+        this.navCtrl.popToRoot();
+      }
 
 }
