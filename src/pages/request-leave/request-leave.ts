@@ -28,11 +28,14 @@ export class RequestLeavePage {
 
   doughnutChart: any;
   barChart: any;
-  //public EditFlag: boolean = false;
   public EditFlag: number = 0;
+  public EnableLoaderFlag: boolean = false;
   public BtnTxt: string = "Submit";
   public YearsArr: Array<number> = [];
   public yearsValue: Array<number> = [];
+  // public disableFlagFarc: boolean = true;
+  // public disableFlagNoOfDays: boolean = true;
+  // public disableStartDate: boolean = true;
   //Form ngModel
   public leaveType: any;
   public startDate: any;
@@ -47,11 +50,26 @@ export class RequestLeavePage {
   public comments: any;
   public reason: any;
   public fraction: any;
+  //
   public minDate: any;
   public rate: number = 0;
+  public RequestLeaveForm: FormGroup;
+  public LeavesData: Array<any> = [];
+  public ChartData: Array<any> = [];
+  public LeaveReasonList: Array<any> = [];
+  public Replacements: Array<any> = [];
+  public requestData: any;
+  public workhour: number;
+  allowFraction: boolean = false;
+  static maxDays: number = null;
+  static allowed: number = null;
+  public static frac: number = 0;
+  public static FullData: any = null;
+  public static mustReason: boolean = true;
+  public static mustNoOfDays: number = null;
+  pickFormat: string;
+  displayFormat: string;
   public errorArray: Array<string> = [];
-  // minDate = this.bloodyIsoString(new Date());
-  // minDate = this.bloodyIsoString(new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0)));
 
   RequestTypeObj: IRequestType = {
     CompId: 0,
@@ -109,30 +127,14 @@ export class RequestLeavePage {
     WaitingError: null,
     WaitingMonth: null
   }
-  public RequestLeaveForm: FormGroup;
-  public LeavesData: Array<any> = [];
-  public ChartData: Array<any> = [];
-  public LeaveReasonList: Array<any> = [];
-  public Replacements: Array<any> = [];
-  public requestData: any;
-  public workhour: number;
-  allowFraction: boolean = false;
-  static maxDays: number = null;
-  static allowed: number = null;
-  public static frac: number = 0;
-  public static FullData: any = null;
-  public static mustReason: boolean = true;
-  public static mustNoOfDays: number = null;
-  pickFormat: string;
-  displayFormat: string;
   //Loader
-  public LoadingMsg = this.loadingCtrl.create({
+  public LoadingChart = this.loadingCtrl.create({
     spinner: 'dots'
   });
   //Toaster
   public ErrorMsgToast = this.ToastCtrl.create({
     message: "There Is Error, Please Try Again Later...",
-    duration: 3000,
+    duration: 2000,
     position: 'middle'
   });
   //
@@ -142,6 +144,10 @@ export class RequestLeavePage {
     private formBuilder: FormBuilder,
     private loadingCtrl: LoadingController,
     private ToastCtrl: ToastController) {
+
+
+
+
     //Edit Mode
     this.item = this.navParams.data;
     this.errorMsgObj.IsError = false
@@ -163,8 +169,7 @@ export class RequestLeavePage {
 
     });
 
-    // this.leaving = 1067;  //annual leave
-    this.LoadingMsg.present().then(() => {
+    this.LoadingChart.present().then(() => {
       this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((Konafa) => {
         console.log("leavetyps>>>", Konafa);
         this.LeavesData = Konafa.LeaveTypeList;
@@ -172,9 +177,9 @@ export class RequestLeavePage {
         this.Replacements = Konafa.Replacements;
         this.LeaveReasonList = Konafa.LeaveReasonList;
         this.loadCharts(this.ChartData);
-        this.LoadingMsg.dismiss();
+        this.LoadingChart.dismiss();
       }, (e) => {
-        this.LoadingMsg.dismiss().then(() => {
+        this.LoadingChart.dismiss().then(() => {
           this.ErrorMsgToast.present();
         })
       })
@@ -182,12 +187,12 @@ export class RequestLeavePage {
     this.yearsValue = this.GetYears();
   }
 
-
   // // EditFlag = 0 ---> Request  , EditFlag = 1 ---> Edit , EditFlad = 2 --->show
   ionViewWillEnter() {
     if (Object.keys(this.item).length > 0) {
       //Edit Mode
       if (this.item.readOnly == false) {
+        this.EnableLoaderFlag = true;
         console.log("Edit Mode ", this.item);
         this.EditFlag = 1;
         this.BtnTxt = "Update";
@@ -237,21 +242,21 @@ export class RequestLeavePage {
       this.RequestLeaveForm.controls['fraction'].disable();
     }
     else if (this.EditFlag == 1 && (this.RequestLeaveForm.controls['noOfDays'].value != 0 || this.RequestLeaveForm.controls['noOfDays'].value != "")) {
-      console.log(`ionViewDidEnter noOfDays :: ${this.RequestLeaveForm.controls['noOfDays'].value} `);
-      this.RequestLeaveForm.controls['noOfDays'].enable();
-      this.RequestLeaveForm.controls['startDate'].enable();
-      this.RequestLeaveForm.controls['fraction'].disable();
-    }
-    else if (this.EditFlag == 1 && (this.RequestLeaveForm.controls['fraction'].value != 0 || this.RequestLeaveForm.controls['fraction'].value != null)) {
-      console.log(`ionViewDidEnter fraction :: ${this.RequestLeaveForm.controls['fraction'].value} `);
-      this.RequestLeaveForm.controls['noOfDays'].disable();
-      this.RequestLeaveForm.controls['startDate'].enable();
-      this.RequestLeaveForm.controls['fraction'].enable();
+      if (this.RequestLeaveForm.controls['noOfDays'].value >= 1) {
+        console.log(`ionViewDidEnter noOfDays :: ${this.RequestLeaveForm.controls['noOfDays'].value} `);
+        this.RequestLeaveForm.controls['noOfDays'].enable();
+        this.RequestLeaveForm.controls['startDate'].enable();
+        this.RequestLeaveForm.controls['fraction'].disable();
+      }
+      else if (this.RequestLeaveForm.controls['noOfDays'].value < 1) {
+        console.log(`ionViewDidEnter fraction :: ${this.RequestLeaveForm.controls['fraction'].value} `);
+        this.RequestLeaveForm.controls['noOfDays'].disable();
+        this.RequestLeaveForm.controls['startDate'].enable();
+        this.RequestLeaveForm.controls['fraction'].enable();
+      }
     }
   }
-  public disableFlagFarc: boolean = true;
-  public disableFlagNoOfDays: boolean = true;
-  public disableStartDate: boolean = true;
+
 
   bloodyIsoString(bloodyDate: Date) {
     let tzo = -bloodyDate.getTimezoneOffset(),
@@ -301,7 +306,12 @@ export class RequestLeavePage {
             'rgba(255, 206, 86, 0.2)',
             'rgba(75, 192, 192, 0.2)',
             'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(205, 92, 92 , 0.2)',
+            'rgba(128, 128, 0 , 0.2)',
+            'rgba(41, 56, 185 ,0.2)',
+            'rgba(91, 44, 111 , 0.2)',
+            'rgba(26, 115, 50 ,0.2)'
           ],
           hoverBackgroundColor: [
             "#FF6384",
@@ -309,7 +319,12 @@ export class RequestLeavePage {
             "#FFCE56",
             "#27AE60",
             "#7B68EE",
-            "#F39C12"
+            "#F39C12",
+            "#CD5C5C",
+            "#808000",
+            "#2938B9",
+            "#5B2C6F",
+            "#1A7332"
           ]
         }]
       }
@@ -349,30 +364,29 @@ export class RequestLeavePage {
 
     });
   }
-  
+
   // events
   public chartClicked(e: any): void {
     //console.log(e);
   }
-
   public chartHovered(e: any): void {
     // console.log(e);
   }
-
-  /////////////////////
   value(item) {
     console.log(`Chang DDDDDDDDDDDDDDDate : ${item}`)
   }
+  ////////////////////////
   leaveChange(item: any) {
+    //Loader
+    let LoadingLeaves = this.loadingCtrl.create({ spinner: 'dots' });
     //this.disableStartDate=false;
     this.RequestLeaveForm.controls['startDate'].enable();
     this.resetForm();
     //console.log("itemSelected ", item);
     this.RequestDataObj.TypeId = item;
     this.RequestDataObj.StartDate = new Date().toDateString();
-    this.LoadingMsg.present().then(() => {
 
-
+    LoadingLeaves.present().then(() => {
       this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
         console.log("data GetRequestLeaveData ", data);
         this.workhour = data.Calender.WorkHours;
@@ -390,6 +404,7 @@ export class RequestLeavePage {
           }
           this.RequestLeaveForm.controls['reason'].markAsDirty({ onlySelf: true });
         }
+        console.log("1");
         //
         if (!RequestLeavePage.FullData && this.EditFlag != 2) {
           console.log("No 3arda");
@@ -447,9 +462,9 @@ export class RequestLeavePage {
         else {
           this.balAfter = undefined;
         }
-        this.LoadingMsg.dismiss();
+        LoadingLeaves.dismiss();
       }, (err) => {
-        this.LoadingMsg.dismiss().then(() => {
+        LoadingLeaves.dismiss().then(() => {
           this.ErrorMsgToast.present();
         })
       });
@@ -460,15 +475,19 @@ export class RequestLeavePage {
     console.log(` dateChange item : ${item}`)
     if (item) {
       if (this.EditFlag != 2) {
-        if ((this.RequestLeaveForm.controls['noOfDays'].value == null || this.RequestLeaveForm.controls['noOfDays'].value == 0) && this.RequestLeaveForm.controls['fraction'].value == 0) {
+
+        if ((this.RequestLeaveForm.controls['noOfDays'].value == null || this.RequestLeaveForm.controls['noOfDays'].value == 0) && (this.RequestLeaveForm.controls['fraction'].value == 0 || this.RequestLeaveForm.controls['fraction'].value == null)) {
+          console.log("1 : noOfDays ", this.RequestLeaveForm.controls['noOfDays'].value, " || ", this.RequestLeaveForm.controls['fraction'].value);
           this.RequestLeaveForm.controls['noOfDays'].enable();
           this.RequestLeaveForm.controls['fraction'].enable();
         }
         else if (this.RequestLeaveForm.controls['noOfDays'].value != null || this.RequestLeaveForm.controls['noOfDays'].value != 0) {
+          console.log("2 : noOfDays : ", this.RequestLeaveForm.controls['noOfDays'].value);
           this.RequestLeaveForm.controls['noOfDays'].enable();
           this.RequestLeaveForm.controls['fraction'].disable();
         }
-        else if (this.RequestLeaveForm.controls['fraction'].value != 0) {
+        else if (this.RequestLeaveForm.controls['fraction'].value != 0 || this.RequestLeaveForm.controls['fraction'].value != null) {
+          console.log("3");
           this.RequestLeaveForm.controls['noOfDays'].disable();
           this.RequestLeaveForm.controls['fraction'].enable();
         }
@@ -483,6 +502,10 @@ export class RequestLeavePage {
   }
   //
   replacementChange(replacement) {
+    //console.log("replacment Loader FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFlag >>>>>>>>>>> ", this.EnableLoaderFlag);
+    //Loader
+    let LoadingValidate = this.loadingCtrl.create({ spinner: 'dots' });
+    //
     console.log("replacementChange", replacement);
     this.validateObj.Id = this.item.Id ? this.item.Id : 0;
     this.validateObj.CompanyId = 0;
@@ -492,22 +515,26 @@ export class RequestLeavePage {
     this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toISOString().slice(0, -1);
     this.validateObj.ReplaceEmpId = replacement;
     this.validateObj.TypeId = this.leaveType;
-    if (this.endDate) {
-      console.log("this.validateObj: ", this.validateObj);
-      this.LoadingMsg.present().then(()=>{    
-      this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
-        this.errorMsgObj = null;
-        this.errorMsgObj = data;
-        this.rate = this.errorMsgObj.Stars;
-        console.log(this.errorMsgObj);
-        this.LoadingMsg.dismiss();
-      },(e)=>{
-        this.LoadingMsg.dismiss().then(()=>{
-          this.ErrorMsgToast.present();
-        })
-      })
-      });//loader
+    if (this.EditFlag != 2 && this.EnableLoaderFlag == false) {
+      console.log("replacementChange FFFFFFFFFFFFFFFFFFFFFFlag hena");
+      if (this.endDate) {
+        console.log("this.validateObj: ", this.validateObj);
+        LoadingValidate.present().then(() => {
+          this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
+            this.errorMsgObj = null;
+            this.errorMsgObj = data;
+            this.rate = this.errorMsgObj.Stars;
+            console.log(this.errorMsgObj);
+            LoadingValidate.dismiss();
+          }, (e) => {
+            LoadingValidate.dismiss().then(() => {
+              this.ErrorMsgToast.present();
+            })
+          })
+        });//loader      
+      }
     }
+    this.EnableLoaderFlag = false;
   }
   //
   numberChange(item) {
@@ -553,13 +580,12 @@ export class RequestLeavePage {
   }
 
   bindForm() {
+    console.log("bindForm");
+    //Loader
+    let Loadingrequest = this.loadingCtrl.create({ spinner: 'dots' });
+    //
     // let MilliDate = new Date(this.startDate).setHours(8);
     // this.startDate = new Date(MilliDate);
-    // console.log("bindForm startDate", this.startDate);
-    // console.log(`bindForm EndDate : ${this.endDate}`);
-    // console.log("bindForm Calender : ", this.requestData.Calender)
-    // console.log(`bindForm noOfDays: ${this.noOfDays} , fraction : ${this.fraction}`)
-    // console.log(`bindForm LeaveType : ${this.requestData.LeaveType}`)
     // if (this.startDate && this.noOfDays) {
     if (this.startDate && (this.noOfDays || this.fraction)) {
       let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
@@ -568,8 +594,9 @@ export class RequestLeavePage {
       //console.log(`End Date ${this.endDate}`);
       this.returnDate = this.allowFraction ? new Date(res.returnDate).toISOString() : new Date(res.returnDate).toISOString();
       this.startDate = this.allowFraction ? new Date(res.startDate).toISOString() : new Date(res.startDate).toISOString();
-      this.balAfter = this.balBefore - Math.abs((Number.parseFloat(this.noOfDays) + (this.fraction ? Number.parseFloat(this.fraction) : 0)));
-
+      //3 - Math.abs(((x==null ? 0: Number.parseFloat(1)) + (0.5 ? Number.parseFloat(0.5) : 0)));
+      this.balAfter = this.balBefore - Math.abs(((this.noOfDays ? Number.parseFloat(this.noOfDays) : 0) + (this.fraction ? Number.parseFloat(this.fraction) : 0)));
+      console.log("bindForm balAfter : ", this.balAfter)
       this.validateObj.Id = this.item.Id ? this.item.Id : 0;
       this.validateObj.CompanyId = 0;
       this.validateObj.Culture = "ar-EG";
@@ -579,21 +606,26 @@ export class RequestLeavePage {
       this.validateObj.ReplaceEmpId = this.replacement;
       this.validateObj.TypeId = this.leaveType;
       console.log("this.validateObj: ", this.validateObj);
-      if (this.endDate) {
-        this.LoadingMsg.present().then(()=>{     
-        this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
-          this.errorMsgObj = null;
-          this.errorMsgObj = data;
-          this.rate = this.errorMsgObj.Stars;
-          console.log(this.errorMsgObj);
-          this.LoadingMsg.dismiss();
-        },(e)=>{
-          this.LoadingMsg.dismiss().then(()=>{
-            this.ErrorMsgToast.present();
-          })
-        })
-        });//Loader
+      if (this.EditFlag != 2 && this.EnableLoaderFlag == false) {
+        console.log("bind FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFlag hena")
+        if (this.endDate) {
+          Loadingrequest.present().then(() => {
+            this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
+              this.errorMsgObj = null;
+              this.errorMsgObj = data;
+              this.rate = this.errorMsgObj.Stars;
+              console.log(this.errorMsgObj);
+              Loadingrequest.dismiss();
+            }, (e) => {
+              Loadingrequest.dismiss().then(() => {
+                this.ErrorMsgToast.present();
+              })
+            })
+          });//Loader
+        }
       }
+      this.EnableLoaderFlag = false;
+      //console.log("end bind formLoader FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFlag >>>>>>>>>>> ", this.EnableLoaderFlag);
     }
   }
   resetForm() {
@@ -691,7 +723,6 @@ export class RequestLeavePage {
       return null;
     }
   }
-
 
   static isValidReqReason(control: FormControl) {
     console.log(`first here RequestLeavePage.mustReason : ${RequestLeavePage.mustReason}`)

@@ -81,7 +81,7 @@
     <span *ngIf="!RequestLeaveForm.controls.noOfDays.valid && (RequestLeaveForm.controls.noOfDays.dirty) && EditFlag!=2 ">
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('RequiredDays')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('RequiredDays')}}</p>
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('maximum')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('maximum')}}, {{requestData.LeaveType.MaxDays}} Day(s)</p>
-      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('allowed')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('allowed')}} - {{allowedDays}}</p>
+      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('allowed')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('allowed')}}, {{allowedDays}} Day(s)</p>
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('noLeave')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('noLeave')}}</p>
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('general')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('general')}}</p>
     </span>

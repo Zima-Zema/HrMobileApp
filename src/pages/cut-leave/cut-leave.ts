@@ -52,6 +52,16 @@ export class CutLeavePage {
     private formBuilder: FormBuilder,
     private ToastCtrl: ToastController,
     private LoadingCtrl: LoadingController) {
+    //Loader
+    let RequestLoader = this.LoadingCtrl.create({
+      spinner: 'dots'
+    })
+    //Toaster
+    let RequestErrorToast = this.ToastCtrl.create({
+      message: "There Is Error, Please Try Again Later...",
+      duration: 2000,
+      position: 'middle'
+    });
     //
     this.LeaveComing = this.navParams.data;
     console.log("LeaveComing : ", this.LeaveComing)
@@ -74,15 +84,22 @@ export class CutLeavePage {
     //
     this.RequestDataObj.TypeId = this.LeaveComing.TypeId;
     this.RequestDataObj.StartDate = new Date().toDateString();
-    this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
-      console.log("GetRequestLeaveData : ", data)
-      this.calender = data.Calender;
-      this.leaveType = data.LeaveType;
-      this.BalBefore = data.requestVal.BalBefore;
-      this.filteredArr = this.LeaveServices.getOffDays(data.Calender);
-      this.localDateval = new Date();
-      this.localDateval = this.LeaveServices.getInitialDate(this.localDateval, data.Calender)
-    });
+    RequestLoader.present().then(() => {
+      this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
+        console.log("GetRequestLeaveData : ", data)
+        this.calender = data.Calender;
+        this.leaveType = data.LeaveType;
+        this.BalBefore = data.requestVal.BalBefore;
+        this.filteredArr = this.LeaveServices.getOffDays(data.Calender);
+        this.localDateval = new Date();
+        this.localDateval = this.LeaveServices.getInitialDate(this.localDateval, data.Calender);
+        RequestLoader.dismiss();
+      }, (e: Error) => {
+        RequestLoader.dismiss().then(() => {
+          RequestErrorToast.present();
+        });
+      });
+    });//loader
   }
 
   bloodyIsoString(bloodyDate: Date) {
@@ -163,6 +180,10 @@ export class CutLeavePage {
             CutSuccessToast.present();
           })
         }
+      }, (e) => {
+        CutLoader.dismiss().then(() => {
+          CutErrorToast.present();
+        })
       })
     }); // Cut Loader
     console.log("Cut: ", this.breakObj);
