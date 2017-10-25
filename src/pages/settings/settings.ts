@@ -47,10 +47,10 @@ export class SettingsPage {
       this.translationService.get('ALERT_message').subscribe(t => {
         a.message = t;
       });
-      this.translationService.get('ALERT_OK').subscribe(t => {
+      this.translationService.get('ALERT_YES').subscribe(t => {
         a.ok = t;
       });
-      this.translationService.get('cancel').subscribe((data) => {
+      this.translationService.get('ALERT_NO').subscribe((data) => {
         a.cancel = data;
       })
       this.alertCtrl.create({

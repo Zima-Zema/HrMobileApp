@@ -10,8 +10,8 @@
     "settingButton":"Save Changes",
     "ALERT_TITLE":"Confirm",
     "ALERT_message":"App Need To Be Restart !!",
-    "ALERT_OK":"OK",
-    "cancel":"Cancel",
+    "ALERT_YES":"Yes",
+    "ALERT_NO":"No",
 
     "compName":"Company Name",
     "compRequir":"Company Name Is Required !!",
@@ -20,6 +20,23 @@
     "Password":"Password",
     "passRequir":"Password is Required !!",
     "remmberMe":"Remember Me",
-    "LogIn":"LogIn"
+    "LogIn":"LogIn",
+
+    "LeaveRequests":"Leave Requests",
+    "day":"day",
+    "days":"days",
+    "Draft":"Draft",
+    "Submit":"Submit",
+    "ApprovalEmployeeReview":"Employee Review", 
+    "ManagerReview":"Manager Review", 
+    "Accepted":"Accepted", 
+    "Approved":"Approved",
+    "CancelBeforeAccepted":"Cancel Before Accepted",
+    "CancelAfterAccepted":"Cancel After Accepted",
+    "Rejected":"Rejected",
+    "ConfirmRemove":"Confirm Remove",
+    "RemoveReqMsg":"Are you sure you want to remove this leave request?",
+    "ConfirmCancel":"Confirm Cancel",
+    "CancelReqMsg":"Are you sure you want to cancel this leave request?"
 
 }

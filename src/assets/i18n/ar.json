@@ -10,8 +10,8 @@
     "settingButton": "حفظ التعديلات",
     "ALERT_TITLE": "تأكيد",
     "ALERT_message": "لابد من اعادة تشغيل البرنامج لجعل تغيراتك دائمة ",
-    "ALERT_OK": "حسناً",
-    "cancel": "إلغاء",
+    "ALERT_YES":"نعم",
+    "ALERT_NO":"لا",
 
     "compName": "اسم الشركة",
     "compRequir": "عفواً اسم الشركة مطلوب !!",
@@ -20,5 +20,22 @@
     "Password":"كلمة المرور",
     "passRequir":"عفوا كلمة المرور مطلوبة !! ",
     "remmberMe":"تذكرني",
-    "LogIn":"تسجيل الدخول"
+    "LogIn":"تسجيل الدخول",
+
+    "LeaveRequests":"طلبات الاجازات",
+    "day":"يوم",
+    "days":"أيام",
+    "Draft":"مسودة",
+    "Submit":"مرسلة",
+    "ApprovalEmployeeReview":"مراجعة لدى الموظف", 
+    "ManagerReview":"مراجعة لدى المدير", 
+    "Accepted":"مقبول", 
+    "Approved":"مصدق عليه",
+    "CancelBeforeAccepted":"إلغاء الطلب قبل التصديق عليه",
+    "CancelAfterAccepted":"إالغاء الطلب بعد التصديق عليه",
+    "Rejected":"مرفوض",
+    "ConfirmRemove":"تاكيد الحذف",
+    "RemoveReqMsg":"هل انت متأكد من حذف هذا الطلب؟",
+    "ConfirmCancel":"تأكيد الالغاء",
+    "CancelReqMsg":"هل أنت متأكد من إلغاء هذا الطلب؟"
 }
