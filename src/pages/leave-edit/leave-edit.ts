@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { IValidationMsg, IValidate, IRequestData, LeaveServicesApi, IEdit } from '../../shared/LeavesService';
-import { LeaveListPage } from '../leave-list/leave-list'
+import { LeaveListPage } from '../leave-list/leave-list';
+import { TranslateService } from '@ngx-translate/core';
 @IonicPage()
 @Component({
   selector: 'page-leave-edit',
@@ -90,7 +91,8 @@ export class LeaveEditPage {
     private LeaveServices: LeaveServicesApi,
     private formBuilder: FormBuilder,
     private toastCtrl: ToastController,
-    private loadingCtrl: LoadingController) {
+    private loadingCtrl: LoadingController,
+    private translationService: TranslateService) {
 
     this.comingLeave = this.navParams.data;
     this.actualNOfDays = this.comingLeave.NofDays;

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { LeaveServicesApi, IRequestData, IBreak } from "../../shared/LeavesService"
 import { FormGroup, Validators, FormBuilder } from "@angular/forms";
-import { LeaveListPage } from '../leave-list/leave-list'
+import { LeaveListPage } from '../leave-list/leave-list';
+import { TranslateService } from '@ngx-translate/core';
 @IonicPage()
 @Component({
   selector: 'page-cut-leave',
@@ -51,7 +52,8 @@ export class CutLeavePage {
     private LeaveServices: LeaveServicesApi,
     private formBuilder: FormBuilder,
     private ToastCtrl: ToastController,
-    private LoadingCtrl: LoadingController) {
+    private LoadingCtrl: LoadingController,
+    private translationService: TranslateService) {
     //Loader
     let RequestLoader = this.LoadingCtrl.create({
       spinner: 'dots'
