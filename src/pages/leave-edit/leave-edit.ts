@@ -4,6 +4,8 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { IValidationMsg, IValidate, IRequestData, LeaveServicesApi, IEdit } from '../../shared/LeavesService';
 import { LeaveListPage } from '../leave-list/leave-list';
 import { TranslateService } from '@ngx-translate/core';
+import { IUser } from '../../shared/IUser';
+import { Storage } from '@ionic/storage';
 @IonicPage()
 @Component({
   selector: 'page-leave-edit',
@@ -47,9 +49,9 @@ export class LeaveEditPage {
   //
   RequestDataObj: IRequestData = {
     CompanyId: 0,
-    TypeId: 1067,
-    Culture: "ar-EG",
-    EmpId: 1072,
+    TypeId: 0,
+    Culture: "",
+    EmpId: 0,
     RequestId: 0,
     StartDate: ""
   }
@@ -58,7 +60,7 @@ export class LeaveEditPage {
     EditedEndDate: null,
     EditedReturnDate: null,
     CompanyId: 0,
-    Language: "ar-EG",
+    Language: "",
     RequestId: 0
   }
 
@@ -86,13 +88,26 @@ export class LeaveEditPage {
     position: 'middle'
   });
   //
+  user: IUser;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private LeaveServices: LeaveServicesApi,
     private formBuilder: FormBuilder,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
+    private storage: Storage,
     private translationService: TranslateService) {
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+        this.RequestDataObj.CompanyId = this.editObj.CompanyId = this.user.CompanyId;
+        this.RequestDataObj.Culture = this.user.Culture;
+        this.RequestDataObj.EmpId = this.user.EmpId;
+        this.editObj.Language = this.user.Language;
+
+
+      }
+    });
 
     this.comingLeave = this.navParams.data;
     this.actualNOfDays = this.comingLeave.NofDays;
@@ -111,7 +126,7 @@ export class LeaveEditPage {
     this.displayFormat = "MMM DD, YYYY ";
     //
     this.RequestDataObj.TypeId = this.comingLeave.TypeId;
-    this.RequestDataObj.StartDate = new Date().toDateString();
+    this.RequestDataObj.StartDate = new Date(this.comingLeave.StartDate).toDateString();
     this.LoadingCons.present().then(() => {
 
 
@@ -170,9 +185,9 @@ export class LeaveEditPage {
       this.actualEndDate = new Date(res.endDate).toISOString();
       this.actualReturnDate = new Date(res.returnDate).toISOString();
       this.validateObj.Id = this.comingLeave.Id ? this.comingLeave.Id : 0;
-      this.validateObj.CompanyId = 0;
-      this.validateObj.Culture = "ar-EG";
-      this.validateObj.EmpId = 1072;
+      this.validateObj.CompanyId = this.user.CompanyId;
+      this.validateObj.Culture = this.user.Culture;
+      this.validateObj.EmpId = this.user.EmpId;
       this.validateObj.EndDate = new Date(new Date(this.actualEndDate).toString()).toISOString().slice(0, -1);
       this.validateObj.StartDate = new Date(new Date(this.actualStartDate).toString()).toISOString().slice(0, -1);
       this.validateObj.ReplaceEmpId = this.comingLeave.ReplaceEmpId;
@@ -206,8 +221,6 @@ export class LeaveEditPage {
     this.editObj.EditedStartDate = new Date(this.actualStartDate).toLocaleDateString();
     this.editObj.EditedEndDate = new Date(this.actualEndDate).toLocaleDateString();
     this.editObj.EditedReturnDate = new Date(this.actualReturnDate).toLocaleDateString();
-    this.editObj.CompanyId = 0;
-    this.editObj.Language = "en-GB";
     this.editObj.RequestId = this.comingLeave.Id;
     console.log("editObj", this.editObj);
     LoadingApprov.present().then(() => {

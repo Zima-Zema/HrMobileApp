@@ -4,6 +4,8 @@ import { LeaveServicesApi, IRequestData, IBreak } from "../../shared/LeavesServi
 import { FormGroup, Validators, FormBuilder } from "@angular/forms";
 import { LeaveListPage } from '../leave-list/leave-list';
 import { TranslateService } from '@ngx-translate/core';
+import { IUser } from '../../shared/IUser';
+import { Storage } from '@ionic/storage';
 @IonicPage()
 @Component({
   selector: 'page-cut-leave',
@@ -33,9 +35,9 @@ export class CutLeavePage {
 
   RequestDataObj: IRequestData = {
     CompanyId: 0,
-    TypeId: 1067,
-    Culture: "ar-EG",
-    EmpId: 1072,
+    TypeId: 0,
+    Culture: "",
+    EmpId: 0,
     RequestId: 0,
     StartDate: ""
   }
@@ -43,17 +45,29 @@ export class CutLeavePage {
     BreakEndDate: null,
     BreakNofDays: 0,
     CompanyId: 0,
-    Language: "ar-EG",
+    Language: "",
     RequestId: 0
   }
-
+  user: IUser;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private LeaveServices: LeaveServicesApi,
     private formBuilder: FormBuilder,
     private ToastCtrl: ToastController,
     private LoadingCtrl: LoadingController,
+    private storage: Storage,
     private translationService: TranslateService) {
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+        this.RequestDataObj.CompanyId = this.user.CompanyId;
+        this.RequestDataObj.Culture = this.user.Culture;
+        this.RequestDataObj.EmpId = this.user.EmpId;
+        this.breakObj.CompanyId = this.user.CompanyId;
+        this.breakObj.Language = this.user.Language;
+
+      }
+    });
     //Loader
     let RequestLoader = this.LoadingCtrl.create({
       spinner: 'dots'
@@ -85,7 +99,7 @@ export class CutLeavePage {
     this.displayFormat = "MMM DD, YYYY ";
     //
     this.RequestDataObj.TypeId = this.LeaveComing.TypeId;
-    this.RequestDataObj.StartDate = new Date().toDateString();
+    this.RequestDataObj.StartDate = new Date(this.LeaveComing.StartDate).toDateString();
     RequestLoader.present().then(() => {
       this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
         console.log("GetRequestLeaveData : ", data)
@@ -155,8 +169,8 @@ export class CutLeavePage {
       position: 'bottom'
     })
     //
-    this.breakObj.CompanyId = 0;
-    this.breakObj.Language = "en-GB";
+    this.breakObj.CompanyId = this.user.CompanyId;
+    this.breakObj.Language = this.user.Language;
     this.breakObj.RequestId = this.LeaveComing.Id;
     this.breakObj.BreakEndDate = new Date(new Date(this.ActualendDate).toString()).toISOString().slice(0, -1); //new Date(this.ActualendDate).toLocaleDateString();
     this.breakObj.BreakNofDays = this.NofDaysAfter;
