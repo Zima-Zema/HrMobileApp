@@ -24,7 +24,6 @@
         <ion-item *ngIf="!logInForm.get('companyName').required && companyNameRequired">
           <p style="color:crimson"> {{"compRequir" | translate}} </p>
         </ion-item>
-        <br/>
         <span *ngIf="!logInForm.controls.companyName.valid && (logInForm.controls.companyName.dirty) ">
           <p *ngIf="logInForm.get('companyName').hasError('wrongurl')" style="color:crimson ">{{logInForm.get('companyName').getError('wrongurl')}}</p>
         </span>
@@ -91,9 +90,9 @@
       <button ion-button color="primary" block large round [disabled]="!logInForm.valid">
         <ion-icon name="log-in"></ion-icon>&nbsp;&nbsp;&nbsp; {{"LogIn" | translate}}</button>
 
-      
+
     </form>
-    
+
   </ion-list>
   <button ion-button color="danger" (click)="Logout()" block large round>
     <ion-icon name="log-out"></ion-icon>&nbsp;&nbsp;&nbsp; {{"LogOut" | translate}}</button>

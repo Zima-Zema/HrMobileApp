@@ -1,9 +1,9 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title *ngIf="EditFlag==0">Request Leave</ion-title>
-    <ion-title *ngIf="EditFlag==1">Edit Leave</ion-title>
-    <ion-title *ngIf="EditFlag==2">Leave Details</ion-title>
+    <ion-title *ngIf="EditFlag==0">{{"RequestLeave" | translate}}</ion-title>
+    <ion-title *ngIf="EditFlag==1">{{"EditLeave" | translate}}</ion-title>
+    <ion-title *ngIf="EditFlag==2">{{"LeaveDetails" | translate}}</ion-title>
     <!-- <ion-buttons end>
       <button ion-button icon-only (click)="addEvent()">
         <ion-icon name="trash"></ion-icon>
@@ -21,7 +21,7 @@
       <ion-slide>
         <ion-card>
           <ion-card-header>
-            Balance Chart
+            {{"BalanceChart" | translate}}
           </ion-card-header>
           <ion-card-content>
             <canvas #doughnutCanvas></canvas>
@@ -32,7 +32,7 @@
       <ion-slide>
         <ion-card>
           <ion-card-header>
-            Leaves Chart
+            {{"LeavesChart" | translate}}
           </ion-card-header>
           <ion-card-content>
             <canvas #barCanvas></canvas>
@@ -55,7 +55,7 @@
 
   <form [formGroup]="RequestLeaveForm" id="RequestLeaveID">
     <ion-item>
-      <ion-label floating>Leave Type</ion-label>
+      <ion-label floating>{{"LeaveType" | translate}}</ion-label>
       <ion-select [(ngModel)]="leaveType" (ionChange)="leaveChange(leaveType)" formControlName="leaveType" interface="popover"
         [disabled]="EditFlag==2">
         <ion-option *ngFor="let item of LeavesData" value="{{item.Id}}">{{item.Name}}</ion-option>
@@ -63,7 +63,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label floating>Start Date</ion-label>
+      <ion-label floating>{{"StartDate" | translate}}</ion-label>
       <ion-datetime ion-datepicker [(ngModel)]="startDate" (ionChanged)="dateChange($event)" [disabledDates]="filteredArr" [(value)]="localDateval"
         formControlName="startDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat" [disabled]="EditFlag==2" [min]="minDate"
         [yearValues]="yearsValue"></ion-datetime>
@@ -74,7 +74,7 @@
     </span>
     <!--oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  -->
     <ion-item>
-      <ion-label floating>No. Of Days</ion-label>
+      <ion-label floating>{{"NoOfDays" | translate}}</ion-label>
       <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays" [min]="1"
         [disabled]="EditFlag==2 "></ion-input>
     </ion-item>
@@ -87,14 +87,14 @@
     </span>
 
     <ion-item *ngIf="allowFraction">
-      <ion-label floating>Fraction</ion-label>
+      <ion-label floating>{{"Fraction" | translate}}</ion-label>
       <ion-select [(ngModel)]="fraction" (ionChange)="fractionChange(fraction)" formControlName="fraction" interface="popover"
         [disabled]="EditFlag==2 ">
-        <ion-option value="0">No Fraction</ion-option>
-        <ion-option value="1">Quarter At Start Day</ion-option>
-        <ion-option value="2">Half At Start Day</ion-option>
-        <ion-option value="3">Quarter At End Day</ion-option>
-        <ion-option value="4">Half At End Day</ion-option>
+        <ion-option value="0">{{"NoFraction" | translate}}</ion-option>
+        <ion-option value="1">{{"QASD" | translate}}</ion-option>
+        <ion-option value="2">{{"HASD" | translate}}</ion-option>
+        <ion-option value="3">{{"QAED" | translate}}</ion-option>
+        <ion-option value="4">{{"HAED" | translate}}</ion-option>
       </ion-select>
       <span *ngIf="!RequestLeaveForm.controls.fraction.valid && (RequestLeaveForm.controls.fraction.dirty) && EditFlag!=2 ">
         {{RequestLeaveForm.controls.leaveType.value}}
@@ -104,9 +104,9 @@
 
 
     <ion-item>
-      <ion-label floating>Leave Reason</ion-label>
+      <ion-label floating>{{"LeaveReason" | translate}}</ion-label>
       <ion-select [(ngModel)]="reason" (ionChange)="reasonChange(reason)" formControlName="reason" interface="popover" [disabled]="EditFlag==2">
-        <ion-option value="0">No Reason</ion-option>
+        <ion-option value="0">{{"NoReason" | translate}}</ion-option>
         <ion-option *ngFor="let item of LeaveReasonList" value="{{item.CodeId}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
@@ -121,13 +121,13 @@
       <ion-row>
         <ion-col>
           <ion-item>
-            <ion-label floating>Allowed Days</ion-label>
+            <ion-label floating>{{"AllowedDays" | translate}}</ion-label>
             <ion-input type="number" readonly [(ngModel)]="allowedDays" formControlName="allowedDays"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item>
-            <ion-label floating>Reserved Days</ion-label>
+            <ion-label floating>{{"ReservedDays" | translate}}</ion-label>
             <ion-input type="number" readonly [(ngModel)]="reservedDays" formControlName="reservedDays"></ion-input>
           </ion-item>
         </ion-col>
@@ -135,14 +135,13 @@
     </ion-grid>
 
     <ion-item>
-      <ion-label floating>End Date</ion-label>
+      <ion-label floating>{{"EndDate" | translate}}</ion-label>
       <ion-datetime disabled [(ngModel)]="endDate" formControlName="endDate" displayFormat="MMM DD, YYYY"></ion-datetime>
     </ion-item>
 
     <ion-item>
-      <ion-label floating>Return Date</ion-label>
-      <ion-datetime displayFormat="MMM DD, YYYY" disabled [(ngModel)]="returnDate"
-        formControlName="returnDate"></ion-datetime>
+      <ion-label floating>{{"ReturnDate" | translate}}</ion-label>
+      <ion-datetime displayFormat="MMM DD, YYYY" disabled [(ngModel)]="returnDate" formControlName="returnDate"></ion-datetime>
     </ion-item>
 
 
@@ -150,13 +149,13 @@
       <ion-row>
         <ion-col>
           <ion-item>
-            <ion-label floating>Balance Before</ion-label>
+            <ion-label floating>{{"BalBefore" | translate}}</ion-label>
             <ion-input type="number" readonly [(ngModel)]="balBefore" formControlName="balBefore"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item>
-            <ion-label floating>Balance After</ion-label>
+            <ion-label floating>{{"BalAfter" | translate}}</ion-label>
             <ion-input type="number" readonly [(ngModel)]="balAfter" formControlName="balAfter"></ion-input>
           </ion-item>
         </ion-col>
@@ -164,7 +163,7 @@
     </ion-grid>
 
     <ion-item>
-      <ion-label floating>Replacement Employee</ion-label>
+      <ion-label floating>{{"Replacement" | translate}}</ion-label>
       <ion-select [(ngModel)]="replacement" formControlName="replacement" (ionChange)="replacementChange(replacement)" interface="popover"
         [disabled]="EditFlag==2">
         <ion-option *ngFor="let item of Replacements" value="{{item.id}}">{{item.name}}</ion-option>
@@ -174,7 +173,7 @@
       <p *ngIf="errorMsgObj.ReplacementError" style="color:crimson">{{errorMsgObj.ReplacementError}}</p>
     </span>
     <ion-item>
-      <ion-label>Comments</ion-label>
+      <ion-label>{{"Comments" | translate}}</ion-label>
       <br>
       <ion-textarea rows="3" class="txtarea" [(ngModel)]="comments" formControlName="comments" placeholder="discription" [disabled]="EditFlag==2"></ion-textarea>
     </ion-item>
@@ -182,6 +181,8 @@
   </form>
 </ion-content>
 <ion-footer *ngIf="EditFlag==0 || EditFlag==1">
-  <button ion-button class="submit" form="RequestLeaveID" color="primary" type="submit" (click)="saveLeaves(true)" [disabled]="!RequestLeaveForm.valid || errorMsgObj.IsError">{{BtnTxt}}</button>
-  <button ion-button class="save" form="RequestLeaveID" color="secondary" type="submit" (click)="saveLeaves(false)" [disabled]="!RequestLeaveForm.valid || errorMsgObj.IsError">Save</button>
+  <button ion-button class="submit" [ngClass]="{rightsubmitButton:lang=='ar',leftsubmitButton:lang=='en'}" form="RequestLeaveID"
+    color="primary" type="submit" (click)="saveLeaves(true)" [disabled]="!RequestLeaveForm.valid || errorMsgObj.IsError">{{"Submittxt" | translate}}</button>
+  <button ion-button class="save" [ngClass]="{right:lang=='en',left:lang=='ar'}" form="RequestLeaveID" color="secondary" type="submit"
+    (click)="saveLeaves(false)" [disabled]="!RequestLeaveForm.valid || errorMsgObj.IsError">{{"Save" | translate}}</button>
 </ion-footer>

@@ -38,6 +38,46 @@
     "ConfirmRemove":"Confirm Remove",
     "RemoveReqMsg":"Are you sure you want to remove this leave request?",
     "ConfirmCancel":"Confirm Cancel",
-    "CancelReqMsg":"Are you sure you want to cancel this leave request?"
+    "CancelReqMsg":"Are you sure you want to cancel this leave request?",
+
+
+    "LeaveType":"Leave Type",
+    "RequestLeave":"Request Leave",
+    "EditLeave":"Edit Leave",
+    "LeaveDetails":"Leave Details",
+    "BalanceChart":"Balance Chart",
+    "LeavesChart":"Leaves Chart",
+    "StartDate":"Start Date",
+    "NoOfDays":"No. Of Days",
+    "Fraction":"Fraction",
+    "NoFraction":"No Fraction",
+    "NoReason":"No Reason",
+    "QASD":"Quarter At Start Day",
+    "HASD":"Half At Start Day",
+    "QAED":"Quarter At End Day",
+    "HAED":"Half At End Day",
+    "LeaveReason":"Leave Reason",
+    "AllowedDays":"Allowed Days",
+    "ReservedDays":"Reserved Days",
+    "EndDate":"End Date",
+    "ReturnDate":"Return Date",
+    "BalBefore":"Balance Before",
+    "BalAfter":"Balance After",
+    "Replacement":"Replacement Employee",
+    "Comments":"Comments",
+    "Save":"Save",
+    "Submittxt":"Save & Submit",
+
+     "ZNError": "Zero or negative not allowed.",
+     "BTMaxError": "Bigger than Maximum",
+     "BTAllowError":"Bigger than allowed",
+     "NanError": "Not a number",
+     "NanWError":"Not a whole number",
+     "RequireError": "Required",
+     "DayFracError":"No. Of Days OR Fraction Should Be Inserted." ,
+     "ReasonError": "This Leave Type Must Have Reason",
+
+     "AEndDate":"Actual End Date",
+     "AReturnDate":"Actual Return Date"
 
 }

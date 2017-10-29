@@ -10,7 +10,6 @@ import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
 import { TranslateService } from '@ngx-translate/core';
 
-
 @IonicPage()
 @Component({
   selector: 'page-leave-list',

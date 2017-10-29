@@ -10,7 +10,6 @@ export interface IRequestType {
     Culture: string,
     EmpId: number
 }
-
 export interface IRequestData {
     CompanyId: number,
     TypeId: number,
@@ -46,7 +45,6 @@ export interface ILeaveRequest {
     Type: string,
     ApprovalStatus: ApprovalStatusEnum
 }
-
 export interface IValidationMsg {
     AssignError: string,
     IsReplacementError: string,

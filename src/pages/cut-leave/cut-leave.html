@@ -12,13 +12,13 @@
   <form [formGroup]="CutLeaveForm" id="CutLeaveID">
 
     <ion-item>
-      <ion-label floating>Actual Return Date</ion-label>
+      <ion-label floating>{{"AReturnDate" |translate}}</ion-label>
       <ion-datetime [(ngModel)]="ReturnDate" (ionChanged)="dateChange($event)" ion-datepicker [disabledDates]="filteredArr" [(value)]="localDateval"
         formControlName="ReturnDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat" [min]="minDate"></ion-datetime>
     </ion-item>
 
     <ion-item>
-      <ion-label floating>Actual End Date</ion-label>
+      <ion-label floating>{{"AEndDate" | translate}}</ion-label>
       <ion-datetime disabled [(ngModel)]="ActualendDate" formControlName="ActualendDate" [displayFormat]="displayFormat"></ion-datetime>
     </ion-item>
 
@@ -26,13 +26,13 @@
       <ion-row>
         <ion-col>
           <ion-item>
-            <ion-label floating>No. of Days</ion-label>
+            <ion-label floating>{{"NoOfDays" | translate}}</ion-label>
             <ion-input type="number" disabled [(ngModel)]="NofDaysAfter" formControlName="NofDaysAfter"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item>
-            <ion-label floating>Balance</ion-label>
+            <ion-label floating>{{"BalAfter" | translate}}</ion-label>
             <ion-input type="number" disabled [(ngModel)]="balAfter" formControlName="balAfter"></ion-input>
           </ion-item>
         </ion-col>
@@ -42,5 +42,5 @@
   </form>
 </ion-content>
 <ion-footer>
-  <button ion-button full form="CutLeaveID" color="primary" type="submit" [disabled]="!CutLeaveForm.valid" (click)="CutLeaves()">Confirm Cut</button>
+  <button ion-button full form="CutLeaveID" color="primary" type="submit" [disabled]="!CutLeaveForm.valid" (click)="CutLeaves()">{{"Submittxt" | translate}}</button>
 </ion-footer>

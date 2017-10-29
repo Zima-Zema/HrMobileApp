@@ -40,3 +40,16 @@ ul {
         color: #ffb400;
     }
   }
+
+  .rightsubmitButton{
+    position: absolute; right: 0;
+   }
+   .leftsubmitButton{
+    position: absolute; left: 0;
+   }
+   .left{
+    float: left;
+   }
+   .right{
+    float: right;
+  }
