@@ -77,6 +77,7 @@ export interface ICancelVM {
 }
 
 
+
 @Injectable()
 export class LeaveServicesApi {
 
@@ -210,8 +211,10 @@ export class LeaveServicesApi {
                     isHoliday = true;
                 }
                 if (leaveType.ExHolidays) {
+
+                    //remmber to check this for
                     for (let i = 0; i < calender.CustomHolidays.length; i++) {
-                        var custDate = new Date(parseInt(calender.CustomHolidays[i].substr(6)));
+                        var custDate = new Date(calender.CustomHolidays[i]);
                         if (custDate.getFullYear() == result.getFullYear() && custDate.getMonth() == result.getMonth() && custDate.getDate() == result.getDate())
                             isHoliday = true;
                     }
@@ -317,6 +320,7 @@ export class LeaveServicesApi {
                 day.setDate(date);
                 day.setMonth(month - 1);
                 day.setFullYear(year);
+
                 if (day.getDay() == calender.weekend1 || day.getDay() == calender.weekend2) {
                     offdays.push(day);
                 }
@@ -325,28 +329,41 @@ export class LeaveServicesApi {
         return offdays;
     }
 
-
-
-    getallDays(year) {
-        var offdays: Array<any> = [];
-        let i = 0;
-        for (let month = 1; month <= 12; month++) {
-            let tdays = new Date(year, month, 0).getDate();
-            for (let date = 1; date <= tdays; date++) {
-                let smonth = (month < 10) ? "0" + month : month;
-                let sdate = (date < 10) ? "0" + date : date;
-                let dd = year + "-" + smonth + "-" + sdate;
-                let day = new Date();
-                day.setDate(date);
-                day.setMonth(month - 1);
-                day.setFullYear(year);
-                offdays[i++] = dd;
-            }
-        }
-        return offdays;
+    addDaysToDate(date, days) {
+        let dat = new Date(date);
+        return new Date(dat.setDate(dat.getDate() + days));
     }
 
+    getDates(startDate, stopDate) {
+        var dateArray = new Array();
+        var currentDate = startDate;
+        while (currentDate <= stopDate) {
+            dateArray.push(currentDate)
+            currentDate = this.addDaysToDate(currentDate, 1);
+        }
+        console.log("dateArray: ", dateArray)
+        return dateArray;
+    }
 
+    cutLeave(startDate, actualReturn, noFDays, endDate, calender, leaveType, balance) {
+        let holidays = this.getOffDays(calender);
+        let dates = this.getDates(new Date(startDate), this.addDaysToDate(actualReturn, -1));
+        holidays.forEach((ele) => {
+            dates = dates.filter((date) => new Date(date).toLocaleDateString() !== new Date(ele).toLocaleDateString());
+        });
+        //console.log("actual", dates)
+        let dayesAfterCut = dates.length;
+        balance += noFDays - dayesAfterCut;
+        noFDays = dayesAfterCut;
+        endDate = this.addDays(startDate, noFDays, calender, leaveType); //new Date(startDate).setDate(new Date(startDate).getDate() + noFDays - 1);
+        return {
+            startDate: startDate,
+            noFDays: noFDays,
+            endDate: new Date(endDate),
+            balance: balance
+        }
+
+    }
 
 
     getInitialDate(initialDate: Date, calender): Date {
