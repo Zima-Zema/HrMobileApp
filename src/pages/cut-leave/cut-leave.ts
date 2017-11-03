@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { LeaveServicesApi, IRequestData } from "../../shared/LeavesService"
+import { LeaveServicesApi, IRequestData, IBreak } from "../../shared/LeavesService"
 import { FormGroup, Validators, FormBuilder } from "@angular/forms";
 
 @IonicPage()
@@ -37,6 +37,13 @@ export class CutLeavePage {
     EmpId: 1072,
     RequestId: 0,
     StartDate: ""
+  }
+  breakObj: IBreak = {
+    BreakEndDate: null,
+    BreakNofDays: 0,
+    CompanyId: 0,
+    Language: "ar-EG",
+    RequestId: 0
   }
 
   constructor(public navCtrl: NavController,
@@ -109,7 +116,17 @@ export class CutLeavePage {
   }
 
   CutLeaves() {
-    console.log("Cut")
+    this.breakObj.CompanyId = 0;
+    this.breakObj.Language = "en-GB";
+    this.breakObj.RequestId = this.LeaveComing.Id;
+    this.breakObj.BreakEndDate = new Date(this.ActualendDate).toLocaleDateString();
+    this.breakObj.BreakNofDays = this.NofDaysAfter;
+    this.LeaveServices.breakLeave(this.breakObj).subscribe((data)=>{
+      if (data.length) {
+        this.navCtrl.pop();
+      }
+    })
+    console.log("Cut: ", this.breakObj);
   }
 
 }

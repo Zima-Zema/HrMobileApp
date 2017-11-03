@@ -75,6 +75,13 @@ export interface ICancelVM {
     Language: string,
     CompanyId: number
 }
+export interface IBreak {
+    RequestId: number,
+    Language: string,
+    CompanyId: number,
+    BreakEndDate: string,
+    BreakNofDays: number
+}
 
 
 
@@ -189,6 +196,19 @@ export class LeaveServicesApi {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}/newApi/Leaves/CancelLeave`, bodyString, { headers: headers })
+            .map((res: Response) => {
+                console.log("res.json ::: ", res.json());
+                return res.json();
+            }).catch((err) => {
+                console.log("the error in Service ::", err);
+                return err;
+            });
+    }
+    ////////////////////////////////////////////////////////
+    breakLeave(body: IBreak) {
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}/newApi/Leaves/BreakLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
                 return res.json();

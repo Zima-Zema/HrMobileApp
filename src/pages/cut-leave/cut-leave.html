@@ -27,7 +27,7 @@
         <ion-col>
           <ion-item>
             <ion-label floating>No. of Days</ion-label>
-            <ion-input type="number" disabled [(ngModel)]="NofDaysAfter" formControlName="NofDaysAfter" ></ion-input>
+            <ion-input type="number" disabled [(ngModel)]="NofDaysAfter" formControlName="NofDaysAfter"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
@@ -42,5 +42,5 @@
   </form>
 </ion-content>
 <ion-footer>
-  <button ion-button full form="CutLeaveID" color="primary" type="submit" (click)="CutLeaves()">Confirm</button>
+  <button ion-button full form="CutLeaveID" color="primary" type="submit" [disabled]="!CutLeaveForm.valid" (click)="CutLeaves()">Confirm</button>
 </ion-footer>
