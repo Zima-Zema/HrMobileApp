@@ -72,14 +72,15 @@
    <p *ngIf="errorMsgObj.HasRequestError" style="color:crimson">{{errorMsgObj.HasRequestError}}</p>
    <p *ngIf="errorMsgObj.IsReplacementError" style="color:crimson">{{errorMsgObj.IsReplacementError}}</p>
 </span>
+    <!--oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  -->
     <ion-item>
       <ion-label floating>No. Of Days</ion-label>
-      <ion-input type="number"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="2" maxlength="2" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays"
+      <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays"
         [min]="1" [disabled]="EditFlag==2 "></ion-input>
     </ion-item>
     <span *ngIf="!RequestLeaveForm.controls.noOfDays.valid && (RequestLeaveForm.controls.noOfDays.dirty) && EditFlag!=2 "> 
      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('RequiredDays')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('RequiredDays')}}</p>  
-      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('maximum')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('maximum')}} - {{requestData.LeaveType.MaxDays}}</p>
+      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('maximum')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('maximum')}}, {{requestData.LeaveType.MaxDays}} Day(s)</p>
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('allowed')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('allowed')}} - {{allowedDays}}</p>      
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('noLeave')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('noLeave')}}</p>      
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('general')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('general')}}</p>       

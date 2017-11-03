@@ -432,11 +432,22 @@ export class RequestLeavePage {
     })
   }
   dateChange(item) {
+    //this.ResetMiniForm();
     console.log(` dateChange item : ${item}`)
     if (item) {
       if (this.EditFlag != 2) {
-        this.RequestLeaveForm.controls['noOfDays'].enable();
-        this.RequestLeaveForm.controls['fraction'].enable();
+        if ((this.RequestLeaveForm.controls['noOfDays'].value == null || this.RequestLeaveForm.controls['noOfDays'].value == 0) && this.RequestLeaveForm.controls['fraction'].value == 0) {
+          this.RequestLeaveForm.controls['noOfDays'].enable();
+          this.RequestLeaveForm.controls['fraction'].enable();
+        }
+        else if (this.RequestLeaveForm.controls['noOfDays'].value != null || this.RequestLeaveForm.controls['noOfDays'].value != 0) {
+          this.RequestLeaveForm.controls['noOfDays'].enable();
+          this.RequestLeaveForm.controls['fraction'].disable();
+        }
+        else if (this.RequestLeaveForm.controls['fraction'].value != 0) {
+          this.RequestLeaveForm.controls['noOfDays'].disable();
+          this.RequestLeaveForm.controls['fraction'].enable();
+        }
         // console.log(`this.disableFlagNoOfDays : ${this.disableFlagNoOfDays} || this.disableFlagFarc : ${this.disableFlagFarc}`)
         // this.disableFlagNoOfDays = false;
         // this.disableFlagFarc = false;
@@ -545,13 +556,10 @@ export class RequestLeavePage {
           console.log(this.errorMsgObj);
         })
       }
-
-
-
-
     }
   }
   resetForm() {
+    //this.errorMsgObj = null;
     RequestLeavePage.allowed = null;
     RequestLeavePage.maxDays = null;
     RequestLeavePage.FullData = null;
@@ -569,6 +577,26 @@ export class RequestLeavePage {
     this.reason = null;;
     this.fraction = null;;
   }
+
+  ResetMiniForm() {
+    RequestLeavePage.allowed = null;
+    RequestLeavePage.maxDays = null;
+    RequestLeavePage.FullData = null;
+    RequestLeavePage.frac = 0;
+    this.noOfDays = null;
+    this.allowedDays = undefined;
+    this.reservedDays = undefined;
+    this.returnDate = null;
+    this.endDate = null;
+    this.balBefore = undefined;
+    this.balAfter = undefined;
+    this.replacement = null;;
+    this.comments = null;;
+    this.reason = null;;
+    this.fraction = null;;
+  }
+
+
   static isRequired(control: FormControl) {
     console.log("isRequired : control.value : ", control.value);
     let x = Number.parseInt(control.value)
@@ -796,7 +824,7 @@ export class RequestLeavePage {
   //   }
   // }
   ///////////////////////////////////////////
-   // static isValid(control: FormControl) {
+  // static isValid(control: FormControl) {
   //   console.log("validationAllowed", RequestLeavePage.allowed);
   //   if (RequestLeavePage.allowed == null) {
   //     return {
