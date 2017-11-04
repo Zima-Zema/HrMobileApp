@@ -1,27 +1,48 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{item.Type}}</ion-title>
+    <ion-title>{{comingLeave.Type}}</ion-title>
   </ion-navbar>
 
 </ion-header>
-
-
 <ion-content padding>
+
+  <rating [(ngModel)]="rate" readOnly="true" max="5" emptyStarIconName="star-outline" halfStarIconName="star-half" starIconName="star"
+    nullable="false"></rating>
 
   <form [formGroup]="EditLeaveForm" (ngSubmit)="UpdateLeaves()">
     <ion-item>
       <ion-label floating>Start Date</ion-label>
-      <ion-datetime [(ngModel)]="startDate" formControlName="startDate" displayFormat="MM/DD/YYYY HH:mm" pickerFormat="MMM DD YYYY:HH:mm"
+      <ion-datetime ion-datepicker [(ngModel)]="actualStartDate" (ionChanged)="dateChange($event)" [disabledDates]="filteredArr"
+        [(value)]="localDateval" formControlName="actualStartDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat"
         [min]="minDate" [yearValues]="yearsValue"></ion-datetime>
     </ion-item>
+    <span *ngIf="errorMsgObj.IsError && (errorMsgObj.HasRequestError || errorMsgObj.IsReplacementError)">
+      <p *ngIf="errorMsgObj.HasRequestError" style="color:crimson">{{errorMsgObj.HasRequestError}}</p>
+      <p *ngIf="errorMsgObj.IsReplacementError" style="color:crimson">{{errorMsgObj.IsReplacementError}}</p>
+    </span>
+
 
     <ion-item>
       <ion-label floating>No. Of Days</ion-label>
-      <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays" [min]="1"></ion-input>
+      <ion-input type="number" [(ngModel)]="actualNOfDays" formControlName="actualNOfDays" disabled></ion-input>
     </ion-item>
 
-    <button ion-button color="primary" type="submit" [disabled]="!EditLeaveForm.valid">Submit</button>
+
+    <ion-item>
+      <ion-label floating>End Date</ion-label>
+      <ion-datetime disabled [(ngModel)]="actualEndDate" formControlName="actualEndDate" [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Return Date</ion-label>
+      <ion-datetime [displayFormat]="allowFraction ? 'MMM DD, YYYY HH:mm A' : 'MMM DD, YYYY'" disabled [(ngModel)]="actualReturnDate"
+        formControlName="actualReturnDate"></ion-datetime>
+    </ion-item>
+
   </form>
 
 </ion-content>
+<ion-footer>
+  <button ion-button full color="primary" type="submit" (click)="UpdateLeaves()" [disabled]="!EditLeaveForm.valid || errorMsgObj.IsError">Save Changes</button>
+</ion-footer>

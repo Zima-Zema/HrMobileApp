@@ -43,11 +43,11 @@
     </ion-slides>
   </ion-card>
   <span *ngIf="errorMsgObj.IsError">
-   <p *ngIf="errorMsgObj.AssignError" style="color:crimson">{{errorMsgObj.AssignError}}</p>
-   <p *ngIf="errorMsgObj.DeptPercentError" style="color:crimson">{{errorMsgObj.DeptPercentError}} - {{errorMsgObj.Percentage}}</p>
-   <p *ngIf="errorMsgObj.StarsError" style="color:crimson">{{errorMsgObj.StarsError}}</p>
-   <p *ngIf="errorMsgObj.WaitingError" style="color:crimson">{{errorMsgObj.WaitingError}} - {{errorMsgObj.WaitingMonth}}</p>
-</span>
+    <p *ngIf="errorMsgObj.AssignError" style="color:crimson">{{errorMsgObj.AssignError}}</p>
+    <p *ngIf="errorMsgObj.DeptPercentError" style="color:crimson">{{errorMsgObj.DeptPercentError}} - {{errorMsgObj.Percentage}}</p>
+    <p *ngIf="errorMsgObj.StarsError" style="color:crimson">{{errorMsgObj.StarsError}}</p>
+    <p *ngIf="errorMsgObj.WaitingError" style="color:crimson">{{errorMsgObj.WaitingError}} - {{errorMsgObj.WaitingMonth}}</p>
+  </span>
 
 
   <rating [(ngModel)]="rate" readOnly="true" max="5" emptyStarIconName="star-outline" halfStarIconName="star-half" starIconName="star"
@@ -69,22 +69,22 @@
         [yearValues]="yearsValue"></ion-datetime>
     </ion-item>
     <span *ngIf="errorMsgObj.IsError && (errorMsgObj.HasRequestError || errorMsgObj.IsReplacementError)">
-   <p *ngIf="errorMsgObj.HasRequestError" style="color:crimson">{{errorMsgObj.HasRequestError}}</p>
-   <p *ngIf="errorMsgObj.IsReplacementError" style="color:crimson">{{errorMsgObj.IsReplacementError}}</p>
-</span>
+      <p *ngIf="errorMsgObj.HasRequestError" style="color:crimson">{{errorMsgObj.HasRequestError}}</p>
+      <p *ngIf="errorMsgObj.IsReplacementError" style="color:crimson">{{errorMsgObj.IsReplacementError}}</p>
+    </span>
     <!--oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"  -->
     <ion-item>
       <ion-label floating>No. Of Days</ion-label>
-      <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays"
-        [min]="1" [disabled]="EditFlag==2 "></ion-input>
+      <ion-input type="number" [(ngModel)]="noOfDays" (ionChange)="numberChange(noOfDays)" formControlName="noOfDays" [min]="1"
+        [disabled]="EditFlag==2 "></ion-input>
     </ion-item>
-    <span *ngIf="!RequestLeaveForm.controls.noOfDays.valid && (RequestLeaveForm.controls.noOfDays.dirty) && EditFlag!=2 "> 
-     <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('RequiredDays')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('RequiredDays')}}</p>  
+    <span *ngIf="!RequestLeaveForm.controls.noOfDays.valid && (RequestLeaveForm.controls.noOfDays.dirty) && EditFlag!=2 ">
+      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('RequiredDays')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('RequiredDays')}}</p>
       <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('maximum')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('maximum')}}, {{requestData.LeaveType.MaxDays}} Day(s)</p>
-      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('allowed')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('allowed')}} - {{allowedDays}}</p>      
-      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('noLeave')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('noLeave')}}</p>      
-      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('general')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('general')}}</p>       
-     </span>
+      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('allowed')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('allowed')}} - {{allowedDays}}</p>
+      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('noLeave')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('noLeave')}}</p>
+      <p *ngIf="RequestLeaveForm.get('noOfDays').hasError('general')" style="color:crimson ">{{RequestLeaveForm.get('noOfDays').getError('general')}}</p>
+    </span>
 
     <ion-item *ngIf="allowFraction">
       <ion-label floating>Fraction</ion-label>
@@ -97,9 +97,9 @@
         <ion-option value="-0.5">Half At End Day</ion-option>
       </ion-select>
       <span *ngIf="!RequestLeaveForm.controls.fraction.valid && (RequestLeaveForm.controls.fraction.dirty) && EditFlag!=2 ">
-       {{RequestLeaveForm.controls.leaveType.value}}
-      <p *ngIf="RequestLeaveForm.get('fraction').hasError('RequiredDays')" style="color:crimson ">{{RequestLeaveForm.get('fraction').getError('RequiredDays')}}</p>  
-    </span>
+        {{RequestLeaveForm.controls.leaveType.value}}
+        <p *ngIf="RequestLeaveForm.get('fraction').hasError('RequiredDays')" style="color:crimson ">{{RequestLeaveForm.get('fraction').getError('RequiredDays')}}</p>
+      </span>
     </ion-item>
 
 
@@ -114,7 +114,7 @@
 
     <span *ngIf="!RequestLeaveForm.controls.reason.valid && (RequestLeaveForm.controls.reason.dirty) && EditFlag!=2">
       <p *ngIf="RequestLeaveForm.get('reason').hasError('theMust')" style="color:crimson ">{{RequestLeaveForm.get('reason').getError('theMust')}}</p>
-       <p *ngIf="RequestLeaveForm.get('reason').hasError('noLeave')" style="color:crimson ">{{RequestLeaveForm.get('reason').getError('noLeave')}}</p>          
+      <p *ngIf="RequestLeaveForm.get('reason').hasError('noLeave')" style="color:crimson ">{{RequestLeaveForm.get('reason').getError('noLeave')}}</p>
     </span>
 
     <ion-grid>
@@ -171,8 +171,8 @@
       </ion-select>
     </ion-item>
     <span *ngIf="errorMsgObj.IsError && errorMsgObj.ReplacementError">
-   <p *ngIf="errorMsgObj.ReplacementError" style="color:crimson">{{errorMsgObj.ReplacementError}}</p>
-</span>
+      <p *ngIf="errorMsgObj.ReplacementError" style="color:crimson">{{errorMsgObj.ReplacementError}}</p>
+    </span>
     <ion-item>
       <ion-label>Comments</ion-label>
       <br>
