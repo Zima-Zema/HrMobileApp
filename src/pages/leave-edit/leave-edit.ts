@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { IValidationMsg, IValidate, IRequestData, LeaveServicesApi } from '../../shared/LeavesService';
+import { IValidationMsg, IValidate, IRequestData, LeaveServicesApi, IEdit } from '../../shared/LeavesService';
 
 @IonicPage()
 @Component({
@@ -52,6 +52,15 @@ export class LeaveEditPage {
     RequestId: 0,
     StartDate: ""
   }
+  editObj: IEdit = {
+    EditedStartDate: null,
+    EditedEndDate: null,
+    EditedReturnDate: null,
+    CompanyId: 0,
+    Language: "ar-EG",
+    RequestId: 0
+  }
+
   ////
   //utilits
   public pickFormat: any;
@@ -152,7 +161,20 @@ export class LeaveEditPage {
   }
 
   UpdateLeaves() {
+    this.editObj.EditedStartDate = new Date(this.actualStartDate).toLocaleDateString();
+    this.editObj.EditedEndDate = new Date(this.actualEndDate).toLocaleDateString();
+    this.editObj.EditedReturnDate = new Date(this.actualReturnDate).toLocaleDateString();
+    this.editObj.CompanyId = 0;
+    this.editObj.Language = "en-GB";
+    this.editObj.RequestId = this.comingLeave.Id;
+    console.log("editObj", this.editObj);
+    this.LeaveServices.editApprovedLeave(this.editObj).subscribe((data) => {
+      if (data.length !== 0) {
+        this.navCtrl.pop();
+      }
+    }, (error) => {
 
+    });
   }
 
 }
