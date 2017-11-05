@@ -33,6 +33,8 @@ import { LeaveListPageModule } from '../pages/leave-list/leave-list.module';
 import { RequestLeavePageModule } from '../pages/request-leave/request-leave.module';
 import { LeaveEditPageModule } from '../pages/leave-edit/leave-edit.module';
 import { CutLeavePageModule} from '../pages/cut-leave/cut-leave.module';
+import { AssignOrderPageModule} from '../pages/AssignOrder/assign-order/assign-order.module'
+import { AddAssignOrderPageModule} from '../pages/AssignOrder/add-assign-order/add-assign-order.module'
 //from Ali
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -87,7 +89,9 @@ export function creatConfig(): SignalRConfiguration {
     RequestLeavePageModule,
     LeaveEditPageModule,
     SettingsPageModule,
-    CutLeavePageModule
+    CutLeavePageModule,
+    AssignOrderPageModule,
+    AddAssignOrderPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

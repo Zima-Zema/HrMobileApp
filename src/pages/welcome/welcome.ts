@@ -12,6 +12,7 @@ import { LeaveListPage } from '../leave-list/leave-list';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsPage } from '../settings/settings';
 import { BackgroundMode } from '@ionic-native/background-mode';
+import { AssignOrderPage} from '../AssignOrder/assign-order/assign-order'
 @IonicPage()
 @Component({
   selector: 'page-welcome',
@@ -133,6 +134,9 @@ export class WelcomePage {
   }
   Settings() {
     this.navCtrl.push(SettingsPage);
+  }
+  GoToAssignOrder(){
+    this.navCtrl.push(AssignOrderPage);
   }
   Logout() {
     this.storage.clear();
