@@ -10,7 +10,6 @@ export interface IRequestType {
     Culture: string,
     EmpId: number
 }
-
 export interface IRequestData {
     CompanyId: number,
     TypeId: number,
@@ -37,7 +36,7 @@ export interface ILeaveRequest {
     EmpId: number,
     ReplaceEmpId: number,
     NofDays: number,
-    FractionDays: number,
+    DayFraction: number,
     StartDate: string,
     Culture: string,
     EndDate: string,
@@ -46,7 +45,6 @@ export interface ILeaveRequest {
     Type: string,
     ApprovalStatus: ApprovalStatusEnum
 }
-
 export interface IValidationMsg {
     AssignError: string,
     IsReplacementError: string,
@@ -94,18 +92,19 @@ export interface IEdit {
 
 @Injectable()
 export class LeaveServicesApi {
-
-    private baseURL: string =
-    'http://192.168.1.17:36207';
-    // "http://www.enterprise-hr.com";
+    private baseURL: string;
     constructor(private _http: Http, private _storage: Storage) {
-    }
+        this._storage.get("BaseURL").then((val) => {
+            this.baseURL = val;
+            console.log("BaseUrl From Notity services>>>", this.baseURL);
 
+        });
+    }
     // get all leaves
     getLeaves(body: IRequestType): Observable<any> {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}/newApi/Leaves/GetEmpLeaves`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}newApi/Leaves/GetEmpLeaves`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
                 return res.json();
@@ -118,7 +117,7 @@ export class LeaveServicesApi {
     GetLeaveTypes(body: IRequestType): Observable<any> {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}/newApi/Leaves/GetLeaveTypes`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}newApi/Leaves/GetLeaveTypes`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
                 return res.json();
@@ -131,7 +130,7 @@ export class LeaveServicesApi {
     GetRequestLeaveData(body: IRequestData): Observable<any> {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}/newApi/Leaves/GetRequestLeaveData`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}newApi/Leaves/GetRequestLeaveData`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
                 return res.json();
@@ -140,12 +139,11 @@ export class LeaveServicesApi {
                 return err;
             });
     }
-
     //Insert LeaveRequest 
     addLeaveRequest(body: ILeaveRequest): Observable<any> {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}/newApi/Leaves/PostLeave`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}newApi/Leaves/PostLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
                 return res.json();
@@ -159,7 +157,7 @@ export class LeaveServicesApi {
     validateRequest(body: IValidate): Observable<IValidationMsg> {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}/newApi/Leaves/ValidateLeaveRequest`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}newApi/Leaves/ValidateLeaveRequest`, bodyString, { headers: headers })
             .map((res: Response) => {
                 //console.log("res.json ::: ", res.json());
                 return res.json();
@@ -173,7 +171,7 @@ export class LeaveServicesApi {
     editLeaveRequest(body: ILeaveRequest): Observable<any> {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}/newApi/Leaves/PutLeave`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}newApi/Leaves/PutLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
                 return res.json();
@@ -186,7 +184,7 @@ export class LeaveServicesApi {
     removeLeaveRequest(body: IDeleteRequest): Observable<any> {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}/newApi/Leaves/DeleteLeave`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}newApi/Leaves/DeleteLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
                 return res.json();
@@ -199,7 +197,7 @@ export class LeaveServicesApi {
     CancelAppLeave(body: ICancelVM) {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}/newApi/Leaves/CancelLeave`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}newApi/Leaves/CancelLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
                 return res.json();
@@ -212,7 +210,7 @@ export class LeaveServicesApi {
     breakLeave(body: IBreak) {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}/newApi/Leaves/BreakLeave`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}newApi/Leaves/BreakLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
                 return res.json();
@@ -225,7 +223,7 @@ export class LeaveServicesApi {
     editApprovedLeave(body: IEdit) {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}/newApi/Leaves/EditLeave`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}newApi/Leaves/EditLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
                 return res.json();
@@ -273,20 +271,11 @@ export class LeaveServicesApi {
     }
 
     calcDates(startDate, noOfDayes, calender, leaveType, fraction) {
-        let startHours;
-        let startMin;
-        let NofHours;
         let endDate;
         let returnDate;
         let NofDays;
         let hasFraction: boolean;
         let hasNofDays: boolean;
-        let calc_Date;
-        let WorkStartTimeString = calender.WorkStartTime;
-        let WorkStartHour: number;
-        let WorkStartMin: number;
-        let WorkingHours = calender.WorkHours;
-        let MilliDate;
         let bloodyStartDate = startDate;
         //
         hasFraction = (leaveType && fraction != null);
@@ -295,32 +284,26 @@ export class LeaveServicesApi {
         console.log(`calcDates startDate : ${startDate}`)
         //
         if (startDate && leaveType.AllowFraction) {  //لو اجازه عارضه
-            WorkStartHour = new Date(WorkStartTimeString).getHours(); //8
-            WorkStartMin = new Date(WorkStartTimeString).getMinutes(); //30 or 0
-            startDate = new Date(startDate).setHours(WorkStartHour, WorkStartMin, 0, 0); //12-10 8:00
+            startDate = new Date(startDate)
 
             console.log("calcDates After startDate : ", startDate);
             if (hasNofDays || (hasNofDays && fraction == 0)) {
                 console.log("yaaaaaaaaaaah, hasNofDays");
                 NofDays = Number.parseInt(noOfDayes);
                 endDate = this.addDays(startDate, NofDays, calender, leaveType);
-                let WorkEndHour: number = new Date(endDate).getHours(); //8
-                endDate = new Date(endDate).setHours((WorkEndHour + WorkingHours), WorkStartMin, 0, 0);//16 //For hours
-                returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType).setHours(WorkStartHour, WorkStartMin, 0, 0);
+                endDate = new Date(endDate)
+                returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType)
             }
             if (hasFraction) {
                 console.log("yaaaaaaaaaaah, hasFraction");
-                if (fraction >= 0) {
-                    let WorkEndHour: number = new Date(startDate).getHours(); //8
-                    endDate = new Date(startDate).setHours((WorkEndHour + (fraction * WorkingHours)), WorkStartMin, 0, 0);
+                if (fraction == 1 || fraction == 2) {
+                    endDate = new Date(startDate)
                     returnDate = endDate;
                 }
-                else if (fraction < 0) {
-                    let WorkEndHour: number = new Date(startDate).getHours(); //8
-                    endDate = new Date(startDate).setHours((WorkEndHour + WorkingHours), WorkStartMin, 0, 0);//16
-                    returnDate = this.addDays(bloodyStartDate, 2, calender, leaveType).setHours(WorkStartHour, WorkStartMin, 0, 0);
-
-                    startDate = new Date(startDate).setHours(((WorkEndHour + WorkingHours) + (fraction * WorkingHours)), WorkStartMin, 0, 0);
+                else if (fraction == 3 || fraction == 4) {
+                    endDate = new Date(startDate);
+                    returnDate = this.addDays(bloodyStartDate, 2, calender, leaveType);
+                    startDate = new Date(startDate);
                 }
             }
         }
@@ -329,18 +312,82 @@ export class LeaveServicesApi {
             endDate = this.addDays(bloodyStartDate, NofDays, calender, leaveType);
             returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType);
         }
-        // // //
-        // if ((startDate && !hasFraction) || (startDate && fraction == 0)) {
-        //     returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType);
-        // }
 
-        console.log(`Before Return: startDate: ${startDate} // endDate: ${endDate} // returnDate ${returnDate}`)
         return {
             startDate: startDate,
             endDate: endDate,
             returnDate: returnDate
         }
     }
+    // calcDates(startDate, noOfDayes, calender, leaveType, fraction) { //Old One
+    //     let startHours;
+    //     let startMin;
+    //     let NofHours;
+    //     let endDate;
+    //     let returnDate;
+    //     let NofDays;
+    //     let hasFraction: boolean;
+    //     let hasNofDays: boolean;
+    //     let calc_Date;
+    //     let WorkStartTimeString = calender.WorkStartTime;
+    //     let WorkStartHour: number;
+    //     let WorkStartMin: number;
+    //     let WorkingHours = calender.WorkHours;
+    //     let MilliDate;
+    //     let bloodyStartDate = startDate;
+    //     //
+    //     hasFraction = (leaveType && fraction != null);
+    //     hasNofDays = (leaveType && noOfDayes != null);
+    //     console.log(`hasFraction : ${hasFraction} , hasNofDays : ${hasNofDays}`);
+    //     console.log(`calcDates startDate : ${startDate}`)
+    //     //
+    //     if (startDate && leaveType.AllowFraction) {  //لو اجازه عارضه
+    //         WorkStartHour = new Date(WorkStartTimeString).getHours(); //8
+    //         WorkStartMin = new Date(WorkStartTimeString).getMinutes(); //30 or 0
+    //         startDate = new Date(startDate).setHours(WorkStartHour, WorkStartMin, 0, 0); //12-10 8:00
+
+    //         console.log("calcDates After startDate : ", startDate);
+    //         if (hasNofDays || (hasNofDays && fraction == 0)) {
+    //             console.log("yaaaaaaaaaaah, hasNofDays");
+    //             NofDays = Number.parseInt(noOfDayes);
+    //             endDate = this.addDays(startDate, NofDays, calender, leaveType);
+    //             let WorkEndHour: number = new Date(endDate).getHours(); //8
+    //             endDate = new Date(endDate).setHours((WorkEndHour + WorkingHours), WorkStartMin, 0, 0);//16 //For hours
+    //             returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType).setHours(WorkStartHour, WorkStartMin, 0, 0);
+    //         }
+    //         if (hasFraction) {
+    //             console.log("yaaaaaaaaaaah, hasFraction");
+    //             if (fraction >= 0) {
+    //                 let WorkEndHour: number = new Date(startDate).getHours(); //8
+    //                 endDate = new Date(startDate).setHours((WorkEndHour + (fraction * WorkingHours)), WorkStartMin, 0, 0);
+    //                 returnDate = endDate;
+    //             }
+    //             else if (fraction < 0) {
+    //                 let WorkEndHour: number = new Date(startDate).getHours(); //8
+    //                 endDate = new Date(startDate).setHours((WorkEndHour + WorkingHours), WorkStartMin, 0, 0);//16
+    //                 returnDate = this.addDays(bloodyStartDate, 2, calender, leaveType).setHours(WorkStartHour, WorkStartMin, 0, 0);
+
+    //                 startDate = new Date(startDate).setHours(((WorkEndHour + WorkingHours) + (fraction * WorkingHours)), WorkStartMin, 0, 0);
+    //             }
+    //         }
+    //     }
+    //     else { //لو مش اجازه عارضه
+    //         NofDays = Number.parseFloat(noOfDayes) + (fraction ? Number.parseFloat(fraction) : 0);
+    //         endDate = this.addDays(bloodyStartDate, NofDays, calender, leaveType);
+    //         returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType);
+    //     }
+    //     // // //
+    //     // if ((startDate && !hasFraction) || (startDate && fraction == 0)) {
+    //     //     returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType);
+    //     // }
+
+    //     console.log(`Before Return: startDate: ${startDate} // endDate: ${endDate} // returnDate ${returnDate}`)
+    //     return {
+    //         startDate: startDate,
+    //         endDate: endDate,
+    //         returnDate: returnDate
+    //     }
+    // }
 
     getOffDays(calender) {
         let year = new Date(calender.WorkStartTime).getFullYear();
@@ -436,52 +483,4 @@ export class LeaveServicesApi {
             }
         }
     }
-    // OriginalcalcDates(startDate, noOfDayes, calender, leaveType, fraction) {
-    //     let startHours;
-    //     let startMin;
-    //     let NofHours;
-    //     let endDate;
-    //     let returnDate;
-    //     let NofDays = Number.parseFloat(noOfDayes) + (fraction ? Number.parseFloat(fraction) : 0);
-    //     let hasFraction = (leaveType && leaveType.AllowFraction && (!Number.isInteger(NofDays)));
-    //     if (hasFraction) {
-    //         startHours = new Date(startDate).getHours();
-    //         startMin = new Date(startDate).getMinutes();
-    //         if (startHours <= (new Date(calender.WorkStartTime).getHours())) {
-    //             if (calender.WorkStartTime) {
-
-    //                 //if (calender.WorkStartTime.indexOf('/Date') != -1) {
-    //                 startHours = new Date(calender.WorkStartTime).getHours();
-    //                 startMin = new Date(calender.WorkStartTime).getMinutes();
-    //                 startDate = (new Date(startDate)).setHours(startHours, startMin);
-    //                 //startDate = new Date((new Date(startDate)).setMinutes(startMin));
-    //                 //}
-    //             }
-    //         }
-    //         //
-    //         NofHours = ((NofDays) != 0 ? NofDays % Number.parseInt(NofDays.toString()) : NofDays);
-    //         if (calender.WorkHours != undefined)
-    //             NofHours *= calender.WorkHours;
-    //     }
-    //     if (startDate && NofDays) {
-    //         endDate = this.addDays(startDate, NofDays, calender, leaveType);
-    //         returnDate = this.addDays(startDate, NofDays + 1, calender, leaveType);
-
-    //         if (hasFraction) {
-    //             var NofMin = (Number.parseInt(NofHours) != 0 ? NofHours % Number.parseInt(NofHours) : NofHours);
-
-    //             returnDate = this.addDays(startDate, NofDays, calender, leaveType);
-    //             returnDate = (new Date(returnDate)).setHours(startHours + NofHours);
-    //             returnDate = new Date((new Date(returnDate)).setMinutes(startMin + (NofMin * 60)));
-
-    //             endDate = (new Date(endDate)).setHours(startHours + NofHours);
-    //             endDate = new Date((new Date(endDate)).setMinutes(startMin + (NofMin * 60)));
-    //         }
-    //     }
-    //     return {
-    //         startDate: startDate,
-    //         endDate: endDate,
-    //         returnDate: returnDate
-    //     }
-    // }
 }

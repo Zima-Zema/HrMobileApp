@@ -5,7 +5,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule, Http } from '@angular/http';
-import { IonicStorageModule, Storage } from '@ionic/storage';
+import { IonicStorageModule } from '@ionic/storage';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AppMinimize } from '@ionic-native/app-minimize';
@@ -18,12 +18,12 @@ import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 import { Network } from '@ionic-native/network';
 import 'signalr';
-import { SignalRModule, SignalRConfiguration } from 'ng2-signalr';
+
 // pages
 import { HomePage } from '../pages/home/home';
 import { LogInPageModule } from '../pages/log-in/log-in.module';
 import { NotificationsPageModule } from '../pages/notifications/notifications.module';
-import { WelcomePageModule } from '../pages/welcome/welcome.module';
+
 import { NotificationDetailsPageModule } from '../pages/notification-details/notification-details.module';
 import { TasksPageModule } from '../pages/tasks/tasks.module';
 import { AddTaskPageModule } from '../pages/add-task/add-task.module';
@@ -43,20 +43,7 @@ import { SettingsPageModule } from '../pages/settings/settings.module';
 export function setTranslateLoader(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
-export function creatConfig(): SignalRConfiguration {
-  // let _store: Storage;
-  // let baseUrl: string = '';
-  // _store.get("BaseURL").then((val) => {
-  //   this.baseURL = val;
-  //   console.log("BaseUrl From Notity services>>>", this.baseURL);
-  // });
-  const config = new SignalRConfiguration();
-  config.hubName = 'MyHub';
-  config.url = 'http://www.enterprise-hr.com/';
-  config.logging = true;
-  config.withCredentials = true;
-  return config;
-}
+// 
 //
 @NgModule({
   declarations: [
@@ -67,7 +54,6 @@ export function creatConfig(): SignalRConfiguration {
     BrowserModule,
     FormsModule,
     IonicModule.forRoot(MyApp),
-    SignalRModule.forRoot(creatConfig),
     IonicStorageModule.forRoot({ driverOrder: ["localstorage", "websql"] }),
     TranslateModule.forRoot({
       loader: {
@@ -78,7 +64,6 @@ export function creatConfig(): SignalRConfiguration {
     }),
     LogInPageModule,
     NotificationsPageModule,
-    WelcomePageModule,
     NotificationDetailsPageModule,
     TasksPageModule,
     AddTaskPageModule,

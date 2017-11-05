@@ -7,6 +7,7 @@ import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService'
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { Storage } from '@ionic/storage';
 import { TranslateService } from '@ngx-translate/core';
+import { IUser } from "../../shared/IUser";
 
 @IonicPage()
 @Component({
@@ -31,7 +32,7 @@ export class TasksPage {
   TollenObj: ITollen = {
     CompanyId: 0,
     Files: [],
-    Language: "en-GB",
+    Language: "",
     Source: "EmpTasksForm",
     TaskId: 0,
     FileDetails: []
@@ -46,6 +47,7 @@ export class TasksPage {
   loader_task = this.loadingCtrl.create({
     content: "Loading Tasks..."
   });
+  user: IUser;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public loadingCtrl: LoadingController,
@@ -55,6 +57,15 @@ export class TasksPage {
     private tasksService: TasksServicesApi,
     private storage: Storage,
     private translationService: TranslateService) {
+      this.storage.get("User").then((udata) => {
+        if (udata) {
+          this.user = udata;
+          this.TollenObj.CompanyId=this.user.CompanyId;
+          this.TollenObj.Language=this.user.Language;
+  
+        }
+  
+      });
       this.lang = translationService.getDefaultLang();
       if (this.lang === 'ar') {
         this.calendarLocal="ar-EG";
@@ -196,7 +207,7 @@ export class TasksPage {
     //  let user: any = this.storage.get("User").then((user) => {
     //if (user) {
     //emp_id = user.EmpId;
-    emp_id = 1054;
+    emp_id = this.user.EmpId;
     this.tasksService.getTasks(emp_id).subscribe((data) => {
       if (data) {
         //Working ==> By Fatma 

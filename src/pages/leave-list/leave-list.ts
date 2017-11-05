@@ -4,8 +4,11 @@ import { RequestLeavePage } from '../request-leave/request-leave';
 import { LeaveEditPage } from '../leave-edit/leave-edit';
 import { LeaveServicesApi, IRequestType, IDeleteRequest, ICancelVM } from '../../shared/LeavesService';
 import { CutLeavePage } from '../cut-leave/cut-leave';
-import * as moment from 'moment';
+
 import * as _ from 'lodash';
+import { Storage } from '@ionic/storage';
+import { IUser } from "../../shared/IUser";
+import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
 @Component({
@@ -14,19 +17,21 @@ import * as _ from 'lodash';
 })
 
 export class LeaveListPage {
+
   public toggled: boolean = false;
   RequestTypeObj: IRequestType = {
     CompId: 0,
-    Culture: "ar-EG",
-    EmpId:
-    //1
-    1072
-    //17
+    Culture: '',
+    EmpId: 0
   }
   CancelVMObj: ICancelVM = {
-    Language: "ar-EG",
+    Language: "",
     CompanyId: 0,
     RequestId: 0
+  }
+  DeleteObj: IDeleteRequest = {
+    Id: 0,
+    Language: ""
   }
   public LeavesData: Array<any> = [];
   public LeavesCount: number = 0;
@@ -39,17 +44,26 @@ export class LeaveListPage {
 
   //new Date().toDateString();
   public apprStartDate: string;
-  DeleteObj: IDeleteRequest = {
-    Id: 0,
-    Language: "ar-EG"
-  }
 
+  user: IUser;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    private storage: Storage,
+    private translationService: TranslateService
+    ) {
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+        this.RequestTypeObj.EmpId = this.user.EmpId;
+        this.RequestTypeObj.Culture = this.user.Culture;
+        this.RequestTypeObj.CompId = this.CancelVMObj.CompanyId = this.user.CompanyId;
+        this.CancelVMObj.Language = this.DeleteObj.Language = this.user.Language;
+      }
+    });
   }
   public toggle(): void {
     this.toggled = this.toggled ? false : true;
@@ -137,16 +151,34 @@ export class LeaveListPage {
     this.navCtrl.push(RequestLeavePage, item);
   }
   ConfirmDelete(itemLeave) {
+    let a: any = {};
+    
+          this.translationService.get('ConfirmRemove').subscribe(t => {
+            a.title = t;
+          });
+    
+          this.translationService.get('RemoveReqMsg').subscribe(t => {
+            a.message = t;
+          });
+          this.translationService.get('ALERT_YES').subscribe(t => {
+            a.yes = t;
+          });
+          this.translationService.get('ALERT_NO').subscribe((data) => {
+            a.no = data;
+          })
+//RemoveReqMsg
+
+
     const alert = this.alertCtrl.create({
-      title: 'Confirm Remove',
-      message: 'Are you sure you want to remove this leave request?',
+      title: a.title,
+      message: a.message,
       buttons: [
         {
-          text: 'No',
+          text: a.no,
           role: 'cancel',
         },
         {
-          text: 'Yes',
+          text: a.yes,
           handler: () => {
             //   if (typeof (itemLeave) == "number") {
             //   this.DeleteAppLeaves(itemLeave);
@@ -162,16 +194,33 @@ export class LeaveListPage {
     alert.present();
   }
   ConfirmAppCancel(itemLeave) {
+    let a: any = {};
+    
+          this.translationService.get('ConfirmCancel').subscribe(t => {
+            a.title = t;
+          });
+    
+          this.translationService.get('CancelReqMsg').subscribe(t => {
+            a.message = t;
+          });
+          this.translationService.get('ALERT_YES').subscribe(t => {
+            a.yes = t;
+          });
+          this.translationService.get('ALERT_NO').subscribe((data) => {
+            a.no = data;
+          })
+
+
     const alert = this.alertCtrl.create({
-      title: 'Confirm Cancel',
-      message: 'Are you sure you want to cancel this leave request?',
+      title: a.title,
+      message: a.message,
       buttons: [
         {
-          text: 'No',
+          text: a.no,
           role: 'cancel',
         },
         {
-          text: 'Yes',
+          text: a.yes,
           handler: () => {
             this.DeleteAppLeaves(itemLeave);
           }
