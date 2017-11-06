@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ShowAssignOrderRequestsPage} from '../show-assign-order-requests/show-assign-order-requests'
+import { ShowAssignOrderRequestsPage} from '../show-assign-order-requests/show-assign-order-requests';
+import { AddAssignOrderPage} from '../add-assign-order/add-assign-order';
 import { AssignOrderServicesApi, IEmpAssignOrders } from '../../../shared/AssignOrderService';
 import * as _ from 'lodash';
 
@@ -73,6 +74,18 @@ export class AssignOrderRequestsPage {
     this.AssignOrderArr=this.AssignOrderFilter;
     this.AssignOrderCount=this.AssignOrderArr.length;
     this.AssignOrderFilter=[];
+  }
+
+  addAssignOrder(){
+    this.navCtrl.push(AddAssignOrderPage);
+  }
+
+  EditAssignOrder(item){
+    console.log("edit");
+  }
+
+  ConfirmDelete(){
+    
   }
 
 }
