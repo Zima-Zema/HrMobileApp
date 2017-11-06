@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ShowAssignOrderPage } from '../show-assign-order/show-assign-order';
+import { ShowAssignOrderRequestsPage} from '../show-assign-order-requests/show-assign-order-requests'
 import { AssignOrderServicesApi, IEmpAssignOrders } from '../../../shared/AssignOrderService';
 import * as _ from 'lodash';
 
 @IonicPage()
 @Component({
-  selector: 'page-assign-order',
-  templateUrl: 'assign-order.html',
+  selector: 'page-assign-order-requests',
+  templateUrl: 'assign-order-requests.html',
 })
-export class AssignOrderPage {
+export class AssignOrderRequestsPage {
+
   public toggled: boolean = false;
   public AssignOrderList: Array<any> = [];
   public AssignOrderArr: Array<any> = [];
@@ -20,7 +21,7 @@ export class AssignOrderPage {
   public queryText: string;
 
   public EmpAssignOrderObj: IEmpAssignOrders = {
-    EmpId: 1072,
+    EmpId: 17,
     Culture: "ar-EG",
     CompanyId: 0
   }
@@ -30,9 +31,10 @@ export class AssignOrderPage {
     public AssignOrderService: AssignOrderServicesApi) {
   }
 
+ 
   ionViewDidLoad() {
     // AssignOrderPage.motherArr = [];
-    this.AssignOrderService.GetEmpAssignOrders(this.EmpAssignOrderObj).subscribe((data) => {
+    this.AssignOrderService.GetMangersAssignOrders(this.EmpAssignOrderObj).subscribe((data) => {
       console.log("tata : ", data);
       this.AssignOrderCount = data.length
       // this.AssignOrderList = data;
@@ -54,7 +56,7 @@ export class AssignOrderPage {
 
   ShowAssignOrder(item) {
     console.log("show");
-    this.navCtrl.push(ShowAssignOrderPage, item)
+    this.navCtrl.push(ShowAssignOrderRequestsPage,item);
   }
 
   filterItems() {
@@ -72,4 +74,5 @@ export class AssignOrderPage {
     this.AssignOrderCount=this.AssignOrderArr.length;
     this.AssignOrderFilter=[];
   }
+
 }

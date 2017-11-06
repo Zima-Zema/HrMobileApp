@@ -23,7 +23,6 @@ import 'signalr';
 import { HomePage } from '../pages/home/home';
 import { LogInPageModule } from '../pages/log-in/log-in.module';
 import { NotificationsPageModule } from '../pages/notifications/notifications.module';
-
 import { NotificationDetailsPageModule } from '../pages/notification-details/notification-details.module';
 import { TasksPageModule } from '../pages/tasks/tasks.module';
 import { AddTaskPageModule } from '../pages/add-task/add-task.module';
@@ -34,7 +33,11 @@ import { RequestLeavePageModule } from '../pages/request-leave/request-leave.mod
 import { LeaveEditPageModule } from '../pages/leave-edit/leave-edit.module';
 import { CutLeavePageModule} from '../pages/cut-leave/cut-leave.module';
 import { AssignOrderPageModule} from '../pages/AssignOrder/assign-order/assign-order.module'
-import { AddAssignOrderPageModule} from '../pages/AssignOrder/add-assign-order/add-assign-order.module'
+import { AddAssignOrderPageModule} from '../pages/AssignOrderRequests/add-assign-order/add-assign-order.module'
+import { AssignOrderRequestsPageModule} from '../pages/AssignOrderRequests/assign-order-requests/assign-order-requests.module';
+import { EditAssignOrderPageModule } from '../pages/AssignOrderRequests/edit-assign-order/edit-assign-order.module';
+import { ShowAssignOrderPageModule} from '../pages/AssignOrder/show-assign-order/show-assign-order.module';
+import { ShowAssignOrderRequestsPageModule} from '../pages/AssignOrderRequests/show-assign-order-requests/show-assign-order-requests.module';
 //from Ali
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -44,7 +47,6 @@ export function setTranslateLoader(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 // 
-//
 @NgModule({
   declarations: [
     MyApp,
@@ -76,7 +78,11 @@ export function setTranslateLoader(http: Http) {
     SettingsPageModule,
     CutLeavePageModule,
     AssignOrderPageModule,
-    AddAssignOrderPageModule
+    AddAssignOrderPageModule,
+    ShowAssignOrderPageModule,
+    AssignOrderRequestsPageModule,
+    EditAssignOrderPageModule,
+    ShowAssignOrderRequestsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

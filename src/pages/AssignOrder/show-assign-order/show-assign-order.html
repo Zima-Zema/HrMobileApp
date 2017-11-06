@@ -1,0 +1,56 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Assign Order Details</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+  <ion-item>
+    <ion-label floating class="labelColor">Assign Order Series</ion-label>
+    <ion-input type="number" readonly [(ngModel)]="AssignorderDetails.Id"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label floating class="labelColor">Assigned From</ion-label>
+    <ion-input type="text" readonly [(ngModel)]="AssignorderDetails.Manager"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label floating class="labelColor">Duration</ion-label>
+    <ion-input type="text" [ngModel]="AssignorderDetails.Duration | assignOrderDuration" (ngModelChange)="AssignorderDetails.Duration=$event">
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label floating class="labelColor">Assign Date</ion-label>
+    <ion-input type="text" [ngModel]="AssignorderDetails.AssignDate | dateMoment" (ngModelChange)="AssignorderDetails.AssignDate=$event">
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label floating class="labelColor">Calculated Method</ion-label>
+    <ion-input type="text" [ngModel]="AssignorderDetails.CalcMethod | assignOrderCalcsMethodPipe" (ngModelChange)="AssignorderDetails.CalcMethod=$event">
+    </ion-input>
+  </ion-item>
+
+  <ion-item *ngIf="AssignorderDetails.CalcMethod == 2">
+    <ion-label floating class="labelColor">Leave Type</ion-label>
+    <ion-input type="text" readonly [(ngModel)]="AssignorderDetails.LeaveType"></ion-input>
+  </ion-item>
+
+  <ion-item *ngIf="AssignorderDetails.CalcMethod == 2">
+    <ion-label floating class="labelColor">Expiry Date</ion-label>
+    <ion-input type="text" [ngModel]="AssignorderDetails.ExpiryDate | dateMoment" (ngModelChange)="AssignorderDetails.ExpiryDate=$event">
+    </ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label floating class="labelColor">Description</ion-label>
+    <ion-input type="text" readonly [(ngModel)]="AssignorderDetails.TaskDesc"></ion-input>
+  </ion-item>
+
+</ion-content>

@@ -1,0 +1,34 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title *ngIf="!toggled">Assign Requests ({{AssignOrderCount}})</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="toggle()">
+        <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-searchbar *ngIf="toggled" placeholder="Filter By Series Number" [(ngModel)]="queryText" (ionInput)="filterItems()"></ion-searchbar>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+  <ion-list>
+    <button ion-item *ngFor="let item of AssignOrderArr" (click)="ShowAssignOrder(item)">
+        <ion-avatar item-start>
+            <img *ngIf="item.ApprovalStatus== 1 || item.ApprovalStatus==2|| item.ApprovalStatus==6 || item.ApprovalStatus==9" src="{{item.ApprovalStatus|imagePipe}}"
+              style="border-radius:15%;" >
+            <img *ngIf="item.ApprovalStatus == 3 || item.ApprovalStatus == 4 || item.ApprovalStatus == 5 || item.ApprovalStatus == 7 || item.ApprovalStatus == 8"
+              src="assets/img/blue.png" style="border-radius:15%;" >
+          </ion-avatar>
+      <h3 id="code">{{item.Id}}</h3>
+      <h6>{{item.Employee}}</h6>
+      <h6>{{item.AssignDate | dateMoment}} </h6>      
+      <p [ngClass]="{grey:item.ApprovalStatus==1,yellow:item.ApprovalStatus==2,green:item.ApprovalStatus==6,red:item.ApprovalStatus==9,blue:true}">{{item.ApprovalStatus|approvalPipe}}</p>
+      <ion-note item-end>{{item.Duration|assignOrderDuration}} </ion-note>
+      <!-- <p>Assigned From : {{item.Manager}}</p> -->
+    </button>
+  </ion-list>
+</ion-content>

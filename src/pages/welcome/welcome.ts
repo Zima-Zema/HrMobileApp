@@ -12,7 +12,9 @@ import { LeaveListPage } from '../leave-list/leave-list';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsPage } from '../settings/settings';
 import { BackgroundMode } from '@ionic-native/background-mode';
-import { AssignOrderPage} from '../AssignOrder/assign-order/assign-order'
+import { AssignOrderPage} from '../AssignOrder/assign-order/assign-order';
+import { AssignOrderRequestsPage} from '../AssignOrderRequests/assign-order-requests/assign-order-requests';
+
 import * as _ from 'lodash';
 @IonicPage()
 @Component({
@@ -51,7 +53,6 @@ export class WelcomePage {
         this.backgroundMode.moveToBackground();
       }
     });
-
 
 
     this.lang = translate.getDefaultLang();
@@ -149,6 +150,9 @@ export class WelcomePage {
   }
   GoToAssignOrder(){
     this.navCtrl.push(AssignOrderPage);
+  }
+  GoToAssignOrderRequests(){
+    this.navCtrl.push(AssignOrderRequestsPage);
   }
   Logout() {
     this.storage.clear();
