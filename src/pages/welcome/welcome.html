@@ -1,4 +1,4 @@
-<ion-menu [content]="content" [side]="menuDir" type="overlay">
+<!-- <ion-menu [content]="content" [side]="menuDir" type="overlay">
   <ion-header>
     <ion-toolbar>
       <ion-title> {{"Welcome" | translate }} </ion-title>
@@ -11,7 +11,6 @@
         <h2> {{user_name}} </h2>
         <p>{{user_email}} </p>
       </ion-list-header>
-      <!-- <button menuclose ion-item (click)="GoToHome()"> Home </button> -->
       <button menuClose ion-item (click)="GoToTasks()">{{"Tasks" | translate }}</button>
       <button menuClose ion-item (click)="GoToLeaveList()">{{"Leave List" | translate}}</button>
       <button menuClose ion-item (click)="GoToAssignOrder()" >{{"My Assign Orders" | translate}}</button>
@@ -20,36 +19,26 @@
       <button menuClose ion-item (click)="Logout()" >{{"Logout" | translate}}</button>
     </ion-list>
   </ion-content>
-</ion-menu>
+</ion-menu> -->
 <!--//////////////////////////////////////////////////////////////////  -->
 <ion-header>
-  <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
+  <!-- <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav> -->
   <ion-navbar>
-    <button ion-button menuToggle [ngClass]="{rightMenuButton:lang=='ar',leftMenuButton:lang=='en'}"> 
+    <!-- <button ion-button menuToggle [ngClass]="{rightMenuButton:lang=='ar',leftMenuButton:lang=='en'}"> 
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-buttons [ngClass]="{right:lang=='en',left:lang=='ar'}" >
+    <ion-buttons [ngClass]="{right:lang=='en',left:lang=='ar'}">
       <button id="notification-button" ion-button clear (click)="GoToNotifications()" large>
         <ion-icon name="notifications">
           <ion-badge id="notifications-badge" color="danger" *ngIf="notificationNumber != 0 && notificationNumber != undefined"> {{notificationNumber}}</ion-badge>
         </ion-icon>              
     </button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-navbar>
 </ion-header>
 <!--//////////////////////////////////////////////////////////////////  -->
-<ion-content>
+<ion-content id="Content">
   <!-- <ion-card>
-    <img id="personal_img" src="assets/img/user.png" />
-    <br/>
-    <ion-card-header class="card">
-      <h1> Welcome </h1>
-    </ion-card-header>
-    <ion-card-content class="card">
-      <p> Double Click ERP, HR mobile application.</p>
-    </ion-card-content>
-  </ion-card>  -->
-<ion-card>
   <ion-slides pager="true" class="card-background-page">
 
     <ion-slide>
@@ -77,5 +66,45 @@
     </ion-slide>
 
   </ion-slides>
-</ion-card>
+</ion-card> -->
+
+  <ion-tabs #ionTabs [scrollable-tabs]="ionTabs" [opts]="scrollableTabsopts" selectedIndex='0' color="{{tabsColor}}" mode='{{tabsMode}}'
+    tabsHighlight="true" tabsPlacement="{{tabsPlacement}}">
+    <ion-tab tabIcon="pie" tabTitle="Charts" [show]='tabToShow[0]' [root]="ChartTab"></ion-tab>
+    <ion-tab tabIcon="clipboard" tabTitle="Requests" [show]='tabToShow[1]' [root]="RequestsTab"></ion-tab>
+    <ion-tab tabIcon="paper" tabTitle="Queries" [show]='tabToShow[2]' [root]="QuereiesTab"></ion-tab>
+    <ion-tab tabIcon="settings" tabTitle="Settings" [show]='tabToShow[3]' [root]="SettingTab"></ion-tab>
+    <ion-tab tabIcon="notifications" tabTitle="Notifications" [show]='tabToShow[4]' [root]="notifyTab"></ion-tab>
+    <!-- <ion-tab tabIcon="paper" tabTitle="Queries" [show]='tabToShow[5]' [root]="QuereiesTab"></ion-tab>
+    <ion-tab tabIcon="pie" tabTitle="Charts" [show]='tabToShow[6]' [root]="ChartTab"></ion-tab>
+    <ion-tab tabIcon="clipboard" tabTitle="Requests" [show]='tabToShow[7]' [root]="RequestsTab"></ion-tab>
+    <ion-tab tabIcon="paper" tabTitle="Queries" [show]='tabToShow[8]' [root]="QuereiesTab"></ion-tab>
+    <ion-tab tabIcon="pie" tabTitle="Charts" [show]='tabToShow[9]' [root]="ChartTab"></ion-tab>
+    <ion-tab tabIcon="clipboard" tabTitle="Requests" [show]='tabToShow[10]' [root]="RequestsTab"></ion-tab>
+    <ion-tab tabIcon="paper" tabTitle="Queries" [show]='tabToShow[11]' [root]="QuereiesTab"></ion-tab> -->
+  </ion-tabs>
+
+  <!-- <ion-list [style.marginTop.px]="200">
+     <ion-item>
+      <ion-label>Color</ion-label>
+      <ion-select [(ngModel)]="tabsColor">
+        <ion-option value="default">Default</ion-option>
+        <ion-option value="primary">Primary</ion-option>
+        <ion-option value="secondary">Secondary</ion-option>
+        <ion-option value="danger">Danger</ion-option>
+        <ion-option value="dark">Dark</ion-option>
+        <ion-option value="light">Light</ion-option>
+      </ion-select>
+    </ion-item> 
+    <ion-item>
+      <ion-label>Tabs Mode</ion-label>
+      <ion-select [(ngModel)]="tabsMode" (ionChange)="presentChangeOrendationToast()">
+        <ion-option value="md">Material Design</ion-option>
+        <ion-option value="ios">ios</ion-option>
+        <ion-option value="wp">Windows Phone</ion-option>n>
+      </ion-select>
+    </ion-item> 
+  </ion-list> -->
+
+
 </ion-content>

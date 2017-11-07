@@ -1,6 +1,6 @@
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar color="newDarkerBlueGreen">
     <ion-title *ngIf="!toggled">{{"LeaveRequests" | translate}} ({{LeavesCount}}) </ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="toggle()">
@@ -18,7 +18,7 @@
 <ion-content>
   <ion-list *ngFor="let mother of Leaves_Arr">
     <ion-item-group id="pItem">
-      <ion-item-divider color="primary" id="divison">{{mother.divisionType}}</ion-item-divider>
+      <ion-item-divider color="newBlueGreen" id="divison">{{mother.divisionType}}</ion-item-divider>
       <ion-item-sliding *ngFor="let item of mother.divisionTypes">
         <button ion-item (click)="ShowLeaves(item)">
 

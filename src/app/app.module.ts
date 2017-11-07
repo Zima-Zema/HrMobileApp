@@ -28,16 +28,20 @@ import { TasksPageModule } from '../pages/tasks/tasks.module';
 import { AddTaskPageModule } from '../pages/add-task/add-task.module';
 import { ForceChangePasswordPageModule } from '../pages/force-change-password/force-change-password.module';
 import { DoneTaskPageModule } from '../pages/done-task/done-task.module';
-import { LeaveListPageModule } from '../pages/leave-list/leave-list.module';
-import { RequestLeavePageModule } from '../pages/request-leave/request-leave.module';
-import { LeaveEditPageModule } from '../pages/leave-edit/leave-edit.module';
-import { CutLeavePageModule} from '../pages/cut-leave/cut-leave.module';
-import { AssignOrderPageModule} from '../pages/AssignOrder/assign-order/assign-order.module'
-import { AddAssignOrderPageModule} from '../pages/AssignOrderRequests/add-assign-order/add-assign-order.module'
-import { AssignOrderRequestsPageModule} from '../pages/AssignOrderRequests/assign-order-requests/assign-order-requests.module';
+import { LeaveListPageModule } from '../pages/Leaves/leave-list/leave-list.module';
+import { RequestLeavePageModule } from '../pages/Leaves/request-leave/request-leave.module';
+import { LeaveEditPageModule } from '../pages/Leaves/leave-edit/leave-edit.module';
+import { CutLeavePageModule } from '../pages/Leaves/cut-leave/cut-leave.module';
+import { AssignOrderPageModule } from '../pages/AssignOrder/assign-order/assign-order.module'
+import { AddAssignOrderPageModule } from '../pages/AssignOrderRequests/add-assign-order/add-assign-order.module'
+import { AssignOrderRequestsPageModule } from '../pages/AssignOrderRequests/assign-order-requests/assign-order-requests.module';
 import { EditAssignOrderPageModule } from '../pages/AssignOrderRequests/edit-assign-order/edit-assign-order.module';
-import { ShowAssignOrderPageModule} from '../pages/AssignOrder/show-assign-order/show-assign-order.module';
-import { ShowAssignOrderRequestsPageModule} from '../pages/AssignOrderRequests/show-assign-order-requests/show-assign-order-requests.module';
+import { ShowAssignOrderPageModule } from '../pages/AssignOrder/show-assign-order/show-assign-order.module';
+import { ShowAssignOrderRequestsPageModule } from '../pages/AssignOrderRequests/show-assign-order-requests/show-assign-order-requests.module';
+import { ChartsPageModule } from '../pages/ExternalTabs/charts/charts.module';
+import { RequestsPageModule } from '../pages/ExternalTabs/requests/requests.module';
+import { QuereiesPageModule } from '../pages/ExternalTabs/quereies/quereies.module';
+import { SettingsTabPageModule} from '../pages/ExternalTabs/settings-tab/settings-tab.module'
 //from Ali
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -82,7 +86,11 @@ export function setTranslateLoader(http: Http) {
     ShowAssignOrderPageModule,
     AssignOrderRequestsPageModule,
     EditAssignOrderPageModule,
-    ShowAssignOrderRequestsPageModule
+    ShowAssignOrderRequestsPageModule,
+    ChartsPageModule,
+    RequestsPageModule,
+    QuereiesPageModule,
+    SettingsTabPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

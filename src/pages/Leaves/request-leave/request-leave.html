@@ -1,15 +1,10 @@
 <ion-header>
 
-  <ion-navbar>
-    <ion-title *ngIf="EditFlag==0">{{"RequestLeave" | translate}}</ion-title>
+   <ion-navbar color="newDarkerBlueGreen">
+     <ion-title *ngIf="EditFlag==0">{{"RequestLeave" | translate}}</ion-title>
     <ion-title *ngIf="EditFlag==1">{{"EditLeave" | translate}}</ion-title>
-    <ion-title *ngIf="EditFlag==2">{{"LeaveDetails" | translate}}</ion-title>
-    <!-- <ion-buttons end>
-      <button ion-button icon-only (click)="addEvent()">
-        <ion-icon name="trash"></ion-icon>
-      </button>
-    </ion-buttons> -->
-  </ion-navbar>
+    <ion-title *ngIf="EditFlag==2">{{"LeaveDetails" | translate}}</ion-title> 
+  </ion-navbar> 
 
 </ion-header>
 

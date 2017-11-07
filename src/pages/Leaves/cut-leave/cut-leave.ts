@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
-import { LeaveServicesApi, IRequestData, IBreak } from "../../shared/LeavesService"
+import { LeaveServicesApi, IRequestData, IBreak } from "../../../shared/LeavesService"
 import { FormGroup, Validators, FormBuilder } from "@angular/forms";
 import { LeaveListPage } from '../leave-list/leave-list';
 import { TranslateService } from '@ngx-translate/core';
-import { IUser } from '../../shared/IUser';
+import {IUser} from '../../../shared/IUser'
 import { Storage } from '@ionic/storage';
 @IonicPage()
 @Component({

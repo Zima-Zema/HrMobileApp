@@ -1,21 +1,24 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidatorFn } from "@angular/forms";
-import { LeaveServicesApi, IRequestType, IRequestData, ILeaveRequest, ApprovalStatusEnum, IValidate, IValidationMsg } from '../../shared/LeavesService';
+import { LeaveServicesApi, IRequestType, IRequestData, ILeaveRequest, ApprovalStatusEnum, IValidate, IValidationMsg } from '../../../shared/LeavesService';
 import { LeaveListPage } from '../leave-list/leave-list';
 import { Chart } from 'chart.js';
 import * as moment from 'moment';
 import { DatePickerDirective } from 'ion-datepicker';
-import { IUser } from '../../shared/IUser';
+import { IUser } from '../../../shared/IUser';
 import { Storage } from '@ionic/storage';
 import { TranslateService } from '@ngx-translate/core';
-import { TranslateUtilities } from '../../shared/TranslateUtilities';
+import { TranslateUtilities } from '../../../shared/TranslateUtilities';
+import { WelcomePage} from '../../welcome/welcome'
 @IonicPage()
 @Component({
   selector: 'page-request-leave',
   templateUrl: 'request-leave.html',
 })
 export class RequestLeavePage {
+
+  tabBarElement: any;
 
   filteredArr;
   localDateval = new Date();
@@ -160,6 +163,8 @@ export class RequestLeavePage {
     private ToastCtrl: ToastController,
     private storage: Storage,
     private translateUtilities: TranslateService) {
+
+    this.tabBarElement = document.querySelector('.tabbar.show-tabbar');
     this.tarnlateErrors();
     this.storage.get("User").then((udata) => {
       if (udata) {
@@ -239,8 +244,13 @@ export class RequestLeavePage {
       RequestLeavePage.ReasonError = translation;
     });
   }
+  
+  ionViewWillLeave() {
+    this.tabBarElement.style.display = 'flex';
+  }
   // // EditFlag = 0 ---> Request  , EditFlag = 1 ---> Edit , EditFlad = 2 --->show
   ionViewWillEnter() {
+    this.tabBarElement.style.display = 'none';
     if (Object.keys(this.item).length > 0) {
       //Edit Mode
       if (this.item.readOnly == false) {

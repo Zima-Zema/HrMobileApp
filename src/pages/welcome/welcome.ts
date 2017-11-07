@@ -1,19 +1,23 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform, } from 'ionic-angular';
 import { NotificationsPage } from '../notifications/notifications';
-import { TasksPage } from '../tasks/tasks';
+//
 import { NotificationServiceApi, INotifyParams, INotification } from '../../shared/NotificationService';
 import { SignalR } from 'ng2-signalr';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { LogInPage } from '../log-in/log-in';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
-import { LeaveListPage } from '../leave-list/leave-list';
+//import { LeaveListPage } from '../leave-list/leave-list';
 import { TranslateService } from '@ngx-translate/core';
-import { SettingsPage } from '../settings/settings';
 import { BackgroundMode } from '@ionic-native/background-mode';
-import { AssignOrderPage} from '../AssignOrder/assign-order/assign-order';
-import { AssignOrderRequestsPage} from '../AssignOrderRequests/assign-order-requests/assign-order-requests';
+//import { AssignOrderPage} from '../AssignOrder/assign-order/assign-order';
+//import { AssignOrderRequestsPage} from '../AssignOrderRequests/assign-order-requests/assign-order-requests';
+//Tabs
+import { ChartsPage } from '../ExternalTabs/charts/charts';
+import { RequestsPage } from '../ExternalTabs/requests/requests';
+import { QuereiesPage } from '../ExternalTabs/quereies/quereies';
+import { SettingsTabPage } from '../ExternalTabs/settings-tab/settings-tab';
 
 import * as _ from 'lodash';
 @IonicPage()
@@ -22,6 +26,19 @@ import * as _ from 'lodash';
   templateUrl: 'welcome.html',
 })
 export class WelcomePage {
+  public ChartTab: any;
+  public RequestsTab: any;
+  public QuereiesTab: any;
+  public SettingTab: any;
+  public notifyTab:any;
+  //
+  tabsColor: string = "newBlueGreen";
+  tabsMode: string = "md";
+  tabsPlacement: string = "top";
+  //
+  tabToShow: Array<boolean> = [true, true, true, true, true, true, true, true, true];
+  scrollableTabsopts: any = {};
+  //
   public user_name: string = "";
   public user_email: string = "";
   notifyParams: INotifyParams = {
@@ -48,6 +65,12 @@ export class WelcomePage {
     translate: TranslateService,
     private backgroundMode: BackgroundMode
   ) {
+    this.ChartTab = ChartsPage;
+    this.RequestsTab = RequestsPage;
+    this.QuereiesTab = QuereiesPage;
+    this.SettingTab = SettingsTabPage;
+    this.notifyTab = NotificationsPage;
+
     this.platform.registerBackButtonAction((event) => {
       if (this.navCtrl.length() <= 1) {
         this.backgroundMode.moveToBackground();
@@ -110,6 +133,7 @@ export class WelcomePage {
   }
 
   ionViewWillEnter() {
+    console.log("willEnter Welcome Page")
     if (NotificationsPage.notificationsList && NotificationsPage.notificationsList.length) {
       WelcomePage.notificationNumber = NotificationsPage.notificationsList.filter((val) => val.Read == false).length;
     }
@@ -128,6 +152,10 @@ export class WelcomePage {
     }
   }
 
+  refreshScrollbarTabs() {
+    this.scrollableTabsopts = { refresh: true };
+  }
+
   ionViewDidLoad() {
   }
   ////////////////////////////
@@ -139,21 +167,21 @@ export class WelcomePage {
   GoToNotifications() {
     this.navCtrl.push(NotificationsPage);
   }
-  GoToTasks() {
-    this.navCtrl.push(TasksPage);
-  }
-  GoToLeaveList() {
-    this.navCtrl.push(LeaveListPage);
-  }
-  Settings() {
-    this.navCtrl.push(SettingsPage);
-  }
-  GoToAssignOrder(){
-    this.navCtrl.push(AssignOrderPage);
-  }
-  GoToAssignOrderRequests(){
-    this.navCtrl.push(AssignOrderRequestsPage);
-  }
+  // GoToTasks() {
+  //   this.navCtrl.push(TasksPage);
+  // }
+  // GoToLeaveList() {
+  //   this.navCtrl.push(LeaveListPage);
+  // }
+  // Settings() {
+  //   this.navCtrl.push(SettingsPage);
+  // }
+  // GoToAssignOrder(){
+  //   this.navCtrl.push(AssignOrderPage);
+  // }
+  // GoToAssignOrderRequests(){
+  //   this.navCtrl.push(AssignOrderRequestsPage);
+  // }
   Logout() {
     this.storage.clear();
     this.navCtrl.setRoot(LogInPage);

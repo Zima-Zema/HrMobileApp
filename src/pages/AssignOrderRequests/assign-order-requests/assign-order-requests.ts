@@ -85,7 +85,7 @@ export class AssignOrderRequestsPage {
   }
 
   ConfirmDelete(){
-    
+    console.log("Confirm Delete");
   }
 
 }

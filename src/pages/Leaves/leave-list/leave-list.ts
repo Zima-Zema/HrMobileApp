@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController, AlertController } from 'ionic-angular';
 import { RequestLeavePage } from '../request-leave/request-leave';
 import { LeaveEditPage } from '../leave-edit/leave-edit';
-import { LeaveServicesApi, IRequestType, IDeleteRequest, ICancelVM } from '../../shared/LeavesService';
+import { LeaveServicesApi, IRequestType, IDeleteRequest, ICancelVM } from '../../../shared/LeavesService';
 import { CutLeavePage } from '../cut-leave/cut-leave';
 
 import * as _ from 'lodash';
 import { Storage } from '@ionic/storage';
-import { IUser } from "../../shared/IUser";
+import { IUser } from "../../../shared/IUser";
 import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
