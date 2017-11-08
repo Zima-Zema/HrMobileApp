@@ -2,10 +2,10 @@
 <ion-header>
 
   <ion-navbar color="newDarkerBlueGreen">
-    <ion-title>{{notifyDate}}</ion-title>
+    <ion-title>{{notifyDate | dateMoment}}</ion-title>
     <ion-buttons end>
       <button ion-button (click)="dismiss()">
-        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <span ion-text color="dark" showWhen="ios">{{"Close" | translate}}</span>
         <ion-icon name="close-circle" class="closeBtn" showWhen="android,windows"></ion-icon>
       </button>
     </ion-buttons>

@@ -11,4 +11,5 @@ export interface IUser {
     Name: string
     ResetPassword: boolean
     UserName: string
+    Roles:Array<string>
 }

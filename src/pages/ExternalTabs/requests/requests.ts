@@ -1,14 +1,24 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { RequestLeavePage } from '../../Leaves/request-leave/request-leave';
-import { AddAssignOrderPage} from '../../AssignOrderRequests/add-assign-order/add-assign-order';
+import { AddAssignOrderPage } from '../../AssignOrderRequests/add-assign-order/add-assign-order';
+import { Storage } from '@ionic/storage';
+import { IUser } from "../../../shared/IUser";
 @IonicPage()
 @Component({
   selector: 'page-requests',
   templateUrl: 'requests.html',
 })
 export class RequestsPage {
-  constructor(public navCtrl: NavController, public navParams: NavParams,public app :App) {
+  user: IUser;
+  isManager: boolean;
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, public app: App) {
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+        this.isManager = (this.user.Roles.indexOf("Manager") == -1) ? false : true;
+      }
+    });
     //fixed-content
   }
 
@@ -23,7 +33,7 @@ export class RequestsPage {
     this.app.getRootNav().push(RequestLeavePage)
   }
   gotoSalaryAdvanceRequests() {
-    
+
   }
   gotoAskingPermission() {
 

@@ -52,7 +52,10 @@ export class WelcomePage {
   lang;
   baseUrl: string = "";
   get notificationNumber() {
-    return WelcomePage.notificationNumber;
+    if(WelcomePage.notificationNumber != 0 && WelcomePage.notificationNumber != undefined){
+      return WelcomePage.notificationNumber;
+    }
+    return null;
   }
   constructor(
     public platform: Platform,

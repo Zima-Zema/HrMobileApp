@@ -13,6 +13,8 @@
     "ALERT_YES":"نعم",
     "ALERT_NO":"لا",
 
+    "Close":"إغلاق",
+
     "compName": "اسم الشركة",
     "compRequir": "عفواً اسم الشركة مطلوب !!",
     "Username":"اسم المستخدم",
@@ -76,5 +78,26 @@
     "RequireError": "مطلوب",
     "DayFracError":"عليك إدخال عدد ايام او كسر يوم" ,
     "ReasonError": "لابد من إدخال سبب الاجازة ",
-    "Charts":"الرسومات"
+
+
+    "Requests":"الطلبات",
+    "SalaryAdvance":"طلب سلفة",
+    "LeavePermission":"طلب إذن خروج",
+    "Complaint":"طلب شكوى",
+    "AddTask":"اضافة مهمة",
+    "EditProfile":"طلب تحديث بيانات",
+    "AssignOrder":"امر تكليف",
+
+    "Notifications":"الإشعارات",
+
+    "Charts":"الرسومات",
+
+    "Queries":"الاستفسارات",
+    "TaskRequests":"المهام",
+    "MyAssignOrders":"تكليفاتي",
+    "AssignOrderRequests":"أوامر التكليف",
+    "Custody":"عهدتي",
+    "officialHoliday":"العطلات الرسمية",
+    "Salary":"تفاصيل المرتب",
+    "Docs":"مرفقاتي"
 }

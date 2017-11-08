@@ -4,7 +4,8 @@ import { LeaveListPage } from '../../Leaves/leave-list/leave-list';
 import { AssignOrderPage } from '../../AssignOrder/assign-order/assign-order'
 import { AssignOrderRequestsPage } from '../../AssignOrderRequests/assign-order-requests/assign-order-requests'
 import { TasksPage } from '../../tasks/tasks'
-
+import { Storage } from '@ionic/storage';
+import { IUser } from "../../../shared/IUser";
 @IonicPage()
 @Component({
   selector: 'page-quereies',
@@ -12,7 +13,15 @@ import { TasksPage } from '../../tasks/tasks'
 })
 export class QuereiesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private app: App) {
+  user: IUser;
+  isManager:boolean;
+  constructor(public navCtrl: NavController, public navParams: NavParams,private storage: Storage, private app: App) {
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+        this.isManager = (this.user.Roles.indexOf("Manager") == -1) ? false : true;
+      }
+    });
   }
 
   ionViewDidLoad() {
