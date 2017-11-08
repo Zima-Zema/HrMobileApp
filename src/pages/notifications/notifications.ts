@@ -46,14 +46,10 @@ export class NotificationsPage {
   }
 
   ionViewWillEnter() {
-
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad NotificationsPage');
-    this.errorMsg = undefined;
-    this.start = 0;
     console.log('ionViewWillEnter NotificationsPage');
+        this.errorMsg = undefined;
+    this.start = 0;
+
     let loader = this.loadingCtrl.create({
       content: "Loading...",
     });
@@ -62,6 +58,7 @@ export class NotificationsPage {
       this.notifications = [];
       this.notifyApi.getNotifications(this.start, this.notifyParams).subscribe((data) => {
         NotificationsPage.notificationsList = data.value;
+        WelcomePage.notificationNumber = NotificationsPage.notificationsList.filter((val) => val.Read == false).length;
         this.notifications = data.value;
         loader.dismiss();
         //this.flag=false;
@@ -86,6 +83,11 @@ export class NotificationsPage {
 
 
     })
+
+  }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad NotificationsPage');
 
   }
 

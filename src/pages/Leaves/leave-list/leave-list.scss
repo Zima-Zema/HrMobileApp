@@ -1,0 +1,49 @@
+
+ion-thumbnail{
+    width: 20px;
+    height: 20px;
+    
+}
+.item-md ion-thumbnail img {
+    width: 50px;
+    height: 50px;
+    padding: 0%;
+    margin: 0%;
+}
+
+.item-md ion-thumbnail{
+    width: 50px;
+    height: 50px;
+     min-width: 40px;
+    min-height: 40px;
+}
+
+ion-note{
+    font-size: 15px;
+    align-self: flex-start;
+    margin-top: 14px;
+}
+
+.blue{
+    color: lightskyblue !important
+}
+.grey{
+    color: grey !important
+}
+.yellow{
+    color: goldenrod !important
+}
+.green{
+    color: green !important
+}
+.red{
+    color: red !important
+}
+#divison{
+    text-align: right;
+    font-size: bolder;
+    margin-top: 0%;
+}
+.TrashLeave{
+    font-size: 15px;
+}

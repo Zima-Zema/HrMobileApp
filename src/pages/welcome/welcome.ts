@@ -1,17 +1,24 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, App } from 'ionic-angular';
 import { NotificationsPage } from '../notifications/notifications';
-import { TasksPage } from '../tasks/tasks';
+//
 import { NotificationServiceApi, INotifyParams, INotification } from '../../shared/NotificationService';
 import { SignalR } from 'ng2-signalr';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { LogInPage } from '../log-in/log-in';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
-import { LeaveListPage } from '../leave-list/leave-list';
+//import { LeaveListPage } from '../leave-list/leave-list';
 import { TranslateService } from '@ngx-translate/core';
-import { SettingsPage } from '../settings/settings';
 import { BackgroundMode } from '@ionic-native/background-mode';
+//import { AssignOrderPage} from '../AssignOrder/assign-order/assign-order';
+//import { AssignOrderRequestsPage} from '../AssignOrderRequests/assign-order-requests/assign-order-requests';
+//Tabs
+import { ChartsPage } from '../ExternalTabs/charts/charts';
+import { RequestsPage } from '../ExternalTabs/requests/requests';
+import { QuereiesPage } from '../ExternalTabs/quereies/quereies';
+import { SettingsTabPage } from '../ExternalTabs/settings-tab/settings-tab';
+
 import * as _ from 'lodash';
 @IonicPage()
 @Component({
@@ -19,6 +26,19 @@ import * as _ from 'lodash';
   templateUrl: 'welcome.html',
 })
 export class WelcomePage {
+  public ChartTab: any;
+  public RequestsTab: any;
+  public QuereiesTab: any;
+  public SettingTab: any;
+  public notifyTab: any;
+  //
+  tabsColor: string = "newBlueGreen";
+  tabsMode: string = "md";
+  tabsPlacement: string = "top";
+  //
+  tabToShow: Array<boolean> = [true, true, true, true, true, true, true, true, true];
+  scrollableTabsopts: any = {};
+  //
   public user_name: string = "";
   public user_email: string = "";
   notifyParams: INotifyParams = {
@@ -43,14 +63,24 @@ export class WelcomePage {
     public localNotifications: LocalNotifications,
     private storage: Storage,
     translate: TranslateService,
-    private backgroundMode: BackgroundMode
+    private backgroundMode: BackgroundMode,
+    private app: App
   ) {
+
+
+
+    this.ChartTab = ChartsPage;
+    this.RequestsTab = RequestsPage;
+    this.QuereiesTab = QuereiesPage;
+    this.SettingTab = SettingsTabPage;
+    this.notifyTab = NotificationsPage;
+
+
     this.platform.registerBackButtonAction((event) => {
       if (this.navCtrl.length() <= 1) {
         this.backgroundMode.moveToBackground();
       }
     });
-
 
 
     this.lang = translate.getDefaultLang();
@@ -108,11 +138,16 @@ export class WelcomePage {
   }
 
   ionViewWillEnter() {
+    console.log("ionViewWillEnter Welcome Page")
+    
     if (NotificationsPage.notificationsList && NotificationsPage.notificationsList.length) {
       WelcomePage.notificationNumber = NotificationsPage.notificationsList.filter((val) => val.Read == false).length;
+       console.log("check NotificationsPage List");
     }
     else {
-      if (WelcomePage.notificationNumber < 0 || WelcomePage.notificationNumber == undefined) {
+      console.log("failed to check NotificationsPage List");
+       console.log("failed to check NotificationsPage List notificationNumber",WelcomePage.notificationNumber);
+      if (WelcomePage.notificationNumber <= 0 || WelcomePage.notificationNumber == undefined) {
 
         this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
           console.log("Notification Number>>>", data);
@@ -126,7 +161,13 @@ export class WelcomePage {
     }
   }
 
+  refreshScrollbarTabs() {
+    this.scrollableTabsopts = { refresh: true };
+  }
+
+
   ionViewDidLoad() {
+    console.log("ionViewDidLoad Welcome Page")
   }
   ////////////////////////////
   GoToHome() {
@@ -137,15 +178,21 @@ export class WelcomePage {
   GoToNotifications() {
     this.navCtrl.push(NotificationsPage);
   }
-  GoToTasks() {
-    this.navCtrl.push(TasksPage);
-  }
-  GoToLeaveList() {
-    this.navCtrl.push(LeaveListPage);
-  }
-  Settings() {
-    this.navCtrl.push(SettingsPage);
-  }
+  // GoToTasks() {
+  //   this.navCtrl.push(TasksPage);
+  // }
+  // GoToLeaveList() {
+  //   this.navCtrl.push(LeaveListPage);
+  // }
+  // Settings() {
+  //   this.navCtrl.push(SettingsPage);
+  // }
+  // GoToAssignOrder(){
+  //   this.navCtrl.push(AssignOrderPage);
+  // }
+  // GoToAssignOrderRequests(){
+  //   this.navCtrl.push(AssignOrderRequestsPage);
+  // }
   Logout() {
     this.storage.clear();
     this.navCtrl.setRoot(LogInPage);

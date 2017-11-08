@@ -78,6 +78,9 @@
      "ReasonError": "This Leave Type Must Have Reason",
 
      "AEndDate":"Actual End Date",
-     "AReturnDate":"Actual Return Date"
+     "AReturnDate":"Actual Return Date",
+
+
+     "Charts":"Charts"
 
 }
