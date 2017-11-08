@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform, } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform, App } from 'ionic-angular';
 import { NotificationsPage } from '../notifications/notifications';
 //
 import { NotificationServiceApi, INotifyParams, INotification } from '../../shared/NotificationService';
@@ -30,7 +30,7 @@ export class WelcomePage {
   public RequestsTab: any;
   public QuereiesTab: any;
   public SettingTab: any;
-  public notifyTab:any;
+  public notifyTab: any;
   //
   tabsColor: string = "newBlueGreen";
   tabsMode: string = "md";
@@ -63,13 +63,18 @@ export class WelcomePage {
     public localNotifications: LocalNotifications,
     private storage: Storage,
     translate: TranslateService,
-    private backgroundMode: BackgroundMode
+    private backgroundMode: BackgroundMode,
+    private app: App
   ) {
+
+
+
     this.ChartTab = ChartsPage;
     this.RequestsTab = RequestsPage;
     this.QuereiesTab = QuereiesPage;
     this.SettingTab = SettingsTabPage;
     this.notifyTab = NotificationsPage;
+
 
     this.platform.registerBackButtonAction((event) => {
       if (this.navCtrl.length() <= 1) {
@@ -133,12 +138,16 @@ export class WelcomePage {
   }
 
   ionViewWillEnter() {
-    console.log("willEnter Welcome Page")
+    console.log("ionViewWillEnter Welcome Page")
+    
     if (NotificationsPage.notificationsList && NotificationsPage.notificationsList.length) {
       WelcomePage.notificationNumber = NotificationsPage.notificationsList.filter((val) => val.Read == false).length;
+       console.log("check NotificationsPage List");
     }
     else {
-      if (WelcomePage.notificationNumber < 0 || WelcomePage.notificationNumber == undefined) {
+      console.log("failed to check NotificationsPage List");
+       console.log("failed to check NotificationsPage List notificationNumber",WelcomePage.notificationNumber);
+      if (WelcomePage.notificationNumber <= 0 || WelcomePage.notificationNumber == undefined) {
 
         this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
           console.log("Notification Number>>>", data);
@@ -156,7 +165,9 @@ export class WelcomePage {
     this.scrollableTabsopts = { refresh: true };
   }
 
+
   ionViewDidLoad() {
+    console.log("ionViewDidLoad Welcome Page")
   }
   ////////////////////////////
   GoToHome() {
