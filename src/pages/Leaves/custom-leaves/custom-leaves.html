@@ -1,0 +1,36 @@
+<ion-header>
+
+  <ion-navbar color="newDarkerBlueGreen">
+    <ion-title>Custom Leaves</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-card>
+    <ion-card-header class="CardHeader">
+      {{"CustomHolidays" | translate}}
+    </ion-card-header>
+    <ion-list *ngFor="let item of CustomHolidaysArr">
+      <ion-item class="items">
+          <div id="FirstDiv" item-end> {{item.Name}} </div>
+        <div id="SecondDiv" item-start> {{item.HoliDate | dateMoment}} </div>       
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header class="CardHeader">
+      {{"StanderdHolidays" | translate}}
+    </ion-card-header>
+    <ion-list *ngFor="let item of StanderdHolidaysArr">
+      <ion-item class="items">
+        <div id="FirstDiv" item-end> {{item.Name}} </div>
+        <div id="SecondDiv" item-start> {{item.Date | dateMoment}} </div>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+
+</ion-content>

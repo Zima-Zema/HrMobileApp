@@ -76,5 +76,7 @@
     "RequireError": "مطلوب",
     "DayFracError":"عليك إدخال عدد ايام او كسر يوم" ,
     "ReasonError": "لابد من إدخال سبب الاجازة ",
-    "Charts":"الرسومات"
+    "Charts":"الرسومات",
+    "CustomHolidays":"الاجازات الخاصة",
+    "StanderdHolidays":"الاجازات الرسميه"
 }

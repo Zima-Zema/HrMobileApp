@@ -41,7 +41,8 @@ import { ShowAssignOrderRequestsPageModule } from '../pages/AssignOrderRequests/
 import { ChartsPageModule } from '../pages/ExternalTabs/charts/charts.module';
 import { RequestsPageModule } from '../pages/ExternalTabs/requests/requests.module';
 import { QuereiesPageModule } from '../pages/ExternalTabs/quereies/quereies.module';
-import { SettingsTabPageModule} from '../pages/ExternalTabs/settings-tab/settings-tab.module'
+import { SettingsTabPageModule} from '../pages/ExternalTabs/settings-tab/settings-tab.module';
+import { CustomLeavesPageModule} from '../pages/Leaves/custom-leaves/custom-leaves.module'
 //from Ali
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
@@ -90,7 +91,8 @@ export function setTranslateLoader(http: Http) {
     ChartsPageModule,
     RequestsPageModule,
     QuereiesPageModule,
-    SettingsTabPageModule
+    SettingsTabPageModule,
+    CustomLeavesPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -81,6 +81,8 @@
      "AReturnDate":"Actual Return Date",
 
 
-     "Charts":"Charts"
+     "Charts":"Charts",
+     "CustomHolidays":"Custom Holidays",
+     "StanderdHolidays":"Official Holidays"
 
 }

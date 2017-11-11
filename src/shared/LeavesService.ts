@@ -390,7 +390,7 @@ export class LeaveServicesApi {
     // }
 
     getOffDays(calender) {
-        let year = new Date(calender.WorkStartTime).getFullYear();
+        let year = new Date().getFullYear();
         let offdays: Array<any> = [];
         calender.CustomHolidays.forEach(element => {
             offdays.push(new Date(element));
@@ -414,6 +414,7 @@ export class LeaveServicesApi {
         }
         return offdays;
     }
+
 
     addDaysToDate(date, days) {
         let dat = new Date(date);
@@ -482,5 +483,14 @@ export class LeaveServicesApi {
                 return initialDate;
             }
         }
+    }
+    /////////////////////////////////////////////////
+    getHolidays(compId: number): Observable<any[]> {
+        return this._http.get(`${this.baseURL}newApi/Leaves/GetHolidays?compId=${compId}`).map((res: Response) => {
+            console.log("res get Holidays : ", res.json())
+            return res.json();
+        }).catch((err) => {
+            return err;
+        })
     }
 }
