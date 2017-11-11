@@ -136,7 +136,8 @@
 
     <ion-item>
       <ion-label floating>{{"ReturnDate" | translate}}</ion-label>
-      <ion-datetime displayFormat="MMM DD, YYYY" disabled [(ngModel)]="returnDate" formControlName="returnDate"></ion-datetime>
+      <ion-datetime displayFormat="MMM DD, YYYY" 
+       [(ngModel)]="returnDate" formControlName="returnDate"></ion-datetime>
     </ion-item>
 
 
@@ -170,7 +171,7 @@
     <ion-item>
       <ion-label>{{"Comments" | translate}}</ion-label>
       <br>
-      <ion-textarea rows="3" class="txtarea" [(ngModel)]="comments" formControlName="comments" placeholder="discription" [disabled]="EditFlag==2"></ion-textarea>
+      <ion-textarea rows="3" class="txtarea" [(ngModel)]="comments" formControlName="comments" placeholder="{{'Comments' | translate}}" [disabled]="EditFlag==2"></ion-textarea>
     </ion-item>
 
   </form>

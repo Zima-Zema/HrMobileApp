@@ -13,6 +13,8 @@
     "ALERT_YES":"نعم",
     "ALERT_NO":"لا",
 
+    "Close":"إغلاق",
+
     "compName": "اسم الشركة",
     "compRequir": "عفواً اسم الشركة مطلوب !!",
     "Username":"اسم المستخدم",
@@ -78,5 +80,25 @@
     "ReasonError": "لابد من إدخال سبب الاجازة ",
     "Charts":"الرسومات",
     "CustomHolidays":"الاجازات الخاصة",
-    "StanderdHolidays":"الاجازات الرسميه"
+    "StanderdHolidays":"الاجازات الرسميه",
+
+
+    "Requests":"الطلبات",
+    "SalaryAdvance":"طلب سلفة",
+    "LeavePermission":"طلب إذن خروج",
+    "Complaint":"طلب شكوى",
+    "AddTask":"اضافة مهمة",
+    "EditProfile":"طلب تحديث بيانات",
+    "AssignOrder":"امر تكليف",
+
+    "Notifications":"الإشعارات",
+
+    "Queries":"الاستفسارات",
+    "TaskRequests":"المهام",
+    "MyAssignOrders":"تكليفاتي",
+    "AssignOrderRequests":"أوامر التكليف",
+    "Custody":"عهدتي",
+    "officialHoliday":"العطلات الرسمية",
+    "Salary":"تفاصيل المرتب",
+    "Docs":"مرفقاتي"
 }

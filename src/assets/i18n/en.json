@@ -13,6 +13,8 @@
     "ALERT_YES":"Yes",
     "ALERT_NO":"No",
 
+    "Close":"Close",
+
     "compName":"Company Name",
     "compRequir":"Company Name Is Required !!",
     "Username":"Username",
@@ -80,9 +82,32 @@
      "AEndDate":"Actual End Date",
      "AReturnDate":"Actual Return Date",
 
+     "Requests":"Requests",
+     "SalaryAdvance":"Request An Advance",
+     "LeavePermission":"Leave Permission Request",
+     "Complaint":"Complaint Request",
+     "AddTask":"Add Task",
+     "EditProfile":"Edit Profile Request",
+     "AssignOrder":"Assign Order",
+
+     "Notifications":"Notifications",
+
+
+
+     "Charts":"Charts",
+
 
      "Charts":"Charts",
      "CustomHolidays":"Custom Holidays",
-     "StanderdHolidays":"Official Holidays"
+     "StanderdHolidays":"Official Holidays",
+     "Queries":"Queries",
+     "TaskRequests":"Task Requests",
+     "MyAssignOrders":"My Assign Orders",
+     "AssignOrderRequests":"Assign Order Requests",
+     "Custody":"My Custody",
+     "officialHoliday":"Official Vacations",
+     "Salary":"Salary Details",
+     "Docs":"My Documents"
+     
 
 }

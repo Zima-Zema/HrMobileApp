@@ -33,7 +33,7 @@
 }
 ul {
     float: none;
-    text-align: center; 
+    text-align: center !important; 
     &.rating li {
         padding: 0px 0px !important;
         background: none;

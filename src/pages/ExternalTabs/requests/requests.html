@@ -1,15 +1,15 @@
-
- <ion-header>
+<ion-header>
 
   <!-- <ion-navbar>
     <ion-title>Requests</ion-title>
   </ion-navbar> -->
 
-</ion-header> 
+</ion-header>
 
 
 <ion-content id="mainContent">
   <ion-card id="mainCard" (click)="gotoLeaveRequests()">
+<<<<<<< HEAD
     <div id="smalldiv">
         <ion-icon name="analytics"></ion-icon>
     </div>   
@@ -17,59 +17,66 @@
        Request Leave 
     </div>
     
-  </ion-card>
-
-   <ion-card id="mainCard" (click)="gotoSalaryAdvanceRequests()">
+=======
     <div id="bigdiv">
-       Request Salary Advance 
+      {{"RequestLeave" | translate}}
     </div>
     <div id="smalldiv">
-        <ion-icon name="analytics"></ion-icon>
-    </div>   
+      <ion-icon name="analytics"></ion-icon>
+    </div>
+>>>>>>> 55689e57e5a59e28e3a821816164a6cfc243f88e
   </ion-card>
 
-   <ion-card id="mainCard" (click)="gotoAskingPermission()">
+  <ion-card id="mainCard" (click)="gotoSalaryAdvanceRequests()">
     <div id="bigdiv">
-       Asking Permission
+      {{"SalaryAdvance" | translate}}
     </div>
     <div id="smalldiv">
-        <ion-icon name="analytics"></ion-icon>
-    </div>   
+      <ion-icon name="analytics"></ion-icon>
+    </div>
   </ion-card>
 
-   <ion-card id="mainCard" (click)="gotoComplaint()">
+  <ion-card id="mainCard" (click)="gotoAskingPermission()">
     <div id="bigdiv">
-       Complaint
+      {{"LeavePermission" | translate}}
     </div>
     <div id="smalldiv">
-        <ion-icon name="analytics"></ion-icon>
-    </div>   
+      <ion-icon name="analytics"></ion-icon>
+    </div>
   </ion-card>
 
-   <ion-card id="mainCard" (click)="gotoTaskRequests()">
+  <ion-card id="mainCard" (click)="gotoComplaint()">
     <div id="bigdiv">
-       Request Task
+      {{"Complaint" | translate}}
     </div>
     <div id="smalldiv">
-        <ion-icon name="analytics"></ion-icon>
-    </div>   
+      <ion-icon name="analytics"></ion-icon>
+    </div>
   </ion-card>
 
-   <ion-card id="mainCard" (click)="gotoEditProfile()">
+  <ion-card id="mainCard" *ngIf="isManager" (click)="gotoTaskRequests()">
     <div id="bigdiv">
-       Request Edit Profile 
+      {{"AddTask" | translate}}
     </div>
     <div id="smalldiv">
-        <ion-icon name="analytics"></ion-icon>
-    </div>   
+      <ion-icon name="analytics"></ion-icon>
+    </div>
   </ion-card>
 
-   <ion-card id="mainCard" (click)="gotoAssignOrderRequests()">
+  <ion-card id="mainCard" (click)="gotoEditProfile()">
     <div id="bigdiv">
-      Request Assign Order 
+      {{"EditProfile" | translate}}
     </div>
     <div id="smalldiv">
-        <ion-icon name="analytics"></ion-icon>
-    </div>   
+      <ion-icon name="analytics"></ion-icon>
+    </div>
+  </ion-card>
+  <ion-card id="mainCard" *ngIf="isManager" (click)="gotoAssignOrderRequests()">
+    <div id="bigdiv">
+      {{"AssignOrder" | translate}}
+    </div>
+    <div id="smalldiv">
+      <ion-icon name="analytics"></ion-icon>
+    </div>
   </ion-card>
 </ion-content>

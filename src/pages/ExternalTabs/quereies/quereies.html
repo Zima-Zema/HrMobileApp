@@ -8,6 +8,7 @@
 <ion-content id="mainContent">
 
     <ion-card id="mainCard" (click)="gotoMyTasks()">
+<<<<<<< HEAD
         <div id="smalldiv">
             <ion-icon name="analytics"></ion-icon>
         </div>
@@ -83,6 +84,77 @@
             Papers
         </div>
 
+=======
+        <div id="bigdiv">
+            {{"TaskRequests" | translate}}
+        </div>
+        <div id="smalldiv">
+            <ion-icon name="analytics"></ion-icon>
+        </div>
+    </ion-card>
+
+    <ion-card id="mainCard" (click)="gotoMyLeave()">
+        <div id="bigdiv">
+            {{"LeaveRequests" | translate}}
+        </div>
+        <div id="smalldiv">
+            <ion-icon name="analytics"></ion-icon>
+        </div>
+    </ion-card>
+
+    <ion-card id="mainCard" (click)="gotoMyAssignOrders()">
+        <div id="bigdiv">
+            {{"MyAssignOrders" | translate}}
+        </div>
+        <div id="smalldiv">
+            <ion-icon name="analytics"></ion-icon>
+        </div>
+    </ion-card>
+
+    <ion-card id="mainCard" *ngIf="isManager" (click)="gotoAssignOrderRequests()">
+        <div id="bigdiv">
+            {{"AssignOrderRequests" | translate}}
+        </div>
+        <div id="smalldiv">
+            <ion-icon name="analytics"></ion-icon>
+        </div>
+    </ion-card>
+
+    <ion-card id="mainCard" (click)="gotocustodyRequests()">
+        <div id="bigdiv">
+            {{"Custody" | translate}}
+        </div>
+        <div id="smalldiv">
+            <ion-icon name="analytics"></ion-icon>
+        </div>
+    </ion-card>
+
+    <ion-card id="mainCard" (click)="gotoCustomLeaves()">
+        <div id="bigdiv">
+            {{"officialHoliday" | translate}}
+        </div>
+        <div id="smalldiv">
+            <ion-icon name="analytics"></ion-icon>
+        </div>
+    </ion-card>
+
+    <ion-card id="mainCard" (click)="gotoSalary()">
+        <div id="bigdiv">
+            {{"Salary" | translate}}
+        </div>
+        <div id="smalldiv">
+            <ion-icon name="analytics"></ion-icon>
+        </div>
+    </ion-card>
+
+    <ion-card id="mainCard" (click)="gotoPapers()">
+        <div id="bigdiv">
+            {{"Docs" | translate}}
+        </div>
+        <div id="smalldiv">
+            <ion-icon name="analytics"></ion-icon>
+        </div>
+>>>>>>> 55689e57e5a59e28e3a821816164a6cfc243f88e
     </ion-card>
 
 </ion-content>
