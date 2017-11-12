@@ -3,13 +3,21 @@
 </ion-header>
 
 
-<ion-content id="mainContent">
- <ion-card id="mainCard" (click)="gotoLanguage()">
-    <div id="bigdiv">
-       {{"Language" | translate}}
+<ion-content id="mainContentSet">
+
+  <!-- <ion-item>
+    <img item-start class="circle-pic" src="{{baseUrl}}SpecialData/Photos/{{User.CompanyId}}/{{User.EmpId}}?dummy=1503580792563">
+    <h2> {{User.UserName}} </h2>
+    <p>{{User.Email}} </p>
+  </ion-item> -->
+
+  <ion-card id="mainCardSet" (click)="gotoLanguage()">
+    <div id="smalldivSet">
+      <ion-icon name="analytics"></ion-icon>
     </div>
-    <div id="smalldiv">
-        <ion-icon name="analytics"></ion-icon>
-    </div>   
+    <div id="largedivSet">
+      {{"Language" | translate}}
+    </div>
+
   </ion-card>
 </ion-content>

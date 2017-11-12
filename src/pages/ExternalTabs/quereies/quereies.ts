@@ -8,6 +8,7 @@ import { CustomLeavesPage } from '../../Leaves/custom-leaves/custom-leaves'
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../../shared/IUser";
 import { CustodyListPage } from '../../custody-list/custody-list';
+import { TransLeavesPage} from '../../Leaves/trans-leaves/trans-leaves'
 @IonicPage()
 @Component({
   selector: 'page-quereies',
@@ -49,6 +50,10 @@ export class QuereiesPage {
 
   gotoCustomLeaves() {
     this.app.getRootNav().push(CustomLeavesPage);
+  }
+
+  gotoTransLeaves(){
+    this.app.getRootNav().push(TransLeavesPage);
   }
 
   gotoSalary() {

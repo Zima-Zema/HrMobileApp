@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,App } from 'ionic-angular';
-import { SettingsPage} from '../../settings/settings'
-
+import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { SettingsPage } from '../../settings/settings'
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -9,14 +9,32 @@ import { SettingsPage} from '../../settings/settings'
   templateUrl: 'settings-tab.html',
 })
 export class SettingsTabPage {
+  //public user_name: string = "";
+  //public user_email: string = "";
+  public User: any;
+  baseUrl: string = "";
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams
+    , private app: App,
+    private storage: Storage) {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,private app:App) {
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        console.log("udata ", udata);
+        this.User=udata;
+      }
+    });
+
+    this.storage.get("BaseURL").then((val) => {
+      this.baseUrl = val;
+    });
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SettingsTabPage');
   }
-  gotoLanguage(){
+  gotoLanguage() {
     this.app.getRootNav().push(SettingsPage);
   }
 

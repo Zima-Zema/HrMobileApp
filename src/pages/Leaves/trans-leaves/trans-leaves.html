@@ -1,0 +1,33 @@
+<ion-header>
+
+  <ion-navbar color="newDarkerBlueGreen">
+    <ion-title>TransLeaves ({{LeavesCount}})</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-note *ngIf="LeavesCount == 0">{{"TransLeaveMsg" | translate}}</ion-note>
+  <ion-list *ngFor="let Mainitem of CreditQtyCount">
+     <ion-item-group id="pItem">
+       <ion-item-divider color="newBlueGreen" >{{Mainitem.LeaveType}}
+         <p item-end>
+          Total : {{Mainitem.total}}
+         </p>
+      </ion-item-divider>
+       <ion-item-sliding *ngFor="let item of Mainitem.objs">
+       <ion-item>
+          <h5> {{item.TransDate | dateMoment}}</h5>
+          <h5> {{item.TransTypeName}}</h5>
+          <div item-end>
+            <p> CreditQty : {{item.CreditQty}}</p>
+            <p> DebitQty : {{item.DebitQty}}</p>
+          </div>
+       </ion-item>
+       </ion-item-sliding>
+     </ion-item-group>
+
+  </ion-list>
+
+</ion-content>

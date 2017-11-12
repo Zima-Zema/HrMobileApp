@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { ShowAssignOrderPage } from '../show-assign-order/show-assign-order';
 import { AssignOrderServicesApi, IEmpAssignOrders } from '../../../shared/AssignOrderService';
 import * as _ from 'lodash';
@@ -15,7 +15,7 @@ export class AssignOrderPage {
   public AssignOrderArr: Array<any> = [];
   public AssignOrderFilter: Array<any> = [];
   public AssignOrderData: Array<any> = [];
-  public AssignOrderCount: number = 0;
+  public AssignOrderCount: number ;
   public static motherArr = [];
   public queryText: string;
 
@@ -27,20 +27,37 @@ export class AssignOrderPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    public AssignOrderService: AssignOrderServicesApi) {
+    public AssignOrderService: AssignOrderServicesApi,
+    public loadingCtrl: LoadingController,
+    public toastCtrl: ToastController) {
   }
 
   ionViewDidLoad() {
-    // AssignOrderPage.motherArr = [];
-    this.AssignOrderService.GetEmpAssignOrders(this.EmpAssignOrderObj).subscribe((data) => {
-      console.log("tata : ", data);
-      this.AssignOrderCount = data.length
-      // this.AssignOrderList = data;
-      // this.AssignOrderList = _.chain(data).groupBy('Manager').toPairs()
-      //   .map(item => _.zipObject(['divisionType', 'divisionTypes'], item)).value();
-      // this.AssignOrderArr = this.AssignOrderList;
-     this.AssignOrderData=data;
-      this.AssignOrderArr = data;
+    var OrdersLoader = this.loadingCtrl.create({
+      content: "Loading Orders..."
+    });
+    OrdersLoader.present().then(() => {
+      this.AssignOrderService.GetEmpAssignOrders(this.EmpAssignOrderObj).subscribe((data) => {
+        if (data) {
+          OrdersLoader.dismiss().then(() => {
+            this.AssignOrderCount = data.length
+            this.AssignOrderData = data;
+            this.AssignOrderArr = data;
+          });
+        }
+        else{
+          OrdersLoader.dismiss();
+        }
+      }, (e) => {
+        let toast = this.toastCtrl.create({
+          message: "Error in getting Orders, Please Try again later.",
+          duration: 3000,
+          position: 'middle'
+        });
+        OrdersLoader.dismiss().then(() => {
+          toast.present();
+        });
+      })
     })
   }
 
@@ -58,18 +75,18 @@ export class AssignOrderPage {
   }
 
   filterItems() {
-    this.AssignOrderArr=[];
+    this.AssignOrderArr = [];
     let val = this.queryText.toLowerCase();
     this.AssignOrderFilter = this.AssignOrderData.filter((v) => {
-      if (v.Id) { 
+      if (v.Id) {
         if ((v.Id + '').indexOf(val) > -1) {
           return true;
         }
         return false;
-      }     
-    }); 
-    this.AssignOrderArr=this.AssignOrderFilter;
-    this.AssignOrderCount=this.AssignOrderArr.length;
-    this.AssignOrderFilter=[];
+      }
+    });
+    this.AssignOrderArr = this.AssignOrderFilter;
+    this.AssignOrderCount = this.AssignOrderArr.length;
+    this.AssignOrderFilter = [];
   }
 }
