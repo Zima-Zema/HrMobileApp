@@ -17,7 +17,7 @@ export class AssignOrderRequestsPage {
   public AssignOrderArr: Array<any> = [];
   public AssignOrderFilter: Array<any> = [];
   public AssignOrderData: Array<any> = [];
-  public AssignOrderCount: number = 0;
+  public AssignOrderCount: number ;
   public static motherArr = [];
   public queryText: string;
 

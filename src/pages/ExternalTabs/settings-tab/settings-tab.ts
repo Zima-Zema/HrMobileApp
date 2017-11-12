@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { SettingsPage } from '../../settings/settings'
 import { Storage } from '@ionic/storage';
+import { LogInPage } from "../../log-in/log-in";
 
 @IonicPage()
 @Component({
@@ -36,6 +37,11 @@ export class SettingsTabPage {
   }
   gotoLanguage() {
     this.app.getRootNav().push(SettingsPage);
+  }
+  logout(){
+    this.storage.clear();
+    this.app.getRootNav().push(LogInPage);
+    //this.navCtrl.popToRoot();
   }
 
 }
