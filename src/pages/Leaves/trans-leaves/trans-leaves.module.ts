@@ -1,20 +1,17 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { AssignOrderPage } from './assign-order';
-import { AssignOrderServicesApi} from '../../../shared/AssignOrderService';
+import { TransLeavesPage } from './trans-leaves';
 import { PipesModule } from "../../../pipes/pipes.module";
 import { TranslateModule } from "@ngx-translate/core";
+
 @NgModule({
   declarations: [
-    AssignOrderPage,
+    TransLeavesPage,
   ],
   imports: [
-    IonicPageModule.forChild(AssignOrderPage),
+    IonicPageModule.forChild(TransLeavesPage),
     PipesModule,
     TranslateModule
   ],
-  providers:[
-    AssignOrderServicesApi
-  ]
 })
-export class AssignOrderPageModule {}
+export class TransLeavesPageModule {}

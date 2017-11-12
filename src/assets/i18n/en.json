@@ -96,8 +96,6 @@
 
      "Charts":"Charts",
 
-
-     "Charts":"Charts",
      "CustomHolidays":"Custom Holidays",
      "StanderdHolidays":"Official Holidays",
      "Queries":"Queries",
@@ -107,7 +105,13 @@
      "Custody":"My Custody",
      "officialHoliday":"Official Vacations",
      "Salary":"Salary Details",
-     "Docs":"My Documents"
+     "Docs":"My Documents",
+
+     "TransLeaves":"Transction Leaves",
+
+     "AssignOrderMsg":"You Have No Assign Orders",
+     "ReqAssignOrderMsg":"You Have Not Assign any Order",
+     "TransLeaveMsg":"You Have No Transction Leaves"
      
 
 }

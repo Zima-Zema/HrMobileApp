@@ -100,5 +100,11 @@
     "Custody":"عهدتي",
     "officialHoliday":"العطلات الرسمية",
     "Salary":"تفاصيل المرتب",
-    "Docs":"مرفقاتي"
+    "Docs":"مرفقاتي",
+
+    "TransLeaves":"كشف الاجازه",
+
+    "AssignOrderMsg":"لا يوجد امور تكليف",
+    "ReqAssignOrderMsg":"لا يوجد امور مكلفه من قبلك",
+    "TransLeaveMsg" : "لا يوجد معاملات للاجازه"
 }

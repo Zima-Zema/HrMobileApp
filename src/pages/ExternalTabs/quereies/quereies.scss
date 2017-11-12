@@ -1,22 +1,25 @@
-#smalldiv{
-    background-color: #009999;
-    width:40px;
-    color: #f2f2f2;
-}
-#bigdiv{
+
+#largedivq{
     background-color:#33cccc;
     flex:1;
-    text-align: right;
+    //text-align: unset !important;
     font-size: 17px;
     color: #f2f2f2;
     padding: 2%
-}
 
-#mainCard{
+}
+#smalldivq{
+    background-color: #009999;
+    width:40px;
+    color: #f2f2f2;
+    text-align: center;
+}
+#mainCardq{
     display: flex;
     margin-top: 10%;
 }
 
-#mainContent{
+#mainContentq{
 //    margin-top: 20%
+text-align: initial ;
 }

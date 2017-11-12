@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { LeaveServicesApi } from '../../../shared/LeavesService';
 @IonicPage()
 @Component({
@@ -14,30 +14,48 @@ export class CustomLeavesPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    private LeaveService: LeaveServicesApi) {
+    private LeaveService: LeaveServicesApi,
+    public loadingCtrl: LoadingController,
+    public toastCtrl: ToastController, ) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad CustomLeavesPage');
-
-    this.LeaveService.getHolidays(this.CompanyId).subscribe((data) => {
-      this.MainArray.push(data);
-      console.log("MainArray : ", this.MainArray)
-      //this.StanderdHolidaysArr = this.getDateofStandardDays(data);
-      //console.log("this.StanderdHolidaysArr : ",this.StanderdHolidaysArr)
-      this.MainArray.forEach(element => {
-        this.CustomHolidaysArr = element.Customs;
-        this.StanderdHolidaysArr = this.getDateofStandardDays(element.Standard);
-        console.log("Customs", element.Customs);
-        console.log("Standard", this.StanderdHolidaysArr);
-      });
+    var LeavesLoader = this.loadingCtrl.create({
+      content: "Loading Leaves..."
+    });
+    LeavesLoader.present().then(() => {
+      this.LeaveService.getHolidays(this.CompanyId).subscribe((data) => {
+        if (data) {
+          LeavesLoader.dismiss().then(() => {
+            this.MainArray.push(data);
+            this.MainArray.forEach(element => {
+              this.CustomHolidaysArr = element.Customs;
+              this.StanderdHolidaysArr = this.getDateofStandardDays(element.Standard);
+            });
+          })
+        }
+        else {
+          LeavesLoader.dismiss()
+        }
+      }, (e) => {
+        let toast = this.toastCtrl.create({
+          message: "Error in getting Leaves, Please Try again later.",
+          duration: 3000,
+          position: 'middle'
+        });
+        LeavesLoader.dismiss().then(() => {
+          toast.present();
+        });
+      })
     })
+
+
   }
 
   getDateofStandardDays(calender) {
     let year = new Date().getFullYear();
-    console.log("year : ",year);
-    console.log("calender : ",calender)
+    console.log("year : ", year);
+    console.log("calender : ", calender)
     let offdays: Array<any> = [];
     calender.forEach((ele) => {
       offdays.push({
@@ -46,7 +64,6 @@ export class CustomLeavesPage {
       });
 
     });
-
     return offdays;
   }
 

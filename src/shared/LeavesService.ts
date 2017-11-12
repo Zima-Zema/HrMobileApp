@@ -88,6 +88,12 @@ export interface IEdit {
     EditedEndDate: string,
     EditedReturnDate: string
 }
+export interface ILeavesTrans{
+    EmpId:number,
+    StartDate:Date,
+    CompanyId:number,
+    Culture:string
+}
 
 
 @Injectable()
@@ -493,4 +499,18 @@ export class LeaveServicesApi {
             return err;
         })
     }
+    //////////////////////////////////////////////
+     getLeaveTrans(body: ILeavesTrans): Observable<any> {
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}newApi/Leaves/GetLeavesTrans`, bodyString, { headers: headers })
+            .map((res: Response) => {
+                console.log("res.json ::: ", res.json());
+                return res.json();
+            }).catch((err) => {
+                console.log("the error in Service ::", err);
+                return err;
+            });
+    }
+
 }
