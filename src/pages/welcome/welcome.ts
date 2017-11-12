@@ -76,7 +76,7 @@ export class WelcomePage {
     this.RequestsTab = RequestsPage;
     this.QuereiesTab = QuereiesPage;
     this.SettingTab = SettingsTabPage;
-    this.notifyTab = NotificationsPage;
+    this.notifyTab =  NotificationsPage;
 
 
     this.platform.registerBackButtonAction((event) => {

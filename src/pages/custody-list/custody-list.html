@@ -1,0 +1,20 @@
+<!--
+  Generated template for the CustodyListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="newDarkerBlueGreen">
+    <ion-title>custodyList</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-note *ngIf="is404Error">You Have NO Custody Right Now</ion-note>
+  <ion-note *ngIf="is500Error">Somthing Went Wrong Try Again</ion-note>
+  <ion-note *ngIf="is500Error">Request TimeOut Please Try Again Later</ion-note>
+</ion-content>

@@ -43,11 +43,14 @@ import { RequestsPageModule } from '../pages/ExternalTabs/requests/requests.modu
 import { QuereiesPageModule } from '../pages/ExternalTabs/quereies/quereies.module';
 import { SettingsTabPageModule} from '../pages/ExternalTabs/settings-tab/settings-tab.module';
 import { CustomLeavesPageModule} from '../pages/Leaves/custom-leaves/custom-leaves.module';
+import { CustodyListPageModule } from '../pages/custody-list/custody-list.module';
 import { TransLeavesPageModule} from '../pages/Leaves/trans-leaves/trans-leaves.module'
 //from Ali
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { SettingsPageModule } from '../pages/settings/settings.module';
+
+
 
 export function setTranslateLoader(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -94,6 +97,7 @@ export function setTranslateLoader(http: Http) {
     QuereiesPageModule,
     SettingsTabPageModule,
     CustomLeavesPageModule,
+    CustodyListPageModule,
     TransLeavesPageModule
   ],
   bootstrap: [IonicApp],
@@ -112,7 +116,8 @@ export function setTranslateLoader(http: Http) {
     AppMinimize,
     StatusBar,
     SplashScreen,
-    { provide: ErrorHandler, useClass: IonicErrorHandler }
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    
   ]
 })
 export class AppModule { }
