@@ -124,6 +124,9 @@
      "Code":"Code",
      "Category":"Category",
      "Serial":"S/N",
-     "Quantity":"Quantity"
+     "Quantity":"Quantity",
+
+     "LangErrorToast":"There Is An Error, Please Try Again Later...",
+     "LangSuccessToast":"Successfully Saved To User Profile..."
 
 }

@@ -119,5 +119,8 @@
     "Code":"كود",
     "Category":"تصنيف",
     "Serial":"ر/ت",
-    "Quantity":"كمية"
+    "Quantity":"كمية",
+
+    "LangErrorToast":"حدث خطأ أثناء الحفظ من فضلك حاول مرة أخرى...",
+    "LangSuccessToast":"تم الحفظ بنجاح..."
 }

@@ -40,8 +40,8 @@ export class SettingsTabPage {
   }
   logout(){
     this.storage.clear();
-    this.app.getRootNav().push(LogInPage);
-    //this.navCtrl.popToRoot();
+    this.app.getRootNav().setRoot(LogInPage);
+    this.navCtrl.popToRoot();
   }
 
 }

@@ -29,8 +29,8 @@
       <ion-item *ngFor="let item of mother.divisionTypes">
 
         <div >
-          <h2>{{item.Name}}</h2>
-          <h3>{{"Code" | translate}}: {{item.Code}}</h3>
+          <h2 id="name-tag">{{item.Name}}</h2>
+          <h3 id="code-tag">{{"Code" | translate}}: {{item.Code}}</h3>
         </div>
         <div item-end>
           <p >{{"Category" | translate}}: {{item.Category}} </p>
