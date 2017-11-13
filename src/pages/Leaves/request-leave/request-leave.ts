@@ -172,8 +172,6 @@ export class RequestLeavePage {
         this.RequestTypeObj.CompId = this.RequestDataObj.CompanyId = this.user.CompanyId;
         this.RequestTypeObj.Culture = this.RequestDataObj.Culture = this.user.Culture;
         this.RequestTypeObj.EmpId = this.RequestDataObj.EmpId = this.user.EmpId;
-
-
       }
     });
 

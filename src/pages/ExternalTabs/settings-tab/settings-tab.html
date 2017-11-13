@@ -18,6 +18,19 @@
     <div id="largedivSet">
       {{"Language" | translate}}
     </div>
-
   </ion-card>
+
+   <ion-card id="mainCardSet" (click)="logout()">
+    <div style="background-color: #ff5050;width:35px;
+    color: #f2f2f2;
+    text-align: center;">
+      <ion-icon name="log-out"></ion-icon>
+    </div>
+    <div style="background-color: #ff9999;flex:1; font-size: 17px;
+    color: #f2f2f2;
+    padding: 2%;">
+        {{"LogOut" | translate}}
+    </div>
+  </ion-card>
+
 </ion-content>

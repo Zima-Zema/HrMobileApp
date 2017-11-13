@@ -8,9 +8,62 @@
 
 
 <ion-content padding>
-  <!-- <form [formGroup]="AssignOrderForm" id="AssignOrderID">
-  </form> -->
+  <form [formGroup]="AssignOrderForm" id="AssignOrderID">
+
+    <ion-item>
+      <ion-label floating>Employee</ion-label>
+      <ion-select [(ngModel)]="Employee" formControlName="Employee" interface="popover">
+        <ion-option *ngFor="let item of EmployeeData" value="{{item.id}}">{{item.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Duration</ion-label>
+      <ion-select [(ngModel)]="Duration" formControlName="Duration" (ionChange)="DurationChange(Duration)" interface="popover">
+        <ion-option value="1">Day</ion-option>
+        <ion-option value="2">0.25 Day</ion-option>
+        <ion-option value="3">0.5 Day</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Assign Date</ion-label>
+      <ion-datetime ion-datepicker [(ngModel)]="AssignDate" (ionChanged)="AssignDateChange($event)" [disabledDates]="filteredArr" [(value)]="localDateval"
+        formControlName="AssignDate" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minDate"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Calculation Method</ion-label>
+      <!-- <ion-toggle [(ngModel)]="CalculMethod" formControlName="CalculMethod" interface="popover" (ionChange)="CalculMethodChange(CalculMethod)"></ion-toggle> -->
+      <ion-select [(ngModel)]="CalculMethodSelect" formControlName="CalculMethodSelect" (ionChange)="CalculMethodChange(CalculMethodSelect)"
+        interface="popover">
+        <ion-option value="1">Monetory</ion-option>
+        <ion-option value="2">Time Compensation</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="CalculMethodSelect == 2">
+      <ion-label floating>{{"LeaveType" | translate}}</ion-label>
+      <ion-select [(ngModel)]="leaveType" formControlName="leaveType" interface="popover">
+        <ion-option *ngFor="let item of LeavesData" value="{{item.id}}">{{item.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="CalculMethodSelect == 2">
+      <ion-label floating>Expiry Date</ion-label>
+      <ion-datetime ion-datepicker [(ngModel)]="ExpiryDate" [disabledDates]="filteredExpiryDate" [(value)]="localDateval" formControlName="ExpiryDate"
+        [displayFormat]="displayFormat" [pickerFormat]="pickFormat" [min]="minExpiryDate"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{"Comments" | translate}}</ion-label>
+      <br>
+      <ion-textarea rows="3" [(ngModel)]="comments" formControlName="comments" placeholder="{{'Comments' | translate}}"></ion-textarea>
+    </ion-item>
+
+  </form>
 </ion-content>
-<!-- <ion-footer>
-  <button ion-button class="save" form="RequestLeaveID" color="secondary" type="submit" (click)="saveLeaves(false)" [disabled]="!RequestLeaveForm.valid || errorMsgObj.IsError">Save</button>
-</ion-footer> -->
+<ion-footer>
+  <button ion-button class="saveAssignOrder" form="AssignOrderID" color="secondary" type="submit" (click)="saveLeaves(false)">Save</button>
+  <!-- [disabled]="!AssignOrderForm.valid || errorMsgObj.IsError" -->
+</ion-footer>
