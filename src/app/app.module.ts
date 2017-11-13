@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -9,6 +9,9 @@ import { IonicStorageModule } from '@ionic/storage';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AppMinimize } from '@ionic-native/app-minimize';
+
+
+
 //
 import { MyApp } from './app.component';
 // plugins
@@ -64,6 +67,7 @@ export function setTranslateLoader(http: Http) {
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot({ driverOrder: ["localstorage", "websql"] }),
     TranslateModule.forRoot({

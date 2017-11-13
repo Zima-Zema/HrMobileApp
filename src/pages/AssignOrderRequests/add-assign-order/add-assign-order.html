@@ -1,7 +1,12 @@
 <ion-header>
 
   <ion-navbar color="newDarkerBlueGreen">
-    <ion-title>Add AssignOrder</ion-title>
+    <ion-title>Add Assign Order</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="ResetForm()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -16,6 +21,9 @@
         <ion-option *ngFor="let item of EmployeeData" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
+    <span *ngIf="!AssignOrderForm.controls.Employee.valid">
+             <p style="color:crimson ">Required</p> 
+    </span>
 
     <ion-item>
       <ion-label floating>Duration</ion-label>
@@ -25,22 +33,38 @@
         <ion-option value="3">0.5 Day</ion-option>
       </ion-select>
     </ion-item>
+     <span *ngIf="!AssignOrderForm.controls.Duration.valid">
+       <p style="color:crimson ">Required</p> 
+    </span> 
+
+    <!-- <span class="help-block" *ngIf="!AssignOrderForm.controls['Duration'].valid" >                                          
+                            <span>
+                                *(Required)
+                                <br />
+                            </span>
+
+    </span> -->
 
     <ion-item>
       <ion-label floating>Assign Date</ion-label>
-      <ion-datetime ion-datepicker [(ngModel)]="AssignDate" (ionChanged)="AssignDateChange($event)" [disabledDates]="filteredArr" [(value)]="localDateval"
-        formControlName="AssignDate" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minDate"></ion-datetime>
+      <ion-datetime ion-datepicker [(ngModel)]="AssignDate" (ionChanged)="AssignDateChange($event)" [disabledDates]="filteredArr"
+        [(value)]="localDateval" formControlName="AssignDate" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minDate"></ion-datetime>
     </ion-item>
+    <span *ngIf="!AssignOrderForm.controls.AssignDate.valid ">
+       <p style="color:crimson ">Required</p> 
+    </span>
 
     <ion-item>
       <ion-label floating>Calculation Method</ion-label>
-      <!-- <ion-toggle [(ngModel)]="CalculMethod" formControlName="CalculMethod" interface="popover" (ionChange)="CalculMethodChange(CalculMethod)"></ion-toggle> -->
       <ion-select [(ngModel)]="CalculMethodSelect" formControlName="CalculMethodSelect" (ionChange)="CalculMethodChange(CalculMethodSelect)"
         interface="popover">
         <ion-option value="1">Monetory</ion-option>
         <ion-option value="2">Time Compensation</ion-option>
       </ion-select>
     </ion-item>
+    <span *ngIf="!AssignOrderForm.controls.CalculMethodSelect.valid ">
+       <p style="color:crimson ">Required</p> 
+    </span>
 
     <ion-item *ngIf="CalculMethodSelect == 2">
       <ion-label floating>{{"LeaveType" | translate}}</ion-label>
@@ -48,22 +72,25 @@
         <ion-option *ngFor="let item of LeavesData" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
+    <span *ngIf="!AssignOrderForm.controls.leaveType.valid">
+     <p *ngIf="AssignOrderForm.get('leaveType').hasError('required')" style="color:crimson ">{{AssignOrderForm.get('leaveType').getError('required')}}</p>
+    </span>
 
     <ion-item *ngIf="CalculMethodSelect == 2">
       <ion-label floating>Expiry Date</ion-label>
-      <ion-datetime ion-datepicker [(ngModel)]="ExpiryDate" [disabledDates]="filteredExpiryDate" [(value)]="localDateval" formControlName="ExpiryDate"
-        [displayFormat]="displayFormat" [pickerFormat]="pickFormat" [min]="minExpiryDate"></ion-datetime>
+      <ion-datetime ion-datepicker [(ngModel)]="ExpiryDate" [disabledDates]="filteredExpiryDate" (ionChanged)="ExpiryDateChange($event)"
+        [(value)]="localDateval" formControlName="ExpiryDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat" [min]="minExpiryDate"></ion-datetime>
     </ion-item>
 
     <ion-item>
-      <ion-label>{{"Comments" | translate}}</ion-label>
+      <ion-label>{{"Description" | translate}}</ion-label>
       <br>
-      <ion-textarea rows="3" [(ngModel)]="comments" formControlName="comments" placeholder="{{'Comments' | translate}}"></ion-textarea>
+      <ion-textarea rows="3" [(ngModel)]="Description" formControlName="Description" placeholder="{{'Comments' | translate}}"></ion-textarea>
     </ion-item>
 
   </form>
 </ion-content>
 <ion-footer>
-  <button ion-button class="saveAssignOrder" form="AssignOrderID" color="secondary" type="submit" (click)="saveLeaves(false)">Save</button>
-  <!-- [disabled]="!AssignOrderForm.valid || errorMsgObj.IsError" -->
+  <button ion-button class="saveAssignOrder" form="AssignOrderID" color="newBlueGreen" type="submit" (click)="saveAssignOrder()"
+    [disabled]="!AssignOrderForm.valid">Save</button>
 </ion-footer>

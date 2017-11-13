@@ -4,6 +4,8 @@ import { ShowAssignOrderRequestsPage } from '../show-assign-order-requests/show-
 import { AddAssignOrderPage } from '../add-assign-order/add-assign-order';
 import { AssignOrderServicesApi, IEmpAssignOrders } from '../../../shared/AssignOrderService';
 import * as _ from 'lodash';
+import { IUser } from '../../../shared/IUser';
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -17,25 +19,33 @@ export class AssignOrderRequestsPage {
   public AssignOrderArr: Array<any> = [];
   public AssignOrderFilter: Array<any> = [];
   public AssignOrderData: Array<any> = [];
-  public AssignOrderCount: number ;
+  public AssignOrderCount: number;
   public static motherArr = [];
   public queryText: string;
 
   public EmpAssignOrderObj: IEmpAssignOrders = {
-    EmpId: 17,
+    EmpId: 0,
     Culture: "ar-EG",
     CompanyId: 0
   }
+  public user: IUser;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public AssignOrderService: AssignOrderServicesApi,
     public loadingCtrl: LoadingController,
-    public toastCtrl: ToastController) {
+    public toastCtrl: ToastController,
+    private storage: Storage) {
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+      }
+    });
   }
 
 
   ionViewDidLoad() {
+    this.EmpAssignOrderObj.EmpId = this.user.EmpId;
     var OrdersLoader = this.loadingCtrl.create({
       content: "Loading Orders..."
     });
