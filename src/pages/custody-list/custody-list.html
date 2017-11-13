@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar color="newDarkerBlueGreen">
-    <ion-title>custodyList</ion-title>
+    <ion-title>{{"Custodies" | translate}} ({{custodyCount}})</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -17,4 +17,30 @@
   <ion-note *ngIf="is404Error">You Have NO Custody Right Now</ion-note>
   <ion-note *ngIf="is500Error">Somthing Went Wrong Try Again</ion-note>
   <ion-note *ngIf="is500Error">Request TimeOut Please Try Again Later</ion-note>
+
+
+  <ion-list *ngFor="let mother of custodyData">
+    <ion-item-group id="pItem">
+      <ion-item-divider color="newBlueGreen">{{mother.divisionType | translate}}
+        <p item-end>
+          {{"Total" | translate}} : {{mother.divisionTypes.length}}
+        </p>
+      </ion-item-divider>
+      <ion-item *ngFor="let item of mother.divisionTypes">
+
+        <div >
+          <h2>{{item.Name}}</h2>
+          <h3>{{"Code" | translate}}: {{item.Code}}</h3>
+        </div>
+        <div item-end>
+          <p >{{"Category" | translate}}: {{item.Category}} </p>
+
+          <p  *ngIf="item.Serial" > {{"Serial" | translate}}: {{item.Serial}}</p>
+
+          <p  *ngIf="item.Quantity" >{{"Quantity" | translate}}: {{item.Quantity}}</p>
+        </div>
+      </ion-item>
+    </ion-item-group>
+
+  </ion-list>
 </ion-content>

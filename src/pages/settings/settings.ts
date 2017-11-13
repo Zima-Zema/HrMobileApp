@@ -35,6 +35,9 @@ export class SettingsPage {
 
   }
   Save() {
+
+    //Call Api here
+    
     console.log(`Saved Lang: ${typeof this.language}`);
     this.storage.set("Lang", this.language).then(() => {
       this.enableSave = false;

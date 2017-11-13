@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, AlertController, Platform } from 'ionic-angular';
 import { WelcomePage } from '../welcome/welcome';
 import { ForceChangePasswordPage } from '../force-change-password/force-change-password';
 import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
@@ -7,6 +7,7 @@ import { LoginServiceApi } from "../../shared/loginService";
 import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
 import { IUser } from "../../shared/IUser";
+import { TranslateService } from '@ngx-translate/core';
 
 @IonicPage()
 @Component({
@@ -35,7 +36,9 @@ export class LogInPage {
         private alertCtrl: AlertController,
         private formBuilder: FormBuilder,
         private storage: Storage,
-        private network: Network) {
+        private network: Network,
+        private translate: TranslateService,
+        public platform: Platform) {
 
         this.createForm();
         this.getValues();
@@ -119,6 +122,16 @@ export class LogInPage {
             else {
                 this.storage.set("User", data).then(() => {
                     this.User = data;
+                    this.storage.set("Lang", this.User.Language.slice(0, -3)).then(() => {
+                        this.translate.setDefaultLang(this.User.Language.slice(0, -3));
+                        if (this.User.Language.slice(0, -3) === 'ar') {
+                            this.platform.setDir("rtl", true);
+                        }
+                        else {
+                            this.translate.setDefaultLang('en');
+                            this.platform.setDir("ltr", true);
+                        }
+                    });
                     if (this.User.ResetPassword) {
                         loader.dismiss();
                         this.navCtrl.push(ForceChangePasswordPage, { UserName: userName, Password: password });
@@ -132,7 +145,26 @@ export class LogInPage {
                         }
                         else {
                             loader.dismiss();
-                            this.navCtrl.setRoot(WelcomePage);
+                            this.storage.get("Lang").then((lang) => {
+                                if (lang) {
+                                    this.translate.setDefaultLang(lang);
+                                    if (lang === 'ar') {
+                                        this.platform.setDir("rtl", true);
+                                    }
+                                    else {
+                                        this.platform.setDir("ltr", true);
+                                    }
+                                    this.navCtrl.setRoot(WelcomePage);
+                                }
+                                else {
+                                    this.translate.setDefaultLang('en');
+                                    this.platform.setDir("ltr", true);
+                                    this.navCtrl.setRoot(WelcomePage);
+                                }
+                                
+
+                            })
+
                         }
                     }
                 });
@@ -197,6 +229,6 @@ export class LogInPage {
         this.storage.clear();
         this.navCtrl.setRoot(LogInPage);
         this.navCtrl.popToRoot();
-      }
+    }
 
 }
