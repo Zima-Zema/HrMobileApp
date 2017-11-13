@@ -103,9 +103,25 @@
     "Docs":"مرفقاتي",
 
     "TransLeaves":"كشف الاجازه",
+    "PrevLeaves":"الإجازات السابقة",
 
     "AssignOrderMsg":"لا يوجد امور تكليف",
     "ReqAssignOrderMsg":"لا يوجد امور مكلفه من قبلك",
     "TransLeaveMsg" : "لا يوجد معاملات للاجازه",
-    "Description" :"الوصف"
+    "Description" :"الوصف",
+    "Permanent" : "مستدامة",
+    "Consumed":"مستهلكة",
+    "Total":"المجموع",
+    "CreditQty":"إضافة",
+    "DebitQty":"خصم",
+    "TotalBal":"الرصيد",
+
+    "Custodies":"العُهد",
+    "Code":"كود",
+    "Category":"تصنيف",
+    "Serial":"ر/ت",
+    "Quantity":"كمية",
+
+    "LangErrorToast":"حدث خطأ أثناء الحفظ من فضلك حاول مرة أخرى...",
+    "LangSuccessToast":"تم الحفظ بنجاح..."
 }

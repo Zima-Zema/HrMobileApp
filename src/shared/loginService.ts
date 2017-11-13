@@ -9,6 +9,11 @@ export interface ILogin {
     ResetPassword: string;
     confirm: string
 }
+export interface ILanguage {
+    UserName: string;
+    Password: string;
+    Language:string;
+}
 
 @Injectable()
 export class LoginServiceApi {
@@ -181,6 +186,17 @@ export class LoginServiceApi {
                 console.log("the bloody From Service>>", err);
                 return err;
             });
+    }
+
+    resetLanguage(body: ILanguage) {
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}newApi/Security/ResetLanguage`, bodyString, { headers: headers }).retry(1)
+            .map((res: Response) => {
+                console.log("Res>>>", res.json());
+                return res.json();
+
+            })
     }
 
 }

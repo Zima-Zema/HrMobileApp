@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar color="newDarkerBlueGreen">
-    <ion-title>TransLeaves ({{LeavesCount}})</ion-title>
+    <ion-title>{{"PrevLeaves" | translate }} ({{LeavesCount}})</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -13,7 +13,7 @@
      <ion-item-group id="pItem">
        <ion-item-divider color="newBlueGreen" >{{Mainitem.LeaveType}}
          <p item-end>
-          Total : {{Mainitem.total}}
+          {{"TotalBal" | translate}} : {{Mainitem.total}}
          </p>
       </ion-item-divider>
        <ion-item-sliding *ngFor="let item of Mainitem.objs">
@@ -21,8 +21,8 @@
           <h5> {{item.TransDate | dateMoment}}</h5>
           <h5> {{item.TransTypeName}}</h5>
           <div item-end>
-            <p> CreditQty : {{item.CreditQty}}</p>
-            <p> DebitQty : {{item.DebitQty}}</p>
+            <p> {{"CreditQty" | translate}} : {{item.CreditQty}}</p>
+            <p> {{"DebitQty" | translate}} : {{item.DebitQty}}</p>
           </div>
        </ion-item>
        </ion-item-sliding>

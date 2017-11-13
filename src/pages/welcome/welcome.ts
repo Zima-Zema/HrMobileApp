@@ -65,13 +65,14 @@ export class WelcomePage {
     private signalr: SignalR,
     public localNotifications: LocalNotifications,
     private storage: Storage,
-    translate: TranslateService,
+    public translate: TranslateService,
     private backgroundMode: BackgroundMode,
     private app: App
   ) {
 
 
-
+    
+    //this.navCtrl.setRoot(WelcomePage);
     this.ChartTab = ChartsPage;
     this.RequestsTab = RequestsPage;
     this.QuereiesTab = QuereiesPage;
@@ -97,12 +98,14 @@ export class WelcomePage {
     this.storage.get("User").then((udata) => {
       if (udata) {
         console.log("udata ", udata)
+        
         this.user = udata;
         this.notifyParams.UserName = this.user.UserName;
         this.notifyParams.Language = this.user.Language;
         this.notifyParams.CompanyId = this.user.CompanyId;
         this.user_name = udata.UserName;
         this.user_email = udata.Email;
+        //this.translate.setDefaultLang(this.user.Language.slice(0, -3));
       }
       this.storage.get('BaseURL').then((val) => {
         this.baseUrl = val;
@@ -171,6 +174,7 @@ export class WelcomePage {
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad Welcome Page")
+    
   }
   ////////////////////////////
   GoToHome() {

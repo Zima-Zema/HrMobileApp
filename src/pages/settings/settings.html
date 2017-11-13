@@ -13,12 +13,16 @@
   <ion-item>
     <ion-label floating>{{"Language" | translate}}</ion-label>
     <ion-select [(ngModel)]="language" (ionChange)="languageChange(language)" interface="popover" > 
-      <ion-option  value="en">{{"English" | translate}}</ion-option>
-      <ion-option  value="ar">{{"Arabic" | translate}}</ion-option>
+      <ion-option  value="en-GB">{{"English" | translate}}</ion-option>
+      <ion-option  value="ar-EG">{{"Arabic" | translate}}</ion-option>
     </ion-select>
   </ion-item>
-  <ion-item>
-      <button ion-button block (click)="Save()" color="primary" [disabled]="!enableSave">{{"settingButton" | translate}}</button>
-  </ion-item>
+  <!-- <ion-item>
+      <button ion-button full (click)="Save()" color="primary" [disabled]="!enableSave">{{"settingButton" | translate}}</button>
+      
+  </ion-item> -->
 </ion-list>
 </ion-content>
+<ion-footer>
+  <button ion-button full (click)="Save()" color="newBlueGreen" [disabled]="!enableSave">{{"settingButton" | translate}}</button>
+ </ion-footer>
