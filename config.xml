@@ -23,6 +23,7 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="50000" />
     <preference name="loadUrlTimeoutValue" value="50000" />
+    <preference name="AndroidPersistentFileLocation" value="Internal" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -82,6 +83,7 @@
     <allow-navigation href="http://192.168.1.17:8100" />
     <engine name="android" spec="^6.2.3" />
     <engine name="browser" spec="^4.1.0" />
+    <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
     <plugin name="cordova-plugin-appminimize" spec="^1.0.0" />
     <plugin name="cordova-plugin-background-mode" spec="^0.7.2" />
     <plugin name="cordova-plugin-camera" spec="^2.4.1" />
@@ -97,7 +99,7 @@
     <plugin name="cordova-plugin-device" spec="^1.1.6" />
     <plugin name="cordova-plugin-file" spec="^4.3.3" />
     <plugin name="cordova-plugin-file-opener2" spec="^2.0.19" />
-    <plugin name="cordova-plugin-file-transfer" spec="^1.6.3" />
+    <plugin name="cordova-plugin-file-transfer" spec="^1.7.0" />
     <plugin name="cordova-plugin-filechooser" spec="^1.0.1" />
     <plugin name="cordova-plugin-filepath" spec="^1.0.2" />
     <plugin name="cordova-plugin-nativestorage" spec="^2.2.2" />

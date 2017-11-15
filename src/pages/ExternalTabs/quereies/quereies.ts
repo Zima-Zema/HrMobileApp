@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage';
 import { IUser } from "../../../shared/IUser";
 import { CustodyListPage } from '../../custody-list/custody-list';
 import { TransLeavesPage} from '../../Leaves/trans-leaves/trans-leaves'
+import { DocumentsPage } from '../../documents/documents';
 @IonicPage()
 @Component({
   selector: 'page-quereies',
@@ -61,7 +62,7 @@ export class QuereiesPage {
   }
 
   gotoPapers() {
-
+    this.app.getRootNav().push(DocumentsPage);
   }
 
 }

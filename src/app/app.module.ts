@@ -10,9 +10,12 @@ import { BackgroundMode } from '@ionic-native/background-mode';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AppMinimize } from '@ionic-native/app-minimize';
 //
+import { AndroidPermissions } from '@ionic-native/android-permissions';
+
 import { MyApp } from './app.component';
 // plugins
 import { File } from '@ionic-native/file';
+import { FileTransfer } from '@ionic-native/file-transfer';
 import { Camera } from '@ionic-native/camera';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
@@ -49,6 +52,7 @@ import { TransLeavesPageModule} from '../pages/Leaves/trans-leaves/trans-leaves.
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { SettingsPageModule } from '../pages/settings/settings.module';
+import { DocumentsPageModule } from '../pages/documents/documents.module';
 
 
 
@@ -98,7 +102,8 @@ export function setTranslateLoader(http: Http) {
     SettingsTabPageModule,
     CustomLeavesPageModule,
     CustodyListPageModule,
-    TransLeavesPageModule
+    TransLeavesPageModule,
+    DocumentsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -107,6 +112,7 @@ export function setTranslateLoader(http: Http) {
   ],
   providers: [
     File,
+    FileTransfer,
     BackgroundMode,
     LocalNotifications,
     FileChooser,
@@ -114,8 +120,10 @@ export function setTranslateLoader(http: Http) {
     Camera,
     Network,
     AppMinimize,
+    AndroidPermissions,
     StatusBar,
     SplashScreen,
+    
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     
   ]
