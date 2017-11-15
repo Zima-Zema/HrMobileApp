@@ -231,11 +231,8 @@ export class LeaveListPage {
   }
   DeleteLeave(item) {
     this.DeleteObj.Id = item.Id;
-    console.log("this.DeleteObj ", this.DeleteObj)
-    this.LeaveServices.removeLeaveRequest(this.DeleteObj)
-      .subscribe((data) => {
-        console.log("deleted", data);
-        //
+  
+    this.LeaveServices.removeLeaveRequest(this.DeleteObj).subscribe((data) => {
         LeaveListPage.motherArr = LeaveListPage.motherArr.filter((element) => {
           return element.Id !== item.Id;
         })
@@ -253,7 +250,7 @@ export class LeaveListPage {
       }, (err: Error) => {
         console.log("error : ", err.message);
         let toast = this.toastCtrl.create({
-          message: "Error in Deleting Leave, Please Try again later.",
+          message: "Error in deleting leave, Please try again later.",
           duration: 3000,
           position: 'bottom'
         });

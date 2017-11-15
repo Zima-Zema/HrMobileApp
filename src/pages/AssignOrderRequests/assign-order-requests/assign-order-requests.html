@@ -13,14 +13,18 @@
     <ion-searchbar *ngIf="toggled" placeholder="Filter By Series Number" [(ngModel)]="queryText" (ionInput)="filterItems()"></ion-searchbar>
   </ion-navbar>
 
+  <button ion-button class="Sortedleft" (click)="SortedByYear()">By Date</button>
+  <button ion-button class="Sortedright" (click)="SortedByName()">By Name</button>
 </ion-header>
 
-
 <ion-content>
- <ion-note *ngIf="AssignOrderCount == 0">{{"ReqAssignOrderMsg" | translate}}</ion-note>
+  <ion-note *ngIf="AssignOrderCount == 0">{{"ReqAssignOrderMsg" | translate}}</ion-note>
+  <div>
+
+  </div>
   <ion-list>
     <ion-item>
-      <ion-item-sliding *ngFor="let item of AssignOrderArr">
+      <ion-item-sliding *ngFor="let item of AssignOrderArr | sortedPipe:SortedName">
         <button ion-item (click)="ShowAssignOrder(item)">
             <ion-avatar item-start>
             <img *ngIf="item.ApprovalStatus== 1 || item.ApprovalStatus==2|| item.ApprovalStatus==6 || item.ApprovalStatus==9" src="{{item.ApprovalStatus|imagePipe}}"

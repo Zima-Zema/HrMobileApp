@@ -13,18 +13,57 @@ export interface ISpacificLeaves {
     CompanyId: number,
     Culture: string,
 }
-export interface IAssignOrderVM{
-    Id:number,
-    EmpId:number,
-    ManagerId:number,
-    Duration:Number,
-    AssignDate:Date,
-    CalcMethod:number,
-    LeaveTypeId:number,
-    ExpiryDate:Date,
-    TaskDesc:string,
-    CompanyId:number,
-    Language:string;
+export interface IAssignOrderVM {
+    Id: number,
+    EmpId: number,
+    ManagerId: number,
+    Duration: Number,
+    AssignDate: Date,
+    CalcMethod: number,
+    LeaveTypeId: number,
+    ExpiryDate: Date,
+    TaskDesc: string,
+    CompanyId: number,
+    Language: string
+}
+// export interface IAssignOrderVM {
+//     Id: number,
+//     EmpId: number,
+//     ManagerId: number,
+//     Duration: Number,
+//     AssignDate: Date,
+//     CalcMethod: number,
+//     LeaveTypeId: number,
+//     ExpiryDate: Date,
+//     TaskDesc: string,
+//     CompanyId: number,
+//     Language: string,
+//     ApprovalStatus: number,
+//     AuthBranch: string,
+//     AuthDept: string,
+//     AuthEmp: string
+//     AuthEmpName: string
+//     AuthPosName: string
+//     AuthPosition: string
+//     BranchId: number
+//     CreatedTime: string
+//     CreatedUser: string
+//     DeptId: number,
+//     Employee: string,
+//     LeaveType: string,
+//     Manager: string,
+//     ModifiedTime: string,
+//     ModifiedUser: string,
+//     PositionId: number
+//     RoleId: number
+//     SectorId: number
+//     WFlowId: number
+//     WorkflowTime: string
+// }
+
+export interface IDeleteRequest {
+    Id: number,
+    Language: string
 }
 
 @Injectable()
@@ -91,12 +130,38 @@ export class AssignOrderServicesApi {
             });
     }
 
-   PostAssignOrder(body: IAssignOrderVM): Observable<any> {
+    PostAssignOrder(body: IAssignOrderVM): Observable<any> {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/AssignOrder/PostAssignOrder`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
+                return res.json();
+            }).catch((err) => {
+                console.log("the error in Service ::", err);
+                return err;
+            });
+    }
+
+    removeAssignOrder(body: IDeleteRequest): Observable<any> {
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}newApi/AssignOrder/DeleteAssignOrder`, bodyString, { headers: headers })
+            .map((res: Response) => {
+                console.log("res.json ::: ", res.json());
+                return res.json();
+            }).catch((err) => {
+                console.log("the error in Service ::", err);
+                return err;
+            });
+    }
+
+    editAssignOrder(body: IAssignOrderVM): Observable<any> {
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}newApi/AssignOrder/EditAssignOrder`, bodyString, { headers: headers })
+            .map((res: Response) => {
+                console.log("editAssignOrder ::: ", res.json());
                 return res.json();
             }).catch((err) => {
                 console.log("the error in Service ::", err);
