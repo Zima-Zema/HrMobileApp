@@ -10,7 +10,7 @@ import { IUser } from '../../../shared/IUser';
 import { Storage } from '@ionic/storage';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateUtilities } from '../../../shared/TranslateUtilities';
-import { WelcomePage} from '../../welcome/welcome'
+import { WelcomePage } from '../../welcome/welcome'
 @IonicPage()
 @Component({
   selector: 'page-request-leave',
@@ -242,7 +242,7 @@ export class RequestLeavePage {
       RequestLeavePage.ReasonError = translation;
     });
   }
-  
+
   ionViewWillLeave() {
     this.tabBarElement.style.display = 'flex';
   }
@@ -852,7 +852,7 @@ export class RequestLeavePage {
     this.requestObj.CompanyId = this.user.CompanyId;
     this.requestObj.Culture = this.user.Culture;
     this.requestObj.NofDays = Number.parseInt(this.noOfDays);
-    this.requestObj.DayFraction = Number.parseInt(this.fraction);
+    this.requestObj.DayFraction = (this.fraction) ? Number.parseInt(this.fraction) : 0;
     this.requestObj.StartDate = new Date(new Date(this.startDate).toString()).toLocaleDateString();//.slice(0, -1);
     this.requestObj.EndDate = new Date(new Date(this.endDate).toString()).toLocaleDateString()//.slice(0, -1);
     this.requestObj.ReturnDate = new Date(new Date(this.returnDate).toString()).toLocaleDateString()//.slice(0, -1);

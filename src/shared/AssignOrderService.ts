@@ -13,6 +13,19 @@ export interface ISpacificLeaves {
     CompanyId: number,
     Culture: string,
 }
+export interface IAssignOrderVM{
+    Id:number,
+    EmpId:number,
+    ManagerId:number,
+    Duration:Number,
+    AssignDate:Date,
+    CalcMethod:number,
+    LeaveTypeId:number,
+    ExpiryDate:Date,
+    TaskDesc:string,
+    CompanyId:number,
+    Language:string;
+}
 
 @Injectable()
 
@@ -69,6 +82,19 @@ export class AssignOrderServicesApi {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/AssignOrder/GetSpacificLeaveTypes`, bodyString, { headers: headers })
+            .map((res: Response) => {
+                console.log("res.json ::: ", res.json());
+                return res.json();
+            }).catch((err) => {
+                console.log("the error in Service ::", err);
+                return err;
+            });
+    }
+
+   PostAssignOrder(body: IAssignOrderVM): Observable<any> {
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}newApi/AssignOrder/PostAssignOrder`, bodyString, { headers: headers })
             .map((res: Response) => {
                 console.log("res.json ::: ", res.json());
                 return res.json();

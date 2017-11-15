@@ -108,6 +108,7 @@
     "AssignOrderMsg":"لا يوجد امور تكليف",
     "ReqAssignOrderMsg":"لا يوجد امور مكلفه من قبلك",
     "TransLeaveMsg" : "لا يوجد معاملات للاجازه",
+    "Description" :"الوصف",
     "Permanent" : "مستدامة",
     "Consumed":"مستهلكة",
     "Total":"المجموع",
