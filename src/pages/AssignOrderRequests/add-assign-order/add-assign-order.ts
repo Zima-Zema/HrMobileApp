@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidatorFn } from "@angular/forms";
-
 import { AssignOrderServicesApi, IEmpAssignOrders, ISpacificLeaves, IAssignOrderVM } from '../../../shared/AssignOrderService';
 import { LeaveServicesApi, IRequestType } from "../../../shared/LeavesService";
 import { Storage } from '@ionic/storage';
@@ -33,9 +32,16 @@ export class AddAssignOrderPage {
   public displayFormat: string;
   public minDate: any;
   public minExpiryDate: any;
+  public ExpiryDatelocalDateval: any;
   //Data
   public localDateval: any = new Date();
   static leaveType: any;
+  //Toast 
+  public toast = this.toastCtrl.create({
+    message: "There is an error, Please try again later.",
+    duration: 3000,
+    position: 'middle'
+  });
 
   //Objects
   public user: IUser;
@@ -88,6 +94,8 @@ export class AddAssignOrderPage {
       Description: ['']
     });
 
+    // this.AssignOrderForm.controls['Employee'].markAsTouched({ onlySelf: true });
+
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
@@ -109,13 +117,9 @@ export class AddAssignOrderPage {
           OrdersLoader.dismiss();
         }
       }, (e) => {
-        let toast = this.toastCtrl.create({
-          message: "Error in getting Orders, Please Try again later.",
-          duration: 3000,
-          position: 'middle'
-        });
+
         OrdersLoader.dismiss().then(() => {
-          toast.present();
+          this.toast.present();
         });
       })
     })
@@ -126,11 +130,25 @@ export class AddAssignOrderPage {
   }
 
   CalculMethodChange(cal) {
+    var LeavesLoader = this.loadingCtrl.create({
+      spinner: 'dots'
+    });
     if (cal == 2) {
       this.minExpiryDate = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
-      this.AssignOrderService.GetSpacificLeaves(this.SpacificLeaves).subscribe((data) => {
-        this.LeavesData = data;
-      });
+      this.ExpiryDatelocalDateval = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+      LeavesLoader.present().then(() => {
+        this.AssignOrderService.GetSpacificLeaves(this.SpacificLeaves).subscribe((data) => {
+          LeavesLoader.dismiss().then(() => {
+            this.LeavesData = data;
+          })
+
+        }, (e) => {
+          LeavesLoader.dismiss().then(() => {
+            this.toast.present();
+          })
+        });
+      })
+
       this.AssignOrderForm.controls['leaveType'].enable();
       this.AssignOrderForm.controls['leaveType'].setValidators([AddAssignOrderPage.isRequired]);
       this.AssignOrderForm.controls['leaveType'].updateValueAndValidity();
@@ -146,19 +164,30 @@ export class AddAssignOrderPage {
   }
 
   DurationChange(Dur) {
-    console.log("DurationChange : ", Dur);
+    var HolidaysLoader = this.loadingCtrl.create({
+      spinner: 'dots'
+    });
     if (Dur == 1) {
-      this.LeaveServices.getHolidays(this.user.CompanyId).subscribe((data) => {
-        this.MainArray.push(data);
-        this.MainArray.forEach(element => {
-          var AllDays: Array<Date> = this.getAllDays();
-          var OffDays: Array<Date> = this.getOffDays(element);
-          var result = AllDays.filter(function (ele) {
-            var try1 = OffDays.map(Number).indexOf(+ele);
-            if (try1 == -1) { return ele; }
+      this.AssignDate = null;
+      HolidaysLoader.present().then(() => {
+        this.LeaveServices.getHolidays(this.user.CompanyId).subscribe((data) => {
+          HolidaysLoader.dismiss().then(() => {
+            this.MainArray.push(data);
+            this.MainArray.forEach(element => {
+              var AllDays: Array<Date> = this.getAllDays();
+              var OffDays: Array<Date> = this.getOffDays(element);
+              var result = AllDays.filter(function (ele) {
+                var try1 = OffDays.map(Number).indexOf(+ele);
+                if (try1 == -1) { return ele; }
+              })
+              this.filteredArr = result;
+            });
           })
-          this.filteredArr = result;
-        });
+        }, (e) => {
+          HolidaysLoader.dismiss().then(() => {
+            this.toast.present();
+          })
+        })
       })
     }
     else {
@@ -168,10 +197,76 @@ export class AddAssignOrderPage {
 
   AssignDateChange(AssignDate) {
     this.AssignDate = this.bloodyIsoString(AssignDate);
+    this.ExpiryDate = null;
+    this.minExpiryDate = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+    this.ExpiryDatelocalDateval = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+    if (this.Employee == null) {
+      this.AssignOrderForm.controls['Employee'].markAsTouched({ onlySelf: true });
+      this.AssignOrderForm.controls['Employee'].markAsDirty({ onlySelf: true });
+    }
+    if (this.Duration == null) {
+      this.AssignOrderForm.controls['Duration'].markAsTouched({ onlySelf: true });
+      this.AssignOrderForm.controls['Duration'].markAsDirty({ onlySelf: true });
+    }
+  }
+
+  AssignDateCancel(AssignDate) {
+    console.log("AssignDateFocus : ", AssignDate, "Emp ", this.Employee, "Dur ", this.Duration);
+    if (AssignDate == null || AssignDate == "") {
+      this.AssignOrderForm.controls['AssignDate'].markAsTouched({ onlySelf: true });
+      this.AssignOrderForm.controls['AssignDate'].markAsDirty({ onlySelf: true });
+    }
+    if (this.Employee == null) {
+      this.AssignOrderForm.controls['Employee'].markAsTouched({ onlySelf: true });
+      this.AssignOrderForm.controls['Employee'].markAsDirty({ onlySelf: true });
+    }
+    if (this.Duration == null) {
+      this.AssignOrderForm.controls['Duration'].markAsTouched({ onlySelf: true });
+      this.AssignOrderForm.controls['Duration'].markAsDirty({ onlySelf: true });
+    }
+
   }
 
   ExpiryDateChange(ExpiryDate) {
     this.ExpiryDate = this.bloodyIsoString(ExpiryDate);
+  }
+
+  InputBlur(item) {
+    console.log("Blur : ", item);
+    switch (item) {
+      case 'Emp':
+        this.AssignOrderForm.controls['Employee'].markAsTouched({ onlySelf: true });
+        this.AssignOrderForm.controls['Employee'].markAsDirty({ onlySelf: true });
+        break;
+      case 'Dur':
+        this.AssignOrderForm.controls['Duration'].markAsTouched({ onlySelf: true });
+        this.AssignOrderForm.controls['Duration'].markAsDirty({ onlySelf: true });
+        if (this.AssignDate == null) {
+          this.AssignOrderForm.controls['Employee'].markAsTouched({ onlySelf: true });
+          this.AssignOrderForm.controls['Employee'].markAsDirty({ onlySelf: true });
+        }
+        break;
+      case 'calcuMethod':
+        this.AssignOrderForm.controls['CalculMethodSelect'].markAsTouched({ onlySelf: true });
+        this.AssignOrderForm.controls['CalculMethodSelect'].markAsDirty({ onlySelf: true });
+        if (this.AssignDate == null) {
+          this.AssignOrderForm.controls['Employee'].markAsTouched({ onlySelf: true });
+          this.AssignOrderForm.controls['Employee'].markAsDirty({ onlySelf: true });
+        }
+        if (this.Duration == null) {
+          this.AssignOrderForm.controls['Duration'].markAsTouched({ onlySelf: true });
+          this.AssignOrderForm.controls['Duration'].markAsDirty({ onlySelf: true });
+        }
+        if (this.AssignDate == null) {
+          this.AssignOrderForm.controls['AssignDate'].markAsTouched({ onlySelf: true });
+          this.AssignOrderForm.controls['AssignDate'].markAsDirty({ onlySelf: true });
+        }
+        break;
+
+      // default:
+      //   break;
+    }
+
   }
 
   static isRequired(control: FormControl) {

@@ -15,7 +15,7 @@
 
   <ion-list>
     <ion-note *ngIf="AssignOrderCount == 0">{{"AssignOrderMsg" | translate}}</ion-note>
-    <button ion-item *ngFor="let item of AssignOrderArr" (click)="ShowAssignOrder(item)">
+    <button ion-item *ngFor="let item of AssignOrderArr | sortedPipe:'Id'" (click)="ShowAssignOrder(item)">
         <ion-avatar item-start>
             <img *ngIf="item.ApprovalStatus== 1 || item.ApprovalStatus==2|| item.ApprovalStatus==6 || item.ApprovalStatus==9" src="{{item.ApprovalStatus|imagePipe}}"
               style="border-radius:15%;" >
