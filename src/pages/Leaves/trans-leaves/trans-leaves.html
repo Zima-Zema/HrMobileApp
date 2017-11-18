@@ -8,7 +8,7 @@
 
 
 <ion-content>
-  <ion-note *ngIf="LeavesCount == 0">{{"TransLeaveMsg" | translate}}</ion-note>
+  <!-- <ion-note *ngIf="LeavesCount == 0">{{"TransLeaveMsg" | translate}}</ion-note>
   <ion-list *ngFor="let Mainitem of CreditQtyCount">
      <ion-item-group id="pItem">
        <ion-item-divider color="newBlueGreen" >{{Mainitem.LeaveType}}
@@ -28,6 +28,52 @@
        </ion-item-sliding>
      </ion-item-group>
 
-  </ion-list>
+  </ion-list> -->
+  <!-- <kendo-grid [groupable]="true" [data]="gridView" [group]="groups" (groupChange)="groupChange($event)">
+    <kendo-grid-column field="ProductID" title="ID" [width]="80"></kendo-grid-column>
+    <kendo-grid-column field="ProductName" title="Name" [width]="300"></kendo-grid-column>
+    <kendo-grid-column field="UnitPrice" title="Unit Price" [width]="120"></kendo-grid-column>
+    <kendo-grid-column field="Category.CategoryName" title="Category">
+      <ng-template kendoGridGroupHeaderTemplate let-value="value">
+        {{value}}
+      </ng-template>
+    </kendo-grid-column>
+  </kendo-grid> -->
 
+  <kendo-grid [data]="gridView" [group]="groups" (groupChange)="groupChange($event)" style="width: 100%; height:100%;">
+    <!-- <kendo-grid-column field="ProductID" title="ID" width="40" [locked]="true">
+    </kendo-grid-column> -->
+
+    <kendo-grid-column field="LeaveType" title="LeaveType" width="100%" [locked]="true">
+        <ng-template kendoGridGroupFooterTemplate let-aggregates let-group="group"
+         >
+         {{"TotalBal" | translate}}: {{aggregates["CreditQty"].sum - aggregates["DebitQty"].sum}}
+         </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="Period" title="      " width="100%">
+    </kendo-grid-column>
+
+    <kendo-grid-column field="TransDate" format="{0:d}"  title="TransDate" width="140%" >
+   
+        <ng-template kendoGridCellTemplate let-dataItem width="100%">
+            {{dataItem.TransDate | dateMoment}}
+        </ng-template>
+    </kendo-grid-column>
+
+    <kendo-grid-column field="TransTypeName" title="TransTypeName" width="140%">
+    </kendo-grid-column>
+  
+    <kendo-grid-column field="CreditQty" title="{{'CreditQty' | translate}}" width="100%">
+    </kendo-grid-column>
+
+    <kendo-grid-column field="DebitQty" title="{{'DebitQty' | translate}}" width="100%">
+    </kendo-grid-column>
+
+    <!-- <kendo-grid-column field="Discontinued" title="Discontinued" width="120">
+      <ng-template kendoGridCellTemplate let-dataItem>
+        <input type="checkbox" [checked]="dataItem.Discontinued" disabled/>
+      </ng-template>
+    </kendo-grid-column> -->
+  </kendo-grid>
 </ion-content>
