@@ -322,6 +322,7 @@ export class EditAssignOrderPage {
     EditAssignOrderLoader.present().then(() => {
       this.AssignOrderService.editAssignOrder(this.AssignOrderObj).subscribe((data) => {
         AssignOrderRequestsPage.AssignOrderList = AssignOrderRequestsPage.AssignOrderList.filter((ele) => ele.Id !== this.ComingAssign.Id);
+        console.log("AssignOrderRequestsPage.AssignOrderList : ",AssignOrderRequestsPage.AssignOrderList)
         data.LeaveType = this.LeavesData.find(ele => ele.id === this.AssignOrderObj.LeaveTypeId).name;
         data.Employee = this.EmployeeData.find(ele => ele.id === this.AssignOrderObj.EmpId).name;
         data.ApprovalStatus = 2;
