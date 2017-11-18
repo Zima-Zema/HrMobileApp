@@ -43,7 +43,7 @@
       <ion-label floating >Assign Date</ion-label>
       <ion-datetime ion-datepicker [(ngModel)]="AssignDate" (ionCanceled)="AssignDateCancel(AssignDate)" (ionBlur)="InputBlur('AssignDate')" (ionChanged)="AssignDateChange($event)"
         [disabledDates]="filteredArr" [(value)]="localDateval" formControlName="AssignDate" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY"
-        [min]="minDate"></ion-datetime>
+        [min]="minDate" [max]="maxDate"></ion-datetime>
     </ion-item>
     <span *ngIf="!AssignOrderForm.controls.AssignDate.valid && AssignOrderForm.controls.AssignDate.touched && AssignOrderForm.controls.AssignDate.dirty">
        <p style="color:crimson ">Required</p> 

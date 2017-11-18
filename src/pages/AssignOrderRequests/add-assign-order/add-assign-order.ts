@@ -6,6 +6,7 @@ import { LeaveServicesApi, IRequestType } from "../../../shared/LeavesService";
 import { Storage } from '@ionic/storage';
 import { IUser } from '../../../shared/IUser';
 import * as _ from "lodash";
+import * as moment from 'moment';
 
 @IonicPage()
 @Component({
@@ -31,6 +32,7 @@ export class AddAssignOrderPage {
   public pickFormat: string;
   public displayFormat: string;
   public minDate: any;
+  public maxDate: any;
   public minExpiryDate: any;
   public ExpiryDatelocalDateval: any;
   //Data
@@ -83,6 +85,9 @@ export class AddAssignOrderPage {
     private storage: Storage) {
 
     this.minDate = new Date();
+    let max = moment(this.minDate).add(1, 'years').calendar();
+    this.maxDate = new Date(max);
+    console.log("max : ", max)
 
     this.AssignOrderForm = this.formBuilder.group({
       Employee: ['', Validators.required],
@@ -340,39 +345,68 @@ export class AddAssignOrderPage {
     calender.Standard.forEach((ele) => {
       offdays.push(new Date(year, ele.SMonth - 1, ele.SDay))
     })
-    for (let month = 1; month <= 12; month++) {
-      let tdays = new Date(year, month, 0).getDate();
-      for (let date = 1; date <= tdays; date++) {
-        let day = new Date();
-        day.setDate(date);
-        day.setMonth(month - 1);
-        day.setFullYear(year);
-        day.setHours(0, 0, 0, 0)
+    for (let oneYear = year; oneYear <= year + 1; oneYear++) {
+      for (let month = 1; month <= 12; month++) {
+        let tdays = new Date(oneYear, month, 0).getDate();
+        for (let date = 1; date <= tdays; date++) {
+          let day
+          if (tdays === 31) {
+            console.log("31 tdays : ", tdays)
+            day= new Date("1/1/"+oneYear);
+          }
+          else {
+            console.log("30 tdays : ", tdays)
+            day= new Date();
+          }
+          day.setDate(date);
+          day.setMonth(month - 1);
+          day.setFullYear(oneYear);
+          day.setHours(0, 0, 0, 0)
 
-        if (day.getDay() == calender.weeKend1 || day.getDay() == calender.weekend2) {
-          offdays.push(day);
+          if (day.getDay() == calender.weeKend1 || day.getDay() == calender.weekend2) {
+            offdays.push(day);
+
+          }
         }
       }
     }
+    console.log("offdays : ", offdays)
     return offdays;
   }
 
   getAllDays() {
     let year = new Date().getFullYear();
-    let offdays: Array<any> = [];
-    for (let month = 1; month <= 12; month++) {
-      let tdays = new Date(year, month, 0).getDate();
-      for (let date = 1; date <= tdays; date++) {
-        let day = new Date();
-        day.setDate(date);
-        day.setMonth(month - 1);
-        day.setFullYear(year);
-        day.setHours(0, 0, 0, 0);
-        offdays.push(day);
+    let alldays: Array<any> = [];
+    for (let oneYear = year; oneYear <= year + 1; oneYear++) {
+      for (let month = 1; month <= 12; month++) {
+        let tdays = new Date(oneYear, month, 0).getDate();
+        
+        for (let date = 1; date <= tdays; date++) {
+           let day
+          if (tdays === 31) {
+            console.log("31 tdays : ", tdays)
+            day= new Date("1/1/"+oneYear);
+          }
+          else {
+            console.log("30 tdays : ", tdays)
+            day= new Date();
+          }
+          day.setDate(date);
+          day.setMonth(month - 1);
+          day.setFullYear(oneYear);
+          day.setHours(0, 0, 0, 0);
+          console.log("day : ", day);
+          console.log("month : ", month - 1);
+          console.log("oneYear : ", oneYear);
+          console.log("date : ", day);
+          alldays.push(day);
+        }
       }
     }
-    return offdays;
+    console.log("alldays : ", alldays)
+    return alldays;
   }
+
 
 
   bloodyIsoString(bloodyDate: Date) {

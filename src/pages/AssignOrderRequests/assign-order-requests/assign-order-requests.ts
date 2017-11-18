@@ -71,8 +71,7 @@ export class AssignOrderRequestsPage {
 
   ionViewDidLoad() {
 
-    this.EmpAssignOrderObj.EmpId = 1072;
-    //this.user.EmpId;
+    this.EmpAssignOrderObj.EmpId = this.user.EmpId;
     var OrdersLoader = this.loadingCtrl.create({
       content: "Loading Orders..."
     });
