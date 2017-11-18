@@ -128,6 +128,10 @@
      "Quantity":"Quantity",
 
      "LangErrorToast":"There Is An Error, Please Try Again Later...",
-     "LangSuccessToast":"Successfully Saved To User Profile..."
+     "LangSuccessToast":"Successfully Saved To User Profile...",
+
+     "Period":"Period",
+     "TransDate":"Transaction Date",
+     "Holidays":"Holidays"
 
 }

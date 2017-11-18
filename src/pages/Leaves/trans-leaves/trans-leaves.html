@@ -44,24 +44,24 @@
     <!-- <kendo-grid-column field="ProductID" title="ID" width="40" [locked]="true">
     </kendo-grid-column> -->
 
-    <kendo-grid-column field="LeaveType" title="LeaveType" width="100%" [locked]="true">
+    <kendo-grid-column field="LeaveType" title="{{'LeaveType' | translate}}" width="100%" [locked]="true">
         <ng-template kendoGridGroupFooterTemplate let-aggregates let-group="group"
          >
          {{"TotalBal" | translate}}: {{aggregates["CreditQty"].sum - aggregates["DebitQty"].sum}}
          </ng-template>
     </kendo-grid-column>
 
-    <kendo-grid-column field="Period" title="      " width="100%">
+    <kendo-grid-column field="Period" title="{{'Period' | translate}}" width="100%">
     </kendo-grid-column>
 
-    <kendo-grid-column field="TransDate" format="{0:d}"  title="TransDate" width="140%" >
+    <kendo-grid-column field="TransDate"  title="{{'TransDate' | translate}}" width="150%" >
    
         <ng-template kendoGridCellTemplate let-dataItem width="100%">
             {{dataItem.TransDate | dateMoment}}
         </ng-template>
     </kendo-grid-column>
 
-    <kendo-grid-column field="TransTypeName" title="TransTypeName" width="140%">
+    <kendo-grid-column field="TransTypeName" title="{{'TransTypeName' | translate}}" width="140%">
     </kendo-grid-column>
   
     <kendo-grid-column field="CreditQty" title="{{'CreditQty' | translate}}" width="100%">
