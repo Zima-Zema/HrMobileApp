@@ -4,12 +4,6 @@ import { UtilitiesProvider, IGetEmpCustody } from '../../shared/utilities';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
 import * as _ from 'lodash';
-/**
- * Generated class for the CustodyListPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -22,7 +16,7 @@ export class CustodyListPage {
   is500Error: boolean = false;
   is0Error: boolean = false;
   public custodyData: Array<any> = [];
-  public custodyCount: number;
+  public custodyCount: number = 0;
   EmpCustody: IGetEmpCustody = {
     Language: "",
     CompanyId: 0,
@@ -45,9 +39,9 @@ export class CustodyListPage {
       console.log("bloody Custody>>", data);
       this.custodyCount = data.length;
       this.custodyData = _.chain(data).groupBy('Disposal').toPairs()
-      .map(item => _.zipObject(['divisionType', 'divisionTypes'], item)).value();
-   
-    console.log("this.Leaves_Arr : ", this.custodyData);
+        .map(item => _.zipObject(['divisionType', 'divisionTypes'], item)).value();
+
+      console.log("this.Leaves_Arr : ", this.custodyData);
 
     }, (error) => {
       console.log("the bloody error", error);

@@ -13,11 +13,11 @@
 
 <ion-content>
 
-  <template #template let-view="view" let-row="row" let-col="col">
+  <ng-template #template let-view="view" let-row="row" let-col="col">
     <div class="calender-day">
       {{view.dates[row*7+col].label}}
     </div>
-  </template>
+  </ng-template>
 
 
   <calendar  locale="de-DE" dir="ltr" [monthviewDisplayEventTemplate]="template" [markDisabled]="markDisable" [eventSource]="eventSource" [calendarMode]="calendar.mode"

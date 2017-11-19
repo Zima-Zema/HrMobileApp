@@ -34,7 +34,7 @@ export class TransLeavesPage {
         this.LeavesTrans.EmpId=this.user.EmpId;
       }
     });
-    this.loadProducts();
+    
 
   }
   private groups: GroupDescriptor[] = [{ field: "LeaveType", aggregates: [{ field: "CreditQty", aggregate: "sum" }, { field: "LeaveType", aggregate: "count" }, { field: "DebitQty", aggregate: "sum" }] }];
@@ -80,7 +80,7 @@ export class TransLeavesPage {
   }
   ionViewDidLoad() {
 
-
+    this.loadProducts();
     // var LeavesLoader = this.loadingCtrl.create({
     //   content: "Loading Leaves..."
     // });
