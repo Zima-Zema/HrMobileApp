@@ -50,12 +50,12 @@ export class EditAssignOrderPage {
   //Objects
   public user: IUser;
   public EmpAssignOrderObj: IEmpAssignOrders = {
-    EmpId: 1042,
-    Culture: "ar-EG",
+    EmpId: 0,
+    Culture: "",
     CompanyId: 0
   }
   public SpacificLeaves: ISpacificLeaves = {
-    Culture: "ar-EG",
+    Culture: "",
     CompanyId: 0
   }
   public AssignOrderObj: IAssignOrderVM = {
@@ -108,6 +108,9 @@ export class EditAssignOrderPage {
       spinner: 'dots'
     });
 
+    this.EmpAssignOrderObj.EmpId = this.user.EmpId;
+    this.EmpAssignOrderObj.Culture = this.user.Culture;
+    this.EmpAssignOrderObj.CompanyId = this.user.CompanyId;
     OrdersLoader.present().then(() => {
       //Loading Employees
       this.AssignOrderService.GetEmployeeForManger(this.EmpAssignOrderObj).subscribe((data) => {
@@ -129,6 +132,8 @@ export class EditAssignOrderPage {
         this.minExpiryDate = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
         this.ExpiryDatelocalDateval = new Date(this.ComingAssign.ExpiryDate);
       }
+      this.SpacificLeaves.CompanyId=this.user.CompanyId;
+      this.SpacificLeaves.Culture=this.user.Culture;
       this.AssignOrderService.GetSpacificLeaves(this.SpacificLeaves).subscribe((data) => {
         this.LeavesData = data;
       });
@@ -322,7 +327,7 @@ export class EditAssignOrderPage {
     EditAssignOrderLoader.present().then(() => {
       this.AssignOrderService.editAssignOrder(this.AssignOrderObj).subscribe((data) => {
         AssignOrderRequestsPage.AssignOrderList = AssignOrderRequestsPage.AssignOrderList.filter((ele) => ele.Id !== this.ComingAssign.Id);
-        console.log("AssignOrderRequestsPage.AssignOrderList : ",AssignOrderRequestsPage.AssignOrderList)
+        console.log("AssignOrderRequestsPage.AssignOrderList : ", AssignOrderRequestsPage.AssignOrderList)
         data.LeaveType = this.LeavesData.find(ele => ele.id === this.AssignOrderObj.LeaveTypeId).name;
         data.Employee = this.EmployeeData.find(ele => ele.id === this.AssignOrderObj.EmpId).name;
         data.ApprovalStatus = 2;

@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 import { ShowAssignOrderPage } from '../show-assign-order/show-assign-order';
 import { AssignOrderServicesApi, IEmpAssignOrders } from '../../../shared/AssignOrderService';
 import * as _ from 'lodash';
+import { IUser } from '../../../shared/IUser';
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -15,13 +17,14 @@ export class AssignOrderPage {
   public AssignOrderArr: Array<any> = [];
   public AssignOrderFilter: Array<any> = [];
   public AssignOrderData: Array<any> = [];
-  public AssignOrderCount: number ;
+  public AssignOrderCount: number;
   public static motherArr = [];
   public queryText: string;
 
+  public user: IUser;
   public EmpAssignOrderObj: IEmpAssignOrders = {
-    EmpId: 1072,
-    Culture: "ar-EG",
+    EmpId: 0,
+    Culture: "",
     CompanyId: 0
   }
 
@@ -29,10 +32,20 @@ export class AssignOrderPage {
     public navParams: NavParams,
     public AssignOrderService: AssignOrderServicesApi,
     public loadingCtrl: LoadingController,
-    public toastCtrl: ToastController) {
+    public toastCtrl: ToastController,
+    private storage: Storage, ) {
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+      }
+    });
   }
 
   ionViewDidLoad() {
+    this.EmpAssignOrderObj.EmpId = this.user.EmpId;
+    this.EmpAssignOrderObj.CompanyId=this.user.CompanyId;
+    this.EmpAssignOrderObj.Culture=this.user.Culture;
+
     var OrdersLoader = this.loadingCtrl.create({
       content: "Loading Orders..."
     });
@@ -45,7 +58,7 @@ export class AssignOrderPage {
             this.AssignOrderArr = data;
           });
         }
-        else{
+        else {
           OrdersLoader.dismiss();
         }
       }, (e) => {
@@ -70,7 +83,6 @@ export class AssignOrderPage {
   }
 
   ShowAssignOrder(item) {
-    console.log("show");
     this.navCtrl.push(ShowAssignOrderPage, item)
   }
 

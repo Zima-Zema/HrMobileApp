@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { LeaveServicesApi } from '../../../shared/LeavesService';
+import { Storage } from '@ionic/storage';
+import { IUser } from "../../../shared/IUser";
+
 @IonicPage()
 @Component({
   selector: 'page-custom-leaves',
@@ -11,15 +14,23 @@ export class CustomLeavesPage {
   public CustomHolidaysArr: Array<any> = [];
   public StanderdHolidaysArr: Array<any> = [];
   public CompanyId = 0;
+  public user: IUser;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private LeaveService: LeaveServicesApi,
     public loadingCtrl: LoadingController,
-    public toastCtrl: ToastController, ) {
+    public toastCtrl: ToastController,
+    private storage: Storage, ) {
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+      }
+    });
   }
 
   ionViewDidLoad() {
+    this.CompanyId=this.user.CompanyId;
     var LeavesLoader = this.loadingCtrl.create({
       content: "Loading Leaves..."
     });
@@ -54,8 +65,6 @@ export class CustomLeavesPage {
 
   getDateofStandardDays(calender) {
     let year = new Date().getFullYear();
-    console.log("year : ", year);
-    console.log("calender : ", calender)
     let offdays: Array<any> = [];
     calender.forEach((ele) => {
       offdays.push({

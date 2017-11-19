@@ -48,18 +48,13 @@ export class AddAssignOrderPage {
   //Objects
   public user: IUser;
   public EmpAssignOrderObj: IEmpAssignOrders = {
-    EmpId: 1042,
-    Culture: "ar-EG",
+    EmpId: 0, //1042
+    Culture: "",
     CompanyId: 0
   }
   public SpacificLeaves: ISpacificLeaves = {
-    Culture: "ar-EG",
+    Culture: "",
     CompanyId: 0
-  }
-  public RequestTypeObj: IRequestType = {
-    CompId: 0,
-    Culture: "ar-EG",
-    EmpId: 0
   }
   public AssignOrderObj: IAssignOrderVM = {
     AssignDate: null,
@@ -87,7 +82,6 @@ export class AddAssignOrderPage {
     this.minDate = new Date();
     let max = moment(this.minDate).add(1, 'years').calendar();
     this.maxDate = new Date(max);
-    console.log("max : ", max)
 
     this.AssignOrderForm = this.formBuilder.group({
       Employee: ['', Validators.required],
@@ -99,18 +93,20 @@ export class AddAssignOrderPage {
       Description: ['']
     });
 
-    // this.AssignOrderForm.controls['Employee'].markAsTouched({ onlySelf: true });
-
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
       }
     });
+  }//end of constructor
 
+  ionViewDidLoad() {
     var OrdersLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
-
+    this.EmpAssignOrderObj.EmpId = this.user.EmpId;
+    this.EmpAssignOrderObj.CompanyId = this.user.CompanyId;
+    this.EmpAssignOrderObj.Culture = this.user.Culture;
     OrdersLoader.present().then(() => {
       this.AssignOrderService.GetEmployeeForManger(this.EmpAssignOrderObj).subscribe((data) => {
         if (data) {
@@ -128,10 +124,6 @@ export class AddAssignOrderPage {
         });
       })
     })
-  }//end of constructor
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad AddAssignOrderPage');
   }
 
   CalculMethodChange(cal) {
@@ -141,6 +133,8 @@ export class AddAssignOrderPage {
     if (cal == 2) {
       this.minExpiryDate = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
       this.ExpiryDatelocalDateval = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+      this.SpacificLeaves.CompanyId = this.user.CompanyId;
+      this.SpacificLeaves.Culture = this.user.Culture;
       LeavesLoader.present().then(() => {
         this.AssignOrderService.GetSpacificLeaves(this.SpacificLeaves).subscribe((data) => {
           LeavesLoader.dismiss().then(() => {
@@ -216,7 +210,6 @@ export class AddAssignOrderPage {
   }
 
   AssignDateCancel(AssignDate) {
-    console.log("AssignDateFocus : ", AssignDate, "Emp ", this.Employee, "Dur ", this.Duration);
     if (AssignDate == null || AssignDate == "") {
       this.AssignOrderForm.controls['AssignDate'].markAsTouched({ onlySelf: true });
       this.AssignOrderForm.controls['AssignDate'].markAsDirty({ onlySelf: true });
@@ -237,7 +230,6 @@ export class AddAssignOrderPage {
   }
 
   InputBlur(item) {
-    console.log("Blur : ", item);
     switch (item) {
       case 'Emp':
         this.AssignOrderForm.controls['Employee'].markAsTouched({ onlySelf: true });
@@ -275,7 +267,6 @@ export class AddAssignOrderPage {
   }
 
   static isRequired(control: FormControl) {
-    console.log("isRequired : ", control.value);
     if (control.value == null || control.value == "") {
       return {
         "required": "Required"
@@ -310,7 +301,6 @@ export class AddAssignOrderPage {
     this.AssignOrderObj.Language = this.user.Culture;
     this.AssignOrderObj.ManagerId = this.user.EmpId;
     this.AssignOrderObj.Id = 0;
-    console.log("this.AssignOrderObj : ", this.AssignOrderObj);
     AddAssignOrderLoader.present().then(() => {
       this.AssignOrderService.PostAssignOrder(this.AssignOrderObj).subscribe((data) => {
         AddAssignOrderLoader.dismiss().then(() => {
@@ -351,12 +341,10 @@ export class AddAssignOrderPage {
         for (let date = 1; date <= tdays; date++) {
           let day
           if (tdays === 31) {
-            console.log("31 tdays : ", tdays)
-            day= new Date("1/1/"+oneYear);
+            day = new Date("1/1/" + oneYear);
           }
           else {
-            console.log("30 tdays : ", tdays)
-            day= new Date();
+            day = new Date();
           }
           day.setDate(date);
           day.setMonth(month - 1);
@@ -370,7 +358,6 @@ export class AddAssignOrderPage {
         }
       }
     }
-    console.log("offdays : ", offdays)
     return offdays;
   }
 
@@ -380,30 +367,23 @@ export class AddAssignOrderPage {
     for (let oneYear = year; oneYear <= year + 1; oneYear++) {
       for (let month = 1; month <= 12; month++) {
         let tdays = new Date(oneYear, month, 0).getDate();
-        
+
         for (let date = 1; date <= tdays; date++) {
-           let day
+          let day
           if (tdays === 31) {
-            console.log("31 tdays : ", tdays)
-            day= new Date("1/1/"+oneYear);
+            day = new Date("1/1/" + oneYear);
           }
           else {
-            console.log("30 tdays : ", tdays)
-            day= new Date();
+            day = new Date();
           }
           day.setDate(date);
           day.setMonth(month - 1);
           day.setFullYear(oneYear);
           day.setHours(0, 0, 0, 0);
-          console.log("day : ", day);
-          console.log("month : ", month - 1);
-          console.log("oneYear : ", oneYear);
-          console.log("date : ", day);
           alldays.push(day);
         }
       }
     }
-    console.log("alldays : ", alldays)
     return alldays;
   }
 
@@ -434,11 +414,9 @@ export class AddAssignOrderPage {
   //     let tdays:any;
   //     if (month < today.getMonth() + 1) {
   //       tdays = new Date(year, month, 0).getDate();
-  //       console.log("tdays : ",tdays)
   //     }
   //     else if (month == today.getMonth() + 1) {
   //       tdays = new Date(year, month, today.getDate()-1).getDate();
-  //       console.log("tdays : ",tdays)
   //     }
   //     for (let date = 1; date <= tdays; date++) {
   //       let day = new Date();
@@ -446,7 +424,6 @@ export class AddAssignOrderPage {
   //       day.setMonth(month - 1);
   //       day.setFullYear(year);
   //       day.setHours(0, 0, 0, 0);
-  //       console.log("Day ::: ",day);
   //       offdays.push(day);
   //     }
   //   }
