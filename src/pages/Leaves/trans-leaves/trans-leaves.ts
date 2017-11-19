@@ -2,34 +2,42 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { LeaveServicesApi, ILeavesTrans } from '../../../shared/LeavesService'
 import * as _ from 'lodash';
-import { products } from "./refData";
+import { Storage } from '@ionic/storage';
 import { GroupDescriptor, DataResult, process } from '@progress/kendo-data-query';
+import { IUser } from '../../../shared/IUser';
 @IonicPage()
 @Component({
   selector: 'page-trans-leaves',
   templateUrl: 'trans-leaves.html',
 })
 export class TransLeavesPage {
-  private gridData: any[] = products;
-
   public LeavesCount: Number;
   public CreditQtyCount;
   public LeavesTrans: ILeavesTrans = {
     CompanyId: 0,
-    Culture: "ar-EG",
-    EmpId: 1072,
+    Culture: "",
+    EmpId: 0,
     StartDate: new Date()
   }
-
+  user: IUser;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private LeaveServices: LeaveServicesApi,
     public loadingCtrl: LoadingController,
-    public toastCtrl: ToastController) {
-    this.loadProducts();
+    public toastCtrl: ToastController,
+    private storage: Storage) {
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+        this.LeavesTrans.CompanyId = this.user.CompanyId;
+        this.LeavesTrans.Culture = this.user.Language;
+        this.LeavesTrans.EmpId = this.user.EmpId;
+      }
+    });
+
 
   }
-  private groups: GroupDescriptor[] = [{ field: "LeaveType", aggregates: [{ field: "CreditQty", aggregate: "sum" },{ field: "LeaveType", aggregate: "count" },{ field: "DebitQty", aggregate: "sum" }] }];
+  private groups: GroupDescriptor[] = [{ field: "LeaveType", aggregates: [{ field: "CreditQty", aggregate: "sum" }, { field: "LeaveType", aggregate: "count" }, { field: "DebitQty", aggregate: "sum" }] }];
 
   private gridView: DataResult;
 
@@ -40,15 +48,11 @@ export class TransLeavesPage {
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaveTrans(this.LeavesTrans).subscribe((data) => {
         console.log("LeavesTrans", data)
-        if (data) {
-          LeavesLoader.dismiss().then(() => {
-            this.LeavesCount = data.length;
-            this.gridView = process(data, { group: this.groups });
-          })
-        }
-        else {
+       
+          this.LeavesCount = data.length;
+          this.gridView = process(data, { group: this.groups });
           LeavesLoader.dismiss();
-        }
+
       }, (e) => {
         let toast = this.toastCtrl.create({
           message: "Error in getting Trans Leaves, Please Try again later.",
@@ -59,9 +63,7 @@ export class TransLeavesPage {
           toast.present();
         });
       })
-    })
-
-    //this.gridView = process(products, { group: this.groups });
+    });
   }
 
 
@@ -72,7 +74,7 @@ export class TransLeavesPage {
   }
   ionViewDidLoad() {
 
-
+    this.loadProducts();
     // var LeavesLoader = this.loadingCtrl.create({
     //   content: "Loading Leaves..."
     // });

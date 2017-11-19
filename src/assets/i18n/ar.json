@@ -123,5 +123,10 @@
     "Quantity":"كمية",
 
     "LangErrorToast":"حدث خطأ أثناء الحفظ من فضلك حاول مرة أخرى...",
-    "LangSuccessToast":"تم الحفظ بنجاح..."
+    "LangSuccessToast":"تم الحفظ بنجاح...",
+
+    "Period":"الفترة",
+    "TransDate":"تاريخ الحركة",
+    "TransTypeName":"نوع الحركة",
+    "Holidays":"العطلات"
 }

@@ -18,7 +18,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 })
 export class DocumentsPage {
   loadingStatus;
-  loadingProgress
+  loadingProgress=0;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -55,7 +55,7 @@ export class DocumentsPage {
     })
     fileTransfer.onProgress((progressEvent) => {
       if (progressEvent.lengthComputable) {
-        this.loadingProgress = (progressEvent.loaded / progressEvent.total) * 100;
+        this.loadingProgress =  Math.round((progressEvent.loaded / progressEvent.total) * 100);          
       }
     })
 
