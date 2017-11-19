@@ -31,10 +31,10 @@ export class TransLeavesPage {
         this.user = udata;
         this.LeavesTrans.CompanyId = this.user.CompanyId;
         this.LeavesTrans.Culture = this.user.Language;
-        this.LeavesTrans.EmpId=this.user.EmpId;
+        this.LeavesTrans.EmpId = this.user.EmpId;
       }
     });
-    
+
 
   }
   private groups: GroupDescriptor[] = [{ field: "LeaveType", aggregates: [{ field: "CreditQty", aggregate: "sum" }, { field: "LeaveType", aggregate: "count" }, { field: "DebitQty", aggregate: "sum" }] }];
@@ -48,15 +48,11 @@ export class TransLeavesPage {
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaveTrans(this.LeavesTrans).subscribe((data) => {
         console.log("LeavesTrans", data)
-        if (data) {
-          LeavesLoader.dismiss().then(() => {
-            this.LeavesCount = data.length;
-            this.gridView = process(data, { group: this.groups });
-          })
-        }
-        else {
+       
+          this.LeavesCount = data.length;
+          this.gridView = process(data, { group: this.groups });
           LeavesLoader.dismiss();
-        }
+
       }, (e) => {
         let toast = this.toastCtrl.create({
           message: "Error in getting Trans Leaves, Please Try again later.",
@@ -67,9 +63,7 @@ export class TransLeavesPage {
           toast.present();
         });
       })
-    })
-
-    //this.gridView = process(products, { group: this.groups });
+    });
   }
 
 

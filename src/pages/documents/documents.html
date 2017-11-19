@@ -26,5 +26,5 @@
   <br /> <br /> <br /> <br />
 
   <span>"{{file.externalRootDirectory}}Download"</span>
-
+  <progress-bar *ngIf="loadingProgress > 0 && loadingProgress < 100" [progress]="loadingProgress"></progress-bar>
 </ion-content>
