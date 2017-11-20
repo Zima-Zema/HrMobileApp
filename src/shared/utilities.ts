@@ -11,9 +11,13 @@ import { Storage } from '@ionic/storage';
   for more info on providers and Angular DI.
 */
 export interface IGetEmpCustody {
-  EmpId: number
+  EmpId: number,
   Language: string,
   CompanyId: number
+}
+export interface IGetEmpDocs{
+  Source:string,
+  SourceId:number
 }
 @Injectable()
 export class UtilitiesProvider {
@@ -30,6 +34,21 @@ export class UtilitiesProvider {
     let bodyString = JSON.stringify(body);
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
     return this._http.post(`${this.baseURL}newApi/Utilities/GetEmployeeCustody`, bodyString, { headers: headers })
+      .map((res: Response) => {
+        console.log("res.json ::: ", res.json());
+        return res.json();
+      });
+      // .catch((err) => {
+      //   console.log("the error in Service ::", err);
+      //   return  Observable.of({error:err}) ;
+      // });
+  }
+
+  // get all docs
+  getEmpDocs(body: IGetEmpDocs): Observable<any> {
+    let bodyString = JSON.stringify(body);
+    let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+    return this._http.post(`${this.baseURL}newApi/Utilities/GetEmployeeDocs`, bodyString, { headers: headers })
       .map((res: Response) => {
         console.log("res.json ::: ", res.json());
         return res.json();
