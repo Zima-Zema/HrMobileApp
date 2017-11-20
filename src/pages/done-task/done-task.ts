@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ActionSheetController, ViewController, ToastController, LoadingController } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
+
 //plugins
-import { Camera, CameraOptions } from '@ionic-native/camera';
+import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 //pages
-import { WelcomePage } from '../welcome/welcome';
-import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService';
+import { TasksServicesApi, ITollen } from '../../shared/TasksService';
 //
 @IonicPage()
 @Component({
@@ -35,9 +34,9 @@ export class DoneTaskPage {
     private tasksService: TasksServicesApi,
     public toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
-    private storage: Storage) {
+    ) {
     this.coming_Task = this.navParams.get('Task');
-    
+
   }
 
   TollenObj: ITollen = {
@@ -108,7 +107,7 @@ export class DoneTaskPage {
         let uri = this.file.dataDirectory;
         this.file.readAsDataURL(uri, textfile).then((b_data) => {
           this.isdisabled = false;
-          let BinaryData = this.convertDataURIToBinary(b_data); 
+          let BinaryData = this.convertDataURIToBinary(b_data);
           let arr = Array.from(BinaryData);           // convert it to array
           this.TollenObj.Files.push(arr);
           this.TollenObj.FileDetails.push(textfile);
@@ -183,7 +182,7 @@ export class DoneTaskPage {
       this.filePath.resolveNativePath(uri).then(filePath => {
         let textfile = filePath.substr(filePath.lastIndexOf('/') + 1);
         let edit_path = filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('?'));
-        this.file.readAsDataURL(edit_path,textfile).then((b_data) => {
+        this.file.readAsDataURL(edit_path, textfile).then((b_data) => {
           this.isdisabled = false;
           let BinaryData = this.convertDataURIToBinary(b_data)
           let arr = Array.from(BinaryData);

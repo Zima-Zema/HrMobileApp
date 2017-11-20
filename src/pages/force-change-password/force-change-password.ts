@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { WelcomePage } from '../welcome/welcome';
-import { LogInPage } from '../log-in/log-in';
 import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms";
 import { LoginServiceApi, ILogin } from "../../shared/loginService";
 import { IUser } from "../../shared/IUser";

@@ -18,7 +18,7 @@ export class ApprovalPipe implements PipeTransform {
     this.lang = translate.getDefaultLang();
   }
   transform(stat: number, ApprovStat: string) {
-    let status: string
+   
     if (this.lang === 'ar') {
       return ArabicApprovalStatusEnum[stat]
     }

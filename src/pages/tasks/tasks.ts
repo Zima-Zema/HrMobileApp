@@ -1,10 +1,7 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ModalController, LoadingController, ToastController } from 'ionic-angular';
 import * as moment from 'moment';
-import { AddTaskPage } from '../add-task/add-task';
-import { DoneTaskPage } from '../done-task/done-task';
-import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService'
-import { CalendarComponent } from 'ionic2-calendar/calendar';
+import { TasksServicesApi, ITollen } from '../../shared/TasksService'
 import { Storage } from '@ionic/storage';
 import { TranslateService } from '@ngx-translate/core';
 import { IUser } from "../../shared/IUser";

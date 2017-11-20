@@ -51,8 +51,8 @@
          </ng-template>
     </kendo-grid-column>
 
-    <kendo-grid-column field="Period" title="{{'Period' | translate}}" width="100%">
-    </kendo-grid-column>
+    <!-- <kendo-grid-column field="Period" title="{{'Period' | translate}}" width="100%">
+    </kendo-grid-column> -->
 
     <kendo-grid-column field="TransDate"  title="{{'TransDate' | translate}}" width="150%" >
    
@@ -68,6 +68,13 @@
     </kendo-grid-column>
 
     <kendo-grid-column field="DebitQty" title="{{'DebitQty' | translate}}" width="100%">
+    </kendo-grid-column>
+
+        <kendo-grid-column field="Bal" title="{{'TotalBal' | translate}}" width="100%">
+            <ng-template kendoGridCellTemplate let-dataItem>
+              {{dataItem.CreditQty - dataItem.DebitQty}}
+            <!-- {{"TotalBal" | translate}}: {{aggregates["CreditQty"].sum - aggregates["DebitQty"].sum}} -->
+            </ng-template>
     </kendo-grid-column>
 
     <!-- <kendo-grid-column field="Discontinued" title="Discontinued" width="120">

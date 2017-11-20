@@ -4,8 +4,6 @@ import { WelcomePage } from './welcome';
 import { NotificationServiceApi } from '../../shared/NotificationService';
 import { TranslateModule } from '@ngx-translate/core'
 import { SignalRConfiguration, SignalRModule } from 'ng2-signalr';
-import { IonicStorageModule, Storage } from '@ionic/storage';
-import { LogInPage } from '../log-in/log-in';
 import { ScrollableTabs} from '../../components/scrollable-tabs/scrollable-tabs'
 
 export function creatConfig(): SignalRConfiguration {
