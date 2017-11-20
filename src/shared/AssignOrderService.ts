@@ -26,40 +26,11 @@ export interface IAssignOrderVM {
     CompanyId: number,
     Language: string
 }
-// export interface IAssignOrderVM {
-//     Id: number,
-//     EmpId: number,
-//     ManagerId: number,
-//     Duration: Number,
-//     AssignDate: Date,
-//     CalcMethod: number,
-//     LeaveTypeId: number,
-//     ExpiryDate: Date,
-//     TaskDesc: string,
-//     CompanyId: number,
-//     Language: string,
-//     ApprovalStatus: number,
-//     AuthBranch: string,
-//     AuthDept: string,
-//     AuthEmp: string
-//     AuthEmpName: string
-//     AuthPosName: string
-//     AuthPosition: string
-//     BranchId: number
-//     CreatedTime: string
-//     CreatedUser: string
-//     DeptId: number,
-//     Employee: string,
-//     LeaveType: string,
-//     Manager: string,
-//     ModifiedTime: string,
-//     ModifiedUser: string,
-//     PositionId: number
-//     RoleId: number
-//     SectorId: number
-//     WFlowId: number
-//     WorkflowTime: string
-// }
+
+export interface IEmpAssignDates{
+    CompanyId: number,
+    EmpId: number
+}
 
 export interface IDeleteRequest {
     Id: number,
@@ -70,11 +41,9 @@ export interface IDeleteRequest {
 
 export class AssignOrderServicesApi {
     private baseURL: string;
-    //= 'http://192.168.1.146:36207/';
     constructor(private _http: Http, private _storage: Storage) {
         this._storage.get("BaseURL").then((val) => {
             this.baseURL = val;
-            console.log("BaseUrl From Notity services>>>", this.baseURL);
         });
     }
 
@@ -83,10 +52,8 @@ export class AssignOrderServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/AssignOrder/GetEmpAssignOrders`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -96,10 +63,8 @@ export class AssignOrderServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/AssignOrder/GetMangerAssignOrders`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -109,10 +74,8 @@ export class AssignOrderServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/AssignOrder/GetEmployeeForManger`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -122,10 +85,8 @@ export class AssignOrderServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/AssignOrder/GetSpacificLeaveTypes`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -135,10 +96,8 @@ export class AssignOrderServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/AssignOrder/PostAssignOrder`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -148,10 +107,8 @@ export class AssignOrderServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/AssignOrder/DeleteAssignOrder`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -161,10 +118,19 @@ export class AssignOrderServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/AssignOrder/EditAssignOrder`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("editAssignOrder ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
+                return err;
+            });
+    }
+
+    getEmpAssignDates(body:IEmpAssignDates):Observable<any>{
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}newApi/AssignOrder/GetEmpAssignDates`, bodyString, { headers: headers })
+            .map((res: Response) => {
+                return res.json();
+            }).catch((err) => {
                 return err;
             });
     }

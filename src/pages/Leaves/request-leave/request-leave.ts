@@ -201,7 +201,7 @@ export class RequestLeavePage {
     this.LoadingChart.present().then(() => {
       console.log('APIGetLeaveTypes');
       this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((Konafa) => {
-
+        console.log("Konafa : ",Konafa)
         this.LeavesData = Konafa.LeaveTypeList;
         this.ChartData = Konafa.ChartData;
         this.Replacements = Konafa.Replacements;

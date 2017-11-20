@@ -17,7 +17,7 @@
 
     <ion-item>
       <ion-label floating>Employee</ion-label>
-      <ion-select [(ngModel)]="Employee" formControlName="Employee" interface="popover" (ionBlur)="InputBlur('Emp')">
+      <ion-select [(ngModel)]="Employee" formControlName="Employee" interface="popover" (ionBlur)="InputBlur('Emp')" (ionChange)="EmployeeChange(Employee)">
         <ion-option *ngFor="let item of EmployeeData" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>

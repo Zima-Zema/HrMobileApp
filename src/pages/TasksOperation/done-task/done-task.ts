@@ -7,7 +7,9 @@ import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 //pages
-import { TasksServicesApi, ITollen } from '../../shared/TasksService';
+import { WelcomePage } from '../../welcome/welcome';
+import { TasksServicesApi, ITasks, ITollen } from '../../../shared/TasksService';
+
 //
 @IonicPage()
 @Component({
@@ -23,6 +25,16 @@ export class DoneTaskPage {
   public ext: string = "";
   public imags: Array<any> = [];
   //
+  TollenObj: ITollen = {
+    CompanyId: 0,
+    Files: [],
+    Language: "en-GB",
+    Source: "EmpTasksForm",
+    TaskId: this.coming_Task.id,
+    FileDetails: []
+  }
+
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public actionSheetCtrl: ActionSheetController,
@@ -37,15 +49,6 @@ export class DoneTaskPage {
     ) {
     this.coming_Task = this.navParams.get('Task');
 
-  }
-
-  TollenObj: ITollen = {
-    CompanyId: 0,
-    Files: [],
-    Language: "en-GB",
-    Source: "EmpTasksForm",
-    TaskId: this.coming_Task.id,
-    FileDetails: []
   }
 
   //action sheet for images
@@ -102,6 +105,11 @@ export class DoneTaskPage {
     else {
       this.ext = ".txt";
       let textfile = this.createFileName(this.ext);
+      let err_toast = this.toastCtrl.create({
+        message: "Sorry, Error to write file, Please try again.",
+        duration: 3000,
+        position: 'middle'
+      });
       //write text on file
       this.file.writeFile(this.file.dataDirectory, textfile, this.disc, { replace: true }).then((data) => {
         let uri = this.file.dataDirectory;
@@ -111,13 +119,10 @@ export class DoneTaskPage {
           let arr = Array.from(BinaryData);           // convert it to array
           this.TollenObj.Files.push(arr);
           this.TollenObj.FileDetails.push(textfile);
+        }, (e) => {
+          err_toast.present();
         });
       }).catch((e: Error) => {
-        let err_toast = this.toastCtrl.create({
-          message: "Sorry, Error to write file, Please try again.",
-          duration: 3000,
-          position: 'middle'
-        });
         err_toast.present();
       });
     }
