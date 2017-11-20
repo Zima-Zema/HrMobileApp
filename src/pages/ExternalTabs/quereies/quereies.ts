@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { LeaveListPage } from '../../Leaves/leave-list/leave-list';
 import { AssignOrderPage } from '../../AssignOrder/assign-order/assign-order'
 import { AssignOrderRequestsPage } from '../../AssignOrderRequests/assign-order-requests/assign-order-requests'
-import { TasksPage } from '../../tasks/tasks';
+import { TasksPage } from '../../TasksOperation/tasks/tasks';
 import { CustomLeavesPage } from '../../Leaves/custom-leaves/custom-leaves'
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../../shared/IUser";

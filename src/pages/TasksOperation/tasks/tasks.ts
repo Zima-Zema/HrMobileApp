@@ -2,12 +2,12 @@ import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit, I
 import { IonicPage, NavController, NavParams, AlertController, ModalController, LoadingController, ToastController } from 'ionic-angular';
 import * as moment from 'moment';
 import { AddTaskPage } from '../add-task/add-task';
-import { DoneTaskPage } from '../done-task/done-task';
-import { TasksServicesApi, ITasks, ITollen } from '../../shared/TasksService'
+import { TasksServicesApi, ITasks, ITollen } from '../../../shared/TasksService'
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { Storage } from '@ionic/storage';
 import { TranslateService } from '@ngx-translate/core';
-import { IUser } from "../../shared/IUser";
+import { IUser } from "../../../shared/IUser";
+import {DoneTaskPage} from '../done-task/done-task'
 
 @IonicPage()
 @Component({
@@ -57,24 +57,24 @@ export class TasksPage {
     private tasksService: TasksServicesApi,
     private storage: Storage,
     private translationService: TranslateService) {
-      this.storage.get("User").then((udata) => {
-        if (udata) {
-          this.user = udata;
-          this.TollenObj.CompanyId=this.user.CompanyId;
-          this.TollenObj.Language=this.user.Language;
-  
-        }
-  
-      });
-      this.lang = translationService.getDefaultLang();
-      if (this.lang === 'ar') {
-        this.calendarLocal="ar-EG";
-        this.calendarDir="rtl"
+    this.storage.get("User").then((udata) => {
+      if (udata) {
+        this.user = udata;
+        this.TollenObj.CompanyId = this.user.CompanyId;
+        this.TollenObj.Language = this.user.Language;
+
       }
-      else {
-        this.calendarLocal="en-GB";
-        this.calendarDir="ltr"
-      }
+
+    });
+    this.lang = translationService.getDefaultLang();
+    if (this.lang === 'ar') {
+      this.calendarLocal = "ar-EG";
+      this.calendarDir = "rtl"
+    }
+    else {
+      this.calendarLocal = "en-GB";
+      this.calendarDir = "ltr"
+    }
   }
 
   ionViewWillLoad() {
@@ -93,10 +93,10 @@ export class TasksPage {
   }
 
   onEventSelected(event) {
-    console.log("event  ", event);
+    //console.log("event  ", event);
     let start = moment(event.startTime).format('LLLL');
     let end = moment(event.endTime).format('LLLL');
-    const Sec_modal = this.modalCtrl.create('DoneTaskPage', { Task: event });
+    const Sec_modal = this.modalCtrl.create(DoneTaskPage, { Task: event });
     let finish_toast = this.toastCtrl.create({
       message: "This Task Is Already Done!!!",
       duration: 3000,
@@ -221,11 +221,12 @@ export class TasksPage {
           this.e_mm = moment(ele.EndTime).format('MM');
           this.e_dd = moment(ele.EndTime).format('DD');
           ////time should pass in this format (UTC) otherwise there is a problem --> from documentation (ionic2-calender)
-          this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd));
-          this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd));
+          this.str_time = new Date(Date.UTC(this.s_yyyy, this.s_mm - 1, this.s_dd, 0, 0, 0, 0));
+          this.end_time = new Date(Date.UTC(this.e_yyyy, this.e_mm - 1, this.e_dd, 0, 0, 0, 0));
           if (ele.Status == 1) { this.title_data = ele.TaskCategory; }
           else { this.title_data = ele.TaskCategory + "  is Done"; }
           console.log("this.str_time : ", this.str_time)
+          console.log("this.end_time : ", this.end_time)
           this.event = { startTime: this.str_time, endTime: this.end_time, allDay: false, title: this.title_data, id: ele.Id, Stat: ele.Status, desc: ele.Description };
           this.events = this.eventSource;
           this.events.push(this.event);

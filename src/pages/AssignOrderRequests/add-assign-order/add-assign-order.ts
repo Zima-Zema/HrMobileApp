@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidatorFn } from "@angular/forms";
-import { AssignOrderServicesApi, IEmpAssignOrders, ISpacificLeaves, IAssignOrderVM } from '../../../shared/AssignOrderService';
+import { AssignOrderServicesApi, IEmpAssignOrders, ISpacificLeaves, IAssignOrderVM, IEmpAssignDates } from '../../../shared/AssignOrderService';
 import { LeaveServicesApi, IRequestType } from "../../../shared/LeavesService";
 import { Storage } from '@ionic/storage';
 import { IUser } from '../../../shared/IUser';
@@ -18,6 +18,7 @@ export class AddAssignOrderPage {
   public MainArray: Array<any> = [];
   public EmployeeData: Array<any> = [];
   public filteredArr: Array<any> = [];
+  public DurationArr: Array<any> = [];
   public LeavesData: Array<any> = [];
   public filteredExpiryDate: Array<any> = [];
   //Forms
@@ -52,10 +53,12 @@ export class AddAssignOrderPage {
     Culture: "",
     CompanyId: 0
   }
+
   public SpacificLeaves: ISpacificLeaves = {
     Culture: "",
     CompanyId: 0
   }
+
   public AssignOrderObj: IAssignOrderVM = {
     AssignDate: null,
     CalcMethod: 0,
@@ -68,6 +71,11 @@ export class AddAssignOrderPage {
     LeaveTypeId: 0,
     ManagerId: 0,
     TaskDesc: ""
+  }
+
+  public GetEmpAssignOrderObj: IEmpAssignDates = {
+    CompanyId: 0,
+    EmpId: 0
   }
 
   constructor(public navCtrl: NavController,
@@ -126,6 +134,93 @@ export class AddAssignOrderPage {
     })
   }
 
+  EmployeeChange(EmpId) {
+    var EmployeesLoader = this.loadingCtrl.create({
+      spinner: 'dots'
+    });
+    this.filteredArr = [];
+    this.Duration = null;
+    this.AssignDate = null;
+    this.Description = null;
+    this.GetEmpAssignOrderObj.CompanyId = this.user.CompanyId;
+    this.GetEmpAssignOrderObj.EmpId = EmpId;
+    EmployeesLoader.present().then(() => {
+      this.AssignOrderService.getEmpAssignDates(this.GetEmpAssignOrderObj).subscribe((data) => {
+        EmployeesLoader.dismiss().then(() => {
+          data.forEach(element => {
+            this.filteredArr.push(new Date(element));
+          });
+        })
+      }, (e) => {
+        EmployeesLoader.dismiss().then(() => {
+          this.toast.present();
+        })
+      })
+    })
+  }
+
+  DurationChange(Dur) {
+    var HolidaysLoader = this.loadingCtrl.create({
+      spinner: 'dots'
+    });
+    if (Dur == 1) {
+      this.AssignDate = null;
+      HolidaysLoader.present().then(() => {
+        // get all holidays
+        this.LeaveServices.getHolidays(this.user.CompanyId).subscribe((data) => {
+          HolidaysLoader.dismiss().then(() => {
+            this.MainArray = [];
+            this.MainArray.push(data);
+            this.MainArray.forEach(element => {
+              var AllDays: Array<Date> = this.getAllDays();
+              var OffDays: Array<Date> = this.getOffDays(element);
+              var result = AllDays.filter(function (ele) {
+                var try1 = OffDays.map(Number).indexOf(+ele);
+                if (try1 == -1) { return ele; }
+              })
+              this.DurationArr = result;
+              this.DurationArr.forEach(element => {
+                this.filteredArr.push(element)
+              });
+            });
+          })
+        }, (e) => {
+          HolidaysLoader.dismiss().then(() => {
+            this.toast.present();
+          })
+        })
+      })
+    }
+    else {
+      if (this.filteredArr.length > 0 && this.DurationArr.length > 0) {
+        var HQData = this.filteredArr.filter(ele => {
+          if (this.DurationArr.indexOf(ele) == -1) {
+            return ele;
+          }
+        });
+        this.filteredArr = [];
+        HQData.forEach(element => {
+          this.filteredArr.push(element)
+        });
+      }
+    }
+  }
+
+  AssignDateChange(AssignDate) {
+    this.AssignDate = this.bloodyIsoString(AssignDate);
+    this.ExpiryDate = null;
+    this.minExpiryDate = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+    this.ExpiryDatelocalDateval = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+    if (this.Employee == null) {
+      this.AssignOrderForm.controls['Employee'].markAsTouched({ onlySelf: true });
+      this.AssignOrderForm.controls['Employee'].markAsDirty({ onlySelf: true });
+    }
+    if (this.Duration == null) {
+      this.AssignOrderForm.controls['Duration'].markAsTouched({ onlySelf: true });
+      this.AssignOrderForm.controls['Duration'].markAsDirty({ onlySelf: true });
+    }
+  }
+
   CalculMethodChange(cal) {
     var LeavesLoader = this.loadingCtrl.create({
       spinner: 'dots'
@@ -159,53 +254,6 @@ export class AddAssignOrderPage {
       this.AssignOrderForm.controls['leaveType'].disable();
       this.AssignOrderForm.controls['leaveType'].clearValidators();
 
-    }
-  }
-
-  DurationChange(Dur) {
-    var HolidaysLoader = this.loadingCtrl.create({
-      spinner: 'dots'
-    });
-    if (Dur == 1) {
-      this.AssignDate = null;
-      HolidaysLoader.present().then(() => {
-        this.LeaveServices.getHolidays(this.user.CompanyId).subscribe((data) => {
-          HolidaysLoader.dismiss().then(() => {
-            this.MainArray.push(data);
-            this.MainArray.forEach(element => {
-              var AllDays: Array<Date> = this.getAllDays();
-              var OffDays: Array<Date> = this.getOffDays(element);
-              var result = AllDays.filter(function (ele) {
-                var try1 = OffDays.map(Number).indexOf(+ele);
-                if (try1 == -1) { return ele; }
-              })
-              this.filteredArr = result;
-            });
-          })
-        }, (e) => {
-          HolidaysLoader.dismiss().then(() => {
-            this.toast.present();
-          })
-        })
-      })
-    }
-    else {
-      this.filteredArr = null;
-    }
-  }
-
-  AssignDateChange(AssignDate) {
-    this.AssignDate = this.bloodyIsoString(AssignDate);
-    this.ExpiryDate = null;
-    this.minExpiryDate = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
-    this.ExpiryDatelocalDateval = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
-    if (this.Employee == null) {
-      this.AssignOrderForm.controls['Employee'].markAsTouched({ onlySelf: true });
-      this.AssignOrderForm.controls['Employee'].markAsDirty({ onlySelf: true });
-    }
-    if (this.Duration == null) {
-      this.AssignOrderForm.controls['Duration'].markAsTouched({ onlySelf: true });
-      this.AssignOrderForm.controls['Duration'].markAsDirty({ onlySelf: true });
     }
   }
 
@@ -325,7 +373,6 @@ export class AddAssignOrderPage {
     this.Description = "";
   }
 
-
   getOffDays(calender) {
     let year = new Date().getFullYear();
     let offdays: Array<any> = [];
@@ -333,7 +380,8 @@ export class AddAssignOrderPage {
       offdays.push(new Date(element.HoliDate));
     });
     calender.Standard.forEach((ele) => {
-      offdays.push(new Date(year, ele.SMonth - 1, ele.SDay))
+      offdays.push(new Date(year, ele.SMonth - 1, ele.SDay));
+      offdays.push(new Date(year + 1, ele.SMonth - 1, ele.SDay))
     })
     for (let oneYear = year; oneYear <= year + 1; oneYear++) {
       for (let month = 1; month <= 12; month++) {
@@ -353,7 +401,6 @@ export class AddAssignOrderPage {
 
           if (day.getDay() == calender.weeKend1 || day.getDay() == calender.weekend2) {
             offdays.push(day);
-
           }
         }
       }
@@ -386,8 +433,6 @@ export class AddAssignOrderPage {
     }
     return alldays;
   }
-
-
 
   bloodyIsoString(bloodyDate: Date) {
     let tzo = -bloodyDate.getTimezoneOffset(),
