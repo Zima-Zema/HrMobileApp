@@ -28,7 +28,7 @@ export class AssignOrderRequestsPage {
 
   public EmpAssignOrderObj: IEmpAssignOrders = {
     EmpId: 0,
-    Culture: "ar-EG",
+    Culture: "",
     CompanyId: 0
   }
   public user: IUser;
@@ -36,19 +36,6 @@ export class AssignOrderRequestsPage {
   {
     Id: 0,
     Language: ""
-  }
-  public AssignOrderObj: IAssignOrderVM = {
-    AssignDate: null,
-    CalcMethod: 0,
-    CompanyId: 0,
-    Duration: 0,
-    EmpId: 0,
-    ExpiryDate: null,
-    Id: 0,
-    Language: "",
-    LeaveTypeId: 0,
-    ManagerId: 0,
-    TaskDesc: ""
   }
 
   constructor(public navCtrl: NavController,
@@ -72,6 +59,8 @@ export class AssignOrderRequestsPage {
   ionViewDidLoad() {
 
     this.EmpAssignOrderObj.EmpId = this.user.EmpId;
+    this.EmpAssignOrderObj.Culture=this.user.Culture;
+    this.EmpAssignOrderObj.CompanyId=this.user.CompanyId;
     var OrdersLoader = this.loadingCtrl.create({
       content: "Loading Orders..."
     });
@@ -104,25 +93,7 @@ export class AssignOrderRequestsPage {
 
   ionViewWillEnter() {
     this.toggled = false;
-    console.log("AssignOrderList : ", AssignOrderRequestsPage.AssignOrderList);
     this.AssignOrderArr = AssignOrderRequestsPage.AssignOrderList;
-    // if (AssignOrderRequestsPage.AssignOrderList) {
-    //   console.log("inside");
-    //   var ele = this.AssignOrderArr.filter(ord => ord.Id == AssignOrderRequestsPage.AssignOrderList.Id);
-    //   console.log("before ele : ", ele);
-    //   ele.forEach(element => {
-    //     console.log("element : ",element);
-    //     element.AssignDate=AssignOrderRequestsPage.AssignOrderList.AssignDate;
-    //     element.CalcMethod=AssignOrderRequestsPage.AssignOrderList.CalcMethod;
-    //     element.Duration=AssignOrderRequestsPage.AssignOrderList.Duration;
-    //     element.EmpId=AssignOrderRequestsPage.AssignOrderList.EmpId;
-    //     element.ExpiryDate=AssignOrderRequestsPage.AssignOrderList.ExpiryDate;
-    //     element.LeaveTypeId=AssignOrderRequestsPage.AssignOrderList.LeaveTypeId;
-    //     element.TaskDesc=AssignOrderRequestsPage.AssignOrderList.TaskDesc;
-    //   });
-    //   console.log("after ele : ", ele);
-    //   this.AssignOrderArr.push(ele);
-    // }
   }
 
   public toggle(): void {
@@ -130,7 +101,6 @@ export class AssignOrderRequestsPage {
   }
 
   ShowAssignOrder(item) {
-    console.log("show");
     this.navCtrl.push(ShowAssignOrderRequestsPage, item);
   }
 
@@ -219,7 +189,6 @@ export class AssignOrderRequestsPage {
           assArr = _.filter(this.AssignOrderArr, function (o) {
             return o.Id != item.Id;
           });
-          console.log("assArr : ", assArr);
           this.AssignOrderCount--;
           this.AssignOrderArr = assArr;
         })

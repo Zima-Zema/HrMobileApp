@@ -30,6 +30,7 @@ export class CustomLeavesPage {
   }
 
   ionViewDidLoad() {
+    this.CompanyId=this.user.CompanyId;
     var LeavesLoader = this.loadingCtrl.create({
       content: "Loading Leaves..."
     });
@@ -66,8 +67,6 @@ export class CustomLeavesPage {
 
   getDateofStandardDays(calender) {
     let year = new Date().getFullYear();
-    console.log("year : ", year);
-    console.log("calender : ", calender)
     let offdays: Array<any> = [];
     calender.forEach((ele) => {
       offdays.push({
