@@ -1,14 +1,18 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ActionSheetController, ViewController, ToastController, LoadingController } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
+
 //plugins
-import { Camera, CameraOptions } from '@ionic-native/camera';
+import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 //pages
+<<<<<<< HEAD:src/pages/TasksOperation/done-task/done-task.ts
 import { WelcomePage } from '../../welcome/welcome';
 import { TasksServicesApi, ITasks, ITollen } from '../../../shared/TasksService';
+=======
+import { TasksServicesApi, ITollen } from '../../shared/TasksService';
+>>>>>>> 0f61bc33dfc4209fa39a2ffe7e5d918ec5de9c49:src/pages/done-task/done-task.ts
 //
 @IonicPage()
 @Component({
@@ -45,8 +49,13 @@ export class DoneTaskPage {
     private tasksService: TasksServicesApi,
     public toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
-    private storage: Storage) {
+    ) {
     this.coming_Task = this.navParams.get('Task');
+<<<<<<< HEAD:src/pages/TasksOperation/done-task/done-task.ts
+=======
+
+  }
+>>>>>>> 0f61bc33dfc4209fa39a2ffe7e5d918ec5de9c49:src/pages/done-task/done-task.ts
 
   }
 

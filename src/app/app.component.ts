@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, ViewController } from 'ionic-angular';
+import { Platform, NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { LogInPage } from '../pages/log-in/log-in';
@@ -16,7 +16,7 @@ export class MyApp {
   rootPage: any = LogInPage;
   @ViewChild('myNav') nav: NavController;
   user: IUser;
-  constructor(public platform: Platform, statusBar: StatusBar, private storage: Storage, splashScreen: SplashScreen, private backgroundMode: BackgroundMode, public localNotifications: LocalNotifications, translate: TranslateService) {
+  constructor(public platform: Platform, statusBar: StatusBar,private storage: Storage, splashScreen: SplashScreen, private backgroundMode: BackgroundMode, public localNotifications: LocalNotifications, translate: TranslateService) {
 
     // this.storage.get("User").then((udata) => {
     //   if (udata) {

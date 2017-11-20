@@ -14,6 +14,8 @@ export class ProgressBarComponent {
 
   text: string;
   @Input('progress') progress;
+  // public c = Math.PI*(90*2);
+  // public pct = ((100-this.progress)/100)*this.c;
   constructor() {
     
   }

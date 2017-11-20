@@ -1,6 +1,6 @@
 import 'rxjs/add/operator/map';
 import { Injectable } from "@angular/core";
-import { Http, Headers, RequestOptionsArgs, Response, RequestMethod } from "@angular/http";
+import { Http, Headers, Response } from "@angular/http";
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
 import { Storage } from '@ionic/storage';

@@ -1,9 +1,13 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ModalController, LoadingController, ToastController } from 'ionic-angular';
 import * as moment from 'moment';
+<<<<<<< HEAD:src/pages/TasksOperation/tasks/tasks.ts
 import { AddTaskPage } from '../add-task/add-task';
 import { TasksServicesApi, ITasks, ITollen } from '../../../shared/TasksService'
 import { CalendarComponent } from 'ionic2-calendar/calendar';
+=======
+import { TasksServicesApi, ITollen } from '../../shared/TasksService'
+>>>>>>> 0f61bc33dfc4209fa39a2ffe7e5d918ec5de9c49:src/pages/tasks/tasks.ts
 import { Storage } from '@ionic/storage';
 import { TranslateService } from '@ngx-translate/core';
 import { IUser } from "../../../shared/IUser";

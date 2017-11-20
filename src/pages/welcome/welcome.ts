@@ -19,7 +19,6 @@ import { RequestsPage } from '../ExternalTabs/requests/requests';
 import { QuereiesPage } from '../ExternalTabs/quereies/quereies';
 import { SettingsTabPage } from '../ExternalTabs/settings-tab/settings-tab';
 
-import * as _ from 'lodash';
 @IonicPage()
 @Component({
   selector: 'page-welcome',
@@ -67,7 +66,6 @@ export class WelcomePage {
     private storage: Storage,
     public translate: TranslateService,
     private backgroundMode: BackgroundMode,
-    private app: App
   ) {
 
 

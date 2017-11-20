@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { LeaveServicesApi, ILeavesTrans } from '../../../shared/LeavesService'
-import * as _ from 'lodash';
 import { Storage } from '@ionic/storage';
 import { GroupDescriptor, DataResult, process } from '@progress/kendo-data-query';
 import { IUser } from '../../../shared/IUser';
@@ -48,11 +47,9 @@ export class TransLeavesPage {
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaveTrans(this.LeavesTrans).subscribe((data) => {
         console.log("LeavesTrans", data)
-       
           this.LeavesCount = data.length;
           this.gridView = process(data, { group: this.groups });
           LeavesLoader.dismiss();
-
       }, (e) => {
         let toast = this.toastCtrl.create({
           message: "Error in getting Trans Leaves, Please Try again later.",
