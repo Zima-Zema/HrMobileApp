@@ -7,12 +7,9 @@ import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 //pages
-<<<<<<< HEAD:src/pages/TasksOperation/done-task/done-task.ts
 import { WelcomePage } from '../../welcome/welcome';
 import { TasksServicesApi, ITasks, ITollen } from '../../../shared/TasksService';
-=======
-import { TasksServicesApi, ITollen } from '../../shared/TasksService';
->>>>>>> 0f61bc33dfc4209fa39a2ffe7e5d918ec5de9c49:src/pages/done-task/done-task.ts
+
 //
 @IonicPage()
 @Component({
@@ -51,11 +48,6 @@ export class DoneTaskPage {
     public loadingCtrl: LoadingController,
     ) {
     this.coming_Task = this.navParams.get('Task');
-<<<<<<< HEAD:src/pages/TasksOperation/done-task/done-task.ts
-=======
-
-  }
->>>>>>> 0f61bc33dfc4209fa39a2ffe7e5d918ec5de9c49:src/pages/done-task/done-task.ts
 
   }
 
