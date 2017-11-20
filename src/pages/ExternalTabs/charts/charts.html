@@ -7,34 +7,52 @@
 </ion-header> -->
 
 
-<ion-content padding>
+<ion-content>
 
   <ion-card>
-    <ion-card-header>
-      Bar Chart
-    </ion-card-header>
-    <ion-card-content>
-      <canvas #barCanvas></canvas>
-    </ion-card-content>
+    <ion-slides dir="ltr" pager>
+
+      <ion-slide>
+        <ion-card>
+          <ion-card-header>
+            {{"BalanceChart" | translate}}
+          </ion-card-header>
+          <ion-card-content>
+            <canvas #doughnutCanvas></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+
+      <ion-slide>
+        <ion-card>
+          <ion-card-header>
+            {{"LeavesChart" | translate}}
+          </ion-card-header>
+          <ion-card-content>
+            <canvas #barCanvas></canvas>
+          </ion-card-content>
+        </ion-card>
+      </ion-slide>
+
+    </ion-slides>
   </ion-card>
 
   <ion-card>
-    <ion-card-header>
-      Doughnut Chart
-    </ion-card-header>
-    <ion-card-content>
-      <canvas #doughnutCanvas></canvas>
-    </ion-card-content>
-  </ion-card>
+      <!-- <ion-slides dir="ltr" pager>
+        
+        <ion-slide> -->
+          <ion-card>
+            <ion-card-header>
+             Period Tasks
+            </ion-card-header>
+            <ion-card-content>
+              <canvas #doughnutTaskCanvas></canvas>
+            </ion-card-content>
+          </ion-card>
+        <!-- </ion-slide>
+  
+      </ion-slides> -->
+    </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      Line Chart
-    </ion-card-header>
-    <ion-card-content>
-      Line Chart
-      <canvas #lineCanvas></canvas>
-    </ion-card-content>
-  </ion-card>
 
 </ion-content>
