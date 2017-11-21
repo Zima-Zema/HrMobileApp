@@ -5,26 +5,49 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>documents</ion-title>
+  <ion-navbar color="newDarkerBlueGreen">
+    <ion-title>{{"Documents" | translate}} ({{docCount}})</ion-title>
   </ion-navbar>
-
 </ion-header>
 
-
 <ion-content padding>
-  <button ion-button full (click)="bloodyDownload()">Download</button>
-  <img src="https://static.pexels.com/photos/34950/pexels-photo.jpg" alt="">
-  <span>{{loadingStatus}}</span>
-  <br />  <br />  <br />  <br />
-  <span>{{loadingProgress}}</span>
-  <br />
-  <span>externalDataDirectory:{{file.externalDataDirectory}}</span>
-  <br />
-
-  <br /> <br /> <br /> <br />
-
-  <span>"{{file.externalRootDirectory}}Download"</span>
+  <ion-note *ngIf="is404Error">You Have NO Docs Right Now</ion-note>
+  <ion-note *ngIf="is500Error">Somthing Went Wrong Try Again</ion-note>
+  <ion-note *ngIf="is0Error">Request TimeOut Please Try Again Later</ion-note>
   <progress-bar *ngIf="loadingProgress > 0 && loadingProgress < 100" [progress]="loadingProgress"></progress-bar>
+  <ion-list>
+    <!-- <ion-item *ngFor="let item of docsData">
+      <ion-thumbnail item-start>
+        <img src="{{baseURL}}{{item.thumbnailUrl}}">
+      </ion-thumbnail>
+      <h2>{{item.name}}</h2>
+      <p>{{getRound(item.size)}}KB</p>
+      <button ion-button  color="newGreen" (click)="bloodyDownload(item.url,item.name)" item-end>
+        <ion-icon name="download"></ion-icon>
+        Download</button>
+    </ion-item> -->
+
+
+
+
+    <ion-item-sliding *ngFor="let item of docsData">
+      <ion-item>
+        <ion-thumbnail item-start>
+          <img src="{{baseURL}}{{item.thumbnailUrl}}">
+        </ion-thumbnail>
+        <h2>{{item.name}}</h2>
+        <p>{{getRound(item.size)}}KB</p>
+      </ion-item>
+      <ion-item-options side="left" style="direction:ltr">
+        <button ion-button color="newGreen" (click)="bloodyDownload(item.url,item.name)">
+          <ion-icon name="download"></ion-icon>
+          Download
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+
+
+
+
+  </ion-list>
 </ion-content>

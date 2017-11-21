@@ -132,6 +132,7 @@
 
      "Period":"Period",
      "TransDate":"Transaction Date",
-     "Holidays":"Holidays"
+     "Holidays":"Holidays",
+     "Documents":"Documents"
 
 }

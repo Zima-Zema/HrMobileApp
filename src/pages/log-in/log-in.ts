@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
     selector: 'page-log-in',
     templateUrl: 'log-in.html',
+    
 })
 export class LogInPage {
 

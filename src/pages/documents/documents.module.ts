@@ -3,7 +3,7 @@ import { IonicPageModule } from 'ionic-angular';
 import { DocumentsPage } from './documents';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { ComponentsModule } from '../../components/components.module';
-
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,8 @@ import { ComponentsModule } from '../../components/components.module';
   ],
   imports: [
     IonicPageModule.forChild(DocumentsPage),
-    ComponentsModule
+    ComponentsModule,
+    TranslateModule
   ],
   providers: [
     FileTransfer
