@@ -133,6 +133,7 @@
      "Period":"Period",
      "TransDate":"Transaction Date",
      "Holidays":"Holidays",
-     "Documents":"Documents"
+     "Documents":"Documents",
+     "ResignRequests":"Resign Request"
 
 }

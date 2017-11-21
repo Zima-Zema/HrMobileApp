@@ -4,6 +4,8 @@ import { RequestLeavePage } from '../../Leaves/request-leave/request-leave';
 import { AddAssignOrderPage } from '../../AssignOrderRequests/add-assign-order/add-assign-order';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../../shared/IUser";
+import { ResignRequestPage} from '../../resign-request/resign-request';
+
 @IonicPage()
 @Component({
   selector: 'page-requests',
@@ -29,7 +31,6 @@ export class RequestsPage {
     console.log("EditProfile");
   }
   gotoLeaveRequests() {
-    //this.navCtrl.push(RequestLeavePage);
     this.app.getRootNav().push(RequestLeavePage)
   }
   gotoSalaryAdvanceRequests() {
@@ -47,5 +48,8 @@ export class RequestsPage {
   gotoAssignOrderRequests() {
     //this.navCtrl.push(AssignOrderRequestsPage);
     this.app.getRootNav().push(AddAssignOrderPage)
+  }
+  gotoResignRequest(){
+    this.app.getRootNav().push(ResignRequestPage);
   }
 }

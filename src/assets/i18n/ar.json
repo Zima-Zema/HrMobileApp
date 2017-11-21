@@ -129,5 +129,7 @@
     "TransDate":"تاريخ الحركة",
     "TransTypeName":"نوع الحركة",
     "Holidays":"العطلات",
-    "Documents":"المرفقات"
+    "Documents":"المرفقات",
+    
+    "ResignRequests":"طلب استقاله"
 }
