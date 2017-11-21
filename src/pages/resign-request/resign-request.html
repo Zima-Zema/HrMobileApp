@@ -9,9 +9,40 @@
 
 <ion-content>
 
+  <form [formGroup]="resignOrderForm" id="resignOrderID">
+
+    <ion-item>
+      <ion-label floating>Employee</ion-label>
+      <ion-input type="text" class="inputField" formControlName="Employee" interface="popover" readonly [(ngModel)]="Employee"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Job</ion-label>
+      <ion-input type="text" class="inputField" formControlName="Job" interface="popover" readonly [(ngModel)]="Job"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Management</ion-label>
+      <ion-input type="text" class="inputField" formControlName="Management" interface="popover" readonly [(ngModel)]="Management"></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-label floating >last working day</ion-label>
+        <ion-datetime ion-datepicker [(ngModel)]="LastDay" (ionCanceled)="LastDayCancel(LastDay)" (ionBlur)="InputBlur('LastDay')" (ionChanged)="LastDayChange($event)"
+          [(value)]="localDateval" formControlName="LastDay" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY"
+          [min]="minDate" [max]="maxDate"></ion-datetime>
+      </ion-item>
+
+    <ion-item>
+      <ion-label floating>Resign Date</ion-label>
+      <ion-input type="text" class="inputField" formControlName="ResignDate" interface="popover" readonly [(ngModel)]="ResignDate"></ion-input>
+    </ion-item>
+
+
+  </form>
 
 </ion-content>
 
 <ion-footer>
-  <button ion-button class="saveresignOrder" color="newBlueGreen" (click)="resignOrder()">Save</button>
+  <button ion-button class="saveresignOrder" form="resignOrderID" color="newBlueGreen" type="submit" (click)="resignOrder()">Save</button>
 </ion-footer>
