@@ -53,9 +53,7 @@ export class AssignOrderServicesApi {
         return this._http.post(`${this.baseURL}newApi/AssignOrder/GetEmpAssignOrders`, bodyString, { headers: headers })
             .map((res: Response) => {
                 return res.json();
-            }).catch((err) => {
-                return err;
-            });
+            })
     }
     //
     GetMangersAssignOrders(body: IEmpAssignOrders): Observable<any> {
@@ -64,9 +62,7 @@ export class AssignOrderServicesApi {
         return this._http.post(`${this.baseURL}newApi/AssignOrder/GetMangerAssignOrders`, bodyString, { headers: headers })
             .map((res: Response) => {
                 return res.json();
-            }).catch((err) => {
-                return err;
-            });
+            })
     }
 
     GetEmployeeForManger(body: IEmpAssignOrders): Observable<any> {
@@ -75,9 +71,7 @@ export class AssignOrderServicesApi {
         return this._http.post(`${this.baseURL}newApi/AssignOrder/GetEmployeeForManger`, bodyString, { headers: headers })
             .map((res: Response) => {
                 return res.json();
-            }).catch((err) => {
-                return err;
-            });
+            })
     }
 
     GetSpacificLeaves(body: ISpacificLeaves): Observable<any> {
@@ -86,9 +80,7 @@ export class AssignOrderServicesApi {
         return this._http.post(`${this.baseURL}newApi/AssignOrder/GetSpacificLeaveTypes`, bodyString, { headers: headers })
             .map((res: Response) => {
                 return res.json();
-            }).catch((err) => {
-                return err;
-            });
+            })
     }
 
     PostAssignOrder(body: IAssignOrderVM): Observable<any> {
@@ -97,9 +89,7 @@ export class AssignOrderServicesApi {
         return this._http.post(`${this.baseURL}newApi/AssignOrder/PostAssignOrder`, bodyString, { headers: headers })
             .map((res: Response) => {
                 return res.json();
-            }).catch((err) => {
-                return err;
-            });
+            })
     }
 
     removeAssignOrder(body: IDeleteRequest): Observable<any> {
@@ -108,9 +98,7 @@ export class AssignOrderServicesApi {
         return this._http.post(`${this.baseURL}newApi/AssignOrder/DeleteAssignOrder`, bodyString, { headers: headers })
             .map((res: Response) => {
                 return res.json();
-            }).catch((err) => {
-                return err;
-            });
+            })
     }
 
     editAssignOrder(body: IAssignOrderVM): Observable<any> {
@@ -119,9 +107,7 @@ export class AssignOrderServicesApi {
         return this._http.post(`${this.baseURL}newApi/AssignOrder/EditAssignOrder`, bodyString, { headers: headers })
             .map((res: Response) => {
                 return res.json();
-            }).catch((err) => {
-                return err;
-            });
+            })
     }
 
     getEmpAssignDates(body:IEmpAssignDates):Observable<any>{
@@ -130,8 +116,6 @@ export class AssignOrderServicesApi {
         return this._http.post(`${this.baseURL}newApi/AssignOrder/GetEmpAssignDates`, bodyString, { headers: headers })
             .map((res: Response) => {
                 return res.json();
-            }).catch((err) => {
-                return err;
-            });
+            })
     }
 }

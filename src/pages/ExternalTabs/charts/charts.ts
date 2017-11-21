@@ -34,6 +34,7 @@ export class ChartsPage {
   public LoadingChart = this.loadingCtrl.create({
     spinner: 'dots'
   });
+  
   public ErrorMsgToast = this.ToastCtrl.create({
     message: "There Is Error, Please Try Again Later...",
     duration: 2000,
@@ -63,7 +64,7 @@ export class ChartsPage {
       //Leaves
       this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((Konafa) => {
         this.ChartData = Konafa.ChartData;
-        this.loadCharts(this.ChartData);
+        this.loadLeavesCharts(this.ChartData);
         this.LoadingChart.dismiss();
       }, (e) => {
         this.LoadingChart.dismiss().then(() => {
@@ -73,7 +74,6 @@ export class ChartsPage {
       //Tasks
       let emp_id = this.user.EmpId;
       this.tasksService.getTasks(emp_id).subscribe((data) => {
-        console.log("Tasks : ", data);
         data.forEach(element => {
           if (element.Status == 1) {
             this.AssignToTasks++;
@@ -83,8 +83,6 @@ export class ChartsPage {
           }
         });
          this.loadTaskChart(this.DoneTasks, this.AssignToTasks)
-        // console.log("Done : ", this.DoneTasks);
-        // console.log("AssignTo : ", this.AssignToTasks);
       }, (e) => {
         this.LoadingChart.dismiss().then(() => {
           this.ErrorMsgToast.present();
@@ -134,7 +132,7 @@ export class ChartsPage {
     })
   }
 
-  loadCharts(chartData: Array<any>) {
+  loadLeavesCharts(chartData: Array<any>) {
     let lableTemp: Array<string> = [];
     let dataTemp: Array<number> = [];
     let DaysTemp: Array<number> = [];
@@ -212,10 +210,6 @@ export class ChartsPage {
           }]
         }
       }
-
     });
   }
-
-
-
 }

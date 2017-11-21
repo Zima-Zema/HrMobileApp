@@ -12,7 +12,7 @@
 
     <ion-item>
       <ion-label floating>Employee</ion-label>
-      <ion-select [(ngModel)]="Employee" (ionChange)="EmployeeChange($event)" formControlName="Employee" interface="popover" (ionBlur)="InputBlur('Emp')">
+      <ion-select [(ngModel)]="Employee" (ionChange)="EmployeeChange(Employee)" formControlName="Employee" interface="popover" (ionBlur)="InputBlur('Emp')">
         <ion-option *ngFor="let item of EmployeeData" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
@@ -38,7 +38,7 @@
       <ion-label floating>Assign Date</ion-label>
       <ion-datetime ion-datepicker [(ngModel)]="AssignDate" (ionCanceled)="AssignDateCancel(AssignDate)" (ionBlur)="InputBlur('AssignDate')"
         (ionChanged)="AssignDateChange($event)" [disabledDates]="filteredArr" [(value)]="localDateval" formControlName="AssignDate"
-        displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minDate"></ion-datetime>
+        displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minDate" [max]="maxDate"></ion-datetime>
     </ion-item>
     <span *ngIf="!AssignOrderForm.controls.AssignDate.valid && AssignOrderForm.controls.AssignDate.touched && AssignOrderForm.controls.AssignDate.dirty">
        <p style="color:crimson ">Required</p> 

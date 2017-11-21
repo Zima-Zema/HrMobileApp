@@ -35,9 +35,10 @@ export class AddAssignOrderPage {
   public minDate: any;
   public maxDate: any;
   public minExpiryDate: any;
-  public ExpiryDatelocalDateval: any;
+
   //Data
   public localDateval: any = new Date();
+  public ExpiryDatelocalDateval: any;
   static leaveType: any;
   //Toast 
   public toast = this.toastCtrl.create({
@@ -45,7 +46,6 @@ export class AddAssignOrderPage {
     duration: 3000,
     position: 'middle'
   });
-
   //Objects
   public user: IUser;
   public EmpAssignOrderObj: IEmpAssignOrders = {
