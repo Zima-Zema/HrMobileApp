@@ -25,6 +25,7 @@ export class AssignOrderRequestsPage {
   public queryText: string;
   public SortedName: string;
   isManager: boolean;
+  public Today = new Date();
 
   public EmpAssignOrderObj: IEmpAssignOrders = {
     EmpId: 0,
@@ -33,10 +34,10 @@ export class AssignOrderRequestsPage {
   }
   public user: IUser;
   public DeleteRequestObj: IDeleteRequest =
-  {
-    Id: 0,
-    Language: ""
-  }
+    {
+      Id: 0,
+      Language: ""
+    }
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -59,8 +60,8 @@ export class AssignOrderRequestsPage {
   ionViewDidLoad() {
 
     this.EmpAssignOrderObj.EmpId = this.user.EmpId;
-    this.EmpAssignOrderObj.Culture=this.user.Culture;
-    this.EmpAssignOrderObj.CompanyId=this.user.CompanyId;
+    this.EmpAssignOrderObj.Culture = this.user.Culture;
+    this.EmpAssignOrderObj.CompanyId = this.user.CompanyId;
     var OrdersLoader = this.loadingCtrl.create({
       content: "Loading Orders..."
     });

@@ -28,7 +28,7 @@
 
     <ion-item>
         <ion-label floating >Planed Date</ion-label>
-        <ion-datetime ion-datepicker [(ngModel)]="LastDay"  (ionCanceled)="LastDayCancel(LastDay)" (ionBlur)="InputBlur('LastDay')" (ionChanged)="LastDayChange($event)"
+        <ion-datetime ion-datepicker [(ngModel)]="LastDay"  (ionCanceled)="LastDayCancel(LastDay)" (ionChanged)="LastDayChange($event)"
           [(value)]="localDateval" formControlName="LastDay" displayFormat="DDD, MMM DD, YYYY" pickerFormat="MMM DD YYYY"
           [min]="minDate" [max]="maxDate"
           ></ion-datetime>
@@ -44,5 +44,5 @@
 </ion-content>
 
 <ion-footer>
-  <button ion-button class="saveresignOrder" form="resignOrderID" color="newBlueGreen" type="submit" (click)="resignOrder()">Save</button>
+  <button ion-button class="saveresignOrder" form="resignOrderID" color="newBlueGreen" type="submit" (click)="resignOrder()" [disabled]="!IsChanged" >Save</button>
 </ion-footer>

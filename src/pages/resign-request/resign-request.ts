@@ -5,13 +5,11 @@ import { Storage } from '@ionic/storage';
 import { IUser } from '../../shared/IUser';
 import * as moment from 'moment';
 import { ITerminationListVM, TerminationServicesApi, IPostTernimationVM } from '../../shared/TerminationServices'
-//import { ChangeDetectionStrategy } from '@angular/core/src/change_detection/constants';
 
 @IonicPage()
 @Component({
   selector: 'page-resign-request',
   templateUrl: 'resign-request.html',
-  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResignRequestPage {
   //Form
@@ -26,13 +24,14 @@ export class ResignRequestPage {
   public minDate: any;
   public maxDate: any;
   public Id: number;
+  public IsChanged = false;
   //Toast
   public toast = this.toastCtrl.create({
     message: "There is an error, Please try again later.",
     duration: 3000,
     position: 'middle'
   });
-
+  // Objects
   public user: IUser;
   public TerminationListObj: ITerminationListVM = {
     Culture: "",
@@ -82,11 +81,9 @@ export class ResignRequestPage {
     var ResignLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
-    //this.zone.run(() => {
     ResignLoader.present().then(() => {
       this.TerminationService.GetTermination(this.TerminationListObj).subscribe((data) => {
         ResignLoader.dismiss().then(() => {
-          console.log("data : ", data);
           this.Employee = data.Employee;
           this.Job = data.Job;
           this.Management = data.Department;
@@ -94,7 +91,6 @@ export class ResignRequestPage {
           this.ResignDate = data.RequestDate;
           this.Id = data.Id;
           this.changeDetectref.detectChanges();
-          //this.tryClick();
         })
 
       }, (e) => {
@@ -103,9 +99,6 @@ export class ResignRequestPage {
         })
       })
     })
-
-    //})
-
   }
 
   resignOrder() {
@@ -122,7 +115,6 @@ export class ResignRequestPage {
     this.PostTernimation.PlanedDate = this.LastDay;
     this.PostTernimation.Culture = this.user.Culture;
     this.PostTernimation.CompanyId = this.user.CompanyId;
-    console.log("Resign b2a", this.PostTernimation);
     ResignLoader.present().then(() => {
       this.TerminationService.PostTerminationRequest(this.PostTernimation).subscribe((data) => {
         ResignLoader.dismiss().then(() => {
@@ -137,21 +129,13 @@ export class ResignRequestPage {
     })
   }
 
-  LastDayCancel(LastDay) {
-    console.log("Cancel LastDay", LastDay);
-  }
-
   LastDayChange(LastDay) {
-    console.log("Change LastDay", LastDay);
-    this.LastDay = this.bloodyIsoString(LastDay)
+    this.LastDay = this.bloodyIsoString(LastDay);
+      this.IsChanged = true;
   }
 
-  InputBlur(input) {
-    switch (input) {
-      case 'LastDay':
-        console.log("switch case last day")
-        break;
-    }
+  LastDayCancel(planedDay) {
+    this.IsChanged = false;
   }
 
   bloodyIsoString(bloodyDate: Date) {
@@ -169,9 +153,5 @@ export class ResignRequestPage {
       ':' + pad(bloodyDate.getSeconds()) +
       dif + pad(tzo / 60) +
       ':' + pad(tzo % 60);
-  }
-
-  tryClick() {
-    console.log("tryClick");
   }
 }
