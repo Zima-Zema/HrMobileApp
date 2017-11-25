@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{"ResignRequests" | translate}}</ion-title>
+    <ion-title>{{"TerminationRequests" | translate}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -13,7 +13,7 @@
 
     <ion-item>
       <ion-label floating>Employee</ion-label>
-      <ion-input type="text" class="inputField" formControlName="Employee" interface="popover" readonly [(ngModel)]="Employee"></ion-input>
+      <ion-input type="text" class="inputField" formControlName="Employee" interface="popover" readonly [(ngModel)]="Employee" ></ion-input>
     </ion-item>
 
     <ion-item>
@@ -27,17 +27,17 @@
     </ion-item>
 
     <ion-item>
-        <ion-label floating >last working day</ion-label>
-        <ion-datetime ion-datepicker [(ngModel)]="LastDay" (ionCanceled)="LastDayCancel(LastDay)" (ionBlur)="InputBlur('LastDay')" (ionChanged)="LastDayChange($event)"
-          [(value)]="localDateval" formControlName="LastDay" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY"
-          [min]="minDate" [max]="maxDate"></ion-datetime>
+        <ion-label floating >Planed Date</ion-label>
+        <ion-datetime ion-datepicker [(ngModel)]="LastDay"  (ionCanceled)="LastDayCancel(LastDay)" (ionBlur)="InputBlur('LastDay')" (ionChanged)="LastDayChange($event)"
+          [(value)]="localDateval" formControlName="LastDay" displayFormat="DDD, MMM DD, YYYY" pickerFormat="MMM DD YYYY"
+          [min]="minDate" [max]="maxDate"
+          ></ion-datetime>
       </ion-item>
 
     <ion-item>
-      <ion-label floating>Resign Date</ion-label>
-      <ion-input type="text" class="inputField" formControlName="ResignDate" interface="popover" readonly [(ngModel)]="ResignDate"></ion-input>
+      <ion-label floating>Request Date</ion-label>
+      <ion-input type="text" class="inputField" formControlName="ResignDate" interface="popover" readonly  [ngModel]="ResignDate | dateMoment" (ngModelChange)="ResignDate=$event"></ion-input>
     </ion-item>
-
 
   </form>
 
