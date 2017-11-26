@@ -138,6 +138,15 @@ export class AddAssignOrderPage {
     var EmployeesLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
+    var LastCalcsLoader = this.loadingCtrl.create({
+      spinner: 'dots'
+    });
+    var LastCalcstoast = this.toastCtrl.create({
+      message: "Error to get last value of Calculation Method.",
+      duration: 3000,
+      position: 'middle'
+    });
+
     this.filteredArr = [];
     this.Duration = null;
     this.AssignDate = null;
@@ -157,6 +166,20 @@ export class AddAssignOrderPage {
         })
       })
     })
+    //
+    LastCalcsLoader.present().then(() => {
+      this.AssignOrderService.GetLastEmpCalcusValue(this.GetEmpAssignOrderObj).subscribe((data) => {
+        LastCalcsLoader.dismiss().then(() => {
+          this.CalculMethodSelect = data;
+          this.CalculMethodChange(data);
+        })
+      }, (e) => {
+        LastCalcsLoader.dismiss().then(() => {
+          LastCalcstoast.present();
+        })
+      })
+    })
+
   }
 
   DurationChange(Dur) {
@@ -226,8 +249,10 @@ export class AddAssignOrderPage {
       spinner: 'dots'
     });
     if (cal == 2) {
-      this.minExpiryDate = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
-      this.ExpiryDatelocalDateval = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+      if (this.AssignDate != null) {
+        this.minExpiryDate = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+        this.ExpiryDatelocalDateval = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
+      }
       this.SpacificLeaves.CompanyId = this.user.CompanyId;
       this.SpacificLeaves.Culture = this.user.Culture;
       LeavesLoader.present().then(() => {

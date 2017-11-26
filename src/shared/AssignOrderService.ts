@@ -118,4 +118,13 @@ export class AssignOrderServicesApi {
                 return res.json();
             })
     }
+
+    GetLastEmpCalcusValue(body:IEmpAssignDates):Observable<number>{
+        let bodyString = JSON.stringify(body);
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
+        return this._http.post(`${this.baseURL}newApi/AssignOrder/GetLastEmpCalcsMethod`, bodyString, { headers: headers })
+            .map((res: Response) => {
+                return res.json();
+            })
+    }
 }

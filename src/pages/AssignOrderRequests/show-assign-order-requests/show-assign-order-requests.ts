@@ -14,7 +14,6 @@ export class ShowAssignOrderRequestsPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ShowAssignOrderRequestsPage');
   }
 
 }

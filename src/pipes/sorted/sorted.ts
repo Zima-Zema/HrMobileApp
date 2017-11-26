@@ -6,9 +6,6 @@ import * as _ from 'lodash';
 export class SortedPipe implements PipeTransform {
 
   transform(value: Array<any>, ...args) {
-    console.log("sortedPipe : ",value);
-    var ss=_.sortBy(value, args);
-    console.log("ss : ",ss)
      return _.sortBy(value, args);
   }
 }
