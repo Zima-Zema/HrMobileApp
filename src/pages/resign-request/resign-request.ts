@@ -92,7 +92,6 @@ export class ResignRequestPage {
           this.Id = data.Id;
           this.changeDetectref.detectChanges();
         })
-
       }, (e) => {
         ResignLoader.dismiss().then(() => {
           this.toast.present();

@@ -29,11 +29,8 @@ export class NotificationsPage {
   errorMsg: string = undefined;
   constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private loadingCtrl: LoadingController, private modalCtrl: ModalController, private storage: Storage) {
     let view = this.navCtrl.getActive();
-    console.log("The Bloody Modal>>", view);
     this.storage.get("BaseURL").then((val) => {
       this.baseUrl = val;
-      console.log("BaseUrl From Notity services>>>", this.baseUrl);
-
     });
     this.storage.get("User").then((udata) => {
       if (udata) {
@@ -46,7 +43,6 @@ export class NotificationsPage {
   }
 
   ionViewWillEnter() {
-    console.log('ionViewWillEnter NotificationsPage');
         this.errorMsg = undefined;
     this.start = 0;
 
@@ -69,7 +65,6 @@ export class NotificationsPage {
         //   this.notifications.push(notification);
         // }
       }, (error) => {
-        console.log("error in notification", error);
         this.errorMsg = "Connection TimeOut Please Check Your Internet Connection."
         loader.dismiss();
         // this.notifications=[];
@@ -87,19 +82,15 @@ export class NotificationsPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NotificationsPage');
-
   }
 
   doInfinite(infiniteScroll: any) {
-    console.log("doInfinite, start is currently>>>", this.start);
     this.start += 10;
     this.notifyApi.getNotifications(this.start, this.notifyParams).subscribe((data) => {
 
       // if (this.start < 10) {
       //   this.storage.set("topNotify", data.value);
       // }
-      console.log("Notification List>>>", data.value);
       // if(this.flag == true){
       //   this.notifications=[];
       //   this.flag=false;
@@ -112,7 +103,6 @@ export class NotificationsPage {
       infiniteScroll.complete();
 
     }, (error) => {
-      console.log("error in notification", error);
       infiniteScroll.enable(error);
       // this.notifications=[];
       // this.storage.get("topNotify").then((data) => {
@@ -128,7 +118,6 @@ export class NotificationsPage {
     let modal = this.modalCtrl.create(NotificationDetailsPage, notification);
     modal.present();
     modal.onDidDismiss((data) => {
-      console.log("ModalReturn", data);
       NotificationsPage.notificationsList.find(n => n.Id == data).Read = true;
       this.notifications.find(n => n.Id == data).Read = true;
       WelcomePage.notificationNumber = NotificationsPage.notificationsList.filter((val) => val.Read == false).length;

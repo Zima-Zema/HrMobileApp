@@ -27,7 +27,7 @@
     </ion-item>
 
     <ion-item>
-        <ion-label floating >Planed Date</ion-label>
+        <ion-label floating >Planed Date <ion-note style="color:crimson">*</ion-note></ion-label>
         <ion-datetime ion-datepicker [(ngModel)]="LastDay"  (ionCanceled)="LastDayCancel(LastDay)" (ionChanged)="LastDayChange($event)"
           [(value)]="localDateval" formControlName="LastDay" displayFormat="DDD, MMM DD, YYYY" pickerFormat="MMM DD YYYY"
           [min]="minDate" [max]="maxDate"
