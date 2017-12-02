@@ -4,7 +4,9 @@
 
 * Show tasks, with title, description, start and end dates.
 * Add Attachment to each task.
-* Smart Leaves list, with CRUD operation.
+* Smart Leaves list, with CRUD operations.
+* Assign Order List. with CRUD operations.
+* Termination Page 
 * Supports Multi-Language.
 
 ## Screen Shots
