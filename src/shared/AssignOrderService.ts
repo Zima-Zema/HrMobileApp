@@ -12,6 +12,7 @@ export interface IEmpAssignOrders {
 export interface ISpacificLeaves {
     CompanyId: number,
     Culture: string,
+    EmpId: number
 }
 export interface IAssignOrderVM {
     Id: number,

@@ -58,7 +58,8 @@ export class EditAssignOrderPage {
   }
   public SpacificLeaves: ISpacificLeaves = {
     Culture: "",
-    CompanyId: 0
+    CompanyId: 0,
+    EmpId:0
   }
   public AssignOrderObj: IAssignOrderVM = {
     AssignDate: null,
@@ -142,6 +143,7 @@ export class EditAssignOrderPage {
       }
       this.SpacificLeaves.CompanyId = this.user.CompanyId;
       this.SpacificLeaves.Culture = this.user.Culture;
+      this.SpacificLeaves.EmpId=this.user.EmpId;
       this.AssignOrderService.GetSpacificLeaves(this.SpacificLeaves).subscribe((data) => {
         this.LeavesData = data;
       });
