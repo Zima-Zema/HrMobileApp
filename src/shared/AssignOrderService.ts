@@ -39,11 +39,11 @@ export interface IDeleteRequest {
 @Injectable()
 
 export class AssignOrderServicesApi {
-    private baseURL: string;
+    private baseURL: string= "http://enterprisehr-001-site1.ctempurl.com/";
     constructor(private _http: Http, private _storage: Storage) {
-        this._storage.get("BaseURL").then((val) => {
-            this.baseURL = val;
-        });
+        // this._storage.get("BaseURL").then((val) => {
+        //     this.baseURL = val;
+        // });
     }
 
     GetEmpAssignOrders(body: IEmpAssignOrders): Observable<any> {

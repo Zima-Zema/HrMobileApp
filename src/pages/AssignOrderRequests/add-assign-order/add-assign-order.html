@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar color="newDarkerBlueGreen">
-    <ion-title>Add Assign Order</ion-title>
+    <ion-title>{{"AddAssignOrder" | translate}}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="ResetForm()">
         <ion-icon name="refresh"></ion-icon>
@@ -16,65 +16,66 @@
   <form [formGroup]="AssignOrderForm" id="AssignOrderID">
 
     <ion-item>
-      <ion-label floating>Employee</ion-label>
+      <ion-label floating>{{"Employee" | translate}}</ion-label>
       <ion-select [(ngModel)]="Employee" formControlName="Employee" interface="popover" (ionBlur)="InputBlur('Emp')" (ionChange)="EmployeeChange(Employee)">
         <ion-option *ngFor="let item of EmployeeData" value="{{item.id}}">{{item.name}}</ion-option>
       </ion-select>
     </ion-item>
     <span *ngIf="!AssignOrderForm.controls.Employee.valid && AssignOrderForm.controls.Employee.touched && AssignOrderForm.controls.Employee.dirty">
-             <p style="color:crimson ">Required</p> 
+      <p style="color:crimson ">{{"Required" | translate}}</p>
     </span>
 
     <ion-item>
-      <ion-label floating>Duration</ion-label>
+      <ion-label floating>{{"Duration" | translate}}</ion-label>
       <ion-select [(ngModel)]="Duration" formControlName="Duration" (ionBlur)="InputBlur('Dur')" (ionChange)="DurationChange(Duration)"
         interface="popover">
-        <ion-option value="1">Day</ion-option>
-        <ion-option value="2">0.25 Day</ion-option>
-        <ion-option value="3">0.5 Day</ion-option>
+        <ion-option value="1">{{"day" |translate}}</ion-option>
+        <ion-option value="2">{{"quartDay"| translate}}</ion-option>
+        <ion-option value="3">{{"halfDay" | translate}}</ion-option>
       </ion-select>
     </ion-item>
     <span *ngIf="!AssignOrderForm.controls.Duration.valid && AssignOrderForm.controls.Duration.touched && AssignOrderForm.controls.Duration.dirty">
-       <p style="color:crimson ">Required</p> 
+      <p style="color:crimson ">{{"Required" | translate}}</p>
     </span>
 
 
     <ion-item>
-      <ion-label floating >Assign Date</ion-label>
-      <ion-datetime ion-datepicker [(ngModel)]="AssignDate" (ionCanceled)="AssignDateCancel(AssignDate)" (ionBlur)="InputBlur('AssignDate')" (ionChanged)="AssignDateChange($event)"
-        [disabledDates]="filteredArr" [(value)]="localDateval" formControlName="AssignDate" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY"
-        [min]="minDate" [max]="maxDate"></ion-datetime>
+      <ion-label floating>{{"AssignDate" | translate}}</ion-label>
+      <ion-datetime ion-datepicker  [(ngModel)]="AssignDate" (ionCanceled)="AssignDateCancel(AssignDate)" (ionBlur)="InputBlur('AssignDate')"
+        (ionChanged)="AssignDateChange($event)" [disabledDates]="filteredArr" [(value)]="localDateval" formControlName="AssignDate"
+        displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minDate" [max]="maxDate"></ion-datetime>
     </ion-item>
     <span *ngIf="!AssignOrderForm.controls.AssignDate.valid && AssignOrderForm.controls.AssignDate.touched && AssignOrderForm.controls.AssignDate.dirty">
-       <p style="color:crimson ">Required</p> 
+      <p style="color:crimson ">{{"Required" | translate}}</p>
     </span>
 
     <ion-item>
-      <ion-label floating>Calculation Method</ion-label>
+      <ion-label floating>{{"CalculationMethod" | translate}}</ion-label>
       <ion-select [(ngModel)]="CalculMethodSelect" formControlName="CalculMethodSelect" (ionBlur)="InputBlur('calcuMethod')" (ionChange)="CalculMethodChange(CalculMethodSelect)"
         interface="popover">
-        <ion-option value="1">Monetory</ion-option>
-        <ion-option value="2">Time Compensation</ion-option>
+        <ion-option value="1">{{"Monetory" | translate}}</ion-option>
+        <ion-option value="2">{{"TimeCompensation" | translate}}</ion-option>
       </ion-select>
     </ion-item>
     <span *ngIf="!AssignOrderForm.controls.CalculMethodSelect.valid && AssignOrderForm.controls.CalculMethodSelect.touched && AssignOrderForm.controls.CalculMethodSelect.dirty">
-       <p style="color:crimson ">Required</p> 
+      <p style="color:crimson ">{{"Required" | translate}}</p>
     </span>
 
     <ion-item *ngIf="CalculMethodSelect == 2">
       <ion-label floating>{{"LeaveType" | translate}}</ion-label>
       <ion-select [(ngModel)]="leaveType" formControlName="leaveType" interface="popover">
-        <ion-option *ngFor="let item of LeavesData" value="{{item.id}}">{{item.name}}</ion-option>
+        <ion-option *ngFor="let item of LeavesData" value="{{item.Id}}">{{item.Name}}</ion-option>
       </ion-select>
     </ion-item>
     <span *ngIf="!AssignOrderForm.controls.leaveType.valid">
-     <p *ngIf="AssignOrderForm.get('leaveType').hasError('required')" style="color:crimson ">{{AssignOrderForm.get('leaveType').getError('required')}}</p>
+      <p *ngIf="AssignOrderForm.get('leaveType').hasError('required')" style="color:crimson ">{{AssignOrderForm.get('leaveType').getError('required')}}</p>
     </span>
 
     <ion-item *ngIf="CalculMethodSelect == 2">
-      <ion-label floating>Expiry Date</ion-label>
+      <ion-label floating>{{"ExpiryDate" | translate}}</ion-label>
       <ion-datetime ion-datepicker [(ngModel)]="ExpiryDate" [disabledDates]="filteredExpiryDate" (ionChanged)="ExpiryDateChange($event)"
-        [(value)]="ExpiryDatelocalDateval" formControlName="ExpiryDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat" [min]="minExpiryDate"></ion-datetime>
+        [(value)]="ExpiryDatelocalDateval"  formControlName="ExpiryDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat"
+        [min]="minExpiryDate"></ion-datetime>
     </ion-item>
 
     <ion-item>
@@ -88,5 +89,5 @@
 </ion-content>
 <ion-footer>
   <button ion-button class="saveAssignOrder" form="AssignOrderID" color="newBlueGreen" type="submit" (click)="saveAssignOrder()"
-    [disabled]="!AssignOrderForm.valid">Save</button>
+    [disabled]="!AssignOrderForm.valid">{{"Save"|translate}}</button>
 </ion-footer>

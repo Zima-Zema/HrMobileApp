@@ -9,16 +9,17 @@
 }
 
 .Sortedleft{
-    float: left;
-    width: 49.9%;
+    
+    width: 49.5%;
     padding: 1%;
     position: absolute;
+    float: right;
     background-color: #33cccc;
 }
 
 .Sortedright{
-    float: right;
-    width: 49.9%;
+    float: left;
+    width: 49.5%;
     padding: 1%;
     background-color: #33cccc;
 }

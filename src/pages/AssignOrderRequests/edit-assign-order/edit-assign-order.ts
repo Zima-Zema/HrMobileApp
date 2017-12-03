@@ -143,7 +143,7 @@ export class EditAssignOrderPage {
       }
       this.SpacificLeaves.CompanyId = this.user.CompanyId;
       this.SpacificLeaves.Culture = this.user.Culture;
-      this.SpacificLeaves.EmpId=this.user.EmpId;
+      this.SpacificLeaves.EmpId=this.ComingAssign.EmpId;
       this.AssignOrderService.GetSpacificLeaves(this.SpacificLeaves).subscribe((data) => {
         this.LeavesData = data;
       });

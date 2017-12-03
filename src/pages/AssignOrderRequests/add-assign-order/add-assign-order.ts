@@ -35,6 +35,7 @@ export class AddAssignOrderPage {
   public minDate: any;
   public maxDate: any;
   public minExpiryDate: any;
+  public showCalender:any;
 
   //Data
   public localDateval: any = new Date();
@@ -136,10 +137,14 @@ export class AddAssignOrderPage {
   }
 
   EmployeeChange(EmpId) {
+    console.log("EmployeeChange : ",EmpId)
     var EmployeesLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
     var LastCalcsLoader = this.loadingCtrl.create({
+      spinner: 'dots'
+    });
+    var LeavesLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
     var LastCalcstoast = this.toastCtrl.create({
@@ -179,6 +184,22 @@ export class AddAssignOrderPage {
           LastCalcstoast.present();
         })
       })
+    })
+    //
+    this.SpacificLeaves.CompanyId = this.user.CompanyId;
+    this.SpacificLeaves.Culture = this.user.Culture;
+    this.SpacificLeaves.EmpId = EmpId;
+    LeavesLoader.present().then(() => {
+      this.AssignOrderService.GetSpacificLeaves(this.SpacificLeaves).subscribe((data) => {
+        LeavesLoader.dismiss().then(() => {
+          this.LeavesData = data;
+        })
+
+      }, (e) => {
+        LeavesLoader.dismiss().then(() => {
+          this.toast.present();
+        })
+      });
     })
 
   }
@@ -246,29 +267,13 @@ export class AddAssignOrderPage {
   }
 
   CalculMethodChange(cal) {
-    var LeavesLoader = this.loadingCtrl.create({
-      spinner: 'dots'
-    });
+   
     if (cal == 2) {
       if (this.AssignDate != null) {
         this.minExpiryDate = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
         this.ExpiryDatelocalDateval = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
       }
-      this.SpacificLeaves.CompanyId = this.user.CompanyId;
-      this.SpacificLeaves.Culture = this.user.Culture;
-      this.SpacificLeaves.EmpId = this.user.EmpId;
-      LeavesLoader.present().then(() => {
-        this.AssignOrderService.GetSpacificLeaves(this.SpacificLeaves).subscribe((data) => {
-          LeavesLoader.dismiss().then(() => {
-            this.LeavesData = data;
-          })
 
-        }, (e) => {
-          LeavesLoader.dismiss().then(() => {
-            this.toast.present();
-          })
-        });
-      })
 
       this.AssignOrderForm.controls['leaveType'].enable();
       this.AssignOrderForm.controls['leaveType'].setValidators([AddAssignOrderPage.isRequired]);
@@ -301,6 +306,7 @@ export class AddAssignOrderPage {
   }
 
   ExpiryDateChange(ExpiryDate) {
+
     this.ExpiryDate = this.bloodyIsoString(ExpiryDate);
   }
 

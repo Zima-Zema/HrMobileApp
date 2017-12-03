@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 export enum DurationsEnum{
-  "1 day"=1,'0.25 day','0.5 day'
+  "1 "=1,'0.25 ','0.5 '
 }
 @Pipe({
   name: 'assignOrderDuration',

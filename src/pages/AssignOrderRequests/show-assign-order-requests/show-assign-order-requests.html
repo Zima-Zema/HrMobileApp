@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar color="newDarkerBlueGreen">
-    <ion-title>Assign Order Requests</ion-title>
+    <ion-title>{{ "AssignOrderRequests" | translate}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -9,46 +9,46 @@
 
 <ion-content>
   <ion-item>
-    <ion-label floating class="labelColor">Assign Order Series</ion-label>
+    <ion-label floating class="labelColor">{{"AssignOrderSeries" | translate}}</ion-label>
     <ion-input type="number" readonly disabled [(ngModel)]="AssignorderDetails.Id"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label floating class="labelColor">Assigned To</ion-label>
+    <ion-label floating class="labelColor">{{"AssignedTo" | translate}}</ion-label>
     <ion-input type="text" readonly disabled [(ngModel)]="AssignorderDetails.Employee"></ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label floating class="labelColor">Duration</ion-label>
+    <ion-label floating class="labelColor">{{"Duration" | translate}}</ion-label>
     <ion-input type="text" disabled [ngModel]="AssignorderDetails.Duration | assignOrderDuration" (ngModelChange)="AssignorderDetails.Duration=$event">
     </ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label floating class="labelColor">Assign Date</ion-label>
+    <ion-label floating class="labelColor">{{"AssignDate" | translate}}</ion-label>
     <ion-input type="text" disabled [ngModel]="AssignorderDetails.AssignDate | dateMoment" (ngModelChange)="AssignorderDetails.AssignDate=$event">
     </ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label floating class="labelColor">Calculated Method</ion-label>
+    <ion-label floating class="labelColor">{{"CalculatedMethod" | translate}}</ion-label>
     <ion-input type="text" disabled [ngModel]="AssignorderDetails.CalcMethod | assignOrderCalcsMethodPipe" (ngModelChange)="AssignorderDetails.CalcMethod=$event">
     </ion-input>
   </ion-item>
 
   <ion-item *ngIf="AssignorderDetails.CalcMethod == 2">
-    <ion-label floating class="labelColor">Leave Type</ion-label>
+    <ion-label floating class="labelColor">{{"LeaveType" | translate}}</ion-label>
     <ion-input type="text" disabled readonly [(ngModel)]="AssignorderDetails.LeaveType"></ion-input>
   </ion-item>
 
   <ion-item *ngIf="AssignorderDetails.CalcMethod == 2">
-    <ion-label floating class="labelColor">Expiry Date</ion-label>
+    <ion-label floating class="labelColor">{{"ExpiryDate" | translate}}</ion-label>
     <ion-input type="text" disabled [ngModel]="AssignorderDetails.ExpiryDate | dateMoment" (ngModelChange)="AssignorderDetails.ExpiryDate=$event">
     </ion-input>
   </ion-item>
 
   <ion-item>
-    <ion-label floating class="labelColor">Description</ion-label>
+    <ion-label floating class="labelColor">{{"Description" | translate}}</ion-label>
     <ion-input type="text" disabled readonly [(ngModel)]="AssignorderDetails.TaskDesc"></ion-input>
   </ion-item>
 </ion-content>

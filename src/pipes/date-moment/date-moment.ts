@@ -5,19 +5,25 @@ import { TranslateService } from '@ngx-translate/core';
   name: 'dateMoment',
 })
 export class DateMomentPipe implements PipeTransform {
-lang;
-constructor(translate: TranslateService) {
-  this.lang=translate.getDefaultLang();
-}
+  lang;
+  constructor(translate: TranslateService) {
+    this.lang = translate.getDefaultLang();
+  }
   transform(value: string, ...args) {
     if (this.lang === 'ar') {
       moment.locale('ar-sa');
-      return moment(value).format('ddd,DD MMM, YYYY');
+      if (value == null || value == "") { return null }
+      else {
+        return moment(value).format('ddd,DD MMM, YYYY');
+      }
     }
-    else{
+    else {
       moment.locale('en');
-      return moment(value).format('ddd, MMM DD, YYYY');
+      if (value == null || value == "") { return null }
+      else {
+        return moment(value).format('ddd, MMM DD, YYYY');
+      }
     }
-   
+
   }
 }

@@ -12,6 +12,7 @@ export class ShowAssignOrderPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.AssignorderDetails = this.navParams.data;
+    console.log("AssignorderDetails : ",this.AssignorderDetails)
   }
 
   ionViewDidLoad() {

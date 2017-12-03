@@ -1,17 +1,17 @@
 <ion-header>
 
   <ion-navbar color="newDarkerBlueGreen">
-    <ion-title *ngIf="!toggled">Assign Requests ({{AssignOrderCount}})</ion-title>
+    <ion-title *ngIf="!toggled"> {{"AssignOrderRequests" | translate}} ({{AssignOrderCount}})</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="toggle()">
         <ion-icon name="search"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-searchbar *ngIf="toggled" placeholder="Filter By Series Number" [(ngModel)]="queryText" (ionInput)="filterItems()"></ion-searchbar>
+    <ion-searchbar *ngIf="toggled" placeholder="{{'FilterBySeriesNumber' | translate}}" [(ngModel)]="queryText" (ionInput)="filterItems()"></ion-searchbar>
   </ion-navbar>
 
-  <button ion-button class="Sortedleft" (click)="SortedByYear()">By Date</button>
-  <button ion-button class="Sortedright" (click)="SortedByName()">By Name</button>
+  <button ion-button class="Sortedleft" (click)="SortedByYear()">{{"ByDate" | translate}}</button>
+  <button ion-button class="Sortedright" (click)="SortedByName()">{{"ByName" | translate}}</button>
 </ion-header>
 
 <ion-content>
