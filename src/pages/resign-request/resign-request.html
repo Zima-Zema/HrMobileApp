@@ -12,22 +12,22 @@
   <form [formGroup]="resignOrderForm" id="resignOrderID">
 
     <ion-item>
-      <ion-label floating>Employee</ion-label>
+      <ion-label floating>{{ "Employee" | translate}}</ion-label>
       <ion-input type="text" class="inputField" formControlName="Employee" interface="popover" readonly [(ngModel)]="Employee" ></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label floating>Job</ion-label>
+      <ion-label floating>{{ "Job" | translate}}</ion-label>
       <ion-input type="text" class="inputField" formControlName="Job" interface="popover" readonly [(ngModel)]="Job"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label floating>Management</ion-label>
+      <ion-label floating>{{ "Management" | translate }}</ion-label>
       <ion-input type="text" class="inputField" formControlName="Management" interface="popover" readonly [(ngModel)]="Management"></ion-input>
     </ion-item>
 
     <ion-item>
-        <ion-label floating >Planed Date <ion-note style="color:crimson">*</ion-note></ion-label>
+        <ion-label floating >{{ "PlanedDate" | translate }} <ion-note style="color:crimson">*</ion-note></ion-label>
         <ion-datetime ion-datepicker [(ngModel)]="LastDay"  (ionCanceled)="LastDayCancel(LastDay)" (ionChanged)="LastDayChange($event)"
           [(value)]="localDateval" formControlName="LastDay" displayFormat="DDD, MMM DD, YYYY" pickerFormat="MMM DD YYYY"
           [min]="minDate" [max]="maxDate"
@@ -35,7 +35,7 @@
       </ion-item>
 
     <ion-item>
-      <ion-label floating>Request Date</ion-label>
+      <ion-label floating> {{ "RequestDate" | translate}}</ion-label>
       <ion-input type="text" class="inputField" formControlName="ResignDate" interface="popover" readonly  [ngModel]="ResignDate | dateMoment" (ngModelChange)="ResignDate=$event"></ion-input>
     </ion-item>
 

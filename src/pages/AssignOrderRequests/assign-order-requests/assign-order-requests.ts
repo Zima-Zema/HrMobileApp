@@ -58,12 +58,19 @@ export class AssignOrderRequestsPage {
 
 
   ionViewDidLoad() {
+    let a: any = {};
+    this.translationService.get('LoadingOrders').subscribe((data) => {
+      a.message = data;
+    })
+    this.translationService.get('ErrorLoadingOrders').subscribe((data) => {
+      a.Error = data;
+    })
 
     this.EmpAssignOrderObj.EmpId = this.user.EmpId;
     this.EmpAssignOrderObj.Culture = this.user.Culture;
     this.EmpAssignOrderObj.CompanyId = this.user.CompanyId;
     var OrdersLoader = this.loadingCtrl.create({
-      content: "Loading Orders..."
+      content: a.message
     });
     OrdersLoader.present().then(() => {
       this.AssignOrderService.GetMangersAssignOrders(this.EmpAssignOrderObj).subscribe((data) => {
@@ -80,7 +87,7 @@ export class AssignOrderRequestsPage {
         }
       }, (e) => {
         let toast = this.toastCtrl.create({
-          message: "Error in getting Orders, Please Try again later.",
+          message:  a.Error,
           duration: 3000,
           position: 'middle'
         });
@@ -172,15 +179,25 @@ export class AssignOrderRequestsPage {
   }
 
   DeleteAssignOrder(item) {
+    let a: any = {};
+    this.translationService.get('AssignOrderToastMsg').subscribe((data) => {
+      a.title = data;
+    })
+    this.translationService.get('AssignOrderdeleting').subscribe((data) => {
+      a.message = data;
+    })
+    this.translationService.get('AssignOrderErrorDeleting').subscribe((data) => {
+      a.Error = data;
+    })
     var removeLoader = this.loadingCtrl.create({
-      content: 'deleting...'
+      content: a.message
     });
     let toast = this.toastCtrl.create({
-      message: "Assign Order Is Deleted Successfully...",
+      message: a.title,
       duration: 3000,
       position: 'bottom'
     });
-    this.DeleteRequestObj.Id = item.Id;
+    this.DeleteRequestObj.Id =  item.Id;
     this.DeleteRequestObj.Language = this.user.Culture;
     removeLoader.present().then(() => {
       this.AssignOrderService.removeAssignOrder(this.DeleteRequestObj).subscribe((data) => {
@@ -197,7 +214,7 @@ export class AssignOrderRequestsPage {
       }, (e) => {
         removeLoader.dismiss().then(() => {
           let toast = this.toastCtrl.create({
-            message: "Error in deleting assign order, Please try again later.",
+            message: a.Error,
             duration: 3000,
             position: 'bottom'
           });

@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { Storage } from '@ionic/storage';
 import { IUser } from '../../shared/IUser';
 import * as moment from 'moment';
-import { ITerminationListVM, TerminationServicesApi, IPostTernimationVM } from '../../shared/TerminationServices'
+import { ITerminationListVM, TerminationServicesApi, IPostTernimationVM } from '../../shared/TerminationServices';
+import { TranslateService } from "@ngx-translate/core";
 
 @IonicPage()
 @Component({
@@ -25,9 +26,10 @@ export class ResignRequestPage {
   public maxDate: any;
   public Id: number;
   public IsChanged = false;
+  public msg:any={};
   //Toast
   public toast = this.toastCtrl.create({
-    message: "There is an error, Please try again later.",
+    message: "",
     duration: 3000,
     position: 'middle'
   });
@@ -52,7 +54,8 @@ export class ResignRequestPage {
     public toastCtrl: ToastController,
     public TerminationService: TerminationServicesApi,
     private storage: Storage,
-    public changeDetectref: ChangeDetectorRef) {
+    public changeDetectref: ChangeDetectorRef,
+    private translationService: TranslateService) {
 
     this.localDateval = new Date();
     this.minDate = new Date();
@@ -78,10 +81,14 @@ export class ResignRequestPage {
   }
 
   ionViewDidLoad() {
+    this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+      this.msg.message = data;
+    })
     var ResignLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
     ResignLoader.present().then(() => {
+      console.log("TerminationListObj : ",this.TerminationListObj);
       this.TerminationService.GetTermination(this.TerminationListObj).subscribe((data) => {
         ResignLoader.dismiss().then(() => {
           this.Employee = data.Employee;
@@ -94,6 +101,7 @@ export class ResignRequestPage {
         })
       }, (e) => {
         ResignLoader.dismiss().then(() => {
+          this.toast.setMessage(this.msg.error);
           this.toast.present();
         })
       })
@@ -101,6 +109,9 @@ export class ResignRequestPage {
   }
 
   resignOrder() {
+    this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+      this.msg.message = data;
+    })
     var ResignLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
@@ -122,6 +133,7 @@ export class ResignRequestPage {
         })
       }, (e) => {
         ResignLoader.dismiss().then(() => {
+          this.toast.setMessage(this.msg.error);
           this.toast.present();
         })
       })

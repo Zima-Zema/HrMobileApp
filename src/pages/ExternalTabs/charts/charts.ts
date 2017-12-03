@@ -112,7 +112,11 @@ export class ChartsPage {
             'rgba(128, 128, 0 , 0.2)',
             'rgba(41, 56, 185 ,0.2)', //magenta
             'rgba(91, 44, 111 , 0.2)', //dark magenta
-            'rgba(26, 115, 50 ,0.2)' //dark green
+            'rgba(26, 115, 50 ,0.2)', //dark green
+            'rgba(113, 125, 126 ,0.2)', // grey
+            'rgba(23, 32, 42 ,0.2)', //black
+            'rgba(253, 237, 236,0.2)'
+            
           ],
           hoverBackgroundColor: [
             "#FF6384",
@@ -125,7 +129,10 @@ export class ChartsPage {
             "#808000",
             "#2938B9", // magenta
             "#5B2C6F", //dark magenta
-            "#1A7332" //dark green
+            "#1A7332",//dark green
+            "#717D7E", //grey
+            "#17202A", //black
+            "#FDEDEC"
           ]
         }]
       }

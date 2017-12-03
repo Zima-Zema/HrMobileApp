@@ -7,7 +7,8 @@ import { Storage } from '@ionic/storage';
 import { IUser } from '../../../shared/IUser';
 import * as _ from "lodash";
 import * as moment from 'moment';
-import { AssignOrderRequestsPage } from '../assign-order-requests/assign-order-requests'
+import { AssignOrderRequestsPage } from '../assign-order-requests/assign-order-requests';
+import { TranslateService } from "@ngx-translate/core";
 
 @IonicPage()
 @Component({
@@ -43,9 +44,11 @@ export class EditAssignOrderPage {
   public ExpiryDatelocalDateval: any;
   static leaveType: any;
   public IsChanged: boolean;
+  public msg: any = {};
+  
   //toast
   public toast = this.toastCtrl.create({
-    message: "There is an error, Please try again later.",
+    message: "",
     duration: 3000,
     position: 'middle'
   });
@@ -86,7 +89,8 @@ export class EditAssignOrderPage {
     public toastCtrl: ToastController,
     public AssignOrderService: AssignOrderServicesApi,
     public LeaveServices: LeaveServicesApi,
-    private storage: Storage) {
+    private storage: Storage,
+    private translationService: TranslateService) {
 
     this.ComingAssign = this.navParams.data;
 
@@ -119,6 +123,9 @@ export class EditAssignOrderPage {
       spinner: 'dots'
     });
 
+    this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+      this.msg.message = data;
+    })
 
     OrdersLoader.present().then(() => {
       //Loading Employees
@@ -133,6 +140,7 @@ export class EditAssignOrderPage {
         }
       }, (e) => {
         OrdersLoader.dismiss().then(() => {
+          this.toast.setMessage(this.msg.message);
           this.toast.present();
         });
       })
@@ -184,6 +192,9 @@ export class EditAssignOrderPage {
     var EmployeesLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
+    this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+      this.msg.message = data;
+    })
     this.GetEmpAssignOrderObj.CompanyId = this.user.CompanyId;
     this.GetEmpAssignOrderObj.EmpId = EmpId;
     EmployeesLoader.present().then(() => {
@@ -195,6 +206,7 @@ export class EditAssignOrderPage {
         })
       }, (e) => {
         EmployeesLoader.dismiss().then(() => {
+          this.toast.setMessage(this.msg.message);
           this.toast.present();
         })
       })
@@ -207,6 +219,9 @@ export class EditAssignOrderPage {
   }
 
   disableHolidaysDuration(Dur){
+    this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+      this.msg.message = data;
+    })
     var HolidaysLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
@@ -234,6 +249,7 @@ export class EditAssignOrderPage {
           })
         }, (e) => {
           HolidaysLoader.dismiss().then(() => {
+            this.toast.setMessage(this.msg.message);
             this.toast.present();
           })
         })
@@ -353,16 +369,27 @@ export class EditAssignOrderPage {
   }
 
   UpdateAssignOrder() {
+    this.translationService.get('EditAssignOrderMsg').subscribe((data) => {
+      this.msg.message = data;
+    })
+    this.translationService.get('EditErrorAssignOrderMsg').subscribe((data) => {
+      this.msg.error = data;
+    })
+    this.translationService.get('EditSuccessAssignOrderMsg').subscribe((data) => {
+      this.msg.success = data;
+    })
+
+
     let EditAssignOrderLoader = this.loadingCtrl.create({
-      content: "Editing Assign Order..."
+      content: this.msg.message
     });
     let EditErrorToast = this.toastCtrl.create({
-      message: "Error in Editing Assign Order, Please Try again later.",
+      message: this.msg.error,
       duration: 3000,
       position: 'middle'
     });
     let EditSuccessToast = this.toastCtrl.create({
-      message: 'Assign Order is edited successfully.',
+      message: this.msg.success,
       duration: 2000,
       position: 'bottom'
     });

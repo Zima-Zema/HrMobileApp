@@ -18,11 +18,11 @@ export interface IPostTernimationVM{
 
 @Injectable()
 export class TerminationServicesApi {
-    private baseURL: string;
+    private baseURL: string="http://enterprisehr-001-site1.ctempurl.com/";
     constructor(private _http: Http, private _storage: Storage) {
-        this._storage.get("BaseURL").then((val) => {
-            this.baseURL = val;
-        });
+        // this._storage.get("BaseURL").then((val) => {
+        //     this.baseURL = val;
+        // });
     }
 
     GetTermination(body: ITerminationListVM): Observable<any> {

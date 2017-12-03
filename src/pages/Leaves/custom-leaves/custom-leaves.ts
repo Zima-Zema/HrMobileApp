@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 import { LeaveServicesApi } from '../../../shared/LeavesService';
 import { IUser } from '../../../shared/IUser';
 import { Storage } from '@ionic/storage';
+import { TranslateService } from "@ngx-translate/core";
+
 @IonicPage()
 @Component({
   selector: 'page-custom-leaves',
@@ -14,32 +16,40 @@ export class CustomLeavesPage {
   public StanderdHolidaysArr: Array<any> = [];
   public CompanyId = 0;
   public HolidaysCount = 0;
+  public msg: any = {};
   user: IUser;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private LeaveService: LeaveServicesApi,
     public loadingCtrl: LoadingController,
-    public toastCtrl: ToastController, private storage: Storage) {
+    public toastCtrl: ToastController,
+    private storage: Storage,
+    private translationService: TranslateService) {
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
         this.CompanyId = this.user.CompanyId;
-
       }
     });
   }
 
   ionViewDidLoad() {
-    this.CompanyId=this.user.CompanyId;
+    this.translationService.get('LoadingLeaves').subscribe((data) => {
+      this.msg.message = data;
+    })
+    this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+      this.msg.error = data;
+    })
+    this.CompanyId = this.user.CompanyId;
     var LeavesLoader = this.loadingCtrl.create({
-      content: "Loading Leaves..."
+      content: this.msg.message
     });
     LeavesLoader.present().then(() => {
       this.LeaveService.getHolidays(this.CompanyId).subscribe((data) => {
         if (data) {
           LeavesLoader.dismiss().then(() => {
             this.MainArray.push(data);
-            
+
             this.MainArray.forEach(element => {
               this.CustomHolidaysArr = element.Customs;
               this.StanderdHolidaysArr = this.getDateofStandardDays(element.Standard);
@@ -52,7 +62,7 @@ export class CustomLeavesPage {
         }
       }, (e) => {
         let toast = this.toastCtrl.create({
-          message: "Error in getting Leaves, Please Try again later.",
+          message: this.msg.error,
           duration: 3000,
           position: 'middle'
         });

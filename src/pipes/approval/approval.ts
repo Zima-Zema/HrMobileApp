@@ -10,9 +10,7 @@ export enum ArabicApprovalStatusEnum {
   name: 'approvalPipe',
 })
 export class ApprovalPipe implements PipeTransform {
-  /**
-   *
-   */
+
   lang;
   constructor(public translate: TranslateService) {
     this.lang = translate.getDefaultLang();

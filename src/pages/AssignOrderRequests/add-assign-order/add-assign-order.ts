@@ -7,6 +7,7 @@ import { Storage } from '@ionic/storage';
 import { IUser } from '../../../shared/IUser';
 import * as _ from "lodash";
 import * as moment from 'moment';
+import { TranslateService } from "@ngx-translate/core";
 
 @IonicPage()
 @Component({
@@ -35,15 +36,16 @@ export class AddAssignOrderPage {
   public minDate: any;
   public maxDate: any;
   public minExpiryDate: any;
-  public showCalender:any;
-
+  public showCalender: any;
+  public msg: any = {};
   //Data
   public localDateval: any = new Date();
   public ExpiryDatelocalDateval: any;
   static leaveType: any;
   //Toast 
+
   public toast = this.toastCtrl.create({
-    message: "There is an error, Please try again later.",
+    message: "",
     duration: 3000,
     position: 'middle'
   });
@@ -58,7 +60,7 @@ export class AddAssignOrderPage {
   public SpacificLeaves: ISpacificLeaves = {
     Culture: "",
     CompanyId: 0,
-    EmpId:0
+    EmpId: 0
   }
 
   public AssignOrderObj: IAssignOrderVM = {
@@ -87,7 +89,8 @@ export class AddAssignOrderPage {
     public toastCtrl: ToastController,
     public AssignOrderService: AssignOrderServicesApi,
     public LeaveServices: LeaveServicesApi,
-    private storage: Storage) {
+    private storage: Storage,
+    private translationService: TranslateService) {
 
     this.minDate = new Date();
     let max = moment(this.minDate).add(1, 'years').calendar();
@@ -111,6 +114,9 @@ export class AddAssignOrderPage {
   }//end of constructor
 
   ionViewDidLoad() {
+    this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+      this.msg.message = data;
+    })
     var OrdersLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
@@ -119,6 +125,7 @@ export class AddAssignOrderPage {
     this.EmpAssignOrderObj.Culture = this.user.Culture;
     OrdersLoader.present().then(() => {
       this.AssignOrderService.GetEmployeeForManger(this.EmpAssignOrderObj).subscribe((data) => {
+        console.log("data : ", data);
         if (data) {
           OrdersLoader.dismiss().then(() => {
             this.EmployeeData = data;
@@ -130,6 +137,7 @@ export class AddAssignOrderPage {
       }, (e) => {
 
         OrdersLoader.dismiss().then(() => {
+          this.toast.setMessage(this.msg.message);
           this.toast.present();
         });
       })
@@ -137,7 +145,12 @@ export class AddAssignOrderPage {
   }
 
   EmployeeChange(EmpId) {
-    console.log("EmployeeChange : ",EmpId)
+    this.translationService.get('ErrorLastCalcsMsg').subscribe((data) => {
+      this.msg.error = data;
+    })
+    this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+      this.msg.message = data;
+    })
     var EmployeesLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
@@ -148,7 +161,7 @@ export class AddAssignOrderPage {
       spinner: 'dots'
     });
     var LastCalcstoast = this.toastCtrl.create({
-      message: "Error to get last value of Calculation Method.",
+      message: this.msg.error,
       duration: 3000,
       position: 'middle'
     });
@@ -168,6 +181,7 @@ export class AddAssignOrderPage {
         })
       }, (e) => {
         EmployeesLoader.dismiss().then(() => {
+          this.toast.setMessage(this.msg.message);
           this.toast.present();
         })
       })
@@ -197,6 +211,7 @@ export class AddAssignOrderPage {
 
       }, (e) => {
         LeavesLoader.dismiss().then(() => {
+          this.toast.setMessage(this.msg.message);
           this.toast.present();
         })
       });
@@ -205,6 +220,9 @@ export class AddAssignOrderPage {
   }
 
   DurationChange(Dur) {
+    this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+      this.msg.message = data;
+    })
     var HolidaysLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
@@ -231,6 +249,7 @@ export class AddAssignOrderPage {
           })
         }, (e) => {
           HolidaysLoader.dismiss().then(() => {
+            this.toast.setMessage(this.msg.message);
             this.toast.present();
           })
         })
@@ -267,13 +286,12 @@ export class AddAssignOrderPage {
   }
 
   CalculMethodChange(cal) {
-   
+
     if (cal == 2) {
       if (this.AssignDate != null) {
         this.minExpiryDate = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
         this.ExpiryDatelocalDateval = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
       }
-
 
       this.AssignOrderForm.controls['leaveType'].enable();
       this.AssignOrderForm.controls['leaveType'].setValidators([AddAssignOrderPage.isRequired]);
@@ -285,7 +303,6 @@ export class AddAssignOrderPage {
       this.ExpiryDate = null;
       this.AssignOrderForm.controls['leaveType'].disable();
       this.AssignOrderForm.controls['leaveType'].clearValidators();
-
     }
   }
 
@@ -340,9 +357,6 @@ export class AddAssignOrderPage {
           this.AssignOrderForm.controls['AssignDate'].markAsDirty({ onlySelf: true });
         }
         break;
-
-      // default:
-      //   break;
     }
 
   }
@@ -356,17 +370,26 @@ export class AddAssignOrderPage {
   }
 
   saveAssignOrder() {
+    this.translationService.get('AddAssignOrderLoaderMsg').subscribe((data) => {
+      this.msg.add = data;
+    })
+    this.translationService.get('EditErrorToastMsg').subscribe((data) => {
+      this.msg.error = data;
+    })
+    this.translationService.get('EditSuccessToastMsg').subscribe((data) => {
+      this.msg.success = data;
+    })
 
     let AddAssignOrderLoader = this.loadingCtrl.create({
-      content: "Adding Assign Order..."
+      content: this.msg.add
     });
     let EditErrorToast = this.toastCtrl.create({
-      message: "Error in Adding Assign Order, Please Try again later.",
+      message: this.msg.error,
       duration: 3000,
       position: 'middle'
     });
     let EditSuccessToast = this.toastCtrl.create({
-      message: 'Assign Order is added successfully.',
+      message: this.msg.success,
       duration: 2000,
       position: 'bottom'
     });

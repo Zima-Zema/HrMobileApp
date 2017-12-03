@@ -5,6 +5,7 @@ import { AssignOrderServicesApi, IEmpAssignOrders } from '../../../shared/Assign
 import * as _ from 'lodash';
 import { IUser } from '../../../shared/IUser';
 import { Storage } from '@ionic/storage';
+import { TranslateService } from "@ngx-translate/core";
 
 @IonicPage()
 @Component({
@@ -33,7 +34,8 @@ export class AssignOrderPage {
     public AssignOrderService: AssignOrderServicesApi,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
-    private storage: Storage, ) {
+    private storage: Storage,
+    private translationService: TranslateService ) {
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
@@ -42,12 +44,20 @@ export class AssignOrderPage {
   }
 
   ionViewDidLoad() {
+    let a: any = {};
+    this.translationService.get('LoadingOrders').subscribe((data) => {
+      a.message = data;
+    })
+    this.translationService.get('ErrorLoadingOrders').subscribe((data) => {
+      a.Error = data;
+    })
+    
     this.EmpAssignOrderObj.EmpId = this.user.EmpId;
     this.EmpAssignOrderObj.CompanyId=this.user.CompanyId;
     this.EmpAssignOrderObj.Culture=this.user.Culture;
 
     var OrdersLoader = this.loadingCtrl.create({
-      content: "Loading Orders..."
+      content: a.message
     });
     OrdersLoader.present().then(() => {
       this.AssignOrderService.GetEmpAssignOrders(this.EmpAssignOrderObj).subscribe((data) => {
@@ -63,10 +73,10 @@ export class AssignOrderPage {
         }
       }, (e) => {
         let toast = this.toastCtrl.create({
-          message: "Error in getting Orders, Please Try again later.",
+          message: a.Error,
           duration: 3000,
           position: 'middle'
-        });
+        }); 
         OrdersLoader.dismiss().then(() => {
           toast.present();
         });

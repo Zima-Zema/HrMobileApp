@@ -88,6 +88,9 @@
     "MyAssignOrders": "تكليفاتي",
     "quartDay":"ربع يوم",
     "halfDay":"نص يوم",
+    "AssignOrderToastMsg":"...تم حذف هذا الطلب بنجاح",
+    "AssignOrderdeleting":"حذف...",
+    "AssignOrderErrorDeleting":"خطأ فى حذف هذا الامر, حاول مره اخري...",
     "AssignOrderRequests": "أوامر التكليف",
     "Custody": "عهدتي",
     "officialHoliday": "العطلات الرسمية",
@@ -129,12 +132,31 @@
     "Category": "تصنيف",
     "Serial": "ر/ت",
     "Quantity": "كمية",
-    "LangErrorToast": "حدث خطأ أثناء الحفظ من فضلك حاول مرة أخرى...",
+    "LangErrorToast": "حدث خطأ أثناء الحفظ, من فضلك حاول مرة أخرى...",
     "LangSuccessToast": "تم الحفظ بنجاح...",
     "Period": "الفترة",
     "TransDate": "تاريخ الحركة",
     "TransTypeName": "نوع الحركة",
     "Holidays": "العطلات",
     "Documents": "المرفقات",
-    "TerminationRequests": "طلب استقاله"
+    "TerminationRequests": "طلب استقاله",
+
+    "Job":"الوظيفه",
+    "Management":"الاداره",
+    "PlanedDate":"تاريخ الاستقاله",
+    "RequestDate":"تاريخ تقديم الاستقاله",
+    
+    "LoadingOrders":"تحميل الاوامر",
+    "LoadingLeaves":"تحميل الاجازات",
+    "ErrorLoadingOrders":"خطأ فى تحميل هذا الامر, من فضلك حاول مره اخري...",
+    "ErrorToasterMsg":"حدث خطأ, من فضلك حاول مرة أخرى...",
+    "ErrorLastCalcsMsg":"خطأ فى الحصول علي قيمه طريقه الحساب الاخيره لهذا الموظف...",
+    "AddAssignOrderLoaderMsg":"اضافه امر التكليف...",
+    "EditErrorToastMsg":"خطأ فى تحميل هذا الامر, من فضلك حاول مره اخري...",
+    "EditSuccessToastMsg":"تمت اضافه امر التكليف بنجاح...",
+    "PeriodTasks":"المهام",
+
+    "EditAssignOrderMsg":"تعديل امر التكليف...",
+    "EditErrorAssignOrderMsg":"خطأ فى تعديل هذا الامر, من فضلك حاول مره اخري...",
+    "EditSuccessAssignOrderMsg":"تم تعديل امر التكليف بنجاح..."
 }

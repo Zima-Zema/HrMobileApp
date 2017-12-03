@@ -4,6 +4,7 @@ import { LeaveServicesApi, ILeavesTrans } from '../../../shared/LeavesService'
 import { Storage } from '@ionic/storage';
 import { GroupDescriptor, DataResult, process } from '@progress/kendo-data-query';
 import { IUser } from '../../../shared/IUser';
+import { TranslateService } from "@ngx-translate/core";
 @IonicPage()
 @Component({
   selector: 'page-trans-leaves',
@@ -12,6 +13,7 @@ import { IUser } from '../../../shared/IUser';
 export class TransLeavesPage {
   public LeavesCount: Number;
   public CreditQtyCount;
+  public msg:any={};
   public LeavesTrans: ILeavesTrans = {
     CompanyId: 0,
     Culture: "",
@@ -24,7 +26,8 @@ export class TransLeavesPage {
     private LeaveServices: LeaveServicesApi,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
-    private storage: Storage) {
+    private storage: Storage,
+    private translationService: TranslateService) {
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
@@ -41,8 +44,14 @@ export class TransLeavesPage {
   private gridView: DataResult;
 
   private loadProducts(): void {
+    this.translationService.get('LoadingLeaves').subscribe((data) => {
+      this.msg.message = data;
+    })
+    this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+      this.msg.error = data;
+    })
     var LeavesLoader = this.loadingCtrl.create({
-      content: "Loading Leaves..."
+      content: this.msg.message
     });
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaveTrans(this.LeavesTrans).subscribe((data) => {
@@ -52,7 +61,7 @@ export class TransLeavesPage {
           LeavesLoader.dismiss();
       }, (e) => {
         let toast = this.toastCtrl.create({
-          message: "Error in getting Trans Leaves, Please Try again later.",
+          message: this.msg.error,
           duration: 3000,
           position: 'middle'
         });
