@@ -125,7 +125,6 @@ export class AddAssignOrderPage {
     this.EmpAssignOrderObj.Culture = this.user.Culture;
     OrdersLoader.present().then(() => {
       this.AssignOrderService.GetEmployeeForManger(this.EmpAssignOrderObj).subscribe((data) => {
-        console.log("data : ", data);
         if (data) {
           OrdersLoader.dismiss().then(() => {
             this.EmployeeData = data;
