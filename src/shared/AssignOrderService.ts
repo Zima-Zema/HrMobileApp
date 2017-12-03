@@ -27,12 +27,10 @@ export interface IAssignOrderVM {
     CompanyId: number,
     Language: string
 }
-
 export interface IEmpAssignDates{
     CompanyId: number,
     EmpId: number
 }
-
 export interface IDeleteRequest {
     Id: number,
     Language: string
@@ -56,7 +54,7 @@ export class AssignOrderServicesApi {
                 return res.json();
             })
     }
-    //
+    
     GetMangersAssignOrders(body: IEmpAssignOrders): Observable<any> {
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
