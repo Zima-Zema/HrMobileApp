@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ActionSheetController, ViewController, ToastController, LoadingController } from 'ionic-angular';
-
+import { TranslateService } from '@ngx-translate/core';
+import { Storage } from '@ionic/storage';
 //plugins
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
@@ -9,6 +10,7 @@ import { FilePath } from '@ionic-native/file-path';
 //pages
 import { WelcomePage } from '../../welcome/welcome';
 import { TasksServicesApi, ITasks, ITollen } from '../../../shared/TasksService';
+import { IUser } from "../../../shared/IUser";
 
 //
 @IonicPage()
@@ -28,13 +30,13 @@ export class DoneTaskPage {
   TollenObj: ITollen = {
     CompanyId: 0,
     Files: [],
-    Language: "en-GB",
+    Language: "",
     Source: "EmpTasksForm",
     TaskId: this.coming_Task.id,
     FileDetails: []
   }
 
-
+  user: IUser;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public actionSheetCtrl: ActionSheetController,
@@ -45,25 +47,44 @@ export class DoneTaskPage {
     private viewCtrl: ViewController,
     private tasksService: TasksServicesApi,
     public toastCtrl: ToastController,
+    private storage: Storage,
     public loadingCtrl: LoadingController,
-    ) {
+    private translationService: TranslateService) {
+      this.storage.get("User").then((udata) => {
+        if (udata) {
+          this.user = udata;
+          this.TollenObj.CompanyId = this.user.CompanyId;
+          this.TollenObj.Language = this.user.Language;
+        }
+      });
     this.coming_Task = this.navParams.get('Task');
-
   }
 
   //action sheet for images
   public presentActionSheet() {
+
+    let a: any = {};
+    this.translationService.get('AlbumTitle').subscribe((data) => {
+      a.title = data;
+    })
+    this.translationService.get('CameraText').subscribe((data) => {
+      a.camera = data;
+    })
+    this.translationService.get('GalleryText').subscribe((data) => {
+      a.gallery = data;
+    })
+
     let actionSheet = this.actionSheetCtrl.create({
-      title: 'Choose Album',
+      title: a.title,
       buttons: [
         {
-          text: 'Take a new photo',
+          text: a.camera,
           handler: () => {
             this.openImage(this.cam.PictureSourceType.CAMERA);
           }
         },
         {
-          text: 'Open your gallery',
+          text: a.gallery,
           handler: () => {
             this.openImage(this.cam.PictureSourceType.SAVEDPHOTOALBUM);
           }
@@ -74,11 +95,20 @@ export class DoneTaskPage {
   }
   //action sheet for files
   public openFile() {
+
+    let a: any = {};
+    this.translationService.get('FileTitle').subscribe((data) => {
+      a.title = data;
+    })
+    this.translationService.get('UploadText').subscribe((data) => {
+      a.text = data;
+    })
+
     let actionSheet = this.actionSheetCtrl.create({
-      title: 'Choose File',
+      title: a.title,
       buttons: [
         {
-          text: 'Upload from your device',
+          text: a.text,
           handler: () => { this.uploadfile(); }
         }
       ]
@@ -87,16 +117,24 @@ export class DoneTaskPage {
   }
   //
   valuechange(it) {
-    console.log("textarea valuechange : ", it)
     this.uploadtext();
   }
 
   //upload the text written in textarea
   uploadtext() {
+
+    let a: any = {};
+    this.translationService.get('TextEmptyMsg').subscribe((data) => {
+      a.title = data;
+    })
+    this.translationService.get('ErrorWriteFile').subscribe((data) => {
+      a.ErrorWrite = data;
+    })
+
     let str_file = this.disc.trim();
     if (str_file == '') {
       let err_toast = this.toastCtrl.create({
-        message: "Text file is empty...",
+        message: a.title,
         duration: 2000,
         position: 'middle'
       });
@@ -106,7 +144,7 @@ export class DoneTaskPage {
       this.ext = ".txt";
       let textfile = this.createFileName(this.ext);
       let err_toast = this.toastCtrl.create({
-        message: "Sorry, Error to write file, Please try again.",
+        message: a.ErrorWrite,
         duration: 3000,
         position: 'middle'
       });
@@ -129,6 +167,12 @@ export class DoneTaskPage {
   }
 
   openImage(SourceType) {
+
+    let a: any = {};
+    this.translationService.get('ErrorGetImage').subscribe((data) => {
+      a.Errorget = data;
+    })
+
     let Options = {
       sourceType: SourceType,
       destinationType: this.cam.DestinationType.DATA_URL,
@@ -151,7 +195,7 @@ export class DoneTaskPage {
     }).catch(
       (e: Error) => {
         let err_toast = this.toastCtrl.create({
-          message: "Sorry, Error to get image, Please try again.",
+          message: a.Errorget,
           duration: 3000,
           position: 'middle',
           cssClass: "tryerror.scss"
@@ -183,6 +227,18 @@ export class DoneTaskPage {
 
   //
   uploadfile() {
+
+    let a: any = {};
+    this.translationService.get('SavedFile').subscribe((data) => {
+      a.SaveFile = data;
+    })
+    this.translationService.get('findFilePath').subscribe((data) => {
+      a.FilePath = data;
+    })
+    this.translationService.get('openFile').subscribe((data) => {
+      a.openFile = data;
+    })
+
     this.fileChooser.open().then((uri) => {
       this.filePath.resolveNativePath(uri).then(filePath => {
         let textfile = filePath.substr(filePath.lastIndexOf('/') + 1);
@@ -194,14 +250,14 @@ export class DoneTaskPage {
           this.TollenObj.FileDetails.push(textfile);
           this.TollenObj.Files.push(arr);
           let success_toast = this.toastCtrl.create({
-            message: "File Is Saved, Press correct to upload...",
+            message: a.SaveFile,
             duration: 3000,
             position: 'bottom'
           });
           success_toast.present();
         }).catch((e: Error) => {
           let err_toast = this.toastCtrl.create({
-            message: "Sorry, Error to find file path, Please try again.",
+            message: a.FilePath,
             duration: 3000,
             position: 'middle'
           });
@@ -209,7 +265,7 @@ export class DoneTaskPage {
         })
       }).catch((e: Error) => {
         let err_toast = this.toastCtrl.create({
-          message: "Sorry, Error to resolve file path, Please try again.",
+          message: a.FilePath,
           duration: 3000,
           position: 'middle'
         });
@@ -217,7 +273,7 @@ export class DoneTaskPage {
       })
     }).catch((e: Error) => {
       let err_toast = this.toastCtrl.create({
-        message: "Sorry, Error to open file, Please try again.",
+        message: a.openFile,
         duration: 3000,
         position: 'middle',
         cssClass: "tryerror.scss"
@@ -228,25 +284,28 @@ export class DoneTaskPage {
   }
   //
   SaveData() {
-    // let user: any = this.storage.get("User").then((user) => {
-    //   this.TollenObj.CompanyId = user.CompanyId;
-    //   this.TollenObj.Language = user.Language;
-    // });
+    let a: any = {};
+    this.translationService.get('LoadDocument').subscribe((data) => {
+      a.loadDocum = data;
+    })
+    this.translationService.get('ErroraddDocument').subscribe((data) => {
+      a.ErrorAddDocum = data;
+    })
+
     this.TollenObj.TaskId = this.coming_Task.id;
     let loader = this.loadingCtrl.create({
-      content: "Loading Documentations..."
+      content: a.loadDocum
     });
     loader.present().then(() => {
       this.tasksService.saveData(this.TollenObj).subscribe((data) => {
         if (data) {
           loader.dismiss();
           this.viewCtrl.dismiss(this.TollenObj).then(() => {
-            console.log("i'm dismissed......")
           })
         }
       }, (err) => {
         let err_toast = this.toastCtrl.create({
-          message: "Fail to Add Documentations.",
+          message: a.ErrorAddDocum,
           duration: 3000,
           position: 'middle',
         });
@@ -254,7 +313,6 @@ export class DoneTaskPage {
           err_toast.present();
           this.viewCtrl.dismiss()
         });
-
       });
     })
   }

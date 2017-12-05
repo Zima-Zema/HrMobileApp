@@ -101,7 +101,7 @@ export class ResignRequestPage {
         })
       }, (e) => {
         ResignLoader.dismiss().then(() => {
-          this.toast.setMessage(this.msg.error);
+          this.toast.setMessage(this.msg.message);
           this.toast.present();
         })
       })
@@ -112,11 +112,14 @@ export class ResignRequestPage {
     this.translationService.get('ErrorToasterMsg').subscribe((data) => {
       this.msg.message = data;
     })
+    this.translationService.get('correctToasterMsg').subscribe((data) => {
+      this.msg.correct = data;
+    })
     var ResignLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
     let SuccessToast = this.toastCtrl.create({
-      message: "Termination Planned Date has changed.",
+      message: this.msg.correct,
       duration: 2000,
       position: 'bottom'
     });
@@ -133,7 +136,7 @@ export class ResignRequestPage {
         })
       }, (e) => {
         ResignLoader.dismiss().then(() => {
-          this.toast.setMessage(this.msg.error);
+          this.toast.setMessage(this.msg.message);
           this.toast.present();
         })
       })
