@@ -67,8 +67,6 @@ export class WelcomePage {
     public translate: TranslateService,
     private backgroundMode: BackgroundMode,
   ) {
-
-    //this.navCtrl.setRoot(WelcomePage);
     this.ChartTab = ChartsPage;
     this.RequestsTab = RequestsPage;
     this.QuereiesTab = QuereiesPage;
@@ -119,7 +117,6 @@ export class WelcomePage {
           });
         });
       })
-
       this.localNotifications.on('click', (data) => {
         this.navCtrl.push(NotificationsPage);
       });
@@ -138,7 +135,6 @@ export class WelcomePage {
           WelcomePage.notificationNumber = data;
         }, (err) => {
         });
-
       }
     }
   }
