@@ -80,7 +80,8 @@ export class ForceChangePasswordPage {
   onSubmit() {
     this.generalError = null;
     let loader = this.loadingCtrl.create({
-      content: "Loading .."
+      //content: "Loading .."
+      spinner: 'dots'
     });
     loader.present();
 

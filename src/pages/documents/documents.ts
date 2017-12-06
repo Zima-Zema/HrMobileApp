@@ -59,19 +59,20 @@ export class DocumentsPage {
 
   ionViewDidLoad() {
 
-    console.log('ionViewDidLoad DocumentsPage');
+    let a: any = {};
+    this.translationService.get('LoadingDocs').subscribe((data) => {
+      a.message = data;
+    })
 
     var DocsLoader = this.loadingCtrl.create({
-      content: "Loading Docs..."
+      content: a.message
     });
     DocsLoader.present().then(() => {
       this.docsApi.getEmpDocs(this.EmpDocs).subscribe((data) => {
-        console.log("docsData", data);
         this.docsData = data;
         this.docCount = data.length;
         DocsLoader.dismiss()
       }, (error) => {
-        console.log("the bloody error", error);
         DocsLoader.dismiss();
         if (error.status === 0) {
           this.is0Error = true;

@@ -5,7 +5,7 @@ import { NotificationServiceApi, INotification, INotifyParams } from "../../shar
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
 import { WelcomePage } from '../welcome/welcome';
-
+import { TranslateService } from "@ngx-translate/core";
 
 @IonicPage()
 @Component({
@@ -27,7 +27,14 @@ export class NotificationsPage {
   public notifications: Array<INotification> = [];
   private start: number = 0;
   errorMsg: string = undefined;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public notifyApi: NotificationServiceApi, private loadingCtrl: LoadingController, private modalCtrl: ModalController, private storage: Storage) {
+  
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public notifyApi: NotificationServiceApi,
+    private loadingCtrl: LoadingController,
+    private modalCtrl: ModalController,
+    private storage: Storage,
+    private translationService: TranslateService) {
     let view = this.navCtrl.getActive();
     this.storage.get("BaseURL").then((val) => {
       this.baseUrl = val;
@@ -43,11 +50,16 @@ export class NotificationsPage {
   }
 
   ionViewWillEnter() {
-        this.errorMsg = undefined;
+    this.errorMsg = undefined;
     this.start = 0;
+    var a:any={};
+    this.translationService.get('ConnTimeOutErrorMsg').subscribe((data) => {
+      a.message = data;
+    })
 
     let loader = this.loadingCtrl.create({
-      content: "Loading...",
+      //content: "Loading...",
+      spinner: 'dots'
     });
     loader.present().then(() => {
       NotificationsPage.notificationsList = [];
@@ -57,63 +69,27 @@ export class NotificationsPage {
         WelcomePage.notificationNumber = NotificationsPage.notificationsList.filter((val) => val.Read == false).length;
         this.notifications = data.value;
         loader.dismiss();
-        //this.flag=false;
-        // if (this.start < 10) {
-        //   this.storage.set("topNotify", data.value);
-        // }
-        // for (let notification of data.value) {
-        //   this.notifications.push(notification);
-        // }
       }, (error) => {
-        this.errorMsg = "Connection TimeOut Please Check Your Internet Connection."
+        //this.errorMsg = "Connection TimeOut Please Check Your Internet Connection."
+        this.errorMsg= a.message;
         loader.dismiss();
-        // this.notifications=[];
-        // this.flag=true;
-        // this.storage.get("topNotify").then((data) => {
-        //   for (let notification of data) {
-        //     this.notifications.push(notification);
-        //   }
-        // })
       });
-
-
     })
-
-  }
-
-  ionViewDidLoad() {
   }
 
   doInfinite(infiniteScroll: any) {
     this.start += 10;
     this.notifyApi.getNotifications(this.start, this.notifyParams).subscribe((data) => {
-
-      // if (this.start < 10) {
-      //   this.storage.set("topNotify", data.value);
-      // }
-      // if(this.flag == true){
-      //   this.notifications=[];
-      //   this.flag=false;
-      // }
       for (let notification of data.value) {
         NotificationsPage.notificationsList.push(notification);
         this.notifications.push(notification);
       }
-
       infiniteScroll.complete();
-
     }, (error) => {
       infiniteScroll.enable(error);
-      // this.notifications=[];
-      // this.storage.get("topNotify").then((data) => {
-      //   for (let notification of data) {
-      //     this.notifications.push(notification);
-      //   }
-      // })
     });
-
   }
-  /////////////////////////////////////////
+
   notificationTapped(event, notification) {
     let modal = this.modalCtrl.create(NotificationDetailsPage, notification);
     modal.present();
@@ -122,10 +98,5 @@ export class NotificationsPage {
       this.notifications.find(n => n.Id == data).Read = true;
       WelcomePage.notificationNumber = NotificationsPage.notificationsList.filter((val) => val.Read == false).length;
     })
-    // this.notifications.find(n => n.Id == notification.Id).Read = true;
-    // this.navCtrl.push(NotificationDetailsPage, notification);
-
-
   }
-
 }

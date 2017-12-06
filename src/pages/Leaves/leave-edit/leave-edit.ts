@@ -83,7 +83,8 @@ export class LeaveEditPage {
   });
   //Toaster
   public ErrorMsgToast = this.toastCtrl.create({
-    message: "There Is Error, Please Try Again Later...",
+    //message: "There Is Error, Please Try Again Later...",
+    message: "",
     duration: 3000,
     position: 'middle'
   });
@@ -104,8 +105,6 @@ export class LeaveEditPage {
         this.RequestDataObj.Culture = this.user.Culture;
         this.RequestDataObj.EmpId = this.user.EmpId;
         this.editObj.Language = this.user.Language;
-
-
       }
     });
 
@@ -128,6 +127,10 @@ export class LeaveEditPage {
     this.RequestDataObj.StartDate = new Date(this.comingLeave.StartDate).toDateString();
     this.LoadingCons.present().then(() => {
 
+      var a: any = {};
+      this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+        a.message = data;
+      })
 
       this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
         this.calender = data.Calender;
@@ -138,6 +141,7 @@ export class LeaveEditPage {
         this.LoadingCons.dismiss();
       }, (e) => {
         this.LoadingCons.dismiss().then(() => {
+          this.ErrorMsgToast.setMessage(a.message);
           this.ErrorMsgToast.present();
         })
       });
@@ -170,6 +174,10 @@ export class LeaveEditPage {
 
   }
   bindForm() {
+    var a: any = {};
+    this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+      a.message = data;
+    })
     //Loader
     let LoadingValidate = this.loadingCtrl.create({
       spinner: 'dots'
@@ -197,6 +205,7 @@ export class LeaveEditPage {
             LoadingValidate.dismiss();
           }, (e) => {
             LoadingValidate.dismiss().then(() => {
+              this.ErrorMsgToast.setMessage(a.message);
               this.ErrorMsgToast.present();
             })
           })
@@ -206,6 +215,10 @@ export class LeaveEditPage {
   }
 
   UpdateLeaves() {
+    var a: any = {};
+    this.translationService.get('ErrorToasterMsg').subscribe((data) => {
+      a.message = data;
+    })
     //Loader
     let LoadingApprov = this.loadingCtrl.create({
       spinner: 'dots'
@@ -227,10 +240,10 @@ export class LeaveEditPage {
         LoadingApprov.dismiss()
       }, (error) => {
         LoadingApprov.dismiss().then(() => {
+          this.ErrorMsgToast.setMessage(a.message);
           this.ErrorMsgToast.present();
         })
       });
     })
   }
-
 }

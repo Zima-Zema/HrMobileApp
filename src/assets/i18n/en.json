@@ -191,7 +191,9 @@
     "ErrorCancelinLeave":"Error in Cancelling Leave, Please Try again later.",
     "DoneChart":"Done",
     "AssignToChart":"Assign To",
-    "LoadingCustodies":"Loading Custodies..."
+    "LoadingCustodies":"Loading Custodies...",
+    "LoadingDocs":"Loading Documents...",
+    "ConnTimeOutErrorMsg":"Connection TimeOut, Please Check Your Internet Connection."
 
 
 }

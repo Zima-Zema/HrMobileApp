@@ -51,7 +51,7 @@ export class WelcomePage {
   lang;
   baseUrl: string = "";
   get notificationNumber() {
-    if(WelcomePage.notificationNumber != 0 && WelcomePage.notificationNumber != undefined){
+    if (WelcomePage.notificationNumber != 0 && WelcomePage.notificationNumber != undefined) {
       return WelcomePage.notificationNumber;
     }
     return null;
@@ -67,13 +67,13 @@ export class WelcomePage {
     public translate: TranslateService,
     private backgroundMode: BackgroundMode,
   ) {
-    
+
     //this.navCtrl.setRoot(WelcomePage);
     this.ChartTab = ChartsPage;
     this.RequestsTab = RequestsPage;
     this.QuereiesTab = QuereiesPage;
     this.SettingTab = SettingsTabPage;
-    this.notifyTab =  NotificationsPage;
+    this.notifyTab = NotificationsPage;
     this.platform.registerBackButtonAction((event) => {
       if (this.navCtrl.length() <= 1) {
         this.backgroundMode.moveToBackground();
@@ -87,11 +87,8 @@ export class WelcomePage {
     else {
       this.menuDir = "left";
     }
-    console.log("Language: ", translate.getDefaultLang());
     this.storage.get("User").then((udata) => {
       if (udata) {
-        console.log("udata ", udata)
-        
         this.user = udata;
         this.notifyParams.UserName = this.user.UserName;
         this.notifyParams.Language = this.user.Language;
@@ -105,10 +102,7 @@ export class WelcomePage {
         this.signalr.connect({
           url: val,
         }).then((connection) => {
-          console.log("connection>>>", connection);
-
           connection.listenFor('AppendMessage').subscribe((message: INotification) => {
-            console.log("the message>>>", message);
             WelcomePage.notificationNumber++;
             this.localNotifications.registerPermission().then((grant) => {
               this.localNotifications.schedule({
@@ -134,23 +128,15 @@ export class WelcomePage {
   }
 
   ionViewWillEnter() {
-    console.log("ionViewWillEnter Welcome Page")
-    
     if (NotificationsPage.notificationsList && NotificationsPage.notificationsList.length) {
       WelcomePage.notificationNumber = NotificationsPage.notificationsList.filter((val) => val.Read == false).length;
-       console.log("check NotificationsPage List");
     }
     else {
-      console.log("failed to check NotificationsPage List");
-       console.log("failed to check NotificationsPage List notificationNumber",WelcomePage.notificationNumber);
       if (WelcomePage.notificationNumber <= 0 || WelcomePage.notificationNumber == undefined) {
 
         this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
-          console.log("Notification Number>>>", data);
           WelcomePage.notificationNumber = data;
-          console.log("WelcomePage.notificationNumber>>>", WelcomePage.notificationNumber);
         }, (err) => {
-          console.log("WelcomePage.notificationNumber Error>>>", err);
         });
 
       }
