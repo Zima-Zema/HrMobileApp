@@ -321,7 +321,6 @@ export class AddAssignOrderPage {
   }
 
   ExpiryDateChange(ExpiryDate) {
-
     this.ExpiryDate = this.bloodyIsoString(ExpiryDate);
   }
 

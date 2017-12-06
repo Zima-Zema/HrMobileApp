@@ -56,7 +56,6 @@ export class AssignOrderRequestsPage {
     });
   }
 
-
   ionViewDidLoad() {
     let a: any = {};
     this.translationService.get('LoadingOrders').subscribe((data) => {
@@ -97,7 +96,6 @@ export class AssignOrderRequestsPage {
       })
     })
   }
-
 
   ionViewWillEnter() {
     this.toggled = false;
