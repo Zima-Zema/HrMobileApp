@@ -207,7 +207,6 @@ export class AddAssignOrderPage {
         LeavesLoader.dismiss().then(() => {
           this.LeavesData = data;
         })
-
       }, (e) => {
         LeavesLoader.dismiss().then(() => {
           this.toast.setMessage(this.msg.message);

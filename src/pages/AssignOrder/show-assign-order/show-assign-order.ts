@@ -15,8 +15,6 @@ export class ShowAssignOrderPage {
   }
 
   ionViewDidLoad() {
-
-
   }
 
 

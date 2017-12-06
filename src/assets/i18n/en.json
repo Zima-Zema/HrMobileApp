@@ -182,7 +182,8 @@
     "ErroraddDocument":"Error to Add Documentations, Please Try again later.",
     "SavedFile":"File Is Saved, Press correct to upload...",
     "findFilePath":"Error to find file path, Please try again later.",
-    "openFile":"Error to open file, Please try again later."
+    "openFile":"Error to open file, Please try again later.",
+    "loadTasks":"Loading Tasks..."
 
 
 }

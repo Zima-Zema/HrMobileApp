@@ -46,7 +46,8 @@ export class TasksPage {
     currentDate: new Date()
   };
   loader_task = this.loadingCtrl.create({
-    content: "Loading Tasks..."
+    spinner: 'dots',
+    content: ""
   });
   user: IUser;
   constructor(public navCtrl: NavController,
@@ -79,6 +80,13 @@ export class TasksPage {
   ionViewWillLoad() {
   }
   ionViewWillEnter() {
+
+    let a: any = {};
+    this.translationService.get('loadTasks').subscribe((data) => {
+      a.cont = data;
+    })
+
+    this.loader_task.setContent(a.cont);
     this.loader_task.present().then(() => {
       this.loadEvents();
     });
