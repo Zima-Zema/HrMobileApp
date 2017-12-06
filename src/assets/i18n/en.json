@@ -188,7 +188,9 @@
     "DeletinLeave":"Leave Is Deleted Successfully...",
     "ErrorDeletinLeave":"Error in deleting leave, Please try again later.",
     "CancelinLeave":"Leave Is cancelled Successfully...",
-    "ErrorCancelinLeave":"Error in Cancelling Leave, Please Try again later."
+    "ErrorCancelinLeave":"Error in Cancelling Leave, Please Try again later.",
+    "DoneChart":"Done",
+    "AssignToChart":"Assign To"
 
 
 }

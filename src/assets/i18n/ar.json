@@ -132,7 +132,7 @@
     "Category": "تصنيف",
     "Serial": "ر/ت",
     "Quantity": "كمية",
-    "LangErrorToast": "حدث خطأ أثناء الحفظ, من فضلك حاول مرة أخرى...",
+    "LangErrorToast": "حدث خطأ, من فضلك حاول مرة أخرى...",
     "LangSuccessToast": "تم الحفظ بنجاح...",
     "Period": "الفترة",
     "TransDate": "تاريخ الحركة",
@@ -187,8 +187,9 @@
     "DeletinLeave":"تم حذف الاجازه بنجاح",
     "ErrorDeletinLeave":"خطأ فى حذف الاجازه, من فضلك حاول مره اخرى.",
     "CancelinLeave":"تم الغاء الاجازه بنجاح",
-    "ErrorCancelinLeave":"خطأ فى الغاء الاجازه, من فضلك حاول مره اخرى."
-
+    "ErrorCancelinLeave":"خطأ فى الغاء الاجازه, من فضلك حاول مره اخرى.",
+    "DoneChart":"تمت",
+    "AssignToChart":"مٌكلفه"
 
 
 

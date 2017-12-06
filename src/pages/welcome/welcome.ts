@@ -67,8 +67,6 @@ export class WelcomePage {
     public translate: TranslateService,
     private backgroundMode: BackgroundMode,
   ) {
-
-
     
     //this.navCtrl.setRoot(WelcomePage);
     this.ChartTab = ChartsPage;
@@ -76,14 +74,11 @@ export class WelcomePage {
     this.QuereiesTab = QuereiesPage;
     this.SettingTab = SettingsTabPage;
     this.notifyTab =  NotificationsPage;
-
-
     this.platform.registerBackButtonAction((event) => {
       if (this.navCtrl.length() <= 1) {
         this.backgroundMode.moveToBackground();
       }
     });
-
 
     this.lang = translate.getDefaultLang();
     if (this.lang === 'ar') {
@@ -127,15 +122,12 @@ export class WelcomePage {
               });
 
             })
-
-
           });
         });
       })
 
       this.localNotifications.on('click', (data) => {
         this.navCtrl.push(NotificationsPage);
-
       });
 
     });
@@ -169,7 +161,6 @@ export class WelcomePage {
     this.scrollableTabsopts = { refresh: true };
   }
   ionViewDidLoad() {
-    console.log("ionViewDidLoad Welcome Page") 
   }
   ////////////////////////////
   GoToHome() {

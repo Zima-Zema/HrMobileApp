@@ -5,6 +5,7 @@ import { LeaveServicesApi, IRequestType } from "../../../shared/LeavesService"
 import { Storage } from '@ionic/storage';
 import { IUser } from '../../../shared/IUser';
 import { TasksServicesApi } from '../../../shared/TasksService';
+import { TranslateService } from "@ngx-translate/core";
 
 @IonicPage()
 @Component({
@@ -19,7 +20,7 @@ export class ChartsPage {
 
   doughnutChart: any;
   barChart: any;
-  doughnutTaskChart:any;
+  doughnutTaskChart: any;
 
   public ChartData: Array<any> = [];
   public DoneTasks: number = 0;
@@ -34,9 +35,9 @@ export class ChartsPage {
   public LoadingChart = this.loadingCtrl.create({
     spinner: 'dots'
   });
-  
+
   public ErrorMsgToast = this.ToastCtrl.create({
-    message: "There Is Error, Please Try Again Later...",
+    message: "",
     duration: 2000,
     position: 'middle'
   });
@@ -47,7 +48,8 @@ export class ChartsPage {
     private LeaveServices: LeaveServicesApi,
     private ToastCtrl: ToastController,
     private storage: Storage,
-    private tasksService: TasksServicesApi, ) {
+    private tasksService: TasksServicesApi,
+    private translationService: TranslateService) {
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
@@ -56,10 +58,15 @@ export class ChartsPage {
         this.RequestTypeObj.EmpId = this.user.EmpId;
       }
     });
-
   }
 
   ionViewDidLoad() {
+
+    let a: any = {};
+    this.translationService.get('LangErrorToast').subscribe((data) => {
+      a.Errormessage = data;
+    })
+
     this.LoadingChart.present().then(() => {
       //Leaves
       this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((Konafa) => {
@@ -68,6 +75,7 @@ export class ChartsPage {
         this.LoadingChart.dismiss();
       }, (e) => {
         this.LoadingChart.dismiss().then(() => {
+          this.ErrorMsgToast.setMessage(a.Errormessage);
           this.ErrorMsgToast.present();
         })
       })
@@ -82,9 +90,10 @@ export class ChartsPage {
             this.DoneTasks++;
           }
         });
-         this.loadTaskChart(this.DoneTasks, this.AssignToTasks)
+        this.loadTaskChart(this.DoneTasks, this.AssignToTasks)
       }, (e) => {
         this.LoadingChart.dismiss().then(() => {
+          this.ErrorMsgToast.setMessage(a.Errormessage);
           this.ErrorMsgToast.present();
         })
       })
@@ -92,13 +101,22 @@ export class ChartsPage {
   }
 
   loadTaskChart(doneCount, AssignToCount) {
+    let a: any = {};
+    this.translationService.get('DoneChart').subscribe((data) => {
+      a.chartDone = data;
+    })
+    this.translationService.get('AssignToChart').subscribe((data) => {
+      a.chartAssignto = data;
+    })
+
+
     let DataTemp: Array<number> = [];
     DataTemp.push(doneCount);
     DataTemp.push(AssignToCount);
     this.doughnutTaskChart = new Chart(this.doughnutTaskCanvas.nativeElement, {
       type: 'doughnut',
       data: {
-        labels: ['Done','Assign To'],
+        labels: [a.chartDone, a.chartAssignto],
         datasets: [{
           data: DataTemp,
           backgroundColor: [
@@ -116,7 +134,7 @@ export class ChartsPage {
             'rgba(113, 125, 126 ,0.2)', // grey
             'rgba(23, 32, 42 ,0.2)', //black
             'rgba(253, 237, 236,0.2)'
-            
+
           ],
           hoverBackgroundColor: [
             "#FF6384",
