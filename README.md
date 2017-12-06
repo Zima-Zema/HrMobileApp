@@ -8,6 +8,7 @@
 * Assign Order List. with CRUD operations.
 * Termination Page 
 * Supports Multi-Language.
+* Transaction Leaves in Kendo Grid.
 
 ## Screen Shots
 
