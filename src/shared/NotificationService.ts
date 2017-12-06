@@ -36,9 +36,7 @@ export class NotificationServiceApi {
     
     constructor(private _http: Http,private _storage: Storage) {
         this._storage.get("BaseURL").then((val) => {
-                                this.baseURL = val;
-                                console.log("BaseUrl From Notity services>>>",this.baseURL);
-                                
+                                this.baseURL = val;                              
                             });
     }
 

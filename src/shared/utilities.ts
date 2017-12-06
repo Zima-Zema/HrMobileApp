@@ -4,12 +4,7 @@ import { Http, Headers, Response } from "@angular/http";
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
 import { Storage } from '@ionic/storage';
-/*
-  Generated class for the UtilitiesProvider provider.
 
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
 export interface IGetEmpCustody {
   EmpId: number,
   Language: string,

@@ -102,8 +102,6 @@ export class LeaveServicesApi {
     constructor(private _http: Http, private _storage: Storage) {
         this._storage.get("BaseURL").then((val) => {
             this.baseURL = val;
-            console.log("BaseUrl From Notity services>>>", this.baseURL);
-
         });
     }
     // get all leaves
@@ -112,10 +110,8 @@ export class LeaveServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/Leaves/GetEmpLeaves`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -125,10 +121,8 @@ export class LeaveServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/Leaves/GetLeaveTypes`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -138,10 +132,8 @@ export class LeaveServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/Leaves/GetRequestLeaveData`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -151,10 +143,8 @@ export class LeaveServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/Leaves/PostLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -165,10 +155,8 @@ export class LeaveServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/Leaves/ValidateLeaveRequest`, bodyString, { headers: headers })
             .map((res: Response) => {
-                //console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -179,10 +167,8 @@ export class LeaveServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/Leaves/PutLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -192,10 +178,8 @@ export class LeaveServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/Leaves/DeleteLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
-            }).catch((err) => {
-                console.log("the error in Service ::", err);
+            }).catch((err) => {;
                 return err;
             });
     }
@@ -205,10 +189,8 @@ export class LeaveServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/Leaves/CancelLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -218,10 +200,8 @@ export class LeaveServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/Leaves/BreakLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -231,10 +211,8 @@ export class LeaveServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/Leaves/EditLeave`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
@@ -242,7 +220,6 @@ export class LeaveServicesApi {
     addDays(startDate, noOfDayes, calender, leaveType): Date {
         let count = 0;
         let result = new Date(startDate);
-        //console.log(`the bloody result from addDays ${result}`)
         noOfDayes--;
         if (calender && leaveType) {
             while (count < noOfDayes) {
@@ -286,22 +263,17 @@ export class LeaveServicesApi {
         //
         hasFraction = (leaveType && fraction != null);
         hasNofDays = (leaveType && noOfDayes != null);
-        console.log(`hasFraction : ${hasFraction} , hasNofDays : ${hasNofDays}`);
-        console.log(`calcDates startDate : ${startDate}`)
         //
         if (startDate && leaveType.AllowFraction) {  //لو اجازه عارضه
             startDate = new Date(startDate)
 
-            console.log("calcDates After startDate : ", startDate);
             if (hasNofDays || (hasNofDays && fraction == 0)) {
-                console.log("yaaaaaaaaaaah, hasNofDays");
                 NofDays = Number.parseInt(noOfDayes);
                 endDate = this.addDays(startDate, NofDays, calender, leaveType);
                 endDate = new Date(endDate)
                 returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType)
             }
             if (hasFraction) {
-                console.log("yaaaaaaaaaaah, hasFraction");
                 if (fraction == 1 || fraction == 2) {
                     endDate = new Date(startDate)
                     returnDate = endDate;
@@ -344,17 +316,13 @@ export class LeaveServicesApi {
     //     //
     //     hasFraction = (leaveType && fraction != null);
     //     hasNofDays = (leaveType && noOfDayes != null);
-    //     console.log(`hasFraction : ${hasFraction} , hasNofDays : ${hasNofDays}`);
-    //     console.log(`calcDates startDate : ${startDate}`)
     //     //
     //     if (startDate && leaveType.AllowFraction) {  //لو اجازه عارضه
     //         WorkStartHour = new Date(WorkStartTimeString).getHours(); //8
     //         WorkStartMin = new Date(WorkStartTimeString).getMinutes(); //30 or 0
     //         startDate = new Date(startDate).setHours(WorkStartHour, WorkStartMin, 0, 0); //12-10 8:00
 
-    //         console.log("calcDates After startDate : ", startDate);
     //         if (hasNofDays || (hasNofDays && fraction == 0)) {
-    //             console.log("yaaaaaaaaaaah, hasNofDays");
     //             NofDays = Number.parseInt(noOfDayes);
     //             endDate = this.addDays(startDate, NofDays, calender, leaveType);
     //             let WorkEndHour: number = new Date(endDate).getHours(); //8
@@ -362,7 +330,6 @@ export class LeaveServicesApi {
     //             returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType).setHours(WorkStartHour, WorkStartMin, 0, 0);
     //         }
     //         if (hasFraction) {
-    //             console.log("yaaaaaaaaaaah, hasFraction");
     //             if (fraction >= 0) {
     //                 let WorkEndHour: number = new Date(startDate).getHours(); //8
     //                 endDate = new Date(startDate).setHours((WorkEndHour + (fraction * WorkingHours)), WorkStartMin, 0, 0);
@@ -387,7 +354,6 @@ export class LeaveServicesApi {
     //     //     returnDate = this.addDays(bloodyStartDate, NofDays + 1, calender, leaveType);
     //     // }
 
-    //     console.log(`Before Return: startDate: ${startDate} // endDate: ${endDate} // returnDate ${returnDate}`)
     //     return {
     //         startDate: startDate,
     //         endDate: endDate,
@@ -434,11 +400,9 @@ export class LeaveServicesApi {
         var currentDate = startDate;
 
         while (new Date(currentDate) <= new Date(stopDate)) {
-            console.log("inside while")
             dateArray.push(currentDate)
             currentDate = this.addDaysToDate(currentDate, 1).setHours(0, 0, 0, 0);
         }
-        console.log("getDates dateArray: ", dateArray)
         return dateArray;
     }
 
@@ -451,7 +415,6 @@ export class LeaveServicesApi {
         holidays.forEach((ele) => {
             dates = dates.filter((date) => new Date(date).toLocaleDateString() !== new Date(ele).toLocaleDateString());
         });
-        console.log("actual >>> ", dates)
         let dayesAfterCut = dates.length;
         balance += noFDays - dayesAfterCut;
         noFDays = dayesAfterCut;
@@ -493,7 +456,6 @@ export class LeaveServicesApi {
     /////////////////////////////////////////////////
     getHolidays(compId: number): Observable<any[]> {
         return this._http.get(`${this.baseURL}newApi/Leaves/GetHolidays?compId=${compId}`).map((res: Response) => {
-            console.log("res get Holidays : ", res.json())
             return res.json();
         }).catch((err) => {
             return err;
@@ -505,10 +467,8 @@ export class LeaveServicesApi {
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
         return this._http.post(`${this.baseURL}newApi/Leaves/GetLeavesTrans`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("res.json ::: ", res.json());
                 return res.json();
             }).catch((err) => {
-                console.log("the error in Service ::", err);
                 return err;
             });
     }
