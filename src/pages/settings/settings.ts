@@ -84,11 +84,8 @@ export class SettingsPage {
     position: 'bottom'
   })
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SettingsPage');
   }
   languageChange(language) {
-    console.log(`Selected language: ${language}`);
-    console.log(`current language: ${this.translationService.getDefaultLang()}`);
     let lan = this.translationService.getDefaultLang();
     if (lan === "en") {
       lan = lan + "-GB";
@@ -112,13 +109,9 @@ export class SettingsPage {
     let LoadingLang = this.loadingCtrl.create({
       spinner: 'dots'
     });
-    console.log("errorTost", this.LangErrorToast);
-    console.log("successTost", this.LangSuccessToast);
     this.langResetOBJ.Language = this.language;
-    console.log(this.langResetOBJ);
     LoadingLang.present().then(() => {
       this.loginServiceApi.resetLanguage(this.langResetOBJ).subscribe((data) => {
-        console.log(data)
         if (data == 1) {
           let SuccessMsgToast = this.ToastCtrl.create({
             message: this.LangSuccessToast,
@@ -189,7 +182,6 @@ export class SettingsPage {
         }
 
       }, (error) => {
-        console.log("the bloody error", error);
         this.enableSave = false;
         if (error) {
           let ErrorMsgToast = this.ToastCtrl.create({

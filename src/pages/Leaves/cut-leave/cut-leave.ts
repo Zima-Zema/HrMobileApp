@@ -80,9 +80,6 @@ export class CutLeavePage {
     });
     //
     this.LeaveComing = this.navParams.data;
-    console.log("LeaveComing : ", this.LeaveComing)
-    //
-    console.log("coming Data : ", this.LeaveComing);
     this.startDate = this.LeaveComing.StartDate;
     this.noFDays = this.LeaveComing.NofDays;
     this.endDate = this.LeaveComing.EndDate;
@@ -102,7 +99,6 @@ export class CutLeavePage {
     this.RequestDataObj.StartDate = new Date(this.LeaveComing.StartDate).toDateString();
     RequestLoader.present().then(() => {
       this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
-        console.log("GetRequestLeaveData : ", data)
         this.calender = data.Calender;
         this.leaveType = data.LeaveType;
         this.BalBefore = data.requestVal.BalBefore;
@@ -136,12 +132,9 @@ export class CutLeavePage {
   }
 
   dateChange(item) {
-    console.log(` dateChange item : ${item}`)
     if (item) {
       this.ReturnDate = this.bloodyIsoString(new Date(new Date(item).toDateString())).slice(0, -15);
-      //console.log("dateChange", this.ReturnDate);
       let res = this.LeaveServices.cutLeave(this.startDate, this.ReturnDate, this.noFDays, this.endDate, this.calender, this.leaveType, this.BalBefore);
-      console.log("dateChange res : ", res)
       this.ActualendDate = new Date(res.endDate).toISOString();
       this.NofDaysAfter = res.noFDays;
       this.balAfter = res.balance;
@@ -149,7 +142,6 @@ export class CutLeavePage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad CutLeavePage');
   }
 
   CutLeaves() {
@@ -189,8 +181,6 @@ export class CutLeavePage {
           this.LeaveComing.NofDays = this.breakObj.BreakNofDays;
           //this.breakObj.RequestId;
           LeaveListPage.motherArr.push(this.LeaveComing);
-          console.log("mother Array : ", LeaveListPage.motherArr);
-          console.log("breakObj : ", this.breakObj)
           this.navCtrl.pop();
           CutLoader.dismiss().then(() => {
             CutSuccessToast.present();
@@ -202,7 +192,6 @@ export class CutLeavePage {
         })
       })
     }); // Cut Loader
-    console.log("Cut: ", this.breakObj);
   }
 
 }

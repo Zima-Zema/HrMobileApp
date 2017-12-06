@@ -40,23 +40,19 @@ export class CustodyListPage {
   }
 
   ionViewDidLoad() {
-    console.log("OBj", this.EmpCustody);
 
     var DocsLoader = this.loadingCtrl.create({
       content: "Loading Custodies..."
     });
     DocsLoader.present().then(() => {
       this.custodyApi.getCustodies(this.EmpCustody).subscribe((data) => {
-        console.log("bloody Custody>>", data);
         this.custodyCount = data.length;
         this.custodyData = _.chain(data).groupBy('Disposal').toPairs()
           .map(item => _.zipObject(['divisionType', 'divisionTypes'], item)).value();
         DocsLoader.dismiss();
-        console.log("this.Leaves_Arr : ", this.custodyData);
 
       }, (error) => {
         DocsLoader.dismiss();
-        console.log("the bloody error", error);
         if (error.status === 0) {
           this.is0Error = true;
         }

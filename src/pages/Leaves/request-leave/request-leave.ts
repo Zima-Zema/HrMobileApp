@@ -199,9 +199,7 @@ export class RequestLeavePage {
     });
 
     this.LoadingChart.present().then(() => {
-      console.log('APIGetLeaveTypes');
       this.LeaveServices.GetLeaveTypes(this.RequestTypeObj).subscribe((Konafa) => {
-        console.log("Konafa : ",Konafa)
         this.LeavesData = Konafa.LeaveTypeList;
         this.ChartData = Konafa.ChartData;
         this.Replacements = Konafa.Replacements;
@@ -452,7 +450,6 @@ export class RequestLeavePage {
     this.RequestDataObj.StartDate = new Date().toDateString();
 
     LoadingLeaves.present().then(() => {
-      console.log('APIGetRequestLeaveData');
       this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
 
         this.workhour = data.Calender.WorkHours;
@@ -584,7 +581,6 @@ export class RequestLeavePage {
 
 
         LoadingValidate.present().then(() => {
-          console.log('APIvalidateRequest1');
           this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
             this.errorMsgObj = null;
             this.errorMsgObj = data;
@@ -714,7 +710,6 @@ export class RequestLeavePage {
         this.validateObj.TypeId = this.leaveType;
         if (this.endDate) {
           Loadingrequest.present().then(() => {
-            console.log('APIvalidateRequest2');
             this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
               this.errorMsgObj = null;
               this.errorMsgObj = data;

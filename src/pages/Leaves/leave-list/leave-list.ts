@@ -54,7 +54,7 @@ export class LeaveListPage {
     public alertCtrl: AlertController,
     private storage: Storage,
     private translationService: TranslateService
-    ) {
+  ) {
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
@@ -70,18 +70,26 @@ export class LeaveListPage {
   }
 
   // getMoment(data) {
-  //   // console.log("moment is called")
   //   return moment(data).format('ddd, MMM DD, YYYY');
   // }
   ionViewDidLoad() {
+
+    let a: any = {};
+    this.translationService.get('LoadingLeaves').subscribe((data) => {
+      a.Cont = data;
+    })
+    this.translationService.get('ErrorGetLeave').subscribe((data) => {
+      a.ErrorGetLeav = data;
+    })
+
+
     this.Leaves_Arr = [];
     LeaveListPage.motherArr = [];
     var LeavesLoader = this.loadingCtrl.create({
-      content: "Loading Leaves..."
+      content: a.Cont
     });
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
-        console.log("From Db : ", data);
         this.LeavesCount = data.length;
         LeaveListPage.motherArr = data;
         // data.forEach(element => {
@@ -93,12 +101,11 @@ export class LeaveListPage {
         this.LeavesData = _.chain(data).groupBy('Type').toPairs()
           .map(item => _.zipObject(['divisionType', 'divisionTypes'], item)).value();
         this.Leaves_Arr = this.LeavesData;
-        console.log("this.Leaves_Arr : ", this.Leaves_Arr);
 
         LeavesLoader.dismiss();
       }, (e) => {
         let toast = this.toastCtrl.create({
-          message: "Error in getting Leaves, Please Try again later.",
+          message: a.ErrorGetLeav,
           duration: 3000,
           position: 'middle'
         });
@@ -116,7 +123,6 @@ export class LeaveListPage {
       this.Leaves_Arr = _.chain(LeaveListPage.motherArr).groupBy('Type').toPairs()
         .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
       this.LeavesCount = LeaveListPage.motherArr.length;
-      console.log("Repeate ME ionViewWillEnter");
     }
 
   }
@@ -137,7 +143,6 @@ export class LeaveListPage {
     });
     this.Leaves_Arr = this.LeavesFilter;
     this.LeavesFilter = [];
-    console.log("Repeate ME filterItems");
   }
   ShowLeaves(item) {
     item.readOnly = true;
@@ -152,21 +157,21 @@ export class LeaveListPage {
   }
   ConfirmDelete(itemLeave) {
     let a: any = {};
-    
-          this.translationService.get('ConfirmRemove').subscribe(t => {
-            a.title = t;
-          });
-    
-          this.translationService.get('RemoveReqMsg').subscribe(t => {
-            a.message = t;
-          });
-          this.translationService.get('ALERT_YES').subscribe(t => {
-            a.yes = t;
-          });
-          this.translationService.get('ALERT_NO').subscribe((data) => {
-            a.no = data;
-          })
-//RemoveReqMsg
+
+    this.translationService.get('ConfirmRemove').subscribe(t => {
+      a.title = t;
+    });
+
+    this.translationService.get('RemoveReqMsg').subscribe(t => {
+      a.message = t;
+    });
+    this.translationService.get('ALERT_YES').subscribe(t => {
+      a.yes = t;
+    });
+    this.translationService.get('ALERT_NO').subscribe((data) => {
+      a.no = data;
+    })
+    //RemoveReqMsg
 
 
     const alert = this.alertCtrl.create({
@@ -195,20 +200,20 @@ export class LeaveListPage {
   }
   ConfirmAppCancel(itemLeave) {
     let a: any = {};
-    
-          this.translationService.get('ConfirmCancel').subscribe(t => {
-            a.title = t;
-          });
-    
-          this.translationService.get('CancelReqMsg').subscribe(t => {
-            a.message = t;
-          });
-          this.translationService.get('ALERT_YES').subscribe(t => {
-            a.yes = t;
-          });
-          this.translationService.get('ALERT_NO').subscribe((data) => {
-            a.no = data;
-          })
+
+    this.translationService.get('ConfirmCancel').subscribe(t => {
+      a.title = t;
+    });
+
+    this.translationService.get('CancelReqMsg').subscribe(t => {
+      a.message = t;
+    });
+    this.translationService.get('ALERT_YES').subscribe(t => {
+      a.yes = t;
+    });
+    this.translationService.get('ALERT_NO').subscribe((data) => {
+      a.no = data;
+    })
 
 
     const alert = this.alertCtrl.create({
@@ -230,40 +235,54 @@ export class LeaveListPage {
     alert.present();
   }
   DeleteLeave(item) {
+
+    let a: any = {};
+    this.translationService.get('DeletinLeave').subscribe((data) => {
+      a.SucessDeleteLeave = data;
+    })
+    this.translationService.get('ErrorDeletinLeave').subscribe((data) => {
+      a.ErrorDeletLeave = data;
+    })
+
     this.DeleteObj.Id = item.Id;
-  
+
     this.LeaveServices.removeLeaveRequest(this.DeleteObj).subscribe((data) => {
-        LeaveListPage.motherArr = LeaveListPage.motherArr.filter((element) => {
-          return element.Id !== item.Id;
-        })
-        this.Leaves_Arr = _.chain(LeaveListPage.motherArr).groupBy('Type').toPairs()
-          .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
-        this.LeavesCount--;
-        console.log("Repeate ME ConfirmDelete");
-        //
-        let toast = this.toastCtrl.create({
-          message: "Leave Is Deleted Successfully...",
-          duration: 3000,
-          position: 'bottom'
-        });
-        toast.present();
-      }, (err: Error) => {
-        console.log("error : ", err.message);
-        let toast = this.toastCtrl.create({
-          message: "Error in deleting leave, Please try again later.",
-          duration: 3000,
-          position: 'bottom'
-        });
-        toast.present();
+      LeaveListPage.motherArr = LeaveListPage.motherArr.filter((element) => {
+        return element.Id !== item.Id;
       })
+      this.Leaves_Arr = _.chain(LeaveListPage.motherArr).groupBy('Type').toPairs()
+        .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
+      this.LeavesCount--;
+      //
+      let toast = this.toastCtrl.create({
+        message: a.SucessDeleteLeave,
+        duration: 3000,
+        position: 'bottom'
+      });
+      toast.present();
+    }, (err: Error) => {
+      let toast = this.toastCtrl.create({
+        message: a.ErrorDeletLeave,
+        duration: 3000,
+        position: 'bottom'
+      });
+      toast.present();
+    })
   }
   EditAppLeaves(item) {
     this.navCtrl.push(LeaveEditPage, item);
   }
   DeleteAppLeaves(itemId) {
+
+    let a: any = {};
+    this.translationService.get('CancelinLeave').subscribe((data) => {
+      a.SucessCancelLeave = data;
+    })
+    this.translationService.get('ErrorCancelinLeave').subscribe((data) => {
+      a.ErrorCancelLeave = data;
+    })
     this.CancelVMObj.RequestId = itemId;
     this.LeaveServices.CancelAppLeave(this.CancelVMObj).subscribe((data) => {
-      console.log(data);
       if (data.length == 0) {
         LeaveListPage.motherArr.forEach((ele) => {
           if (ele.Id == itemId) {
@@ -275,15 +294,14 @@ export class LeaveListPage {
           .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
       }
       let toast = this.toastCtrl.create({
-        message: "Leave Is cancelled Successfully...",
+        message: a.SucessCancelLeave,
         duration: 3000,
         position: 'bottom'
       });
       toast.present();
     }, (e: Error) => {
-      console.log(e.message);
       let toast = this.toastCtrl.create({
-        message: "Error in Cancelling Leave, Please Try again later.",
+        message: a.ErrorCancelLeave,
         duration: 3000,
         position: 'bottom'
       });

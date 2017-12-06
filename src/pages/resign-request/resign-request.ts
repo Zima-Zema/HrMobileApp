@@ -88,7 +88,6 @@ export class ResignRequestPage {
       spinner: 'dots'
     });
     ResignLoader.present().then(() => {
-      console.log("TerminationListObj : ",this.TerminationListObj);
       this.TerminationService.GetTermination(this.TerminationListObj).subscribe((data) => {
         ResignLoader.dismiss().then(() => {
           this.Employee = data.Employee;

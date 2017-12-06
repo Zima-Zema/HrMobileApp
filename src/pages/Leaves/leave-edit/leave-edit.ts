@@ -112,7 +112,6 @@ export class LeaveEditPage {
     this.comingLeave = this.navParams.data;
     this.actualNOfDays = this.comingLeave.NofDays;
 
-    console.log("item : ", this.comingLeave);
     this.EditLeaveForm = this.formBuilder.group({
       actualStartDate: ['', Validators.required],
       actualNOfDays: [''],
@@ -131,7 +130,6 @@ export class LeaveEditPage {
 
 
       this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
-        console.log("GetRequestLeaveData : ", data)
         this.calender = data.Calender;
         this.leaveType = data.LeaveType;
         this.filteredArr = this.LeaveServices.getOffDays(data.Calender);
@@ -164,13 +162,10 @@ export class LeaveEditPage {
       ':' + pad(tzo % 60);
   }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad LeaveEditPage');
   }
 
   dateChange(newStartDate) {
-    console.log("new", newStartDate);
     this.actualStartDate = this.bloodyIsoString(new Date(new Date(newStartDate).toDateString())).slice(0, -15);
-    console.log("actual", this.actualStartDate);
     this.bindForm();
 
   }
@@ -192,7 +187,6 @@ export class LeaveEditPage {
       this.validateObj.StartDate = new Date(new Date(this.actualStartDate).toString()).toISOString().slice(0, -1);
       this.validateObj.ReplaceEmpId = this.comingLeave.ReplaceEmpId;
       this.validateObj.TypeId = this.comingLeave.TypeId;
-      console.log("this.validateObj: ", this.validateObj);
       if (this.actualEndDate) {
         LoadingValidate.present().then(() => {
 
@@ -200,7 +194,6 @@ export class LeaveEditPage {
             this.errorMsgObj = null;
             this.errorMsgObj = data;
             this.rate = this.errorMsgObj.Stars;
-            console.log(this.errorMsgObj);
             LoadingValidate.dismiss();
           }, (e) => {
             LoadingValidate.dismiss().then(() => {
@@ -222,7 +215,6 @@ export class LeaveEditPage {
     this.editObj.EditedEndDate = new Date(this.actualEndDate).toLocaleDateString();
     this.editObj.EditedReturnDate = new Date(this.actualReturnDate).toLocaleDateString();
     this.editObj.RequestId = this.comingLeave.Id;
-    console.log("editObj", this.editObj);
     LoadingApprov.present().then(() => {
       this.LeaveServices.editApprovedLeave(this.editObj).subscribe((data) => {
         LeaveListPage.motherArr = LeaveListPage.motherArr.filter((ele) => ele.Id !== this.comingLeave.Id);

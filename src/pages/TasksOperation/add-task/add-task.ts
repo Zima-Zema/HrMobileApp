@@ -25,13 +25,9 @@ export class AddTaskPage {
     this.event.startTime = preselectedDate;
     this.event.endTime = preselectedDate;
 
-    console.log("daaaate",new Date(Date.now()));
-    console.log("minDate ",this.minDate);
-    
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AddTaskPage');
   }
 
   cancel() {

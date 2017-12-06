@@ -147,6 +147,7 @@
     "RequestDate": "Request Date",
     "LoadingOrders": "Loading Orders...",
     "LoadingLeaves": "Loading Leaves...",
+    "ErrorGetLeave":"Error in getting Leaves, Please Try again later.",
     "ErrorLoadingOrders": "Error in getting Orders, Please Try again later.",
     "ErrorToasterMsg": "There is an error, Please try again later.",
     "ErrorLastCalcsMsg": "Error to get last value of Calculation Method For Employee.",
@@ -183,7 +184,11 @@
     "SavedFile":"File Is Saved, Press correct to upload...",
     "findFilePath":"Error to find file path, Please try again later.",
     "openFile":"Error to open file, Please try again later.",
-    "loadTasks":"Loading Tasks..."
+    "loadTasks":"Loading Tasks...",
+    "DeletinLeave":"Leave Is Deleted Successfully...",
+    "ErrorDeletinLeave":"Error in deleting leave, Please try again later.",
+    "CancelinLeave":"Leave Is cancelled Successfully...",
+    "ErrorCancelinLeave":"Error in Cancelling Leave, Please Try again later."
 
 
 }

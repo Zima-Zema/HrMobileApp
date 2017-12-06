@@ -55,7 +55,6 @@ export class TransLeavesPage {
     });
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaveTrans(this.LeavesTrans).subscribe((data) => {
-        console.log("LeavesTrans", data)
           this.LeavesCount = data.length;
           this.gridView = process(data, { group: this.groups });
           LeavesLoader.dismiss();
