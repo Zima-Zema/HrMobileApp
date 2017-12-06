@@ -7,13 +7,7 @@ import { UtilitiesProvider, IGetEmpDocs } from '../../shared/utilities';
 import { IUser } from '../../shared/IUser';
 import { Storage } from '@ionic/storage';
 import { parse } from 'querystring';
-
-/**
- * Generated class for the DocumentsPage page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
+import { TranslateService } from "@ngx-translate/core";
 
 @IonicPage()
 @Component({
@@ -44,7 +38,8 @@ export class DocumentsPage {
     public toastCtrl: ToastController,
     private androidPermissions: AndroidPermissions,
     private docsApi: UtilitiesProvider,
-    private storage: Storage) {
+    private storage: Storage,
+    private translationService: TranslateService) {
     this.storage.get("BaseURL").then((val) => {
       this.baseURL = val;
       console.log("BaseUrl From Notity services>>>", this.baseURL);

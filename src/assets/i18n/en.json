@@ -190,7 +190,8 @@
     "CancelinLeave":"Leave Is cancelled Successfully...",
     "ErrorCancelinLeave":"Error in Cancelling Leave, Please Try again later.",
     "DoneChart":"Done",
-    "AssignToChart":"Assign To"
+    "AssignToChart":"Assign To",
+    "LoadingCustodies":"Loading Custodies..."
 
 
 }

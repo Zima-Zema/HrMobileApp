@@ -4,6 +4,7 @@ import { UtilitiesProvider, IGetEmpCustody } from '../../shared/utilities';
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../shared/IUser";
 import * as _ from 'lodash';
+import { TranslateService } from "@ngx-translate/core";
 
 @IonicPage()
 @Component({
@@ -28,7 +29,8 @@ export class CustodyListPage {
     private custodyApi: UtilitiesProvider,
     private storage: Storage,
     public loadingCtrl: LoadingController,
-    public toastCtrl: ToastController) {
+    public toastCtrl: ToastController,
+    private translationService: TranslateService) {
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
@@ -41,8 +43,13 @@ export class CustodyListPage {
 
   ionViewDidLoad() {
 
+    let a: any = {};
+    this.translationService.get('LoadingCustodies').subscribe((data) => {
+      a.message = data;
+    })
+
     var DocsLoader = this.loadingCtrl.create({
-      content: "Loading Custodies..."
+      content: a.message
     });
     DocsLoader.present().then(() => {
       this.custodyApi.getCustodies(this.EmpCustody).subscribe((data) => {

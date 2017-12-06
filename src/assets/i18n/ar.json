@@ -189,7 +189,8 @@
     "CancelinLeave":"تم الغاء الاجازه بنجاح",
     "ErrorCancelinLeave":"خطأ فى الغاء الاجازه, من فضلك حاول مره اخرى.",
     "DoneChart":"تمت",
-    "AssignToChart":"مٌكلفه"
+    "AssignToChart":"مٌكلفه",
+    "LoadingCustodies":"تحميل العٌهد..."
 
 
 
