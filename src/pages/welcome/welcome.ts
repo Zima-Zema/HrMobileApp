@@ -168,11 +168,8 @@ export class WelcomePage {
   refreshScrollbarTabs() {
     this.scrollableTabsopts = { refresh: true };
   }
-
-
   ionViewDidLoad() {
-    console.log("ionViewDidLoad Welcome Page")
-    
+    console.log("ionViewDidLoad Welcome Page") 
   }
   ////////////////////////////
   GoToHome() {

@@ -8,9 +8,6 @@ export enum ImageStatusEnum {
   name: 'imagePipe',
 })
 export class ImagePipe implements PipeTransform {
-  /**
-   * Takes a value and makes it lowercase.
-   */
 transform(stat: number, ApprovStat:string) {
     return ImageStatusEnum[stat];
   }
