@@ -118,8 +118,6 @@ export class LeaveListPage {
   ionViewWillEnter() {
     this.toggled = false;
     if (LeaveListPage.motherArr.length > this.Leaves_Arr.length) {
-
-
       this.Leaves_Arr = _.chain(LeaveListPage.motherArr).groupBy('Type').toPairs()
         .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
       this.LeavesCount = LeaveListPage.motherArr.length;

@@ -4,6 +4,8 @@ import { WelcomePage } from '../welcome/welcome';
 import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms";
 import { LoginServiceApi, ILogin } from "../../shared/loginService";
 import { IUser } from "../../shared/IUser";
+import { TranslateService } from "@ngx-translate/core";
+
 @IonicPage()
 @Component({
   selector: 'page-force-change-password',
@@ -22,7 +24,8 @@ export class ForceChangePasswordPage {
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private logInService: LoginServiceApi,
     private loadingCtrl: LoadingController,
-    private formBuilder: FormBuilder ) {
+    private formBuilder: FormBuilder,
+    private translationService: TranslateService) {
     this.currentUser = this.navParams.data;
 
     this.createForm();
@@ -78,6 +81,12 @@ export class ForceChangePasswordPage {
     }
   }
   onSubmit() {
+
+    let a: any = {};
+    this.translationService.get('ConfirmPassword').subscribe((data) => {
+      a.message = data;
+    })
+
     this.generalError = null;
     let loader = this.loadingCtrl.create({
       //content: "Loading .."
@@ -87,28 +96,20 @@ export class ForceChangePasswordPage {
 
     let newPassword: string = this.logInForm.value.newPassword;
     let confirmPassword: string = this.logInForm.value.confirm;
-    console.log(newPassword);
-    console.log(confirmPassword);
     if (newPassword === confirmPassword) {
       this.currentUser.ResetPassword = newPassword;
       this.currentUser.confirm = confirmPassword;
-      console.log("The bloody user>>", this.currentUser);
       this.logInService.resetPassword(this.currentUser).subscribe((data) => {
-        console.log("resetPassword ReturnData>>", data);
         this.navCtrl.popToRoot();
-
       }, (error) => { });
       loader.dismiss();
     }
     else {
-
-      console.log("Wow")
       this.logInForm.reset();
       this.confirmPasswordMatched = true;
       loader.dismiss();
-      this.generalError = "Confirm Password is NOT Matched !!";
+      this.generalError = a.message;
     }
-
   }
 
 }

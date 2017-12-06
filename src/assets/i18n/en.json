@@ -193,7 +193,7 @@
     "AssignToChart":"Assign To",
     "LoadingCustodies":"Loading Custodies...",
     "LoadingDocs":"Loading Documents...",
-    "ConnTimeOutErrorMsg":"Connection TimeOut, Please Check Your Internet Connection."
-
+    "ConnTimeOutErrorMsg":"Connection TimeOut, Please Check Your Internet Connection.",
+    "ConfirmPassword":"Confirm Password is NOT Matched !!"
 
 }

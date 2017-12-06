@@ -42,15 +42,12 @@ export class DocumentsPage {
     private translationService: TranslateService) {
     this.storage.get("BaseURL").then((val) => {
       this.baseURL = val;
-      console.log("BaseUrl From Notity services>>>", this.baseURL);
-
     });
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
         this.EmpDocs.Source = "People";
         this.EmpDocs.SourceId = this.user.EmpId;
-
       }
     });
     this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE);
@@ -58,7 +55,6 @@ export class DocumentsPage {
   }
 
   ionViewDidLoad() {
-
     let a: any = {};
     this.translationService.get('LoadingDocs').subscribe((data) => {
       a.message = data;
@@ -89,19 +85,14 @@ export class DocumentsPage {
   }
 
   bloodyDownload(url, name) {
-    console.log(url);
-    console.log(name);
-    //name = name.replace(/\s+/g, ''); %20
     let fullUrl = `${this.baseURL}${encodeURIComponent(url)}`;
-    const realUrl = fullUrl.replace(/\s+/g,'%20')
-    console.log(fullUrl);
+    const realUrl = fullUrl.replace(/\s+/g, '%20');
     const fileTransfer: FileTransferObject = this.transfer.create();
     this.loadingStatus = "PUsh"
     //const url = 'https://static.pexels.com/photos/34950/pexels-photo.jpg';
     var pathFile = this.file.externalRootDirectory + 'Download/';
 
-    fileTransfer.download(fullUrl, pathFile +  new Date().getTime().toString() + "_" + name).then((entry) => {
-      console.log('download complete: ' + entry.toURL());
+    fileTransfer.download(fullUrl, pathFile + new Date().getTime().toString() + "_" + name).then((entry) => {
       this.loadingStatus = entry.toURL();
       const alertSuccess = this.alertCtrl.create({
         title: `Download Succeeded!`,
@@ -134,19 +125,15 @@ export class DocumentsPage {
     //     subTitle: `pexels-photo.jpg was successfully downloaded to: ${entry.toURL()}`,
     //     buttons: ['Ok']
     //   });
-
     //   alertSuccess.present();
 
     // }, (error) => {
-
     //   const alertFailure = this.alertCtrl.create({
     //     title: `Download Failed!`,
     //     subTitle: `pexels-photo.jpg was not successfully downloaded. Error code: ${error.code}`,
     //     buttons: ['Ok']
     //   });
-
     //   alertFailure.present();
-
     // });
   }
 
