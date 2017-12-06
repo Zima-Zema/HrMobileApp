@@ -31,7 +31,6 @@ export class QuereiesPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad QuereiesPage');
   }
   gotoMyTasks() {
     this.app.getRootNav().push(TasksPage);

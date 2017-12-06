@@ -25,10 +25,8 @@ export class RequestsPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad RequestsPage');
   }
   gotoEditProfile() {
-    console.log("EditProfile");
   }
   gotoLeaveRequests() {
     this.app.getRootNav().push(RequestLeavePage)

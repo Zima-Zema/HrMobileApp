@@ -21,7 +21,6 @@ export class SettingsTabPage {
 
     this.storage.get("User").then((udata) => {
       if (udata) {
-        console.log("udata ", udata);
         this.User=udata;
       }
     });
@@ -33,7 +32,6 @@ export class SettingsTabPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SettingsTabPage');
   }
   gotoLanguage() {
     this.app.getRootNav().push(SettingsPage);
