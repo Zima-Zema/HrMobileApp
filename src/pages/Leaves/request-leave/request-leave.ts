@@ -129,6 +129,7 @@ export class RequestLeavePage {
     EndDate: "",
     StartDate: null,
     ReplaceEmpId: 0,
+    NofDays:0,
   }
   errorMsgObj: IValidationMsg = {
     AssignError: null,
@@ -141,7 +142,9 @@ export class RequestLeavePage {
     Stars: 0,
     StarsError: null,
     WaitingError: null,
-    WaitingMonth: null
+    WaitingMonth: null,
+    AllowedDaysError:null,
+    CantGreaterError:null
   }
   //Loader
   public LoadingChart = this.loadingCtrl.create({
@@ -578,7 +581,7 @@ export class RequestLeavePage {
         this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toISOString().slice(0, -1);
         this.validateObj.ReplaceEmpId = replacement;
         this.validateObj.TypeId = this.leaveType;
-
+        this.validateObj.NofDays=this.noOfDays;
 
         LoadingValidate.present().then(() => {
           this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
@@ -708,6 +711,7 @@ export class RequestLeavePage {
         this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toLocaleDateString();//.slice(0, -1);
         this.validateObj.ReplaceEmpId = this.replacement;
         this.validateObj.TypeId = this.leaveType;
+        this.validateObj.NofDays=this.noOfDays;
         if (this.endDate) {
           Loadingrequest.present().then(() => {
             this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {

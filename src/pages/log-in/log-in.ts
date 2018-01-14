@@ -8,12 +8,13 @@ import { Storage } from '@ionic/storage';
 import { Network } from '@ionic-native/network';
 import { IUser } from "../../shared/IUser";
 import { TranslateService } from '@ngx-translate/core';
+import { ForgetPage } from '../forget/forget';
 
 @IonicPage()
 @Component({
     selector: 'page-log-in',
     templateUrl: 'log-in.html',
-    
+
 })
 export class LogInPage {
 
@@ -30,6 +31,7 @@ export class LogInPage {
     public type = 'password';
     public showPass = false;
     static baseUrl: string;
+    errorMsg:any = {};
     constructor(
         private logInService: LoginServiceApi,
         private navCtrl: NavController,
@@ -87,8 +89,11 @@ export class LogInPage {
 
     onSubmit() {
         this.generalError = null;
+
         let loader = this.loadingCtrl.create({
-            content: "Loading .."
+            content: "Loading ..",
+            dismissOnPageChange:true
+            
         });
         loader.present();
 
@@ -98,25 +103,44 @@ export class LogInPage {
         let rememberMe = this.logInForm.value.rememberMe;
 
         this.logInService.logIn(companyName, userName, password).then((data: any) => {
+            let a:any={}
+            this.translate.get("networkError").subscribe((t) => {
+                a.title = t;
+            });
+            this.translate.get("ALERT_Ok").subscribe((t) => {
+                a.ok = t; 
+            });
+            this.translate.get("ALERT_ERROR").subscribe((t) => {
+                a.error = t; 
+            });
+
+
             if (this.network.type == "none") {
                 loader.dismiss();
                 let alert = this.alertCtrl.create({
-                    title: "Error",
-                    buttons: [{ text: "Ok", role: "cancel" }],
-                    message: "Error in Internet Connection .. Please Try again later",
+                    title: a.error,
+                    buttons: [{ text:  a.ok, role: "cancel" }],
+                    message: a.title,
                 });
                 alert.present();
             }
             if (typeof (data) == "string") {
-                this.generalError = data;
+                if (data == "InvalidGrant") {
+                    this.translate.get("login403Error").subscribe((t) => {
+                        this.generalError = t
+                    })
+                }
+                else {
+                    this.generalError = data;
+                }
                 loader.dismiss();
             }
             else if (data.type == "error") {
                 loader.dismiss();
                 let alert = this.alertCtrl.create({
-                    title: "Error",
-                    buttons: [{ text: "Ok", role: "cancel" }],
-                    message: "Error in Internet Connection .. Please Try again later",
+                    title: a.error,
+                    buttons: [{ text: a.ok, role: "cancel" }],
+                    message: a.title,
                 });
                 alert.present();
             }
@@ -133,9 +157,9 @@ export class LogInPage {
                             this.platform.setDir("ltr", true);
                         }
                     });
-                    if (this.User.ResetPassword) {
+                    if (this.User.ResetPassword && this.User.Code) {
                         loader.dismiss();
-                        this.navCtrl.push(ForceChangePasswordPage, { UserName: userName, Password: password });
+                        this.navCtrl.push(ForceChangePasswordPage, { UserName: userName, OldPassword: password, Code: this.User.Code });
                     }
                     else {
                         if (rememberMe) {
@@ -162,7 +186,7 @@ export class LogInPage {
                                     this.platform.setDir("ltr", true);
                                     this.navCtrl.setRoot(WelcomePage);
                                 }
-                                
+
 
                             })
 
@@ -198,13 +222,13 @@ export class LogInPage {
                 }
                 break;
             case 'userName':
-                if (this.generalError == "Incorrect Username or Password !!") {
+                if (this.generalError == "Incorrect UserName Or Password" || this.generalError == "اسم المستخدم او كلمة المرور غير صحيح") {
                     this.generalError = null;
                 }
                 this.userNameRequired = false;
                 break;
             case 'password':
-                if (this.generalError == "Incorrect Username or Password !!") {
+                if (this.generalError == "Incorrect UserName Or Password" || this.generalError == "اسم المستخدم او كلمة المرور غير صحيح") {
                     this.generalError = null;
                 }
                 this.passwordRequired = false;
@@ -229,6 +253,10 @@ export class LogInPage {
         this.storage.clear();
         this.navCtrl.setRoot(LogInPage);
         this.navCtrl.popToRoot();
+    }
+    forgetPassword() {
+        this.navCtrl.push(ForgetPage);
+
     }
 
 }

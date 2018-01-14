@@ -9,7 +9,9 @@
 <ion-content padding>
   <br/>
   <br/>
-  <img src="assets/img/logo.png" />
+
+  <img *ngIf="User" src="{{User.ComImg}}" />
+  <img *ngIf="!User" src="assets/img/logo.png" />
   <br/>
   <br/>
   <ion-list no-lines>
@@ -43,11 +45,13 @@
       <div *ngIf="userNameExisted">
         <br />
         <ion-item>
-          <h1>
+          <h2>
             <strong id="lbl_UserName">
               {{"Welcome" | translate}} {{User.UserName}}
             </strong>
-          </h1>
+          </h2>
+          <img *ngIf="User" src="{{User.EmpImg}}" />
+          <img *ngIf="!User" src="assets/img/user.png" />
         </ion-item>
       </div>
       <div>
@@ -74,11 +78,15 @@
       <br/>
       <br/>
       <ion-item>
-        <ion-label>{{"remmberMe" | translate}}</ion-label>
-        <ion-checkbox formControlName="rememberMe" color="primary"></ion-checkbox>
-      </ion-item>
+          <ion-label>{{"remmberMe" | translate}}</ion-label>
+          <ion-checkbox formControlName="rememberMe" color="primary"></ion-checkbox>
+          <a (click)="forgetPassword()">{{"forgetPassword" | translate}}</a>
+        </ion-item>
       <br/>
       <br/>
+      <ion-item>
+          <a (click)="forgetPassword()">{{"forgetPassword" | translate}}</a>
+        </ion-item>
       <br/>
       <div *ngIf="generalError">
         <ion-item *ngIf="generalError">
@@ -94,6 +102,7 @@
     </form>
 
   </ion-list>
+  
   <button ion-button color="danger" (click)="Logout()" block large round>
     <ion-icon name="log-out"></ion-icon>&nbsp;&nbsp;&nbsp; {{"LogOut" | translate}}</button>
     <!-- ////////////////////////////////////////////////////////////////////////// -->

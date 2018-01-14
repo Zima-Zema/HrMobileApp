@@ -13,4 +13,7 @@ export interface IUser {
     UserName: string;
     Roles:Array<string>;
     Password:string;
+    Code:string;
+    EmpImg:string;
+    ComImg:string;
 }

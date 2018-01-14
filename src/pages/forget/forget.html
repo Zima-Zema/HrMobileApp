@@ -1,0 +1,64 @@
+<ion-header>
+
+  <ion-navbar color="newDarkerBlueGreen">
+    <ion-title>{{"forgotPass"|translate}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list no-lines>
+    <form [formGroup]="forgetForm" (ngSubmit)="onSubmit()">
+      <div *ngIf="!companyNameExisted">
+        <ion-item>
+          <ion-label floating>
+            <ion-icon name="aperture"></ion-icon>&nbsp; {{"compName" | translate}}</ion-label>
+          <ion-input type="text" #txtCompanyName formControlName="companyName" (ionBlur)="InputBlured(txtCompanyName.ngControl.name)"
+            (ionFocus)="InputFocused(txtCompanyName.ngControl.name)"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="!forgetForm.get('companyName').required && companyNameRequired">
+          <p style="color:crimson"> {{"compRequir" | translate}} </p>
+        </ion-item>
+        <span *ngIf="!forgetForm.controls.companyName.valid && (forgetForm.controls.companyName.dirty) ">
+          <p *ngIf="forgetForm.get('companyName').hasError('wrongurl')" style="color:crimson ">{{logInForm.get('companyName').getError('wrongurl')}}</p>
+        </span>
+      </div>
+
+      <div>
+        <ion-item>
+          <ion-label floating>
+            <ion-icon name="create"></ion-icon>{{"Username" | translate}}</ion-label>
+          <ion-input type="text" formControlName="userName" [(ngModel)]="userName" #txtUserName (ionBlur)="InputBlured(txtUserName.ngControl.name)"
+            (ionFocus)="InputFocused(txtUserName.ngControl.name)"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="!forgetForm.get('userName').required && userNameRequired">
+          <p style="color:crimson"> {{"userRequir" | translate}} </p>
+        </ion-item>
+      </div>
+      <div>
+        <ion-item>
+          <ion-label floating>
+            <ion-icon name="create"></ion-icon>{{"Email" | translate}}</ion-label>
+          <ion-input type="email" formControlName="email" [(ngModel)]="confirm" #txtEmail (ionBlur)="InputBlured(txtEmail.ngControl.name)"
+            (ionFocus)="InputFocused(txtEmail.ngControl.name)"></ion-input>
+        </ion-item>
+        <ion-item *ngIf="!forgetForm.get('email').required && emailRequired">
+          <p style="color:crimson">{{"emailRequire" | translate}}</p>
+        </ion-item>
+        <ion-item *ngIf="forgetForm.get('email').hasError('isValid') && forgetForm.get('email').touched  ">
+          <p style="color:crimson">{{"forgotEmailInValid" | translate}}</p>
+        </ion-item>
+        <button ion-button color="primary" block large round [disabled]="!forgetForm.valid">
+          <ion-icon name="log-in"></ion-icon>{{"forceConfirmBtn" | translate}}</button>
+      </div>
+      <div *ngIf="generalError">
+        <ion-item *ngIf="generalError">
+          <ion-label text-center style="color:crimson" text-wrap>{{generalError}}</ion-label>
+        </ion-item>
+
+      </div>
+    </form>
+  </ion-list>
+
+</ion-content>

@@ -17,8 +17,9 @@
     <ion-item *virtualItem="let notification" class="item-content" (click)="notificationTapped($event,notification)" [ngClass]="{'item-content':!notification.Read}">
       <ion-avatar item-start>
 
-        <ion-img src="{{baseUrl}}SpecialData/Photos/{{user.CompanyId}}/{{notification.PicUrl}}?dummy=1503580792563">
-        </ion-img>
+
+        <ion-img *ngIf="notification.PicUrl" src="{{notification.PicUrl}}"></ion-img>
+        <ion-img *ngIf="!notification.PicUrl" src="{{baseUrl}}/Content/Photos/systemnoimage.jpg"></ion-img>
 
       </ion-avatar>
       <h2>{{notification.From}}</h2>

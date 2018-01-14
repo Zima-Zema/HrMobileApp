@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -45,17 +45,17 @@ import { ShowAssignOrderRequestsPageModule } from '../pages/AssignOrderRequests/
 import { ChartsPageModule } from '../pages/ExternalTabs/charts/charts.module';
 import { RequestsPageModule } from '../pages/ExternalTabs/requests/requests.module';
 import { QuereiesPageModule } from '../pages/ExternalTabs/quereies/quereies.module';
-import { SettingsTabPageModule} from '../pages/ExternalTabs/settings-tab/settings-tab.module';
-import { CustomLeavesPageModule} from '../pages/Leaves/custom-leaves/custom-leaves.module';
+import { SettingsTabPageModule } from '../pages/ExternalTabs/settings-tab/settings-tab.module';
+import { CustomLeavesPageModule } from '../pages/Leaves/custom-leaves/custom-leaves.module';
 import { CustodyListPageModule } from '../pages/custody-list/custody-list.module';
-import { TransLeavesPageModule} from '../pages/Leaves/trans-leaves/trans-leaves.module';
-import { ResignRequestPageModule} from '../pages/resign-request/resign-request.module'
+import { TransLeavesPageModule } from '../pages/Leaves/trans-leaves/trans-leaves.module';
+import { ResignRequestPageModule } from '../pages/resign-request/resign-request.module'
 //from Ali
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { SettingsPageModule } from '../pages/settings/settings.module';
 import { DocumentsPageModule } from '../pages/documents/documents.module';
-
+import { ForgetPageModule } from '../pages/forget/forget.module';
 
 
 export function setTranslateLoader(http: Http) {
@@ -107,7 +107,8 @@ export function setTranslateLoader(http: Http) {
     CustodyListPageModule,
     TransLeavesPageModule,
     DocumentsPageModule,
-    ResignRequestPageModule
+    ResignRequestPageModule,
+    ForgetPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -127,9 +128,9 @@ export function setTranslateLoader(http: Http) {
     AndroidPermissions,
     StatusBar,
     SplashScreen,
-    
+
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    
+
   ]
 })
 export class AppModule { }

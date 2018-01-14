@@ -55,6 +55,8 @@ export interface IValidationMsg {
     StarsError: string,
     Stars: number,
     DeptPercentError: string,
+    CantGreaterError:string,
+    AllowedDaysError:string,
     percentage: number,
     IsError: boolean
 }
@@ -67,6 +69,7 @@ export interface IValidate {
     StartDate: string,
     Culture: string,
     ReplaceEmpId: number,
+    NofDays:number
 }
 export interface ICancelVM {
     RequestId: number,

@@ -21,7 +21,7 @@ export class NotificationDetailsPage {
   }
   user: IUser;
   notify: INotification;
-  baseUrl: string = "http://www.enterprise-hr.com/";
+  baseUrl: string = "";
   notifyDate: any;
   notifyTime: any;
   notifySubject: any;
@@ -31,7 +31,9 @@ export class NotificationDetailsPage {
     public notifyApi: NotificationServiceApi,
     public viewCtrl: ViewController,
     private storage: Storage) {
-
+      this.storage.get("BaseURL").then((val) => {
+        this.baseUrl = val;
+      });
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;

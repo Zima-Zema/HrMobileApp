@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { WelcomePage } from '../welcome/welcome';
 import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms";
-import { LoginServiceApi, ILogin } from "../../shared/loginService";
+import { LoginServiceApi, IResetPassword } from "../../shared/loginService";
 import { IUser } from "../../shared/IUser";
 import { TranslateService } from "@ngx-translate/core";
-
+import { Storage } from '@ionic/storage';
 @IonicPage()
 @Component({
   selector: 'page-force-change-password',
@@ -20,11 +20,12 @@ export class ForceChangePasswordPage {
   public user: IUser;
   public logInForm: FormGroup;
   public generalError: string;
-  currentUser: ILogin;
+  currentUser: IResetPassword;
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private logInService: LoginServiceApi,
     private loadingCtrl: LoadingController,
     private formBuilder: FormBuilder,
+    private storage: Storage,
     private translationService: TranslateService) {
     this.currentUser = this.navParams.data;
 
@@ -44,6 +45,7 @@ export class ForceChangePasswordPage {
     this.navCtrl.setRoot(WelcomePage);
     this.navCtrl.popToRoot();
   }
+
   equalto(field_name): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
 
@@ -86,7 +88,9 @@ export class ForceChangePasswordPage {
     this.translationService.get('ConfirmPassword').subscribe((data) => {
       a.message = data;
     })
-
+    this.translationService.get('oldPasswordMatched').subscribe((data) => {
+      a.oldPassMessage = data;
+    })
     this.generalError = null;
     let loader = this.loadingCtrl.create({
       //content: "Loading .."
@@ -97,12 +101,55 @@ export class ForceChangePasswordPage {
     let newPassword: string = this.logInForm.value.newPassword;
     let confirmPassword: string = this.logInForm.value.confirm;
     if (newPassword === confirmPassword) {
-      this.currentUser.ResetPassword = newPassword;
-      this.currentUser.confirm = confirmPassword;
-      this.logInService.resetPassword(this.currentUser).subscribe((data) => {
-        this.navCtrl.popToRoot();
-      }, (error) => { });
-      loader.dismiss();
+
+      if (newPassword !== this.currentUser.OldPassword) {
+        this.currentUser.Password = newPassword;
+        this.currentUser.ConfirmPassword = confirmPassword;
+        this.logInService.resetPassword(this.currentUser).subscribe((data) => {
+          console.log("reset Data", data);
+          this.storage.set("User", data).then(() => {
+            this.navCtrl.popToRoot();
+          });
+        }, (error) => {
+          console.log("resetError", error.status);
+          switch (error.status) {
+            case 409:
+              this.translationService.get('rest409Error').subscribe((data) => {
+                this.generalError = data;
+              })
+              break;
+            case 304:
+              this.translationService.get('reset304Error').subscribe((data) => {
+                this.generalError = data;
+              })
+              break;
+            case 400:
+              this.translationService.get('login400Error').subscribe((data) => {
+                this.generalError = data;
+              })
+              break;
+            case 403:
+              this.translationService.get('reset403Error').subscribe((data) => {
+                this.generalError = data;
+              })
+              break;
+              case 404:
+              this.translationService.get('login404Error').subscribe((data) => {
+                this.generalError = data;
+              })
+              break;
+            default:
+              break;
+          }
+        })
+        loader.dismiss();
+      }
+      else {
+        loader.dismiss();
+        this.generalError = a.oldPassMessage;
+      }
+
+
     }
     else {
       this.logInForm.reset();

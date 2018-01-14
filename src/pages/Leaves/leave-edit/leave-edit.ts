@@ -33,7 +33,9 @@ export class LeaveEditPage {
     Stars: 0,
     StarsError: null,
     WaitingError: null,
-    WaitingMonth: null
+    WaitingMonth: null,
+    AllowedDaysError:null,
+    CantGreaterError:null
   }
   //
   validateObj: IValidate = {
@@ -45,6 +47,7 @@ export class LeaveEditPage {
     EndDate: "",
     StartDate: null,
     ReplaceEmpId: 0,
+    NofDays:0,
   }
   //
   RequestDataObj: IRequestData = {
@@ -195,6 +198,7 @@ export class LeaveEditPage {
       this.validateObj.StartDate = new Date(new Date(this.actualStartDate).toString()).toISOString().slice(0, -1);
       this.validateObj.ReplaceEmpId = this.comingLeave.ReplaceEmpId;
       this.validateObj.TypeId = this.comingLeave.TypeId;
+      this.validateObj.NofDays = this.actualNOfDays;
       if (this.actualEndDate) {
         LoadingValidate.present().then(() => {
 
