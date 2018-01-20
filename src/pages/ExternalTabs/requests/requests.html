@@ -8,7 +8,7 @@
 
 
 <ion-content id="mainContent">
-  <ion-card id="mainCard" (click)="gotoLeaveRequests()">
+  <ion-card id="mainCard" (click)="gotoLeaveRequests()" *ngIf="isManager || isEmployee">
     <div id="smalldiv">
       <ion-icon name="analytics"></ion-icon>
     </div>
@@ -26,16 +26,16 @@
     </div>
   </ion-card>
 
-  <ion-card id="mainCardq" (click)="gotoResignRequest()">
+  <!-- <ion-card id="mainCardq" (click)="gotoResignRequest()" *ngIf="isManager || isEmployee">
       <div id="smalldivq">
           <ion-icon name="analytics"></ion-icon>
       </div>
       <div id="largedivq">
           {{"TerminationRequests" | translate}}
       </div>
-  </ion-card>
+  </ion-card> -->
 
-  <ion-card id="mainCard" (click)="gotoSalaryAdvanceRequests()">
+  <ion-card id="mainCard" (click)="gotoSalaryAdvanceRequests()" *ngIf="isManager || isEmployee">
     <div id="smalldiv">
       <ion-icon name="analytics"></ion-icon>
     </div>
@@ -44,7 +44,7 @@
     </div>
   </ion-card>
 
-  <ion-card id="mainCard" (click)="gotoAskingPermission()">
+  <ion-card id="mainCard" (click)="gotoAskingPermission()" *ngIf="isManager || isEmployee">
     <div id="smalldiv">
       <ion-icon name="analytics"></ion-icon>
     </div>
@@ -53,7 +53,7 @@
     </div>
   </ion-card>
 
-  <ion-card id="mainCard" (click)="gotoComplaint()">
+  <ion-card id="mainCard" (click)="gotoComplaint()" *ngIf="isManager || isEmployee">
     <div id="smalldiv">
       <ion-icon name="analytics"></ion-icon>
     </div>
@@ -71,7 +71,7 @@
     </div>
   </ion-card> -->
 
-  <ion-card id="mainCard" (click)="gotoEditProfile()">
+  <ion-card id="mainCard" (click)="gotoEditProfile()" *ngIf="isManager || isEmployee">
     <div id="smalldiv">
       <ion-icon name="analytics"></ion-icon>
     </div>

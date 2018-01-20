@@ -36,7 +36,7 @@ export class ForceChangePasswordPage {
   }
   createForm() {
     this.logInForm = this.formBuilder.group({
-      newPassword: [null, Validators.compose([Validators.required])],
+      newPassword: [null, Validators.compose([Validators.required,this.validate()])],
       confirm: new FormControl('', [Validators.required, this.equalto('newPassword')])
 
     });
@@ -58,6 +58,30 @@ export class ForceChangePasswordPage {
         return null;
     };
   }
+
+  validate():ValidatorFn {
+    var minMaxLength = /^[\s\S]{8,32}$/,
+    upper = /[A-Z]/,
+    lower = /[a-z]/,
+    number = /[0-9]/,
+    special = /[ !"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/;
+   
+
+    return (control: AbstractControl): { [key: string]: any } => {
+      let input = control.value;
+      if (minMaxLength.test(input) && upper.test(input) && lower.test(input) && number.test(input) && special.test(input)) {
+      return null;
+    }
+    else{
+      return { 'validTo': { isValid:false } }
+    }
+
+    }
+   
+
+
+  }
+
   InputBlured(inputName) {
     switch (inputName) {
       case 'newPassword':
@@ -133,7 +157,7 @@ export class ForceChangePasswordPage {
                 this.generalError = data;
               })
               break;
-              case 404:
+            case 404:
               this.translationService.get('login404Error').subscribe((data) => {
                 this.generalError = data;
               })

@@ -14,11 +14,14 @@ import { ResignRequestPage} from '../../resign-request/resign-request';
 export class RequestsPage {
   user: IUser;
   isManager: boolean;
+
+  isEmployee: boolean;
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, public app: App) {
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
         this.isManager = (this.user.Roles.indexOf("Manager") == -1) ? false : true;
+        this.isEmployee = (this.user.Roles.indexOf("Employee") == -1) ? false : true;
       }
     });
     //fixed-content

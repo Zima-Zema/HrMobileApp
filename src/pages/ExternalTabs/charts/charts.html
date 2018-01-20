@@ -9,7 +9,7 @@
 
 <ion-content>
 
-  <ion-card>
+  <ion-card *ngIf="isManager || isEmployee">
     <ion-slides dir="ltr" pager >
 
       <ion-slide >
@@ -37,7 +37,7 @@
     </ion-slides>
   </ion-card>
 
-  <ion-card>
+  <ion-card *ngIf="isManager || isEmployee">
       <!-- <ion-slides dir="ltr" pager>
         
         <ion-slide> -->

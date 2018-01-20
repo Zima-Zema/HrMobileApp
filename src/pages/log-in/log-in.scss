@@ -1,11 +1,36 @@
-img{
-    align-self: center;
-    margin: auto;
-    width: 90%;
+
+
+.empimage{
+   display: block;
+   margin: 0 auto;
+    border-radius: 100%;
+    height: 70px;
+    width: 70px;
+    border: #EEEEEE 4px solid;
+
 }
-#lbl_UserName{
-    font-family: 'Trebuchet MS';
-    font-weight: bolder;
-    color: darkblue;
-    font-size: xx-large;
+.copmImg{
+    vertical-align: middle;
+    border-radius: 100%;
+    height: 140px;
+    width: 140px;
+    border: #EEEEEE 4px solid;
+
+}
+// #lbl_UserName{
+//     font-family: 'Trebuchet MS';
+//     font-weight: bolder;
+//     color: darkblue;
+//     font-size: xx-large;
+// }
+h2{
+    font-size: 18px;
+    margin: 0px 0px 10px;
+    color: #666666;
+    text-align: center;
+
+    span{
+        display: block;
+        font-weight: bolder;
+    }
 }

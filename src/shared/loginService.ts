@@ -25,7 +25,8 @@ export interface IResetPassword {
 export interface IForgotPassword {
     Email: string;
     Username: string;
-
+    WithEmail:boolean;
+    TempUrl:string;
 }
 
 @Injectable()
@@ -249,11 +250,12 @@ export class LoginServiceApi {
 
             });
     }
+    
     forgotPassword(body: IForgotPassword) {
 
         let bodyString = JSON.stringify(body);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' });
-        return this._http.post(`${this.baseURL}newApi/Security/ForgotPassword`, bodyString, { headers: headers }).retry(1)
+        return this._http.post(`${body.TempUrl}newApi/Security/ForgotPassword`, bodyString, { headers: headers }).retry(1)
             .map((res: Response) => {
                 console.log("Res>>>", res.json());
                 return res.json();

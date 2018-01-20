@@ -7,54 +7,63 @@
 </ion-header>
 
 <ion-content padding>
-  <br/>
-  <br/>
-
-  <img *ngIf="User" src="{{User.ComImg}}" />
-  <img *ngIf="!User" src="assets/img/logo.png" />
-  <br/>
-  <br/>
+  <img *ngIf="User" class="copmImg" src="{{User.ComImg}}" />
+  <img *ngIf="!User" class="copmImg" src="assets/img/logo.png" />
   <ion-list no-lines>
     <form [formGroup]="logInForm" (ngSubmit)="onSubmit()">
-      <div *ngIf="!companyNameExisted">
-        <ion-item>
+      <!-- <div *ngIf="!companyNameExisted"> -->
+        <ion-item *ngIf="!companyNameExisted">
           <ion-label floating>
             <ion-icon name="aperture"></ion-icon>&nbsp; {{"compName" | translate}}</ion-label>
           <ion-input type="text" #txtCompanyName formControlName="companyName" (ionBlur)="InputBlured(txtCompanyName.ngControl.name)"
             (ionFocus)="InputFocused(txtCompanyName.ngControl.name)"></ion-input>
         </ion-item>
         <ion-item *ngIf="!logInForm.get('companyName').required && companyNameRequired">
-          <p style="color:crimson"> {{"compRequir" | translate}} </p>
+          <ion-label style="color:crimson"> {{"compRequir" | translate}} </ion-label>
         </ion-item>
         <span *ngIf="!logInForm.controls.companyName.valid && (logInForm.controls.companyName.dirty) ">
-          <p *ngIf="logInForm.get('companyName').hasError('wrongurl')" style="color:crimson ">{{logInForm.get('companyName').getError('wrongurl')}}</p>
+          <ion-label *ngIf="logInForm.get('companyName').hasError('wrongurl')" style="color:crimson ">{{logInForm.get('companyName').getError('wrongurl')}}</ion-label>
         </span>
-      </div>
+      <!-- </div> -->
 
-      <div *ngIf="!userNameExisted">
-        <ion-item>
+
+
+
+
+
+
+      <!-- <div *ngIf="!userNameExisted"> -->
+        <ion-item *ngIf="!userNameExisted">
           <ion-label floating>
             <ion-icon name="person"></ion-icon>&nbsp; {{"Username" | translate}}</ion-label>
           <ion-input type="text" formControlName="userName" #txtUserName (ionBlur)="InputBlured(txtUserName.ngControl.name)" (ionFocus)="InputFocused(txtUserName.ngControl.name)"></ion-input>
         </ion-item>
         <ion-item *ngIf="!logInForm.get('userName').required && userNameRequired">
-          <p style="color:crimson "> {{"userRequir" | translate}}</p>
+          <ion-label style="color:crimson "> {{"userRequir" | translate}}</ion-label>
         </ion-item>
-      </div>
+      <!-- </div> -->
 
-      <div *ngIf="userNameExisted">
-        <br />
-        <ion-item>
+      <!-- <div > -->
+        <ion-item *ngIf="userNameExisted">
           <h2>
-            <strong id="lbl_UserName">
-              {{"Welcome" | translate}} {{User.UserName}}
-            </strong>
+            <span id="lbl_UserName">
+              {{"Welcome" | translate}} {{User.LocalName}}
+            </span >
+            <!-- <span>{{"lastLogin" | translate}} {{User.LastLogin}}</span> -->
+            <span>{{"lastLogin" | translate}} {{lastLogin}}</span>
+            
           </h2>
-          <img *ngIf="User" src="{{User.EmpImg}}" />
-          <img *ngIf="!User" src="assets/img/user.png" />
+          <img *ngIf="User" class="empimage" src="{{User.EmpImg}}" />
+          <img *ngIf="!User" class="empimage" src="assets/img/user.png" />
         </ion-item>
-      </div>
-      <div>
+      <!-- </div> -->
+
+
+
+
+
+
+      <!-- <div> -->
         <ion-item>
           <ion-label floating>
             <ion-icon name="create"></ion-icon>&nbsp; {{"Password" | translate}}</ion-label>
@@ -67,23 +76,28 @@
           <button *ngIf="showPass" ion-button icon-only clear color="dark" type="button" item-right (click)="showPassword()">
             <ion-icon name="eye"></ion-icon>
           </button>
-
-
         </ion-item>
         <ion-item *ngIf="!logInForm.get('password').required && passwordRequired">
-          <p style="color:crimson"> {{"passRequir" | translate}} </p>
+          <ion-label style="color:crimson"> {{"passRequir" | translate}} </ion-label>
         </ion-item>
-      </div>
+      <!-- </div> -->
 
       <br/>
-      <br/>
+
+
+
+
+
+
+
+
       <ion-item>
           <ion-label>{{"remmberMe" | translate}}</ion-label>
           <ion-checkbox formControlName="rememberMe" color="primary"></ion-checkbox>
           <a (click)="forgetPassword()">{{"forgetPassword" | translate}}</a>
         </ion-item>
       <br/>
-      <br/>
+
       <ion-item>
           <a (click)="forgetPassword()">{{"forgetPassword" | translate}}</a>
         </ion-item>
@@ -93,7 +107,7 @@
           <ion-label text-center style="color:crimson" text-wrap>{{generalError}}</ion-label>
         </ion-item>
         <br/>
-        <br/>
+
       </div>
       <button ion-button color="primary" block large round [disabled]="!logInForm.valid">
         <ion-icon name="log-in"></ion-icon>&nbsp;&nbsp;&nbsp; {{"LogIn" | translate}}</button>

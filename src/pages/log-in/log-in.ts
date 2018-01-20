@@ -9,7 +9,7 @@ import { Network } from '@ionic-native/network';
 import { IUser } from "../../shared/IUser";
 import { TranslateService } from '@ngx-translate/core';
 import { ForgetPage } from '../forget/forget';
-
+import * as moment from 'moment';
 @IonicPage()
 @Component({
     selector: 'page-log-in',
@@ -31,6 +31,7 @@ export class LogInPage {
     public type = 'password';
     public showPass = false;
     static baseUrl: string;
+    public lastLogin:string;
     errorMsg:any = {};
     constructor(
         private logInService: LoginServiceApi,
@@ -65,6 +66,9 @@ export class LogInPage {
                 if (udata) {
                     this.userNameExisted = true;
                     this.User = udata;
+                    moment.locale(this.translate.getDefaultLang());
+                    
+                    this.lastLogin = moment(this.User.LastLogin).format('lll');
                     this.logInForm.controls['userName'].setValue(udata.UserName);
                 }
                 this.storage.get("Password").then((pdata) => {

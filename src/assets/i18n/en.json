@@ -23,6 +23,7 @@
     "Password": "Password",
     "passRequir": "Password is Required",
     "remmberMe": "Remember Me",
+    "lastLogin":"Last Login",
     "LogIn": "LogIn",
     "LogOut": "LogOut",
     "LeaveRequests": "Leave Requests",
@@ -209,6 +210,7 @@
 
     "forceNewPassword":"New Password",
     "forceConfirm":"Confirm Password",
+    "forcePasswordComplex":"Not complex Passowrd uses Upper and Lower Case, Number and special Character",
     "forceNewPasswordRequire":"New Password is Required",
     "forceConfirmRequire":"Confirm Password is Required",
     "forceConfirmMatched":"Confirm password and Password do not match.",
@@ -220,6 +222,7 @@
     "reset304Error":"Error In Reset Password Please Try Again",
     "reset403Error":"Confirm password and Password do not match.",
 
+    "Forgot_message":"Please check your email to reset your password. Back to Login?",
     "forgot403Error":"Error in Generate Reset Password Token",
     "Email":"Email Address",
     "emailRequire":"Email is Required",

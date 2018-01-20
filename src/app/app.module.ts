@@ -57,6 +57,10 @@ import { SettingsPageModule } from '../pages/settings/settings.module';
 import { DocumentsPageModule } from '../pages/documents/documents.module';
 import { ForgetPageModule } from '../pages/forget/forget.module';
 
+import { InformingPageModule } from '../pages/informingPages/informing/informing.module'
+import { ReceivedPageModule } from '../pages/informingPages/received/received.module';
+import { NotreceivedPageModule } from '../pages/informingPages/notreceived/notreceived.module';
+import { from } from 'rxjs/observable/from';
 
 export function setTranslateLoader(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -108,7 +112,10 @@ export function setTranslateLoader(http: Http) {
     TransLeavesPageModule,
     DocumentsPageModule,
     ResignRequestPageModule,
-    ForgetPageModule
+    ForgetPageModule,
+    InformingPageModule,
+    ReceivedPageModule,
+    NotreceivedPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

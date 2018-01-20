@@ -29,7 +29,7 @@
         <ion-item>
           <ion-label floating>
             <ion-icon name="create"></ion-icon>{{"Username" | translate}}</ion-label>
-          <ion-input type="text" formControlName="userName" [(ngModel)]="userName" #txtUserName (ionBlur)="InputBlured(txtUserName.ngControl.name)"
+          <ion-input type="text" formControlName="userName" [(ngModel)]="userName" #txtUserName [disabled]="isDisabled" (ionBlur)="InputBlured(txtUserName.ngControl.name)"
             (ionFocus)="InputFocused(txtUserName.ngControl.name)"></ion-input>
         </ion-item>
         <ion-item *ngIf="!forgetForm.get('userName').required && userNameRequired">

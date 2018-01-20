@@ -20,7 +20,7 @@ export class LeaveListPage {
 
   public toggled: boolean = false;
   RequestTypeObj: IRequestType = {
-    CompId: 0,
+    CompanyId: 0,
     Culture: '',
     EmpId: 0
   }
@@ -60,8 +60,9 @@ export class LeaveListPage {
         this.user = udata;
         this.RequestTypeObj.EmpId = this.user.EmpId;
         this.RequestTypeObj.Culture = this.user.Culture;
-        this.RequestTypeObj.CompId = this.CancelVMObj.CompanyId = this.user.CompanyId;
+        this.RequestTypeObj.CompanyId = this.CancelVMObj.CompanyId = this.user.CompanyId;
         this.CancelVMObj.Language = this.DeleteObj.Language = this.user.Language;
+        console.log("this.RequestTypeObj.CompId",this.RequestTypeObj.CompanyId)
       }
     });
   }
@@ -92,6 +93,7 @@ export class LeaveListPage {
       this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
         this.LeavesCount = data.length;
         LeaveListPage.motherArr = data;
+        console.log("getLeaves",data);
         // data.forEach(element => {
         //   element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
         //   element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');

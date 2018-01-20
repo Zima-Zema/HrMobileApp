@@ -68,6 +68,7 @@ export class RequestLeavePage {
   public workhour: number;
   allowFraction: boolean = false;
   static maxDays: number = null;
+  public theMaxDay: number;
   static allowed: number = null;
 
   static ZNError: string = null;
@@ -88,7 +89,7 @@ export class RequestLeavePage {
   public errorArray: Array<string> = [];
 
   RequestTypeObj: IRequestType = {
-    CompId: 0,
+    CompanyId: 0,
     Culture: "",
     EmpId: 0
   }
@@ -129,7 +130,7 @@ export class RequestLeavePage {
     EndDate: "",
     StartDate: null,
     ReplaceEmpId: 0,
-    NofDays:0,
+    NofDays: 0,
   }
   errorMsgObj: IValidationMsg = {
     AssignError: null,
@@ -143,8 +144,8 @@ export class RequestLeavePage {
     StarsError: null,
     WaitingError: null,
     WaitingMonth: null,
-    AllowedDaysError:null,
-    CantGreaterError:null
+    AllowedDaysError: null,
+    CantGreaterError: null
   }
   //Loader
   public LoadingChart = this.loadingCtrl.create({
@@ -158,6 +159,7 @@ export class RequestLeavePage {
   });
   //
   user: IUser;
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
@@ -172,7 +174,7 @@ export class RequestLeavePage {
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
-        this.RequestTypeObj.CompId = this.RequestDataObj.CompanyId = this.user.CompanyId;
+        this.RequestTypeObj.CompanyId = this.RequestDataObj.CompanyId = this.user.CompanyId;
         this.RequestTypeObj.Culture = this.RequestDataObj.Culture = this.user.Culture;
         this.RequestTypeObj.EmpId = this.RequestDataObj.EmpId = this.user.EmpId;
       }
@@ -222,7 +224,7 @@ export class RequestLeavePage {
       RequestLeavePage.ZNError = translation;
     });
     this.translateUtilities.get('BTMaxError').subscribe(translation => {
-      RequestLeavePage.BTMaxError;
+      RequestLeavePage.BTMaxError = translation;
     });
     this.translateUtilities.get('BTAllowError').subscribe(translation => {
       RequestLeavePage.BTAllowError = translation;
@@ -266,7 +268,7 @@ export class RequestLeavePage {
         this.minDate = this.bloodyIsoString(SDate);
         this.noOfDays = this.item.NofDays;
 
-        this.replacement = this.item.ReplaceEmpId;
+        this.replacement = Number.parseInt(this.item.ReplaceEmpId) === 0 ? null : Number.parseInt(this.item.ReplaceEmpId);
         this.comments = this.item.ReasonDesc;
         this.reason = this.item.ReqReason;
         this.endDate = this.bloodyIsoString(new Date(new Date(this.item.EndDate).toDateString())).slice(0, -15);
@@ -289,7 +291,7 @@ export class RequestLeavePage {
         this.noOfDays = this.item.NofDays;
         // this.returnDate = this.bloodyIsoString(new Date(new Date(this.item.ReturnDate).toDateString())).slice(0, -15);
         // this.endDate = this.bloodyIsoString(new Date(new Date(this.item.EndDate).toDateString())).slice(0, -15);
-        this.replacement = this.item.ReplaceEmpId;
+        this.replacement = Number.parseInt(this.item.ReplaceEmpId) === 0 ? null : Number.parseInt(this.replacement);
         this.comments = this.item.ReasonDesc;
         this.reason = this.item.ReqReason;
         this.endDate = this.bloodyIsoString(new Date(new Date(this.item.EndDate).toDateString())).slice(0, -15);
@@ -355,9 +357,18 @@ export class RequestLeavePage {
     let dataTemp: Array<number> = [];
     let DaysTemp: Array<number> = [];
     chartData.forEach((item) => {
-      lableTemp.push(item.Name);
-      dataTemp.push(item.Balance);
-      DaysTemp.push(item.Days)
+      if (item.Balance<0) {
+        item.Balance = 0;
+        lableTemp.push(item.Name);
+        dataTemp.push(item.Balance);
+        DaysTemp.push(item.Days)
+      }
+      else{
+        lableTemp.push(item.Name);
+        dataTemp.push(item.Balance);
+        DaysTemp.push(item.Days)
+      }
+
     })
     // //doughnut chart
     this.doughnutChart = new Chart(this.doughnutCanvas.nativeElement, {
@@ -454,7 +465,7 @@ export class RequestLeavePage {
 
     LoadingLeaves.present().then(() => {
       this.LeaveServices.GetRequestLeaveData(this.RequestDataObj).subscribe((data) => {
-
+        this.theMaxDay = data.requestVal.MaxDays ? data.requestVal.MaxDays : data.LeaveType.MaxDays;
         this.workhour = data.Calender.WorkHours;
         this.filteredArr = this.LeaveServices.getOffDays(data.Calender);
         this.requestData = data;
@@ -535,7 +546,7 @@ export class RequestLeavePage {
     });//loader
   }
   dateChange(item) {
-    //this.ResetMiniForm();
+    this.ResetMiniForm();
 
     if (item) {
       if (this.EditFlag != 2) {
@@ -545,7 +556,8 @@ export class RequestLeavePage {
           this.RequestLeaveForm.controls['noOfDays'].enable();
           this.RequestLeaveForm.controls['fraction'].enable();
         }
-        else if (this.RequestLeaveForm.controls['noOfDays'].value != null || this.RequestLeaveForm.controls['noOfDays'].value != 0) {
+        else if ((this.RequestLeaveForm.controls['noOfDays'].value != null || this.RequestLeaveForm.controls['noOfDays'].value != 0) && !isNaN(Number.parseInt(this.noOfDays))) {
+
 
           this.RequestLeaveForm.controls['noOfDays'].enable();
           this.RequestLeaveForm.controls['fraction'].disable();
@@ -559,7 +571,11 @@ export class RequestLeavePage {
       }
       this.startDate = this.bloodyIsoString(new Date(new Date(item).toDateString())).slice(0, -15);
 
-      this.bindForm();
+      // this.bindForm();
+      if (Number.parseInt(this.fraction) > 0 || Number.parseInt(this.noOfDays) > 0) {
+        this.bindForm();
+      }
+
     }
   }
   //
@@ -572,21 +588,25 @@ export class RequestLeavePage {
 
     if (this.EditFlag != 2 && this.EnableLoaderFlag == false) {
 
-      if (this.endDate) {
+      if (this.endDate && !this.RequestLeaveForm.invalid) {
+        console.log("this.RequestLeaveForm.invalid", this.RequestLeaveForm.invalid);
         this.validateObj.Id = this.item.Id ? this.item.Id : 0;
         this.validateObj.CompanyId = this.user.CompanyId;
         this.validateObj.Culture = this.user.Culture;
         this.validateObj.EmpId = this.user.EmpId;
         this.validateObj.EndDate = new Date(new Date(this.endDate).toString()).toISOString().slice(0, -1);
         this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toISOString().slice(0, -1);
-        this.validateObj.ReplaceEmpId = replacement;
+        this.validateObj.ReplaceEmpId = Number.parseInt(replacement) == 0 ? null : Number.parseInt(replacement);
         this.validateObj.TypeId = this.leaveType;
-        this.validateObj.NofDays=this.noOfDays;
+        this.validateObj.NofDays = this.noOfDays;
 
         LoadingValidate.present().then(() => {
           this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
             this.errorMsgObj = null;
             this.errorMsgObj = data;
+            moment.locale(this.translateUtilities.getDefaultLang())
+            this.errorMsgObj.WaitingMonth = moment(data.WaitingMonth).format('LL');  // January 15, 2018
+
             this.rate = this.errorMsgObj.Stars;
 
             LoadingValidate.dismiss();
@@ -640,8 +660,11 @@ export class RequestLeavePage {
       RequestLeavePage.frac = 0
       //this.fraction = 0;
     }
+    if (Number.parseInt(this.fraction) > 0) {
+      this.bindForm();
+    }
 
-    this.bindForm();
+
   }
   reasonChange(reason) {
   }
@@ -691,17 +714,10 @@ export class RequestLeavePage {
 
     if (this.startDate && (this.noOfDays || this.fraction)) {
       let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
-
       this.endDate = this.allowFraction ? new Date(res.endDate).toISOString() : new Date(res.endDate).toISOString();
-
       this.returnDate = this.allowFraction ? new Date(res.returnDate).toISOString() : new Date(res.returnDate).toISOString();
       this.startDate = this.allowFraction ? new Date(res.startDate).toISOString() : new Date(res.startDate).toISOString();
-
-
       this.balAfter = this.calcBalAfter(this.balBefore, this.noOfDays, this.fraction);
-
-
-
       if (this.EditFlag != 2 && this.EnableLoaderFlag == false) {
         this.validateObj.Id = this.item.Id ? this.item.Id : 0;
         this.validateObj.CompanyId = this.user.CompanyId;
@@ -709,14 +725,19 @@ export class RequestLeavePage {
         this.validateObj.EmpId = this.user.EmpId;
         this.validateObj.EndDate = new Date(new Date(this.endDate).toString()).toLocaleDateString();//.slice(0, -1);
         this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toLocaleDateString();//.slice(0, -1);
-        this.validateObj.ReplaceEmpId = this.replacement;
+        this.validateObj.ReplaceEmpId = Number.parseInt(this.replacement) === 0 ? null : Number.parseInt(this.replacement);
         this.validateObj.TypeId = this.leaveType;
-        this.validateObj.NofDays=this.noOfDays;
-        if (this.endDate) {
+        this.validateObj.NofDays = (this.noOfDays == null) ? 0 : Number.parseInt(this.noOfDays);
+        this.validateObj.NofDays = isNaN(this.validateObj.NofDays) ? 0 : this.validateObj.NofDays
+
+        if (this.endDate && !this.RequestLeaveForm.invalid) {
+          console.log("this.RequestLeaveForm.invalid", this.RequestLeaveForm.invalid);
           Loadingrequest.present().then(() => {
             this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
               this.errorMsgObj = null;
               this.errorMsgObj = data;
+              moment.locale(this.translateUtilities.getDefaultLang())
+              this.errorMsgObj.WaitingMonth = moment(data.WaitingMonth).format('LL');  // January 15, 2018
               this.rate = this.errorMsgObj.Stars;
 
               Loadingrequest.dismiss();
@@ -752,13 +773,13 @@ export class RequestLeavePage {
   }
 
   ResetMiniForm() {
-    RequestLeavePage.allowed = null;
-    RequestLeavePage.maxDays = null;
-    RequestLeavePage.FullData = null;
-    RequestLeavePage.frac = 0;
-    this.noOfDays = null;
-    this.allowedDays = undefined;
-    this.reservedDays = undefined;
+    // RequestLeavePage.allowed = null;
+    // RequestLeavePage.maxDays = null;
+    // RequestLeavePage.FullData = null;
+    // RequestLeavePage.frac = 0;
+    this.noOfDays = this.noOfDays ? this.noOfDays : null
+    // this.allowedDays = undefined;
+    // this.reservedDays = undefined;
     this.returnDate = null;
     this.endDate = null;
     this.balBefore = undefined;
@@ -766,7 +787,7 @@ export class RequestLeavePage {
     this.replacement = null;
     this.comments = null;
     this.reason = null;
-    this.fraction = null;
+    this.fraction = this.fraction ? this.fraction : null;
   }
 
 
@@ -782,7 +803,7 @@ export class RequestLeavePage {
     }
     if (x > RequestLeavePage.maxDays && RequestLeavePage.maxDays != null) {
       return {
-        "maximum": RequestLeavePage.BTMaxError
+        "maximum": RequestLeavePage.BTMaxError + " " + RequestLeavePage.maxDays
       }
     }
     if (control.value > RequestLeavePage.allowed) {
@@ -858,7 +879,7 @@ export class RequestLeavePage {
     this.requestObj.ReqReason = Number.parseInt(this.reason);
     this.requestObj.ReasonDesc = this.comments;
     this.requestObj.ApprovalStatus = ApprovalStatusEnum.Draft
-    this.requestObj.ReplaceEmpId = Number.parseInt(this.replacement);
+    this.requestObj.ReplaceEmpId = Number.parseInt(this.replacement) === 0 ? null : Number.parseInt(this.replacement)
     this.requestObj.BalanceBefore = this.balBefore;
     this.requestObj.BalBefore = this.balBefore;
     this.requestObj.submit = item;

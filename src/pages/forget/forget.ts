@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms";
-import { LoginServiceApi, ILogin, IForgotPassword } from "../../shared/loginService";
+import { LoginServiceApi, IForgotPassword } from "../../shared/loginService";
 import { IUser } from "../../shared/IUser";
 import { TranslateService } from "@ngx-translate/core";
 import { Storage } from '@ionic/storage';
 import { ForceChangePasswordPage } from '../force-change-password/force-change-password';
+import { LogInPage } from '../log-in/log-in';
 /**
  * Generated class for the ForgetPage page.
  *
@@ -30,26 +31,32 @@ export class ForgetPage {
   public companyNameRequired: boolean;
   forgotModel: IForgotPassword = {
     Username: "",
-    Email: ""
+    Email: "",
+    TempUrl: "",
+    WithEmail: true
   }
+  isDisabled: boolean = false;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private logInService: LoginServiceApi,
     private loadingCtrl: LoadingController,
     private formBuilder: FormBuilder,
+    public alertCtrl: AlertController,
     private storage: Storage,
     private translationService: TranslateService
   ) {
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
-
+        this.userName = this.user.UserName;
+        this.isDisabled = true;
+        this.userNameRequired=false;
       }
     });
 
     this.createForm();
-    this.storage.get("CompanyName").then((cdata) => {
+    this.storage.get("BaseURL").then((cdata) => {
       if (cdata) {
         this.forgetForm.controls['companyName'].setValue(cdata);
         this.companyNameExisted = true;
@@ -126,40 +133,95 @@ export class ForgetPage {
 
     let userName: string = this.forgetForm.value.userName;
     let email: string = this.forgetForm.value.email;
-    let Url = this.forgetForm.value.companyName;
-    this.storage.set("BaseURL", Url).then(() => {
-      this.storage.set("CompanyName", Url).then(() => {
-        this.forgotModel.Username = userName;
-        this.forgotModel.Email = email;
-        this.logInService.forgotPassword(this.forgotModel).subscribe((data) => {
-          if (data) {
+    let Url: string;
+    if (this.companyNameExisted == true) {
+      Url = this.forgetForm.value.companyName;
+    }
+    else {
+      Url = (`http://${this.forgetForm.value.companyName}/`);
+    }
+    this.forgotModel.TempUrl = Url;
+    this.forgotModel.Username = userName;
+    this.forgotModel.Email = email;
+    if (this.user) {
+      this.forgotModel.WithEmail = true;
+    }
+    else {
+      this.forgotModel.WithEmail = true;
+    }
+
+    this.logInService.forgotPassword(this.forgotModel).subscribe((data) => {
+      if (data) {
+        this.storage.set("BaseURL", Url).then(() => {
+          this.storage.set("CompanyName", Url).then(() => {
             loader.dismiss();
-            this.navCtrl.push(ForceChangePasswordPage, { UserName: data.UserName, OldPassword: this.user.Password, Code: data.Code });
-          }
-        }, (err) => {
-          loader.dismiss();
-          switch (err.status) {
-            case 400:
-              this.translationService.get('login400Error').subscribe((data) => {
-                this.generalError = data;
-              })
-              break;
-            case 404:
-              this.translationService.get('login404Error').subscribe((data) => {
-                this.generalError = data;
-              })
-              break;
-            case 403:
-              this.translationService.get('forgot403Error').subscribe((data) => {
-                this.generalError = data;
-              })
-              break;
-            default:
-              break;
-          }
+            if (this.forgotModel.WithEmail && data.Code == null) {
+              let a: any = {};
+
+              this.translationService.get('ALERT_TITLE').subscribe(t => {
+                a.title = t;
+              });
+
+              this.translationService.get('Forgot_message').subscribe(t => {
+                a.message = t;
+              });
+              this.translationService.get('ALERT_YES').subscribe(t => {
+                a.ok = t;
+              });
+
+              this.alertCtrl.create({
+                title: a.title,
+                message: a.message,
+                buttons: [{
+                  text: a.ok,
+                  handler: () => {
+                    this.navCtrl.setRoot(LogInPage);
+                    this.navCtrl.popToRoot();
+                  }
+                }
+                ]
+              }).present();
+            }
+            else {
+              this.navCtrl.push(ForceChangePasswordPage, { UserName: data.UserName, OldPassword: this.user.Password, Code: data.Code });
+            }
+          });
         });
-      });
+      }
+    }, (err) => {
+      loader.dismiss();
+      console.log("forgotPassword", err);
+      switch (err.status) {
+        case 400:
+          this.translationService.get('login400Error').subscribe((data) => {
+            this.generalError = data;
+          })
+          break;
+        case 404:
+          this.translationService.get('login404Error').subscribe((data) => {
+            this.generalError = data;
+          })
+          break;
+        case 403:
+          this.translationService.get('forgot403Error').subscribe((data) => {
+            this.generalError = data;
+          })
+          break;
+        default:
+          break;
+      }
+
+      if (err.type == 3) {
+        this.translationService.get('serviceError').subscribe(t => {
+          this.generalError = t;
+        });
+
+      }
     });
+
+
+
+
   }
 
 }

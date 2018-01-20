@@ -72,7 +72,7 @@
 
         <kendo-grid-column field="Bal" title="{{'TotalBal' | translate}}" width="100%">
             <ng-template kendoGridCellTemplate let-dataItem>
-              {{dataItem.CreditQty - dataItem.DebitQty}}
+              {{dataItem.Balance}}
             <!-- {{"TotalBal" | translate}}: {{aggregates["CreditQty"].sum - aggregates["DebitQty"].sum}} -->
             </ng-template>
     </kendo-grid-column>

@@ -16,4 +16,6 @@ export interface IUser {
     Code:string;
     EmpImg:string;
     ComImg:string;
+    LocalName:string;
+    LastLogin:string;
 }

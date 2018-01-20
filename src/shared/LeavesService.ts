@@ -6,7 +6,7 @@ import { Storage } from '@ionic/storage';
 import * as moment from 'moment';
 
 export interface IRequestType {
-    CompId: number,
+    CompanyId: number,
     Culture: string,
     EmpId: number
 }

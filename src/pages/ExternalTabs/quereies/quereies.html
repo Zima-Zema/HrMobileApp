@@ -7,7 +7,7 @@
 
 <ion-content id="mainContentq">
 
-    <ion-card id="mainCardq" (click)="gotoMyTasks()">
+    <ion-card id="mainCardq" (click)="gotoMyTasks()" *ngIf="isManager || isEmployee">
         <div id="smalldivq">
             <ion-icon name="analytics"></ion-icon>
         </div>
@@ -16,7 +16,7 @@
         </div>
     </ion-card>
 
-    <ion-card id="mainCardq" (click)="gotoMyLeave()">
+    <ion-card id="mainCardq" (click)="gotoMyLeave()" *ngIf="isManager || isEmployee" >
         <div id="smalldivq">
             <ion-icon name="analytics"></ion-icon>
         </div>
@@ -25,7 +25,7 @@
         </div>
     </ion-card>
 
-    <ion-card id="mainCardq" (click)="gotoMyAssignOrders()">
+    <ion-card id="mainCardq" (click)="gotoMyAssignOrders()" *ngIf="isManager || isEmployee">
         <div id="smalldivq">
             <ion-icon name="analytics"></ion-icon>
         </div>
@@ -34,7 +34,14 @@
         </div>
     </ion-card>
 
-
+    <ion-card id="mainCardq" (click)="gotoInforming()" *ngIf="isManager || isEmployee">
+        <div id="smalldivq">
+            <ion-icon name="analytics"></ion-icon>
+        </div>
+        <div id="largedivq">
+            {{"myInforming" | translate}}
+        </div>
+    </ion-card>
 
     <ion-card id="mainCardq" *ngIf="isManager" (click)="gotoAssignOrderRequests()">
         <div id="smalldivq">
@@ -45,7 +52,7 @@
         </div>
     </ion-card>
 
-    <ion-card id="mainCardq" (click)="gotocustodyRequests()">
+    <ion-card id="mainCardq" (click)="gotocustodyRequests()" *ngIf="isManager || isEmployee">
         <div id="smalldivq">
             <ion-icon name="analytics"></ion-icon>
         </div>
@@ -54,7 +61,7 @@
         </div>
     </ion-card>
 
-    <ion-card id="mainCardq" (click)="gotoCustomLeaves()">
+    <ion-card id="mainCardq" (click)="gotoCustomLeaves()" *ngIf="isManager || isEmployee">
         <div id="smalldivq">
             <ion-icon name="analytics"></ion-icon>
         </div>
@@ -63,7 +70,7 @@
         </div>
     </ion-card>
 
-    <ion-card id="mainCardq" (click)="gotoTransLeaves()">
+    <ion-card id="mainCardq" (click)="gotoTransLeaves()" *ngIf="isManager || isEmployee">
         <div id="smalldivq">
             <ion-icon name="analytics"></ion-icon>
         </div>
@@ -72,7 +79,7 @@
         </div>
     </ion-card>
 
-    <ion-card id="mainCardq" (click)="gotoSalary()">
+    <ion-card id="mainCardq" (click)="gotoSalary()" *ngIf="isManager || isEmployee">
         <div id="smalldivq">
             <ion-icon name="analytics"></ion-icon>
         </div>
@@ -81,7 +88,7 @@
         </div>
     </ion-card>
 
-    <ion-card id="mainCardq" (click)="gotoPapers()">
+    <ion-card id="mainCardq" (click)="gotoPapers()" *ngIf="isManager || isEmployee">
         <div id="smalldivq">
             <ion-icon name="analytics"></ion-icon>
         </div>

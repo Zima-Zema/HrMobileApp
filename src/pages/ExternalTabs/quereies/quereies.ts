@@ -8,9 +8,9 @@ import { CustomLeavesPage } from '../../Leaves/custom-leaves/custom-leaves'
 import { Storage } from '@ionic/storage';
 import { IUser } from "../../../shared/IUser";
 import { CustodyListPage } from '../../custody-list/custody-list';
-import { TransLeavesPage} from '../../Leaves/trans-leaves/trans-leaves'
+import { TransLeavesPage } from '../../Leaves/trans-leaves/trans-leaves'
 import { DocumentsPage } from '../../documents/documents';
-
+import { InformingPage } from "../../informingPages/informing/informing";
 
 @IonicPage()
 @Component({
@@ -21,11 +21,13 @@ export class QuereiesPage {
 
   user: IUser;
   isManager: boolean;
+  isEmployee: boolean;
   constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private app: App) {
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
         this.isManager = (this.user.Roles.indexOf("Manager") == -1) ? false : true;
+        this.isEmployee = (this.user.Roles.indexOf("Employee") == -1) ? false : true;
       }
     });
   }
@@ -54,7 +56,7 @@ export class QuereiesPage {
     this.app.getRootNav().push(CustomLeavesPage);
   }
 
-  gotoTransLeaves(){
+  gotoTransLeaves() {
     this.app.getRootNav().push(TransLeavesPage);
   }
 
@@ -64,8 +66,11 @@ export class QuereiesPage {
 
   gotoPapers() {
     this.app.getRootNav().push(DocumentsPage);
-  }0
+  }
 
+  gotoInforming() {
+    this.app.getRootNav().push(InformingPage);
+  }
 
 
 }

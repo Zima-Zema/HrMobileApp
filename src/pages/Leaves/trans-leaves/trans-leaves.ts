@@ -13,7 +13,7 @@ import { TranslateService } from "@ngx-translate/core";
 export class TransLeavesPage {
   public LeavesCount: Number;
   public CreditQtyCount;
-  public msg:any={};
+  public msg: any = {};
   public LeavesTrans: ILeavesTrans = {
     CompanyId: 0,
     Culture: "",
@@ -55,9 +55,14 @@ export class TransLeavesPage {
     });
     LeavesLoader.present().then(() => {
       this.LeaveServices.getLeaveTrans(this.LeavesTrans).subscribe((data) => {
-          this.LeavesCount = data.length;
-          this.gridView = process(data, { group: this.groups });
-          LeavesLoader.dismiss();
+  
+        console.log(this.LeavesTrans);
+        this.LeavesCount = data.length;
+        this.gridView = process(data, {
+          group: this.groups
+
+        });
+        LeavesLoader.dismiss();
       }, (e) => {
         let toast = this.toastCtrl.create({
           message: this.msg.error,
