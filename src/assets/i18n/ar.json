@@ -85,7 +85,7 @@
     "Complaint": "طلب شكوى",
     "AddTask": "اضافة مهمة",
     "EditProfile": "طلب تحديث بيانات",
-    "AssignOrder": "امر تكليف",
+    "AssignOrder": "أمر تكليف وقت أضافى",
     "Notifications": "الإشعارات",
     "Queries": "الاستفسارات",
     "TaskRequests": "المهام",
@@ -95,12 +95,12 @@
     "AssignOrderToastMsg": "...تم حذف هذا الطلب بنجاح",
     "AssignOrderdeleting": "حذف...",
     "AssignOrderErrorDeleting": "خطأ فى حذف هذا الامر, حاول مره اخري...",
-    "AssignOrderRequests": "أوامر التكليف",
+    "AssignOrderRequests": "أوامر تكليف وقت اضافي",
     "Custody": "عهدتي",
     "officialHoliday": "العطلات الرسمية",
     "Salary": "تفاصيل المرتب",
     "Docs": "مرفقاتي",
-    "AssignOrderSeries": "كود امر التكليف",
+    "AssignOrderSeries": "رقم امر التكليف",
     "AssignedFrom": " مُكلف من",
     "Duration": "الفتره",
     "AssignDate": "تاريخ التكليف",
@@ -227,6 +227,23 @@
     "forgotPass":"نسيت كلمة المرور",
     "forgotEmailInValid":"عنوان البريد الالكتروني غير صحيح",
     "networkError":"برجاء التاكد من الاتصال بالانترنت واعادة المحاولة ",
-    "serviceError":"خطأ في تحميل الرابط برجاء الاتصال بخدمة العملاء"  
+    "serviceError":"خطأ في تحميل الرابط برجاء الاتصال بخدمة العملاء",
 
+
+    "cutLeave":"قطع الإجازة",
+    "AEndDate": "تاريخ النهاية الفعلي",
+    "AReturnDate": "تاريخ العودة الفعلي",
+    "notThisMonth":"لا يمكن تكلف الموظف مرة اخر هذا الشهر",
+    "assignOrderfound":"يوجد أمر تكليف في هذا التاريخ",
+    "filterfound":"هذا يوم عمل فعلي",
+    "returnDateLess":"هذا التاريخ لا يمكن أن يكون أقل من أو يساوي تاريخ اليوم",
+    "returnDategreater":"هذا التاريخ لا يمكن أن يكون أكبر من تاريخ نهاية الأجازة",
+
+
+    "editLeavesLoaderMsg":"جاري التعديل ...",
+    "editErrorToastMsg":"خطأ في تعديل طلب الإجازة أعد المحاولة مرة أخرى",
+    "editSuccessToastMsg":"تم تعديل الطلب بنجاح",
+    "addLeavesLoaderMsg":"جاري الإضافة ...",
+    "addErrorToastMsg":"خطأ في إضافة طلب الإجازة أعد المحاولة مرة أخرى",
+    "addSuccessToastMsg":"تم إضافة الطلب بنجاح"
 }

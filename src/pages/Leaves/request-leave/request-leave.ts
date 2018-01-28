@@ -145,7 +145,8 @@ export class RequestLeavePage {
     WaitingError: null,
     WaitingMonth: null,
     AllowedDaysError: null,
-    CantGreaterError: null
+    CantGreaterError: null,
+    PeriodError:null,
   }
   //Loader
   public LoadingChart = this.loadingCtrl.create({
@@ -159,7 +160,7 @@ export class RequestLeavePage {
   });
   //
   user: IUser;
-
+  public errorMsg;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public LeaveServices: LeaveServicesApi,
@@ -168,7 +169,7 @@ export class RequestLeavePage {
     private ToastCtrl: ToastController,
     private storage: Storage,
     private translateUtilities: TranslateService) {
-
+      this.errorMsg = {};
     this.tabBarElement = document.querySelector('.tabbar.show-tabbar');
     this.tarnlateErrors();
     this.storage.get("User").then((udata) => {
@@ -244,6 +245,26 @@ export class RequestLeavePage {
     this.translateUtilities.get('ReasonError').subscribe(translation => {
       RequestLeavePage.ReasonError = translation;
     });
+
+
+    this.translateUtilities.get('editLeavesLoaderMsg').subscribe(translation => {
+      this.errorMsg.editLeavesLoaderMsg = translation;
+    });
+    this.translateUtilities.get('editErrorToastMsg').subscribe(translation => {
+      this.errorMsg.editErrorToastMsg = translation;
+    });
+    this.translateUtilities.get('editSuccessToastMsg').subscribe(translation => {
+      this.errorMsg.editSuccessToastMsg = translation;
+    });
+    this.translateUtilities.get('addLeavesLoaderMsg').subscribe(translation => {
+      this.errorMsg.addLeavesLoaderMsg = translation;
+    });
+    this.translateUtilities.get('addErrorToastMsg').subscribe(translation => {
+      this.errorMsg.addErrorToastMsg = translation;
+    });
+    this.translateUtilities.get('addSuccessToastMsg').subscribe(translation => {
+      this.errorMsg.addSuccessToastMsg = translation;
+    });
   }
 
   ionViewWillLeave() {
@@ -286,12 +307,12 @@ export class RequestLeavePage {
         this.leaveChange(this.item.TypeId);
         this.leaveType = this.item.TypeId;
         let SDate = new Date(this.item.StartDate);
-        this.startDate = this.bloodyIsoString(new Date(new Date(this.item.StartDate).toDateString())).slice(0, -15);
+        this.startDate = this.item.ActualStartDate ? this.bloodyIsoString(new Date(new Date(this.item.ActualStartDate).toDateString())).slice(0, -15) : this.bloodyIsoString(new Date(new Date(this.item.StartDate).toDateString())).slice(0, -15);
         this.minDate = this.bloodyIsoString(SDate);
         this.noOfDays = this.item.NofDays;
         // this.returnDate = this.bloodyIsoString(new Date(new Date(this.item.ReturnDate).toDateString())).slice(0, -15);
         // this.endDate = this.bloodyIsoString(new Date(new Date(this.item.EndDate).toDateString())).slice(0, -15);
-        this.replacement = Number.parseInt(this.item.ReplaceEmpId) === 0 ? null : Number.parseInt(this.replacement);
+        this.replacement = Number.parseInt(this.item.ReplaceEmpId) === 0 ? null : Number.parseInt(this.item.ReplaceEmpId);
         this.comments = this.item.ReasonDesc;
         this.reason = this.item.ReqReason;
         this.endDate = this.bloodyIsoString(new Date(new Date(this.item.EndDate).toDateString())).slice(0, -15);
@@ -518,9 +539,11 @@ export class RequestLeavePage {
           this.minDate = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
           this.localDateval = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
           this.localDateval = this.LeaveServices.getInitialDate(this.localDateval, data.Calender);
+          //put work flow check here
         }
         this.reservedDays = data.requestVal.ReservedDays
         this.balBefore = data.requestVal.BalBefore;
+
         if (this.EditFlag == 1 || this.EditFlag == 2) {
           if (this.noOfDays % 1 === 0) {
             this.fraction = 0;
@@ -535,7 +558,7 @@ export class RequestLeavePage {
           this.bindForm();
         }
         else {
-          this.balAfter = undefined;
+          //this.balAfter = undefined;
         }
         LoadingLeaves.dismiss();
       }, (err) => {
@@ -589,7 +612,7 @@ export class RequestLeavePage {
     if (this.EditFlag != 2 && this.EnableLoaderFlag == false) {
 
       if (this.endDate && !this.RequestLeaveForm.invalid) {
-        console.log("this.RequestLeaveForm.invalid", this.RequestLeaveForm.invalid);
+        
         this.validateObj.Id = this.item.Id ? this.item.Id : 0;
         this.validateObj.CompanyId = this.user.CompanyId;
         this.validateObj.Culture = this.user.Culture;
@@ -670,13 +693,14 @@ export class RequestLeavePage {
   }
 
   calcBalAfter(balBefore, NofDays, Fraction) {
-
+ 
     Fraction = Number.parseInt(Fraction);
     NofDays = Number.parseInt(NofDays);
     let balAfter = 0;
     if (NofDays && NofDays > 0) {
       NofDays = Number.parseInt(NofDays);
       balAfter = balBefore - NofDays;
+
       return balAfter;
     }
     else {
@@ -700,9 +724,10 @@ export class RequestLeavePage {
         }
 
         balAfter = Number.parseFloat(balBefore) - Number.parseFloat(Fraction);
-
+ 
         return balAfter;
       }
+
       return balAfter;
     }
   }
@@ -731,7 +756,7 @@ export class RequestLeavePage {
         this.validateObj.NofDays = isNaN(this.validateObj.NofDays) ? 0 : this.validateObj.NofDays
 
         if (this.endDate && !this.RequestLeaveForm.invalid) {
-          console.log("this.RequestLeaveForm.invalid", this.RequestLeaveForm.invalid);
+
           Loadingrequest.present().then(() => {
             this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
               this.errorMsgObj = null;
@@ -782,7 +807,7 @@ export class RequestLeavePage {
     // this.reservedDays = undefined;
     this.returnDate = null;
     this.endDate = null;
-    this.balBefore = undefined;
+    //this.balBefore = undefined;
     this.balAfter = undefined;
     this.replacement = null;
     this.comments = null;
@@ -894,16 +919,16 @@ export class RequestLeavePage {
 
       //Loader
       let EditLeavesLoader = this.loadingCtrl.create({
-        content: "Editing Leaves..."
+        content: this.errorMsg.editLeavesLoaderMsg
       });
       //Toaster
       let EditErrorToast = this.ToastCtrl.create({
-        message: "Error in updating Leave, Please Try again later.",
+        message: this.errorMsg.editErrorToastMsg,
         duration: 3000,
         position: 'middle'
       });
       let EditSuccessToast = this.ToastCtrl.create({
-        message: 'Leave is edited successfully.',
+        message: this.errorMsg.editSuccessToastMsg,
         duration: 2000,
         position: 'bottom'
       });
@@ -940,16 +965,16 @@ export class RequestLeavePage {
 
       //Loader
       let AddLeavesLoader = this.loadingCtrl.create({
-        content: "Adding Leaves..."
+        content: this.errorMsg.addLeavesLoaderMsg
       });
       //Toaster
       let AddErrorToast = this.ToastCtrl.create({
-        message: "Error in Adding Leave, Please Try again later.",
+        message: this.errorMsg.addErrorToastMsg,
         duration: 3000,
         position: 'middle'
       });
       let AddSuccessToast = this.ToastCtrl.create({
-        message: 'Leave is Added successfully.',
+        message: this.errorMsg.addSuccessToastMsg,
         duration: 2000,
         position: 'bottom'
       });
@@ -970,7 +995,7 @@ export class RequestLeavePage {
             })
           }
         }, (err) => {
-
+          console.log(err.status);
           AddLeavesLoader.dismiss().then(() => {
             AddErrorToast.present();
           })

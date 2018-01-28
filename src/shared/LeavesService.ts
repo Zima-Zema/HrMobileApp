@@ -57,6 +57,7 @@ export interface IValidationMsg {
     DeptPercentError: string,
     CantGreaterError:string,
     AllowedDaysError:string,
+    PeriodError:string,
     percentage: number,
     IsError: boolean
 }

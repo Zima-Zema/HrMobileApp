@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar color="newDarkerBlueGreen">
-    <ion-title>Edit</ion-title>
+    <ion-title>{{"EditLeave" | translate}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -17,17 +17,25 @@
         [(value)]="localDateval" formControlName="actualStartDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat"
         [min]="minDate" [yearValues]="yearsValue"></ion-datetime>
     </ion-item>
+    <span *ngIf="errorMsgObj.IsError">
+      <p *ngIf="errorMsgObj.PeriodError" style="color:crimson">{{errorMsgObj.PeriodError}}</p>
+      <p *ngIf="errorMsgObj.AssignError" style="color:crimson">{{errorMsgObj.AssignError}}</p>
+      <p *ngIf="errorMsgObj.DeptPercentError" style="color:crimson">{{errorMsgObj.DeptPercentError}} - {{errorMsgObj.Percentage}}</p>
+      <p *ngIf="errorMsgObj.StarsError" style="color:crimson">{{errorMsgObj.StarsError}}</p>
+      <p *ngIf="errorMsgObj.WaitingError" style="color:crimson">{{errorMsgObj.WaitingError}} - {{errorMsgObj.WaitingMonth}}</p>
+    </span>
     <span *ngIf="errorMsgObj.IsError && (errorMsgObj.HasRequestError || errorMsgObj.IsReplacementError)">
       <p *ngIf="errorMsgObj.HasRequestError" style="color:crimson">{{errorMsgObj.HasRequestError}}</p>
       <p *ngIf="errorMsgObj.IsReplacementError" style="color:crimson">{{errorMsgObj.IsReplacementError}}</p>
     </span>
 
-
     <ion-item>
       <ion-label floating>{{"NoOfDays" | translate}}</ion-label>
       <ion-input type="number" [(ngModel)]="actualNOfDays" formControlName="actualNOfDays" disabled></ion-input>
     </ion-item>
-
+    <span *ngIf="errorMsgObj.IsError && errorMsgObj.ReplacementError">
+      <p *ngIf="errorMsgObj.ReplacementError" style="color:crimson">{{errorMsgObj.ReplacementError}}</p>
+    </span>
 
     <ion-item>
       <ion-label floating>{{"EndDate" | translate}}</ion-label>

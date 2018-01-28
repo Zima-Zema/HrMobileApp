@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar color="newDarkerBlueGreen">
-    <ion-title>Cut Leave</ion-title>
+    <ion-title>{{"cutLeave" | translate}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -12,11 +12,16 @@
   <form [formGroup]="CutLeaveForm" id="CutLeaveID">
 
     <ion-item>
-      <ion-label floating>{{"AReturnDate" |translate}}</ion-label>
+      <ion-label floating>{{"AReturnDate" | translate}}</ion-label>
       <ion-datetime [(ngModel)]="ReturnDate" (ionChanged)="dateChange($event)" ion-datepicker [disabledDates]="filteredArr" [(value)]="localDateval"
         formControlName="ReturnDate" [displayFormat]="displayFormat" [pickerFormat]="pickFormat" [min]="minDate"></ion-datetime>
     </ion-item>
-
+    <ion-item *ngIf="CutLeaveForm.get('ReturnDate').hasError('isLess') && CutLeaveForm.get('ReturnDate').touched">
+      <p style="color:crimson">{{"returnDateLess" | translate}}</p>
+    </ion-item>
+    <ion-item *ngIf="CutLeaveForm.get('ReturnDate').hasError('isGreater')">
+      <p style="color:crimson">{{"returnDategreater" | translate}}</p>
+    </ion-item>
     <ion-item>
       <ion-label floating>{{"AEndDate" | translate}}</ion-label>
       <ion-datetime disabled [(ngModel)]="ActualendDate" formControlName="ActualendDate" [displayFormat]="displayFormat"></ion-datetime>

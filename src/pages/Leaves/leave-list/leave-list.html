@@ -29,8 +29,8 @@
               src="assets/img/blue.png" style="border-radius:15%;" class="smallImg">
           </ion-avatar>
           <!-- <h2>{{item.Type}}</h2> -->
-          <h5>{{item.StartDate | dateMoment}} - {{item.EndDate | dateMoment}} </h5>
-          <!-- <h5 *ngIf="item.ActualEndDate != null">{{item.StartDate | dateMoment}} - {{item.ActualEndDate | dateMoment}} </h5> -->
+          <h5 *ngIf="!item.ActualEndDate && !item.ActualStartDate">{{item.StartDate | dateMoment}} - {{item.EndDate | dateMoment}} </h5>
+          <h5 *ngIf="item.ActualEndDate && item.ActualStartDate ">{{item.ActualStartDate | dateMoment}} - {{item.ActualEndDate | dateMoment}} </h5>
           <ion-note item-end *ngIf="item.NofDays <= 1">{{item.NofDays}} {{"day" | translate }} </ion-note>
           <ion-note item-end *ngIf="item.NofDays > 1">{{item.NofDays}} {{"days" | translate }} </ion-note>
           <p [ngClass]="{grey:item.ApprovalStatus==1,yellow:item.ApprovalStatus==2,green:item.ApprovalStatus==6,red:item.ApprovalStatus==9,blue:true}">{{item.ApprovalStatus|approvalPipe}}</p>
@@ -44,14 +44,14 @@
           <button *ngIf="item.ApprovalStatus==1 " ion-button color="danger" class="TrashLeave" (click)="ConfirmDelete(item)">
             <ion-icon name="trash"></ion-icon>
           </button>
-          <button *ngIf="item.ApprovalStatus==6 &&  !(item.StartDate | compareDate)" ion-button color="newYellow" class="TrashLeave"
+          <button *ngIf="item.ApprovalStatus==6 &&  !(item.StartDate | compareDate) && (item.NofDays >1 && item.ActualNofDays >= 1)" ion-button color="newYellow" class="TrashLeave"
             (click)="EditAppLeaves(item)">
             <ion-icon name="calendar"></ion-icon>
           </button>
           <button *ngIf="item.ApprovalStatus==6 &&  !(item.StartDate | compareDate)" ion-button color="danger" class="TrashLeave" (click)="ConfirmAppCancel(item.Id)">
             <ion-icon name="remove-circle"></ion-icon>
           </button>
-          <button *ngIf="item.ApprovalStatus==6 &&  (item.StartDate | compareDate) &&(item.EndDate | compareEndDate) && item.NofDays >=1"
+          <button *ngIf="item.ApprovalStatus==6 &&  ((item.StartDate | compareDate) || (item.ActualStartDate | compareDate)) && ((item.EndDate | compareEndDate) || (item.ActualEndDate | compareEndDate)) && (item.NofDays >=1 || item.ActualNofDays > 1) && (item.isBreaked)"
             ion-button color="dark" class="TrashLeave" (click)="CutAppLeaves(item)">
             <ion-icon name="cut"></ion-icon>
           </button>

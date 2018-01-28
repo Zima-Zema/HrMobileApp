@@ -35,7 +35,8 @@ export class LeaveEditPage {
     WaitingError: null,
     WaitingMonth: null,
     AllowedDaysError:null,
-    CantGreaterError:null
+    CantGreaterError:null,
+    PeriodError:null
   }
   //
   validateObj: IValidate = {
@@ -76,6 +77,7 @@ export class LeaveEditPage {
   public filteredArr;
   public localDateval;
   public minDate = new Date();
+
   public rate;
   //
   public EditLeaveForm: FormGroup;
@@ -172,11 +174,13 @@ export class LeaveEditPage {
   }
 
   dateChange(newStartDate) {
+    console.log(newStartDate)
     this.actualStartDate = this.bloodyIsoString(new Date(new Date(newStartDate).toDateString())).slice(0, -15);
     this.bindForm();
 
   }
   bindForm() {
+    console.log("insideBindForm",this.actualStartDate)
     var a: any = {};
     this.translationService.get('ErrorToasterMsg').subscribe((data) => {
       a.message = data;
@@ -186,7 +190,7 @@ export class LeaveEditPage {
       spinner: 'dots'
     });
     //
-    if (this.actualStartDate && this.actualNOfDays) {
+    if (this.actualStartDate) {
       let res = this.LeaveServices.calcDates(this.actualStartDate, this.actualNOfDays, this.calender, this.leaveType, 0);
       this.actualEndDate = new Date(res.endDate).toISOString();
       this.actualReturnDate = new Date(res.returnDate).toISOString();
@@ -198,14 +202,18 @@ export class LeaveEditPage {
       this.validateObj.StartDate = new Date(new Date(this.actualStartDate).toString()).toISOString().slice(0, -1);
       this.validateObj.ReplaceEmpId = this.comingLeave.ReplaceEmpId;
       this.validateObj.TypeId = this.comingLeave.TypeId;
-      this.validateObj.NofDays = this.actualNOfDays;
+
+      this.validateObj.NofDays = (this.actualNOfDays == null) ? 0 : Number.parseInt(this.actualNOfDays);
+        this.validateObj.NofDays = isNaN(this.validateObj.NofDays) ? 0 : this.validateObj.NofDays
+
       if (this.actualEndDate) {
         LoadingValidate.present().then(() => {
-
+          console.log("Out validateRequest")
           this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
             this.errorMsgObj = null;
             this.errorMsgObj = data;
             this.rate = this.errorMsgObj.Stars;
+            console.log("In validateRequest")
             LoadingValidate.dismiss();
           }, (e) => {
             LoadingValidate.dismiss().then(() => {
@@ -235,7 +243,7 @@ export class LeaveEditPage {
     LoadingApprov.present().then(() => {
       this.LeaveServices.editApprovedLeave(this.editObj).subscribe((data) => {
         LeaveListPage.motherArr = LeaveListPage.motherArr.filter((ele) => ele.Id !== this.comingLeave.Id);
-        this.comingLeave.StartDate = this.actualStartDate;
+        this.comingLeave.ActualStartDate = this.actualStartDate;// start date does not chang on server
         this.comingLeave.ActualEndDate = this.actualEndDate;
         this.comingLeave.EndDate = this.actualEndDate;
         LeaveListPage.motherArr.push(this.comingLeave);

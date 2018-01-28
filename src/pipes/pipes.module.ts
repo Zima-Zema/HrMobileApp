@@ -7,6 +7,7 @@ import { CompareEndDatePipe } from './compare-end-date/compare-end-date';
 import { AssignOrderDurationPipe } from './assign-order-duration/assign-order-duration';
 import { AssignOrderCalcsMethodPipe } from './assign-order-calcs-method/assign-order-calcs-method';
 import { SortedPipe } from './sorted/sorted';
+import { AssigncomparePipe } from './assigncompare/assigncompare';
 @NgModule({
     declarations: [ApprovalPipe,
         ImagePipe,
@@ -15,7 +16,8 @@ import { SortedPipe } from './sorted/sorted';
     CompareEndDatePipe,
     AssignOrderDurationPipe,
     AssignOrderCalcsMethodPipe,
-    SortedPipe],
+    SortedPipe,
+    AssigncomparePipe],
     imports: [],
     exports: [ApprovalPipe,
         ImagePipe,
@@ -24,6 +26,7 @@ import { SortedPipe } from './sorted/sorted';
     CompareEndDatePipe,
     AssignOrderDurationPipe,
     AssignOrderCalcsMethodPipe,
-    SortedPipe]
+    SortedPipe,
+    AssigncomparePipe]
 })
 export class PipesModule { }

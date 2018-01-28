@@ -62,7 +62,7 @@ export class LeaveListPage {
         this.RequestTypeObj.Culture = this.user.Culture;
         this.RequestTypeObj.CompanyId = this.CancelVMObj.CompanyId = this.user.CompanyId;
         this.CancelVMObj.Language = this.DeleteObj.Language = this.user.Language;
-        console.log("this.RequestTypeObj.CompId",this.RequestTypeObj.CompanyId)
+        console.log("this.RequestTypeObj.CompId", this.RequestTypeObj.CompanyId)
       }
     });
   }
@@ -93,7 +93,7 @@ export class LeaveListPage {
       this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
         this.LeavesCount = data.length;
         LeaveListPage.motherArr = data;
-        console.log("getLeaves",data);
+        
         // data.forEach(element => {
         //   element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
         //   element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');
@@ -282,17 +282,14 @@ export class LeaveListPage {
       a.ErrorCancelLeave = data;
     })
     this.CancelVMObj.RequestId = itemId;
+
     this.LeaveServices.CancelAppLeave(this.CancelVMObj).subscribe((data) => {
-      if (data.length == 0) {
-        LeaveListPage.motherArr.forEach((ele) => {
-          if (ele.Id == itemId) {
-            ele.ApprovalStatus = 8;
-            return;
-          }
-        })
-        this.Leaves_Arr = _.chain(LeaveListPage.motherArr).groupBy('Type').toPairs()
-          .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
-      }
+      LeaveListPage.motherArr = LeaveListPage.motherArr.filter((element) => {
+        return element.Id !== itemId;
+      })
+      this.Leaves_Arr = _.chain(LeaveListPage.motherArr).groupBy('Type').toPairs()
+      .map(ele => _.zipObject(['divisionType', 'divisionTypes'], ele)).value();
+
       let toast = this.toastCtrl.create({
         message: a.SucessCancelLeave,
         duration: 3000,

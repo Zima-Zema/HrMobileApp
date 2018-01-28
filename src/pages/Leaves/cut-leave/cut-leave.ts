@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
 import { LeaveServicesApi, IRequestData, IBreak } from "../../../shared/LeavesService"
-import { FormGroup, Validators, FormBuilder } from "@angular/forms";
+import { FormGroup, Validators, FormBuilder, FormControl, AbstractControl, ValidatorFn } from "@angular/forms";
 import { LeaveListPage } from '../leave-list/leave-list';
 import { TranslateService } from '@ngx-translate/core';
-import {IUser} from '../../../shared/IUser'
+import { IUser } from '../../../shared/IUser'
 import { Storage } from '@ionic/storage';
 @IonicPage()
 @Component({
@@ -13,6 +13,7 @@ import { Storage } from '@ionic/storage';
 })
 
 export class CutLeavePage {
+
   public LeaveComing: any;
   CutLeaveForm: FormGroup;
   //
@@ -24,7 +25,7 @@ export class CutLeavePage {
   public calender: any;
   public leaveType: any;
   public BalBefore: any;
-  public minDate = new Date();
+  public minDate = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
   public filteredArr;
   public localDateval = new Date();
   public pickFormat: any;
@@ -83,10 +84,10 @@ export class CutLeavePage {
     this.startDate = this.LeaveComing.StartDate;
     this.noFDays = this.LeaveComing.NofDays;
     this.endDate = this.LeaveComing.EndDate;
-    this.ReturnDate = this.LeaveComing.ReturnDate;
+    this.ReturnDate = this.LeaveComing.EndDate;
     //
     this.CutLeaveForm = this.formBuilder.group({
-      ReturnDate: ['', Validators.required],
+      ReturnDate: new FormControl('', [Validators.required, this.isValid()]),
       ActualendDate: [''],
       NofDaysAfter: [''],
       balAfter: ['']
@@ -103,7 +104,7 @@ export class CutLeavePage {
         this.leaveType = data.LeaveType;
         this.BalBefore = data.requestVal.BalBefore;
         this.filteredArr = this.LeaveServices.getOffDays(data.Calender);
-        this.localDateval = new Date();
+        this.localDateval = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
         this.localDateval = this.LeaveServices.getInitialDate(this.localDateval, data.Calender);
         RequestLoader.dismiss();
       }, (e: Error) => {
@@ -113,6 +114,36 @@ export class CutLeavePage {
       });
     });//loader
   }
+
+
+
+
+
+
+  isValid(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } => {
+
+      let _returnDate = new Date(control.value).setHours(0, 0, 0, 0);
+      let _startDate = new Date(this.startDate).setHours(0, 0, 0, 0);
+      let _endDate = new Date(this.endDate).setHours(0, 0, 0, 0);
+      let isLess = _returnDate <= new Date().setHours(0, 0, 0, 0);
+      let isGreater = _returnDate > _endDate;
+
+      if (isLess) {
+        return { 'isLess': { isLess: true } }
+      } else if (isGreater) {
+        console.log("isGreater", isGreater)
+        return { 'isGreater': true }
+      } else {
+        return null;
+      }
+
+    };
+  }
+
+
+
+
 
   bloodyIsoString(bloodyDate: Date) {
     let tzo = -bloodyDate.getTimezoneOffset(),

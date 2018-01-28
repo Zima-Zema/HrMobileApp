@@ -78,6 +78,7 @@
     "ReasonError": "This Leave Type Must Have Reason",
     "AEndDate": "Actual End Date",
     "AReturnDate": "Actual Return Date",
+
     "Requests": "Requests",
     "SalaryAdvance": "Request An Advance",
     "LeavePermission": "Leave Permission Request",
@@ -230,7 +231,21 @@
     "forgotEmailInValid":"The Email field is not a valid e-mail address",
 
     "networkError":"Error in Internet Connection .. Please Try again later",
-    "serviceError":"Error in Service URL .. Please Contact Customer Service"  
-   
+    "serviceError":"Error in Service URL .. Please Contact Customer Service",
+
+    "cutLeave":"Cut Leave",
+
+    "notThisMonth":"No more assigns for this month",
+    "assignOrderfound":"There is an assignorder in this date",
+    "filterfound":"This is a working day already",
+    "returnDateLess":"It Can't be Less than or equal tham today",
+
+
+    "editLeavesLoaderMsg":"Editing Leaves...",
+    "editErrorToastMsg":"Error in updating Leave, Please Try again later.",
+    "editSuccessToastMsg":"Leave is edited successfully.",
+    "addLeavesLoaderMsg":"Adding Leaves...",
+    "addErrorToastMsg":"Error in Adding Leave, Please Try again later.",
+    "addSuccessToastMsg":"Leave is Added successfully."
 
 }

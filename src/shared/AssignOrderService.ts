@@ -19,10 +19,10 @@ export interface IAssignOrderVM {
     EmpId: number,
     ManagerId: number,
     Duration: Number,
-    AssignDate: Date,
+    AssignDate: string,
     CalcMethod: number,
     LeaveTypeId: number,
-    ExpiryDate: Date,
+    ExpiryDate: string,
     TaskDesc: string,
     CompanyId: number,
     Language: string

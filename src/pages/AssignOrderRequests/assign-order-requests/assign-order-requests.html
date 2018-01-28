@@ -34,11 +34,11 @@
           <p [ngClass]="{grey:item.ApprovalStatus==1,yellow:item.ApprovalStatus==2,green:item.ApprovalStatus==6,red:item.ApprovalStatus==9,blue:true}">{{item.ApprovalStatus|approvalPipe}}</p>
           <ion-note item-end id="emp"> {{item.Employee}} </ion-note>
         </button>
-        <ion-item-options side="right" style="direction:ltr">
-          <button ion-button color="newGreen" class="TrashLeave" *ngIf="!(item.AssignDate | compareDate)" (click)="EditAssignOrder(item)">
+        <ion-item-options side="left" style="direction:ltr">
+          <button ion-button color="newGreen" class="TrashLeave" *ngIf="(item.AssignDate | assigncompare) && item.ApprovalStatus !== 6" (click)="EditAssignOrder(item)">
             <ion-icon name="brush"></ion-icon>           
           </button>
-          <button ion-button color="danger" class="TrashLeave" *ngIf="!(item.AssignDate | compareDate)" (click)="ConfirmDelete(item)">
+          <button ion-button color="danger" class="TrashLeave" *ngIf="(item.AssignDate | assigncompare) && item.ApprovalStatus !== 6" (click)="ConfirmDelete(item)">
             <ion-icon name="trash"></ion-icon>       
           </button>
         </ion-item-options>
