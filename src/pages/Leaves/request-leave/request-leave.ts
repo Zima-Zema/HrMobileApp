@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidatorFn } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
 import { LeaveServicesApi, IRequestType, IRequestData, ILeaveRequest, ApprovalStatusEnum, IValidate, IValidationMsg } from '../../../shared/LeavesService';
 import { LeaveListPage } from '../leave-list/leave-list';
 import { Chart } from 'chart.js';
@@ -9,8 +9,7 @@ import { DatePickerDirective } from 'ion-datepicker';
 import { IUser } from '../../../shared/IUser';
 import { Storage } from '@ionic/storage';
 import { TranslateService } from '@ngx-translate/core';
-import { TranslateUtilities } from '../../../shared/TranslateUtilities';
-import { WelcomePage } from '../../welcome/welcome'
+
 @IonicPage()
 @Component({
   selector: 'page-request-leave',
@@ -146,7 +145,8 @@ export class RequestLeavePage {
     WaitingMonth: null,
     AllowedDaysError: null,
     CantGreaterError: null,
-    PeriodError:null,
+    PeriodError: null,
+    NoWorkFlowError: null
   }
   //Loader
   public LoadingChart = this.loadingCtrl.create({
@@ -169,7 +169,7 @@ export class RequestLeavePage {
     private ToastCtrl: ToastController,
     private storage: Storage,
     private translateUtilities: TranslateService) {
-      this.errorMsg = {};
+    this.errorMsg = {};
     this.tabBarElement = document.querySelector('.tabbar.show-tabbar');
     this.tarnlateErrors();
     this.storage.get("User").then((udata) => {
@@ -317,7 +317,7 @@ export class RequestLeavePage {
         this.reason = this.item.ReqReason;
         this.endDate = this.bloodyIsoString(new Date(new Date(this.item.EndDate).toDateString())).slice(0, -15);
         this.returnDate = this.bloodyIsoString(new Date(new Date(this.item.ReturnDate).toDateString())).slice(0, -15);
-
+        this.validateForm();
       }
     }
     //Request Mode
@@ -378,13 +378,13 @@ export class RequestLeavePage {
     let dataTemp: Array<number> = [];
     let DaysTemp: Array<number> = [];
     chartData.forEach((item) => {
-      if (item.Balance<0) {
+      if (item.Balance < 0) {
         item.Balance = 0;
         lableTemp.push(item.Name);
         dataTemp.push(item.Balance);
         DaysTemp.push(item.Days)
       }
-      else{
+      else {
         lableTemp.push(item.Name);
         dataTemp.push(item.Balance);
         DaysTemp.push(item.Days)
@@ -470,9 +470,7 @@ export class RequestLeavePage {
   public chartHovered(e: any): void {
 
   }
-  value(item) {
 
-  }
   ////////////////////////
   leaveChange(item: any) {
     //Loader
@@ -604,43 +602,9 @@ export class RequestLeavePage {
   //
   replacementChange(replacement) {
 
+    this.replacement = replacement;
     //Loader
-    let LoadingValidate = this.loadingCtrl.create({ spinner: 'dots' });
-    //
-
-
-    if (this.EditFlag != 2 && this.EnableLoaderFlag == false) {
-
-      if (this.endDate && !this.RequestLeaveForm.invalid) {
-        
-        this.validateObj.Id = this.item.Id ? this.item.Id : 0;
-        this.validateObj.CompanyId = this.user.CompanyId;
-        this.validateObj.Culture = this.user.Culture;
-        this.validateObj.EmpId = this.user.EmpId;
-        this.validateObj.EndDate = new Date(new Date(this.endDate).toString()).toISOString().slice(0, -1);
-        this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toISOString().slice(0, -1);
-        this.validateObj.ReplaceEmpId = Number.parseInt(replacement) == 0 ? null : Number.parseInt(replacement);
-        this.validateObj.TypeId = this.leaveType;
-        this.validateObj.NofDays = this.noOfDays;
-
-        LoadingValidate.present().then(() => {
-          this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
-            this.errorMsgObj = null;
-            this.errorMsgObj = data;
-            moment.locale(this.translateUtilities.getDefaultLang())
-            this.errorMsgObj.WaitingMonth = moment(data.WaitingMonth).format('LL');  // January 15, 2018
-
-            this.rate = this.errorMsgObj.Stars;
-
-            LoadingValidate.dismiss();
-          }, (e) => {
-            LoadingValidate.dismiss().then(() => {
-              this.ErrorMsgToast.present();
-            })
-          })
-        });//loader      
-      }
-    }
+    this.validateForm();
     this.EnableLoaderFlag = false;
   }
   //
@@ -693,7 +657,7 @@ export class RequestLeavePage {
   }
 
   calcBalAfter(balBefore, NofDays, Fraction) {
- 
+
     Fraction = Number.parseInt(Fraction);
     NofDays = Number.parseInt(NofDays);
     let balAfter = 0;
@@ -724,7 +688,7 @@ export class RequestLeavePage {
         }
 
         balAfter = Number.parseFloat(balBefore) - Number.parseFloat(Fraction);
- 
+
         return balAfter;
       }
 
@@ -733,47 +697,13 @@ export class RequestLeavePage {
   }
 
   bindForm() {
-
-    //Loader
-    let Loadingrequest = this.loadingCtrl.create({ spinner: 'dots' });
-
     if (this.startDate && (this.noOfDays || this.fraction)) {
       let res = this.LeaveServices.calcDates(this.startDate, this.noOfDays, this.requestData.Calender, this.requestData.LeaveType, this.fraction);
       this.endDate = this.allowFraction ? new Date(res.endDate).toISOString() : new Date(res.endDate).toISOString();
       this.returnDate = this.allowFraction ? new Date(res.returnDate).toISOString() : new Date(res.returnDate).toISOString();
       this.startDate = this.allowFraction ? new Date(res.startDate).toISOString() : new Date(res.startDate).toISOString();
       this.balAfter = this.calcBalAfter(this.balBefore, this.noOfDays, this.fraction);
-      if (this.EditFlag != 2 && this.EnableLoaderFlag == false) {
-        this.validateObj.Id = this.item.Id ? this.item.Id : 0;
-        this.validateObj.CompanyId = this.user.CompanyId;
-        this.validateObj.Culture = this.user.Culture;
-        this.validateObj.EmpId = this.user.EmpId;
-        this.validateObj.EndDate = new Date(new Date(this.endDate).toString()).toLocaleDateString();//.slice(0, -1);
-        this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toLocaleDateString();//.slice(0, -1);
-        this.validateObj.ReplaceEmpId = Number.parseInt(this.replacement) === 0 ? null : Number.parseInt(this.replacement);
-        this.validateObj.TypeId = this.leaveType;
-        this.validateObj.NofDays = (this.noOfDays == null) ? 0 : Number.parseInt(this.noOfDays);
-        this.validateObj.NofDays = isNaN(this.validateObj.NofDays) ? 0 : this.validateObj.NofDays
-
-        if (this.endDate && !this.RequestLeaveForm.invalid) {
-
-          Loadingrequest.present().then(() => {
-            this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
-              this.errorMsgObj = null;
-              this.errorMsgObj = data;
-              moment.locale(this.translateUtilities.getDefaultLang())
-              this.errorMsgObj.WaitingMonth = moment(data.WaitingMonth).format('LL');  // January 15, 2018
-              this.rate = this.errorMsgObj.Stars;
-
-              Loadingrequest.dismiss();
-            }, (e) => {
-              Loadingrequest.dismiss().then(() => {
-                this.ErrorMsgToast.present();
-              })
-            })
-          });//Loader
-        }
-      }
+      this.validateForm();
       this.EnableLoaderFlag = false;
     }
   }
@@ -798,16 +728,9 @@ export class RequestLeavePage {
   }
 
   ResetMiniForm() {
-    // RequestLeavePage.allowed = null;
-    // RequestLeavePage.maxDays = null;
-    // RequestLeavePage.FullData = null;
-    // RequestLeavePage.frac = 0;
     this.noOfDays = this.noOfDays ? this.noOfDays : null
-    // this.allowedDays = undefined;
-    // this.reservedDays = undefined;
     this.returnDate = null;
     this.endDate = null;
-    //this.balBefore = undefined;
     this.balAfter = undefined;
     this.replacement = null;
     this.comments = null;
@@ -815,7 +738,40 @@ export class RequestLeavePage {
     this.fraction = this.fraction ? this.fraction : null;
   }
 
+  validateForm() {
+    let Loadingrequest = this.loadingCtrl.create({ spinner: 'dots' });
+    if (this.EditFlag != 2) {
+      this.validateObj.Id = this.item.Id ? this.item.Id : 0;
+      this.validateObj.CompanyId = this.user.CompanyId;
+      this.validateObj.Culture = this.user.Culture;
+      this.validateObj.EmpId = this.user.EmpId;
+      this.validateObj.EndDate = new Date(new Date(this.endDate).toString()).toLocaleDateString();//.slice(0, -1);
+      this.validateObj.StartDate = new Date(new Date(this.startDate).toString()).toLocaleDateString();//.slice(0, -1);
+      this.validateObj.ReplaceEmpId = Number.parseInt(this.replacement) === 0 ? null : Number.parseInt(this.replacement);
+      this.validateObj.TypeId = this.leaveType;
+      this.validateObj.NofDays = (this.noOfDays == null) ? 0 : Number.parseInt(this.noOfDays);
+      this.validateObj.NofDays = isNaN(this.validateObj.NofDays) ? 0 : this.validateObj.NofDays
 
+      if (this.endDate && !this.RequestLeaveForm.invalid) {
+
+        Loadingrequest.present().then(() => {
+          this.LeaveServices.validateRequest(this.validateObj).subscribe((data) => {
+            this.errorMsgObj = null;
+            this.errorMsgObj = data;
+            moment.locale(this.translateUtilities.getDefaultLang())
+            this.errorMsgObj.WaitingMonth = moment(data.WaitingMonth).format('LL');  // January 15, 2018
+            this.rate = this.errorMsgObj.Stars;
+
+            Loadingrequest.dismiss();
+          }, (e) => {
+            Loadingrequest.dismiss().then(() => {
+              this.ErrorMsgToast.present();
+            })
+          })
+        });//Loader
+      }
+    }
+  }
   static isRequired(control: FormControl) {
 
     let x = Number.parseInt(control.value)

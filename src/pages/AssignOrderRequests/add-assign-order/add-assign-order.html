@@ -41,9 +41,9 @@
 
     <ion-item>
       <ion-label floating>{{"AssignDate" | translate}}</ion-label>
-      <ion-datetime ion-datepicker  [(ngModel)]="AssignDate" (ionCanceled)="AssignDateCancel(AssignDate)" (ionBlur)="InputBlur('AssignDate')"
-        (ionChanged)="AssignDateChange($event)" [disabled]="isDisabled" [disabledDates]="filteredArr" [(value)]="localDateval" formControlName="AssignDate"
-        displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minDate" [max]="maxDate"></ion-datetime>
+      <ion-datetime ion-datepicker  [(ngModel)]="AssignDate" (ionCanceled)="AssignDateCancel(AssignDate)" (ionBlur)="InputBlur(AssignDate)"
+        (ionChanged)="AssignDateChange($event)" [disabledDates]="filteredArr" [(value)]="localDateval" formControlName="AssignDate"
+        displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minDate" ></ion-datetime>
     </ion-item>
     <ion-item *ngIf="AssignOrderForm.get('AssignDate').hasError('isValid')">
       <p style="color:crimson">{{"assignOrderfound" | translate}}</p>

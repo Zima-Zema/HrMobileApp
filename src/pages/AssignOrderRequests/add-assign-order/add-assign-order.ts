@@ -120,11 +120,11 @@ export class AddAssignOrderPage {
     return (control: AbstractControl): { [key: string]: any } => {
 
       let _assignDate = new Date(control.value).setHours(0, 0, 0, 0);
-      let foo = Boolean(this.EmpAssignDates.map(Number).lastIndexOf(+new Date(_assignDate).setHours(0,0,0,0)) > -1);
-      let too = Boolean(this.filteredArr.map(Number).lastIndexOf(+new Date(_assignDate).setHours(0,0,0,0)) > -1);
+      let foo = Boolean(this.EmpAssignDates.map(Number).lastIndexOf(+new Date(_assignDate).setHours(0, 0, 0, 0)) > -1);
+      let too = Boolean(this.filteredArr.map(Number).lastIndexOf(+new Date(_assignDate).setHours(0, 0, 0, 0)) > -1);
       if (foo) {
         return { 'isValid': { isValid: true } }
-      }else if(too){
+      } else if (too) {
         return { 'isFilter': { isValid: true } }
       }
       else {
@@ -200,8 +200,8 @@ export class AddAssignOrderPage {
 
         EmployeesLoader.dismiss().then(() => {
           data.forEach(element => {
-            this.filteredArr.push(new Date(element).setHours(0,0,0,0));
-            this.EmpAssignDates.push(new Date(element).setHours(0,0,0,0));
+            this.filteredArr.push(new Date(element).setHours(0, 0, 0, 0));
+            this.EmpAssignDates.push(new Date(element).setHours(0, 0, 0, 0));
           });
         })
       }, (e) => {
@@ -250,29 +250,28 @@ export class AddAssignOrderPage {
     var HolidaysLoader = this.loadingCtrl.create({
       spinner: 'dots'
     });
-    if (Dur == 1) {
-      this.AssignDate = null;
-      this.localDateval = null;
-      HolidaysLoader.present().then(() => {
-        // get all holidays
-        this.LeaveServices.getHolidays(this.user.CompanyId).subscribe((data) => {
-          HolidaysLoader.dismiss().then(() => {
-            this.MainArray = [];
-            this.MainArray.push(data);
-            this.MainArray.forEach(element => {
-              var AllDays: Array<Date> = this.getAllDays();
-              var OffDays: Array<Date> = this.getOffDays(element);
-              var result = AllDays.filter(function (ele) {
-                var try1 = OffDays.map(Number).indexOf(+ele);
-                if (try1 == -1) { return ele; }
-              })
-              this.DurationArr = result;
-              this.DurationArr.forEach(element => {
-                this.filteredArr.push(new Date(element).setHours(0,0,0,0))
-              });
+    HolidaysLoader.present().then(() => {
+      // get all holidays
+      this.LeaveServices.getHolidays(this.user.CompanyId).subscribe((data) => {
+
+        HolidaysLoader.dismiss().then(() => {
+          if (Dur == 1) {
+            this.AssignDate = null;
+            this.localDateval = null;
+            var AllDays: Array<Date> = this.getAllDays();
+            var OffDays: Array<Date> = this.getOffDays(data);
+            var result = AllDays.filter(function (ele) {
+              var try1 = OffDays.map(Number).indexOf(+ele);
+              if (try1 == -1) { return ele; }
+            })
+            this.DurationArr = result;
+            this.DurationArr.forEach(element => {
+              this.filteredArr.push(new Date(element).setHours(0, 0, 0, 0));
             });
+  
+        
             let gg = this.getOffDays(data).filter((date) => {
-              let foo = Boolean(this.EmpAssignDates.map(Number).lastIndexOf(+new Date(date).setHours(0,0,0,0)) > -1);
+              let foo = Boolean(this.EmpAssignDates.map(Number).lastIndexOf(+new Date(date).setHours(0, 0, 0, 0)) > -1);
               let con = new Date(date).getMonth() === new Date().getMonth() && new Date(date).getFullYear() === new Date().getFullYear() && new Date(date).getDate() > new Date().getDate()
               return con && !foo;
             });
@@ -280,52 +279,45 @@ export class AddAssignOrderPage {
               this.localDateval = gg[0];
             }
             else {
-              this.isDisabled = true;
+              this.isDisabled = false;
+              this.localDateval = new Date(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));
             }
-          })
-        }, (e) => {
-          HolidaysLoader.dismiss().then(() => {
-            this.toast.setMessage(this.msg.message);
-            this.toast.present();
-          })
+          } 
+          else {
+            // this.isDisabled = false;
+            // this.filteredArr = this.getOffDays(data);
+            // console.log("this.filteredArr", this.filteredArr)
+            //
+            //let foo = Boolean(this.EmpAssignDates.map(Number).lastIndexOf(+new Date(date)) > -1);
+            //let arr = this.LeaveServices.getDates(this.minDate, moment(this.minDate).add(1, 'months').toISOString());
+            this.localDateval = new Date();
+            this.filteredArr= this.EmpAssignDates;
+            // let gg = this.getAllDays().filter((date) => {
+            //   let foo = Boolean(this.EmpAssignDates.map(Number).lastIndexOf(+new Date(date)) > -1);
+            //   return !foo;
+            // });
+      
+            // if (gg[0]) {
+            //   this.localDateval = new Date(gg[0]);
+      
+            // } else {
+            //   this.isDisabled = true;
+            // }
+          }
+
+        })
+      }, (e) => {
+        HolidaysLoader.dismiss().then(() => {
+          this.toast.setMessage(this.msg.message);
+          this.toast.present();
         })
       })
-    }
-    else {
-      this.isDisabled = false;
-      if (this.filteredArr.length > 0 && this.DurationArr.length > 0) {
-        var HQData = this.filteredArr.filter(ele => {
-          if (this.DurationArr.indexOf(ele) == -1) {
-            return ele;
-          }
-        });
-        this.filteredArr = [];
-        HQData.forEach(element => {
-          this.filteredArr.push(new Date(element).setHours(0,0,0,0));
-        });
-      }
+    })
 
-      //
-      //let foo = Boolean(this.EmpAssignDates.map(Number).lastIndexOf(+new Date(date)) > -1);
-      let arr = this.LeaveServices.getDates(this.minDate, moment(this.minDate).add(1, 'months').toISOString());
-
-      let gg = arr.filter((date) => {
-        let foo = Boolean(this.EmpAssignDates.map(Number).lastIndexOf(+new Date(date)) > -1);
-        return !foo;
-      });
-
-      if (gg[0]) {
-        this.localDateval = new Date(gg[0]);
-
-      } else {
-        this.isDisabled = true;
-      }
-
-
-    }
   }
 
   AssignDateChange(AssignDate) {
+    console.log(AssignDate);
     this.AssignDate = this.bloodyIsoString(AssignDate);
     this.ExpiryDate = null;
     this.minExpiryDate = new Date(new Date(new Date(this.AssignDate).getTime() + (24 * 60 * 60 * 1000)).setHours(0, 0));

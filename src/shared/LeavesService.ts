@@ -59,6 +59,7 @@ export interface IValidationMsg {
     AllowedDaysError:string,
     PeriodError:string,
     percentage: number,
+    NoWorkFlowError:string,
     IsError: boolean
 }
 export interface IValidate {

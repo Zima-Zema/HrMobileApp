@@ -36,7 +36,8 @@ export class LeaveEditPage {
     WaitingMonth: null,
     AllowedDaysError:null,
     CantGreaterError:null,
-    PeriodError:null
+    PeriodError:null,
+    NoWorkFlowError:null
   }
   //
   validateObj: IValidate = {

@@ -93,7 +93,7 @@ export class LeaveListPage {
       this.LeaveServices.getLeaves(this.RequestTypeObj).subscribe((data) => {
         this.LeavesCount = data.length;
         LeaveListPage.motherArr = data;
-        
+        console.log(data);
         // data.forEach(element => {
         //   element.StartDate = moment(element.StartDate).format('ddd, MMM DD, YYYY');
         //   element.ReturnDate = moment(element.ReturnDate).format('ddd, MMM DD, YYYY');

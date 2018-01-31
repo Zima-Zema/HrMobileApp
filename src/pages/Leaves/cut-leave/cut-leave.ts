@@ -208,8 +208,9 @@ export class CutLeavePage {
         else {
           LeaveListPage.motherArr = LeaveListPage.motherArr.filter((ele) => ele.Id !== this.LeaveComing.Id);
           this.LeaveComing.ActualEndDate = this.breakObj.BreakEndDate;
-          this.LeaveComing.EndDate = this.breakObj.BreakEndDate;
+          // this.LeaveComing.EndDate = this.breakObj.BreakEndDate;
           this.LeaveComing.NofDays = this.breakObj.BreakNofDays;
+          this.LeaveComing.isBreaked = !this.LeaveComing.isBreaked
           //this.breakObj.RequestId;
           LeaveListPage.motherArr.push(this.LeaveComing);
           this.navCtrl.pop();

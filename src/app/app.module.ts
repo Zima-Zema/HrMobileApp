@@ -61,6 +61,7 @@ import { InformingPageModule } from '../pages/informingPages/informing/informing
 import { ReceivedPageModule } from '../pages/informingPages/received/received.module';
 import { NotreceivedPageModule } from '../pages/informingPages/notreceived/notreceived.module';
 import { from } from 'rxjs/observable/from';
+import { RenewRequestPageModule } from '../pages/renew-request/renew-request.module';
 
 export function setTranslateLoader(http: Http) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -115,7 +116,8 @@ export function setTranslateLoader(http: Http) {
     ForgetPageModule,
     InformingPageModule,
     ReceivedPageModule,
-    NotreceivedPageModule
+    NotreceivedPageModule,
+    RenewRequestPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

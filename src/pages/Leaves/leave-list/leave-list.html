@@ -51,7 +51,7 @@
           <button *ngIf="item.ApprovalStatus==6 &&  !(item.StartDate | compareDate)" ion-button color="danger" class="TrashLeave" (click)="ConfirmAppCancel(item.Id)">
             <ion-icon name="remove-circle"></ion-icon>
           </button>
-          <button *ngIf="item.ApprovalStatus==6 &&  ((item.StartDate | compareDate) || (item.ActualStartDate | compareDate)) && ((item.EndDate | compareEndDate) || (item.ActualEndDate | compareEndDate)) && (item.NofDays >=1 || item.ActualNofDays > 1) && (item.isBreaked)"
+          <button *ngIf="item.ApprovalStatus==6 &&  ((item.StartDate | compareDate) || (item.ActualStartDate | compareDate)) && ((item.EndDate | compareEndDate) || (item.ActualEndDate | compareEndDate)) && (item.NofDays >=1 || item.ActualNofDays > 1) && (!item.isBreaked)"
             ion-button color="dark" class="TrashLeave" (click)="CutAppLeaves(item)">
             <ion-icon name="cut"></ion-icon>
           </button>

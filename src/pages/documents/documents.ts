@@ -6,8 +6,9 @@ import { AndroidPermissions } from '@ionic-native/android-permissions';
 import { UtilitiesProvider, IGetEmpDocs } from '../../shared/utilities';
 import { IUser } from '../../shared/IUser';
 import { Storage } from '@ionic/storage';
-import { parse } from 'querystring';
+
 import { TranslateService } from "@ngx-translate/core";
+
 
 @IonicPage()
 @Component({
@@ -16,6 +17,7 @@ import { TranslateService } from "@ngx-translate/core";
 })
 export class DocumentsPage {
   loadingStatus;
+
   loadingProgress = 0;
   user: IUser;
   is404Error: boolean = false;
@@ -23,11 +25,13 @@ export class DocumentsPage {
   is0Error: boolean = false;
   public docsData: Array<any> = [];
   public docCount: number = 0;
+
   EmpDocs: IGetEmpDocs = {
     Source: "",
     SourceId: 0
   }
   public baseURL;
+  public isdisabled: boolean = true;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -36,6 +40,8 @@ export class DocumentsPage {
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
+
+
     private androidPermissions: AndroidPermissions,
     private docsApi: UtilitiesProvider,
     private storage: Storage,
@@ -140,5 +146,7 @@ export class DocumentsPage {
   getRound(item) {
     return Math.round((item / 1024) * 100) / 100
   }
+
+
 
 }

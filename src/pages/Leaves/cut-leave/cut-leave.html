@@ -20,7 +20,7 @@
       <p style="color:crimson">{{"returnDateLess" | translate}}</p>
     </ion-item>
     <ion-item *ngIf="CutLeaveForm.get('ReturnDate').hasError('isGreater')">
-      <p style="color:crimson">{{"returnDategreater" | translate}}</p>
+      <p style="color:crimson">{{" " | translate}}</p>
     </ion-item>
     <ion-item>
       <ion-label floating>{{"AEndDate" | translate}}</ion-label>
