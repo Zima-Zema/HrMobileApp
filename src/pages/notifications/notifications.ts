@@ -21,7 +21,7 @@ export class NotificationsPage {
     Language: ""
   }
   user: IUser;
-  //http://localhost:36207/SpecialData/Photos/0/1054.jpeg?dummy=1503580792563
+ 
   baseUrl: string = "";
   public static notificationsList: Array<INotification> = [];
   public notifications: Array<INotification> = [];

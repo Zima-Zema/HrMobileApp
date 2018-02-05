@@ -245,5 +245,9 @@
     "editSuccessToastMsg":"تم تعديل الطلب بنجاح",
     "addLeavesLoaderMsg":"جاري الإضافة ...",
     "addErrorToastMsg":"خطأ في إضافة طلب الإجازة أعد المحاولة مرة أخرى",
-    "addSuccessToastMsg":"تم إضافة الطلب بنجاح"
+    "addSuccessToastMsg":"تم إضافة الطلب بنجاح",
+    "myInforming":"إخطاراتي",
+    "FilterByletterName":"بحث بإسم الإخطار",
+    "Inform":"علم"
+
 }

@@ -246,6 +246,9 @@
     "editSuccessToastMsg":"Leave is edited successfully.",
     "addLeavesLoaderMsg":"Adding Leaves...",
     "addErrorToastMsg":"Error in Adding Leave, Please Try again later.",
-    "addSuccessToastMsg":"Leave is Added successfully."
+    "addSuccessToastMsg":"Leave is Added successfully.",
+    "myInforming":"My Notify Letters",
+    "FilterByletterName":"Search By Letter Name",
+    "Inform":"Inform"
 
 }

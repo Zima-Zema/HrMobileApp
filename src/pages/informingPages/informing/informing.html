@@ -1,4 +1,60 @@
-<ion-tabs>
-    <ion-tab [root]="receivedRoot" tabTitle="Received" tabIcon="arrow-dropdown-circle"></ion-tab>
-    <ion-tab [root]="notreceivedRoot" tabTitle="Notreceived" tabIcon="arrow-dropup-circle"></ion-tab>
-</ion-tabs>
+<ion-header>
+    <ion-navbar>
+        <ion-title *ngIf="!toggled"> {{"myInforming" | translate}} </ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="toggle()">
+                <ion-icon name="search"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-searchbar *ngIf="toggled" placeholder="{{'FilterByletterName' | translate}}" [(ngModel)]="queryText" (ionInput)="filterItems()"></ion-searchbar>
+    </ion-navbar>
+</ion-header>
+<ion-content class="list-avatar-page">
+    <ion-note *ngIf="errorMsg != undefined">{{errorMsg}}</ion-note>
+    <ion-note *ngIf="notifications.length == 0 && errorMsg == undefined">You Have NO Notification Right Now</ion-note>
+
+
+    <ion-list>
+        <ion-item-sliding *ngFor="let notification of notifications">
+            <ion-item class="def-inform" [ngClass]="{'unread-inform':!notification.read}">
+                <ion-note *ngIf="notification.Readdatetime" item-end>{{notification.Readdatetime | dateTimeMoment}}</ion-note>
+                <!-- <br /> -->
+                <!-- <ion-note *ngIf="notification.EventDate" item-end>{{notification.EventDate | dateTimeMoment}}</ion-note> -->
+                
+               
+                <div>
+
+                        <h2>{{notification.NotifySource}}</h2>
+                    <div [ngClass]="isItemShown(notification) ? 'item-expand active' : 'item-expand inactive'">
+                        <p>{{notification.Description}}</p>
+                    </div>
+                    <div (click)="toggleItem(notification)" class="item-expand-footer">
+                        <i [ngClass]="isItemShown(notification) ? 'ios-remove-outline' : 'ios-add-outline'"></i>
+                        {{ isItemShown(notification) ? 'Less' : 'More' }}
+                    </div>
+
+                </div>
+            </ion-item>
+
+            <ion-item-options *ngIf="!notification.read" side="left" style="direction:ltr">
+                <button ion-button color="primary" class="TrashLeave" (click)="EditInform(notification)">
+                    <ion-icon name="brush"></ion-icon>
+                    {{"Inform" | translate}}
+                </button>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+        <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+</ion-content>
+<ion-footer>
+        <ion-item>
+          
+                <ion-checkbox  [(ngModel)]="readed"  (ionChange)="updateList()">
+                        
+                </ion-checkbox>
+              </ion-item>
+   
+</ion-footer>
