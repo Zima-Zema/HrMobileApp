@@ -248,6 +248,8 @@
     "addSuccessToastMsg":"تم إضافة الطلب بنجاح",
     "myInforming":"إخطاراتي",
     "FilterByletterName":"بحث بإسم الإخطار",
-    "Inform":"علم"
+    "Inform":"علم",
+    "More":"المزيد",
+    "Less":"أقل"
 
 }

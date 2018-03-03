@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl, ValidatorFn } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators, FormControl } from "@angular/forms";
 import { AssignOrderServicesApi, IEmpAssignOrders, ISpacificLeaves, IAssignOrderVM, IEmpAssignDates } from '../../../shared/AssignOrderService';
-import { LeaveServicesApi, IRequestType } from "../../../shared/LeavesService";
+import { LeaveServicesApi } from "../../../shared/LeavesService";
 import { Storage } from '@ionic/storage';
 import { IUser } from '../../../shared/IUser';
-import * as _ from "lodash";
 import * as moment from 'moment';
 import { AssignOrderRequestsPage } from '../assign-order-requests/assign-order-requests';
 import { TranslateService } from "@ngx-translate/core";

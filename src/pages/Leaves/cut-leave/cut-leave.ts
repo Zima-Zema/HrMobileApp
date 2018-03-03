@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams, ToastController, LoadingController
 import { LeaveServicesApi, IRequestData, IBreak } from "../../../shared/LeavesService"
 import { FormGroup, Validators, FormBuilder, FormControl, AbstractControl, ValidatorFn } from "@angular/forms";
 import { LeaveListPage } from '../leave-list/leave-list';
-import { TranslateService } from '@ngx-translate/core';
 import { IUser } from '../../../shared/IUser'
 import { Storage } from '@ionic/storage';
 @IonicPage()
@@ -56,8 +55,7 @@ export class CutLeavePage {
     private formBuilder: FormBuilder,
     private ToastCtrl: ToastController,
     private LoadingCtrl: LoadingController,
-    private storage: Storage,
-    private translationService: TranslateService) {
+    private storage: Storage) {
     this.storage.get("User").then((udata) => {
       if (udata) {
         this.user = udata;
@@ -124,7 +122,6 @@ export class CutLeavePage {
     return (control: AbstractControl): { [key: string]: any } => {
 
       let _returnDate = new Date(control.value).setHours(0, 0, 0, 0);
-      let _startDate = new Date(this.startDate).setHours(0, 0, 0, 0);
       let _endDate = new Date(this.endDate).setHours(0, 0, 0, 0);
       let isLess = _returnDate <= new Date().setHours(0, 0, 0, 0);
       let isGreater = _returnDate > _endDate;

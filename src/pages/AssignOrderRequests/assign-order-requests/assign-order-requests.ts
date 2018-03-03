@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, LoadingController, AlertController } from 'ionic-angular';
 import { ShowAssignOrderRequestsPage } from '../show-assign-order-requests/show-assign-order-requests';
 import { AddAssignOrderPage } from '../add-assign-order/add-assign-order';
-import { AssignOrderServicesApi, IEmpAssignOrders, IDeleteRequest, IAssignOrderVM } from '../../../shared/AssignOrderService';
+import { AssignOrderServicesApi, IEmpAssignOrders, IDeleteRequest } from '../../../shared/AssignOrderService';
 import * as _ from 'lodash';
 import { IUser } from '../../../shared/IUser';
 import { Storage } from '@ionic/storage';

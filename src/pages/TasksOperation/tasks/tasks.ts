@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, ModalController, LoadingController, ToastController } from 'ionic-angular';
 import * as moment from 'moment';
 import { AddTaskPage } from '../add-task/add-task';
-import { TasksServicesApi, ITasks, ITollen } from '../../../shared/TasksService'
-import { CalendarComponent } from 'ionic2-calendar/calendar';
+import { TasksServicesApi, ITollen } from '../../../shared/TasksService'
 import { Storage } from '@ionic/storage';
 import { TranslateService } from '@ngx-translate/core';
 import { IUser } from "../../../shared/IUser";

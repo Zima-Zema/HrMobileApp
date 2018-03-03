@@ -249,6 +249,8 @@
     "addSuccessToastMsg":"Leave is Added successfully.",
     "myInforming":"My Notify Letters",
     "FilterByletterName":"Search By Letter Name",
-    "Inform":"Inform"
+    "Inform":"Inform",
+    "More":"More",
+    "Less":"Less"
 
 }

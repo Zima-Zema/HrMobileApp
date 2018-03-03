@@ -1,4 +1,21 @@
+
+
 page-informing {
+    button[ion-fab] {
+        overflow: visible;
+        position: relative;
+
+        ion-label{
+            position: absolute;
+            top: -8px;
+            right: 40px;
+            color: white;
+            background-color: rgba(0,0,0,0.7);
+            line-height: 24px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+    }
     // ion-item-sliding{width:100%}
     // ion-item-sliding.active-slide ion-item-options[side=left] {
     //     visibility: visible;
@@ -30,11 +47,6 @@ page-informing {
        p{
         white-space: normal;
        }
-      }
-      .virtual-scroll .virtual-position, .virtual-scroll .virtual-position.item{
-          position: static;
-          transform: none !important;
-          
       }
         left: 0;
         height: 15px;

@@ -18,6 +18,7 @@ import { ChartsPage } from '../ExternalTabs/charts/charts';
 import { RequestsPage } from '../ExternalTabs/requests/requests';
 import { QuereiesPage } from '../ExternalTabs/quereies/quereies';
 import { SettingsTabPage } from '../ExternalTabs/settings-tab/settings-tab';
+import { InformingPage } from '../informingPages/informing/informing';
 
 @IonicPage()
 @Component({
@@ -30,6 +31,7 @@ export class WelcomePage {
   public QuereiesTab: any;
   public SettingTab: any;
   public notifyTab: any;
+  public letterTab: any;
   //
   tabsColor: string = "newBlueGreen";
   tabsMode: string = "md";
@@ -43,16 +45,24 @@ export class WelcomePage {
   notifyParams: INotifyParams = {
     UserName: "",
     CompanyId: 0,
-    Language: ""
+    Language: "",
+    EmpId: 0
   }
-  public static notificationNumber: number = 0;
+  public static notificationNumber: number = null;
+  public static lettersNumber: number = null;
   user: IUser;
   menuDir;
   lang;
   baseUrl: string = "";
   get notificationNumber() {
-    if (WelcomePage.notificationNumber != 0 && WelcomePage.notificationNumber != undefined) {
+    if (WelcomePage.notificationNumber != 0 && WelcomePage.notificationNumber != null) {
       return WelcomePage.notificationNumber;
+    }
+    return null;
+  }
+  get lettersNumber() {
+    if (WelcomePage.lettersNumber != 0 && WelcomePage.lettersNumber != null) {
+      return WelcomePage.lettersNumber;
     }
     return null;
   }
@@ -72,6 +82,7 @@ export class WelcomePage {
     this.QuereiesTab = QuereiesPage;
     this.SettingTab = SettingsTabPage;
     this.notifyTab = NotificationsPage;
+    this.letterTab = InformingPage;
     this.platform.registerBackButtonAction((event) => {
       if (this.navCtrl.length() <= 1) {
         this.backgroundMode.moveToBackground();
@@ -91,6 +102,7 @@ export class WelcomePage {
         this.notifyParams.UserName = this.user.UserName;
         this.notifyParams.Language = this.user.Language;
         this.notifyParams.CompanyId = this.user.CompanyId;
+        this.notifyParams.EmpId = this.user.EmpId;
         this.user_name = udata.UserName;
         this.user_email = udata.Email;
         //this.translate.setDefaultLang(this.user.Language.slice(0, -3));
@@ -125,25 +137,22 @@ export class WelcomePage {
   }
 
   ionViewWillEnter() {
-    if (NotificationsPage.notificationsList && NotificationsPage.notificationsList.length) {
-      WelcomePage.notificationNumber = NotificationsPage.notificationsList.filter((val) => val.Read == false).length;
-    }
-    else {
-      if (WelcomePage.notificationNumber <= 0 || WelcomePage.notificationNumber == undefined) {
 
-        this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
-          WelcomePage.notificationNumber = data;
-        }, (err) => {
-        });
-      }
+    if ((WelcomePage.notificationNumber < 0 || WelcomePage.notificationNumber == null) || (WelcomePage.lettersNumber < 0 || WelcomePage.lettersNumber == null)) {
+      this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
+        WelcomePage.notificationNumber = data.NotifyCount;
+        WelcomePage.lettersNumber = data.LetterCount;
+
+      }, (err) => {
+      });
     }
+
   }
 
   refreshScrollbarTabs() {
     this.scrollableTabsopts = { refresh: true };
   }
-  ionViewDidLoad() {
-  }
+
   ////////////////////////////
   GoToHome() {
     //this.navCtrl.push(WelcomePage);

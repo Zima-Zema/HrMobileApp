@@ -1,6 +1,6 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, LoadingController } from 'ionic-angular';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup } from '@angular/forms'
 import { Storage } from '@ionic/storage';
 import { IUser } from '../../shared/IUser';
 import * as moment from 'moment';

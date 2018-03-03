@@ -8,7 +8,6 @@ import { File } from '@ionic-native/file';
 import { FileChooser } from '@ionic-native/file-chooser';
 import { FilePath } from '@ionic-native/file-path';
 //pages
-import { WelcomePage } from '../../welcome/welcome';
 import { TasksServicesApi, ITasks, ITollen } from '../../../shared/TasksService';
 import { IUser } from "../../../shared/IUser";
 

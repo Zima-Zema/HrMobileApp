@@ -7,11 +7,13 @@ export interface INotifyParams {
     UserName: string;
     Language: string;
     CompanyId: number;
+    EmpId:number
 }
 export interface ILetterParams {
     EmpId: number;
     Language: string;
     CompanyId: number;
+    ReadParam:boolean;
 }
 
 export interface INotification {
@@ -82,16 +84,13 @@ export class NotificationServiceApi {
 
     getNotifiyLetters(start: number = 0, body: ILetterParams): Observable<ODataLetter> {
         //let bodyString = JSON.stringify(body);
-        let bodyString = `EmpId=${body.EmpId}&Language=${body.Language}&CompanyId=${body.CompanyId}`;
-        console.log("bodyString>>>>", bodyString);
+        let bodyString = `EmpId=${body.EmpId}&Language=${body.Language}&CompanyId=${body.CompanyId}&ReadParam=${body.ReadParam}`;
+        
         let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-        return this._http.post(`${this.baseURL}odata/NotifyLetters?$top=${this.perPage}&$skip=${start}&$orderby=EventDate desc`, bodyString, { headers: headers })
+        return this._http.post(`${this.baseURL}odata/NotifyLetters?$top=${this.perPage}&$skip=${start}&$orderby=NotifyDate desc`, bodyString, { headers: headers })
             .map((res: Response) => {
-                console.log("Res>>>", res.json());
                 return res.json();
-
             }).catch((err) => {
-                console.log("the bloody From Service>>", err);
                 return err;
             });
     }

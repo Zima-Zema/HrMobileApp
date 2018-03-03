@@ -92,7 +92,6 @@ export class DocumentsPage {
 
   bloodyDownload(url, name) {
     let fullUrl = `${this.baseURL}${encodeURIComponent(url)}`;
-    const realUrl = fullUrl.replace(/\s+/g, '%20');
     const fileTransfer: FileTransferObject = this.transfer.create();
     this.loadingStatus = "PUsh"
     //const url = 'https://static.pexels.com/photos/34950/pexels-photo.jpg';

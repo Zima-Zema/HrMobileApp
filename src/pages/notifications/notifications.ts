@@ -18,7 +18,8 @@ export class NotificationsPage {
   notifyParams: INotifyParams = {
     UserName: "",
     CompanyId: 0,
-    Language: ""
+    Language: "",
+    EmpId:0
   }
   user: IUser;
  
@@ -35,7 +36,7 @@ export class NotificationsPage {
     private modalCtrl: ModalController,
     private storage: Storage,
     private translationService: TranslateService) {
-    let view = this.navCtrl.getActive();
+    
     this.storage.get("BaseURL").then((val) => {
       this.baseUrl = val;
     });
@@ -45,6 +46,7 @@ export class NotificationsPage {
         this.notifyParams.UserName = this.user.UserName;
         this.notifyParams.Language = this.user.Language;
         this.notifyParams.CompanyId = this.user.CompanyId;
+        this.notifyParams.EmpId = this.user.EmpId;
       }
     });
   }

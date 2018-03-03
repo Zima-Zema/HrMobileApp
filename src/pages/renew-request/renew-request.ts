@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams, AlertController, LoadingController
 
 import { IUser } from '../../shared/IUser';
 import { Storage } from '@ionic/storage';
-import { parse } from 'querystring';
 import { TranslateService } from "@ngx-translate/core";
 import { Camera } from '@ionic-native/camera';
 import { unescape } from 'lodash';
@@ -249,10 +248,6 @@ export class RenewRequestPage {
         this.file.readAsDataURL(edit_path, textfile).then((b_data) => {
           this.isdisabled = false;
           let BinaryData = this.convertDataURIToBinary(b_data)
-          let arr = Array.from(BinaryData);
-
-
-
           let success_toast = this.toastCtrl.create({
             message: a.SaveFile,
             duration: 3000,

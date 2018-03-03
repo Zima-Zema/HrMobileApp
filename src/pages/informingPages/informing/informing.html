@@ -1,6 +1,11 @@
-<ion-header>
+<!-- <ion-header> -->
+
+<!-- </ion-header> -->
+
+
+<ion-content class="list-avatar-page">
     <ion-navbar>
-        <ion-title *ngIf="!toggled"> {{"myInforming" | translate}} </ion-title>
+        <!-- <ion-title *ngIf="!toggled"> {{"myInforming" | translate}} ({{unReadLetters}}) </ion-title> -->
         <ion-buttons end>
             <button ion-button icon-only (click)="toggle()">
                 <ion-icon name="search"></ion-icon>
@@ -8,8 +13,6 @@
         </ion-buttons>
         <ion-searchbar *ngIf="toggled" placeholder="{{'FilterByletterName' | translate}}" [(ngModel)]="queryText" (ionInput)="filterItems()"></ion-searchbar>
     </ion-navbar>
-</ion-header>
-<ion-content class="list-avatar-page">
     <ion-note *ngIf="errorMsg != undefined">{{errorMsg}}</ion-note>
     <ion-note *ngIf="notifications.length == 0 && errorMsg == undefined">You Have NO Notification Right Now</ion-note>
 
@@ -17,20 +20,21 @@
     <ion-list>
         <ion-item-sliding *ngFor="let notification of notifications">
             <ion-item class="def-inform" [ngClass]="{'unread-inform':!notification.read}">
-                <ion-note *ngIf="notification.Readdatetime" item-end>{{notification.Readdatetime | dateTimeMoment}}</ion-note>
+                <ion-note *ngIf="notification.read" item-end>{{notification.Readdatetime | dateTimeMoment}}</ion-note>
                 <!-- <br /> -->
-                <!-- <ion-note *ngIf="notification.EventDate" item-end>{{notification.EventDate | dateTimeMoment}}</ion-note> -->
-                
-               
+                <ion-note *ngIf="!notification.read" item-end>{{notification.NotifyDate | dateTimeMoment}}</ion-note>
                 <div>
-
-                        <h2>{{notification.NotifySource}}</h2>
+                    <h2>{{notification.NotifySource}}</h2>
                     <div [ngClass]="isItemShown(notification) ? 'item-expand active' : 'item-expand inactive'">
                         <p>{{notification.Description}}</p>
                     </div>
                     <div (click)="toggleItem(notification)" class="item-expand-footer">
-                        <i [ngClass]="isItemShown(notification) ? 'ios-remove-outline' : 'ios-add-outline'"></i>
-                        {{ isItemShown(notification) ? 'Less' : 'More' }}
+                        <!-- <i [ngClass]="isItemShown(notification) ? 'ios-remove-outline' : 'ios-add-outline'"></i> -->
+                        <!-- <ion-icon *ngIf="isItemShown(notification)" name="ios-remove-outline"></ion-icon>
+                        <ion-icon *ngIf="!isItemShown(notification)" name="ios-add-outline"></ion-icon> -->
+                        <p style="color:crimson" *ngIf="isItemShown(notification)">{{ "Less" | translate}}</p>
+                        <p style="color:crimson" *ngIf="!isItemShown(notification)">{{ "More" | translate}}</p>
+
                     </div>
 
                 </div>
@@ -47,14 +51,43 @@
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
         <ion-infinite-scroll-content></ion-infinite-scroll-content>
     </ion-infinite-scroll>
+    <ion-fab right bottom #fab4>
+        <button ion-fab color="dark">
+            <ion-icon name="arrow-dropup"></ion-icon>
+        </button>
+        <ion-fab-list side="top">
+            <button ion-fab (click)="openSocial('facebook', fab4)">
+
+                <ion-icon name="logo-facebook"></ion-icon>
+                <ion-label>here</ion-label>
+            </button>
+            <button ion-fab (click)="openSocial('twitter', fab4)">
+
+                <ion-icon name="logo-facebook"></ion-icon>
+                <ion-label>here</ion-label>
+            </button>
+            <button ion-fab (click)="openSocial('vimeo', fab4)">
+
+                <ion-icon name="logo-facebook"></ion-icon>
+                <ion-label>here</ion-label>
+            </button>
+
+            <button ion-fab (click)="openSocial('googleplus', fab4)">
+
+                <ion-icon name="logo-facebook"></ion-icon>
+                <ion-label>here</ion-label>
+            </button>
+        </ion-fab-list>
+    </ion-fab>
 
 </ion-content>
 <ion-footer>
-        <ion-item>
-          
-                <ion-checkbox  [(ngModel)]="readed"  (ionChange)="updateList()">
-                        
-                </ion-checkbox>
-              </ion-item>
-   
+    <ion-item>
+
+        <!-- <ion-checkbox [(ngModel)]="readed" (ionChange)="updateList()">
+           
+        </ion-checkbox> -->
+        <ion-toggle [(ngModel)]="readed" (ionChange)="updateList()"></ion-toggle>
+    </ion-item>
+
 </ion-footer>

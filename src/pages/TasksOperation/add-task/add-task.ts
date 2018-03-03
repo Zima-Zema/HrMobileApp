@@ -21,7 +21,6 @@ export class AddTaskPage {
     public loadingCtrl: LoadingController,
     public viewCtrl: ViewController) {
     let preselectedDate = moment(this.navParams.get('selectedDay')).format();
-    let tryDate = this.navParams
     this.event.startTime = preselectedDate;
     this.event.endTime = preselectedDate;
 

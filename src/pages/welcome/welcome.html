@@ -74,6 +74,7 @@
     <ion-tab tabIcon="clipboard" tabTitle=" {{'Requests' | translate}}" [show]='tabToShow[1]' [root]="RequestsTab"></ion-tab>
     <ion-tab tabIcon="paper" tabTitle=" {{'Queries' | translate}}" [show]='tabToShow[2]' [root]="QuereiesTab"></ion-tab>
     <ion-tab tabIcon="notifications" tabTitle=" {{'Notifications' | translate}}" [show]='tabToShow[4]' (ionSelect)="ionViewWillEnter()" tabBadge="{{notificationNumber}}" tabBadgeStyle="danger" [root]="notifyTab"> </ion-tab>
+    <ion-tab tabIcon="document" tabTitle=" {{'myInforming' | translate}}" [show]='tabToShow[5]' (ionSelect)="ionViewWillEnter()" tabBadge="{{lettersNumber}}" tabBadgeStyle="danger" [root]="letterTab"> </ion-tab>
     <ion-tab tabIcon="settings" tabTitle=" {{'Settings' | translate}}" [show]='tabToShow[3]' [root]="SettingTab"></ion-tab>
     <!-- <ion-tab tabIcon="paper" tabTitle="Queries" [show]='tabToShow[5]' [root]="QuereiesTab"></ion-tab>
     <ion-tab tabIcon="pie" tabTitle="Charts" [show]='tabToShow[6]' [root]="ChartTab"></ion-tab>

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
 import { ShowAssignOrderPage } from '../show-assign-order/show-assign-order';
 import { AssignOrderServicesApi, IEmpAssignOrders } from '../../../shared/AssignOrderService';
-import * as _ from 'lodash';
 import { IUser } from '../../../shared/IUser';
 import { Storage } from '@ionic/storage';
 import { TranslateService } from "@ngx-translate/core";
