@@ -142,7 +142,6 @@ export class WelcomePage {
       this.notifyApi.getNotificationCount(this.notifyParams).subscribe((data) => {
         WelcomePage.notificationNumber = data.NotifyCount;
         WelcomePage.lettersNumber = data.LetterCount;
-
       }, (err) => {
       });
     }
